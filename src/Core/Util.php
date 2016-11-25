@@ -6,6 +6,58 @@
 class ParagonIE_Sodium_Core_Util
 {
     /**
+     * Load a 3 character substring into an integer
+     *
+     * @param $string
+     * @return int;
+     */
+    public static function load_3($string)
+    {
+        $result = self::chrToInt($string[0]);
+        $result |= self::chrToInt($string[1]) << 8;
+        $result |= self::chrToInt($string[2]) << 16;
+        return $result;
+    }
+
+    /**
+     * Load a 4 character substring into an integer
+     *
+     * @param $string
+     * @return int;
+     */
+    public static function load_4($string)
+    {
+        $result = self::chrToInt($string[0]);
+        $result |= self::chrToInt($string[1]) << 8;
+        $result |= self::chrToInt($string[2]) << 16;
+        $result |= self::chrToInt($string[3]) << 24;
+        return $result;
+    }
+
+    /**
+     * @param $int
+     * @return string
+     */
+    public static function store_3($int)
+    {
+        return self::intToChr(($int >> 16)    & 0xff) .
+            self::intToChr(($int >> 8)     & 0xff) .
+            self::intToChr( $int           & 0xff);
+    }
+
+    /**
+     * @param $int
+     * @return string
+     */
+    public static function store_4($int)
+    {
+        return self::intToChr(($int >> 24) & 0xff) .
+            self::intToChr(($int >> 16)    & 0xff) .
+            self::intToChr(($int >> 8)     & 0xff) .
+            self::intToChr( $int           & 0xff);
+    }
+
+    /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
@@ -56,27 +108,26 @@ class ParagonIE_Sodium_Core_Util
     /**
      * @param string $left
      * @param string $right
+     * @param int $len
      * @return int
      */
-    public static function compare($left, $right)
+    public static function compare($left, $right, $len = null)
     {
         $leftLen = self::strlen($left);
         $rightLen = self::strlen($right);
-        $shared = min($leftLen, $rightLen);
+        if ($len === null) {
+            $len = max($leftLen, $rightLen);
+            $left = str_pad($left, $len, "\x00", STR_PAD_RIGHT);
+            $right = str_pad($right, $len, "\x00", STR_PAD_RIGHT);
+        }
 
         $gt = 0;
         $eq = 1;
-        for ($i = 0; $i < $shared; ++$i) {
-            $gt |= ((($right[$i] - $left[$i]) >> 8) & $eq);
-            $eq &= (($right[$i] ^ $left[$i])) >> 8;
-        }
-        if (!hash_equals(self::bin2hex($leftLen), self::bin2hex($rightLen))) {
-            /**
-             * @todo make this constant-time
-             */
-            if (($gt + $gt + $eq) - 1 === 0) {
-                return $leftLen - $rightLen;
-            }
+        $i = $len;
+        while ($i !== 0) {
+            --$i;
+            $gt |= ((self::chrToInt($right[$i]) - self::chrToInt($left[$i])) >> 8) & $eq;
+            $eq &= ((self::chrToInt($right[$i]) ^ self::chrToInt($left[$i])) - 1) >> 8;
         }
         return ($gt + $gt + $eq) - 1;
     }
@@ -145,6 +196,55 @@ class ParagonIE_Sodium_Core_Util
         return $bin;
     }
 
+    /**
+     * Cache-timing-safe variant of ord()
+     *
+     * @param string $chr
+     * @return int
+     */
+    public static function chrToInt($chr)
+    {
+        $chunk = unpack('C', self::substr($chr, 0, 1));
+        return $chunk[1];
+    }
+
+    /**
+     * Cache-timing-safe variant of ord()
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function intToChr($int)
+    {
+        return pack('C', $int);
+    }
+
+    /**
+     * Turn a string into an array of integers
+     *
+     * @param $string
+     * @return int[]
+     */
+    public static function stringToIntArray($string)
+    {
+        return array_values(
+            unpack('C*', $string)
+        );
+    }
+
+    /**
+     * @param int[] $ints
+     * @return string
+     */
+    public static function intArrayToString(array $ints)
+    {
+        $args = $ints;
+        foreach ($args as $i => $v) {
+            $args[$i] = $v & 0xff;
+        }
+        array_unshift($args, str_repeat('C', count($ints)));
+        return call_user_func_array('pack', $args);
+    }
 
     /**
      * Safe string length
@@ -193,5 +293,36 @@ class ParagonIE_Sodium_Core_Util
         } else {
             return substr($str, $start);
         }
+    }
+
+    /**
+     * @param string $a
+     * @param string $b
+     * @return bool
+     */
+    public static function verify_32($a, $b)
+    {
+        $diff = self::strlen($a) ^ self::strlen($b);
+        for ($i = 0; $i < 32; ++$i) {
+            $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
+        }
+        return $diff === 0;
+    }
+
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
+    public static function xorStrings($a, $b)
+    {
+        $aLen = self::strlen($a);
+        $bLen = self::strlen($b);
+        $d = '';
+
+        for ($i = 0; $i < $aLen && $i < $bLen; ++$i) {
+            $d .= self::intToChr(self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]));
+        }
+        return $d;
     }
 }

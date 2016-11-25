@@ -13,6 +13,15 @@ if (!extension_loaded('libsodium')) {
             );
         }
     }
+    if (!is_callable('\\Sodium\\compare')) {
+        function compare()
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'compare'),
+                func_get_args()
+            );
+        }
+    }
     if (!is_callable('\\Sodium\\hex2bin')) {
         function hex2bin()
         {

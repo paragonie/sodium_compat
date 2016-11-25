@@ -2,6 +2,11 @@
 
 class UtilTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     public function testBin2hex()
     {
         $data = random_bytes(32);
@@ -30,5 +35,60 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $int = ParagonIE_Sodium_Compat::randombytes_uniform(1000);
         $this->assertLessThan(1000, $int, 'Out of bounds (> 1000)');
         $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+    }
+
+    public function testConversion()
+    {
+        $sample = array(80, 97, 114, 97, 103, 111, 110);
+
+        $this->assertSame(
+            'Paragon',
+            ParagonIE_Sodium_Core_Util::intArrayToString($sample)
+        );
+
+        $this->assertSame(
+            $sample,
+            ParagonIE_Sodium_Core_Util::stringToIntArray('Paragon')
+        );
+
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::load_3()
+     */
+    public function testLoad3()
+    {
+        $this->assertSame(
+            8451279,
+            ParagonIE_Sodium_Core_Curve25519::load_3("\xcf\xf4\x80"),
+            'Unexpected result from load_3'
+        );
+        $this->assertSame(
+            8516815,
+            ParagonIE_Sodium_Core_Curve25519::load_3("\xcf\xf4\x81"),
+            'Verify endianness is correct'
+        );
+        $this->assertSame(
+            8451280,
+            ParagonIE_Sodium_Core_Curve25519::load_3("\xd0\xf4\x80"),
+            'Verify endianness is correct'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::load_3()
+     */
+    public function testLoad4()
+    {
+        $this->assertSame(
+            8451279,
+            ParagonIE_Sodium_Core_Curve25519::load_4("\xcf\xf4\x80\x00"),
+            'Unexpected result from load_4'
+        );
+        $this->assertSame(
+            2163527424,
+            ParagonIE_Sodium_Core_Curve25519::load_4("\x00\xcf\xf4\x80"),
+            'Unexpected result from load_4'
+        );
     }
 }

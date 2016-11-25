@@ -1,5 +1,5 @@
 <?php
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 spl_autoload_register(function($class) {
     $namespace = 'ParagonIE_Sodium_';
@@ -22,8 +22,8 @@ spl_autoload_register(function($class) {
     }
 });
 
-if (PHP_VERSION_ID >= 50300 && !extension_loaded('libsodium')) {
+if (PHP_VERSION_ID >= 50300) {
     // Namespaces didn't exist before 5.3.0, so don't even try to use this
     // unless PHP >= 5.3.0
-    require_once 'lib/sodium_compat.php';
+    require_once __DIR__ . '/lib/sodium_compat.php';
 }

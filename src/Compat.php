@@ -5,6 +5,9 @@
  */
 class ParagonIE_Sodium_Compat
 {
+    /**
+     * @var bool
+     */
     public static $disableFallbackForUnitTests = false;
 
     const LIBRARY_VERSION_MAJOR = 9;
@@ -15,10 +18,10 @@ class ParagonIE_Sodium_Compat
      * @param $string
      * @return string
      */
-    public function bin2hex($string)
+    public static function bin2hex($string)
     {
         if (self::use_fallback('bin2hex')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\bin2hex',
                 array($string)
             );
@@ -31,10 +34,10 @@ class ParagonIE_Sodium_Compat
      * @param string $right
      * @return int
      */
-    public function compare($left, $right)
+    public static function compare($left, $right)
     {
         if (self::use_fallback('compare')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\compare',
                 array($left, $right)
             );
@@ -46,10 +49,10 @@ class ParagonIE_Sodium_Compat
      * @param $string
      * @return string
      */
-    public function hex2bin($string)
+    public static function hex2bin($string)
     {
         if (self::use_fallback('hex2bin')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\hex2bin',
                 array($string)
             );
@@ -60,10 +63,10 @@ class ParagonIE_Sodium_Compat
     /**
      * @return int
      */
-    public function library_version_major()
+    public static function library_version_major()
     {
         if (self::use_fallback('hex2bin')) {
-            return call_user_func('\\Sodium\\library_version_minor');
+            return (int) call_user_func('\\Sodium\\library_version_minor');
         }
         return self::LIBRARY_VERSION_MAJOR;
     }
@@ -71,10 +74,10 @@ class ParagonIE_Sodium_Compat
     /**
      * @return int
      */
-    public function library_version_minor()
+    public static function library_version_minor()
     {
         if (self::use_fallback('library_version_minor')) {
-            return call_user_func('\\Sodium\\library_version_minor');
+            return (int) call_user_func('\\Sodium\\library_version_minor');
         }
         return self::LIBRARY_VERSION_MINOR;
     }
@@ -84,10 +87,10 @@ class ParagonIE_Sodium_Compat
      * @param string $right
      * @return int
      */
-    public function memcmp($left, $right)
+    public static function memcmp($left, $right)
     {
         if (self::use_fallback('memcmp')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\memcmp',
                 array($left, $right)
             );
@@ -98,12 +101,12 @@ class ParagonIE_Sodium_Compat
     /**
      * @param &string $var
      */
-    public function memzero(&$var)
+    public static function memzero(&$var)
     {
         if (self::use_fallback('memzero')) {
-            call_user_func(
+            call_user_func_array(
                 '\\Sodium\\memzero',
-                array($var)
+                array(&$var)
             );
             return;
         }
@@ -118,7 +121,7 @@ class ParagonIE_Sodium_Compat
     public static function randombytes_buf($numBytes)
     {
         if (self::use_fallback('randombytes_buf')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\randombytes_buf',
                 array($numBytes)
             );
@@ -133,7 +136,7 @@ class ParagonIE_Sodium_Compat
     public static function randombytes_uniform($range)
     {
         if (self::use_fallback('randombytes_uniform')) {
-            return call_user_func(
+            return (int) call_user_func_array(
                 '\\Sodium\\randombytes_uniform',
                 array($range)
             );
@@ -147,7 +150,7 @@ class ParagonIE_Sodium_Compat
     public static function randombytes_random16()
     {
         if (self::use_fallback('randombytes_random16')) {
-            return call_user_func('\\Sodium\\randombytes_random16');
+            return (int) call_user_func('\\Sodium\\randombytes_random16');
         }
         return random_int(0, 65535);
     }
@@ -158,20 +161,132 @@ class ParagonIE_Sodium_Compat
     public static function version_string()
     {
         if (self::use_fallback('version_string')) {
-            return call_user_func('\\Sodium\\version_string');
+            return (int) call_user_func('\\Sodium\\version_string');
         }
         return self::VERSION_STRING;
     }
 
+    /**
+     * @param string $plaintext
+     * @param string $nonce
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_box($plaintext, $nonce, $kp)
+    {
+        if (self::use_fallback('memcmp')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box',
+                array($plaintext, $nonce, $kp)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box($plaintext, $nonce, $kp);
+    }
+
+    /**
+     * @param string $ciphertext
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function crypto_box_open($ciphertext, $nonce, $key)
+    {
+        if (self::use_fallback('memcmp')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_secretbox_open',
+                array($ciphertext, $nonce, $key)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::secretbox_open($ciphertext, $nonce, $key);
+    }
+
+    /**
+     * @param string $plaintext
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
     public static function crypto_secretbox($plaintext, $nonce, $key)
     {
         if (self::use_fallback('memcmp')) {
-            return call_user_func(
+            return call_user_func_array(
                 '\\Sodium\\crypto_secretbox',
                 array($plaintext, $nonce, $key)
             );
         }
         return ParagonIE_Sodium_Crypto::secretbox($plaintext, $nonce, $key);
+    }
+
+    /**
+     * @param string $ciphertext
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function crypto_secretbox_open($ciphertext, $nonce, $key)
+    {
+        if (self::use_fallback('memcmp')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_secretbox_open',
+                array($ciphertext, $nonce, $key)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::secretbox_open($ciphertext, $nonce, $key);
+    }
+
+    /**
+     * @param int $len
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function crypto_stream($len, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
+    }
+
+    /**
+     * @param string $message
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function crypto_stream_xor($message, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Core_XSalsa20::xor($message, $nonce, $key);
+    }
+
+    /**
+     * @param string $message
+     * @param string $sk
+     * @return string
+     */
+    public static function crypto_sign_detached($message, $sk)
+    {
+        if (self::use_fallback('crypto_sign_detached')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_detached',
+                array($message, $sk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::sign_detached($message, $sk);
+    }
+
+    /**
+     * @param string $signature
+     * @param string $message
+     * @param string $pk
+     * @return bool
+     */
+    public static function crypto_sign_verify_detached($signature, $message, $pk)
+    {
+        if (self::use_fallback('crypto_sign_verify_detached')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_verify_detached',
+                array($signature, $message, $pk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::sign_verify_detached($signature, $message, $pk);
     }
 
     /**

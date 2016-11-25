@@ -29,21 +29,31 @@ class ParagonIE_Sodium_Crypto
     /**
      * @param string $plaintext
      * @param string $nonce
-     * @param string $keypair
+     * @param string $pk
+     * @param string $sk
+     * @return string
      */
-    public function box($plaintext, $nonce, $keypair)
+    public static function box($plaintext, $nonce, $pk, $sk)
     {
-
+        $k = ParagonIE_Sodium_Core_X25519::scalarmult($pk, $sk);
+        $c = self::secretbox($plaintext, $nonce, $k);
+        ParagonIE_Sodium_Compat::memzero($k);
+        return $c;
     }
 
     /**
      * @param string $ciphertext
      * @param string $nonce
-     * @param string $keypair
+     * @param string $pk
+     * @param string $sk
+     * @return string
      */
-    public function box_open($ciphertext, $nonce, $keypair)
+    public static function box_open($ciphertext, $nonce, $pk, $sk)
     {
-
+        $k = ParagonIE_Sodium_Core_X25519::scalarmult($pk, $sk);
+        $p = self::secretbox_open($ciphertext, $nonce, $k);
+        ParagonIE_Sodium_Compat::memzero($k);
+        return $p;
     }
 
     /**
@@ -54,7 +64,7 @@ class ParagonIE_Sodium_Crypto
      */
     public static function secretbox($plaintext, $nonce, $key)
     {
-
+        $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key, null);
     }
 
     /**
@@ -71,19 +81,41 @@ class ParagonIE_Sodium_Crypto
     /**
      * @param string $message
      * @param string $sk
+     * @return string
      */
     public static function sign_detached($message, $sk)
     {
+        return ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $sk);
+    }
 
+    /**
+     * @param string $message
+     * @param string $sk
+     * @return string
+     */
+    public static function sign($message, $sk)
+    {
+        return ParagonIE_Sodium_Core_Ed25519::sign($message, $sk);
+    }
+
+    /**
+     * @param string $signedMessage
+     * @param string $pk
+     * @return string
+     */
+    public static function sign_open($signedMessage, $pk)
+    {
+        return ParagonIE_Sodium_Core_Ed25519::sign_open($signedMessage, $pk);
     }
 
     /**
      * @param string $signature
      * @param string $message
      * @param string $pk
+     * @return bool
      */
     public static function sign_verify_detached($signature, $message, $pk)
     {
-
+        return ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $pk);
     }
 }
