@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class ParagonIE_Sodium_Core_HSalsa20
+ */
 class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Salsa20
 {
     /**
@@ -8,6 +11,7 @@ class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Salsa20
      * @param string $in
      * @param string $k
      * @param string|null $c
+     * @return string
      */
     public static function hsalsa20($in, $k, $c = null)
     {
@@ -70,13 +74,13 @@ class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Salsa20
             $x15 ^= self::rotate($x14 + $x13, 18);
         }
 
-        return self::store_4($x0) .
-            self::store_4($x5) .
-            self::store_4($x10) .
-            self::store_4($x15) .
-            self::store_4($x6) .
-            self::store_4($x7) .
-            self::store_4($x8) .
-            self::store_4($x9);
+        return self::store32_le($x0) .
+            self::store32_le($x5) .
+            self::store32_le($x10) .
+            self::store32_le($x15) .
+            self::store32_le($x6) .
+            self::store32_le($x7) .
+            self::store32_le($x8) .
+            self::store32_le($x9);
     }
 }

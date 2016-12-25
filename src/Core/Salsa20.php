@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class ParagonIE_Sodium_Core_Salsa20
+ */
 class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
 {
     const ROUNDS = 20;
@@ -14,6 +17,9 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
      */
     public static function core_salsa20($in, $k, $c = null)
     {
+        if (self::strlen($k) < 32) {
+            throw new RangeException('Key must be 32 bytes long');
+        }
         if ($c === null) {
             $j0  = $x0  = 0x61707865;
             $j5  = $x5  = 0x3320646e;
@@ -29,44 +35,51 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         $j2  = $x2  = self::load_4(self::substr($k,  4, 4));
         $j3  = $x3  = self::load_4(self::substr($k,  8, 4));
         $j4  = $x4  = self::load_4(self::substr($k, 12, 4));
-        $j11 = $x11 = self::load_4(self::substr($k, 16, 4));
-        $j12 = $x12 = self::load_4(self::substr($k, 20, 4));
-        $j13 = $x13 = self::load_4(self::substr($k, 24, 4));
-        $j14 = $x14 = self::load_4(self::substr($k, 28, 4));
         $j6  = $x6  = self::load_4(self::substr($in, 0, 4));
         $j7  = $x7  = self::load_4(self::substr($in, 4, 4));
         $j8  = $x8  = self::load_4(self::substr($in, 8, 4));
         $j9  = $x9  = self::load_4(self::substr($in, 12, 4));
+        $j11 = $x11 = self::load_4(self::substr($k, 16, 4));
+        $j12 = $x12 = self::load_4(self::substr($k, 20, 4));
+        $j13 = $x13 = self::load_4(self::substr($k, 24, 4));
+        $j14 = $x14 = self::load_4(self::substr($k, 28, 4));
 
         for ($i = self::ROUNDS; $i > 0; $i -= 2) {
             $x4 ^= self::rotate($x0 + $x12, 7);
             $x8 ^= self::rotate($x4 + $x0, 9);
             $x12 ^= self::rotate($x8 + $x4, 13);
             $x0 ^= self::rotate($x12 + $x8, 18);
+
             $x9 ^= self::rotate($x5 + $x1, 7);
             $x13 ^= self::rotate($x9 + $x5, 9);
             $x1 ^= self::rotate($x13 + $x9, 13);
             $x5 ^= self::rotate($x1 + $x13, 18);
+
             $x14 ^= self::rotate($x10 + $x6, 7);
             $x2 ^= self::rotate($x14 + $x10, 9);
             $x6 ^= self::rotate($x2 + $x14, 13);
             $x10 ^= self::rotate($x6 + $x2, 18);
+
             $x3 ^= self::rotate($x15 + $x11, 7);
             $x7 ^= self::rotate($x3 + $x15, 9);
             $x11 ^= self::rotate($x7 + $x3, 13);
             $x15 ^= self::rotate($x11 + $x7, 18);
+
             $x1 ^= self::rotate($x0 + $x3, 7);
             $x2 ^= self::rotate($x1 + $x0, 9);
             $x3 ^= self::rotate($x2 + $x1, 13);
             $x0 ^= self::rotate($x3 + $x2, 18);
+
             $x6 ^= self::rotate($x5 + $x4, 7);
             $x7 ^= self::rotate($x6 + $x5, 9);
             $x4 ^= self::rotate($x7 + $x6, 13);
             $x5 ^= self::rotate($x4 + $x7, 18);
+
             $x11 ^= self::rotate($x10 + $x9, 7);
             $x8 ^= self::rotate($x11 + $x10, 9);
             $x9 ^= self::rotate($x8 + $x11, 13);
             $x10 ^= self::rotate($x9 + $x8, 18);
+
             $x12 ^= self::rotate($x15 + $x14, 7);
             $x13 ^= self::rotate($x12 + $x15, 9);
             $x14 ^= self::rotate($x13 + $x12, 13);
@@ -90,22 +103,22 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         $x14 += $j14;
         $x15 += $j15;
 
-        return self::store_4($x0) .
-            self::store_4($x1) .
-            self::store_4($x2) .
-            self::store_4($x3) .
-            self::store_4($x4) .
-            self::store_4($x5) .
-            self::store_4($x6) .
-            self::store_4($x7) .
-            self::store_4($x8) .
-            self::store_4($x9) .
-            self::store_4($x10) .
-            self::store_4($x11) .
-            self::store_4($x12) .
-            self::store_4($x13) .
-            self::store_4($x14) .
-            self::store_4($x15);
+        return self::store32_le($x0) .
+            self::store32_le($x1) .
+            self::store32_le($x2) .
+            self::store32_le($x3) .
+            self::store32_le($x4) .
+            self::store32_le($x5) .
+            self::store32_le($x6) .
+            self::store32_le($x7) .
+            self::store32_le($x8) .
+            self::store32_le($x9) .
+            self::store32_le($x10) .
+            self::store32_le($x11) .
+            self::store32_le($x12) .
+            self::store32_le($x13) .
+            self::store32_le($x14) .
+            self::store32_le($x15);
     }
 
     /**
@@ -116,14 +129,19 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
      */
     public static function salsa20($len, $nonce, $key)
     {
+        if (self::strlen($key) !== 32) {
+            throw new RangeException('Key must be 32 bytes long');
+        }
         $kcopy = '' . $key;
         $in = self::substr($nonce, 0, 8) . str_repeat("\0", 8);
         $c = '';
         while ($len >= 64) {
             $c .= self::core_salsa20($in, $kcopy, null);
             $u = 1;
+            // Internal counter.
             for ($i = 8; $i < 16; ++$i) {
-                $u += $in[$i];
+                $u += self::chrToInt($in[$i]);
+                $in[$i] = self::intToChr($u & 0xff);
                 $u >>= 8;
             }
             $len -= 64;
@@ -135,7 +153,7 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
                 $len
             );
         }
-        ParagonIE_Sodium_Compat::memzero(&$kcopy);
+        ParagonIE_Sodium_Compat::memzero($kcopy);
         return $c;
     }
 
@@ -144,11 +162,10 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
      * @param int $c
      * @return int
      */
-    protected static function rotate($u, $c)
+    public static function rotate($u, $c)
     {
-        if (PHP_INT_SIZE === 8) {
-            return 0xffffffff & (($u << $c) | ($u >> (64 - $c)));
-        }
-        return ($u << $c) | ($u >> (32 - $c));
+        $u &= 0xffffffff;
+        $c %= 32;
+        return 0xffffffff & (($u << $c) | ($u >> (32 - $c)));
     }
 }

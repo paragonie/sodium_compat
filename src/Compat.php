@@ -201,6 +201,37 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     */
+    public static function crypto_scalarmult($sk, $pk)
+    {
+        if (self::use_fallback('crypto_scalarmult')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_scalarmult',
+                array($sk, $pk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::scalarmult($sk, $pk);
+    }
+
+    /**
+     * @param $sk
+     * @return string
+     */
+    public static function crypto_scalarmult_base($sk)
+    {
+        if (self::use_fallback('crypto_scalarmult_base')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_scalarmult_base',
+                array($sk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::scalarmult_base($sk);
+    }
+
+    /**
      * @param string $plaintext
      * @param string $nonce
      * @param string $key
@@ -208,7 +239,7 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_secretbox($plaintext, $nonce, $key)
     {
-        if (self::use_fallback('memcmp')) {
+        if (self::use_fallback('crypto_secretbox')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_secretbox',
                 array($plaintext, $nonce, $key)
@@ -242,7 +273,7 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_stream($len, $nonce, $key)
     {
-        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
+        return ParagonIE_Sodium_Core_Xsalsa20::xsalsa20($len, $nonce, $key);
     }
 
     /**
@@ -253,7 +284,47 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_stream_xor($message, $nonce, $key)
     {
-        return ParagonIE_Sodium_Core_XSalsa20::xor($message, $nonce, $key);
+        return ParagonIE_Sodium_Core_Xsalsa20::xsalsa20_xor($message, $nonce, $key);
+    }
+
+    /**
+     * @param string $message
+     * @param string $sk
+     * @return string
+     */
+    public static function crypto_sign($message, $sk)
+    {
+        if (self::use_fallback('crypto_sign_detached')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign',
+                array($message, $sk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::sign($message, $sk);
+    }
+
+    /**
+     * @param string $sm
+     * @param string $pk
+     * @return string
+     */
+    public static function crypto_sign_open($sm, $pk)
+    {
+        if (self::use_fallback('crypto_sign_detached')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_open',
+                array($sm, $pk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::sign($sm, $pk);
+    }
+
+    /**
+     * @return string
+     */
+    public static function crypto_sign_keypair()
+    {
+        return ParagonIE_Sodium_Core_Ed25519::keypair();
     }
 
     /**

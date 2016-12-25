@@ -100,10 +100,65 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             'Signature verification failed in compatibility test.'
         );
 
+        $signed = \Sodium\crypto_sign($message, $secret);
         $this->assertSame(
-            bin2hex(\Sodium\crypto_sign($message, $secret)),
+            bin2hex($signed),
             bin2hex(ParagonIE_Sodium_Crypto::sign($message, $secret)),
             'Basic crypto_sign works'
+        );
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_sign_open($signed, $public)),
+            bin2hex(ParagonIE_Sodium_Crypto::sign_open($signed, $public)),
+            'Basic crypto_sign_open works'
+        );
+    }
+
+    public function testCryptoStream()
+    {
+        $key = str_repeat("\x80", 32);
+        $nonce = str_repeat("\x00", 24);
+
+        $streamed = \Sodium\crypto_stream(64, $nonce, $key);
+        $this->assertSame(
+            bin2hex($streamed),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_stream(64, $nonce, $key)),
+            'crypto_stream_xor() is not working'
+        );
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $streamed = \Sodium\crypto_stream(64, $nonce, $key);
+        $this->assertSame(
+            bin2hex($streamed),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_stream(64, $nonce, $key)),
+            'crypto_stream_xor() is not working'
+        );
+    }
+
+    public function testCryptoStreamXor()
+    {
+        $key = str_repeat("\x80", 32);
+        $nonce = str_repeat("\x00", 24);
+        $message ='Test message';
+
+        $streamed = \Sodium\crypto_stream_xor($message, $nonce, $key);
+        $this->assertSame(
+            bin2hex($streamed),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_stream_xor($message, $nonce, $key)),
+            'crypto_stream_xor() is not working'
+        );
+
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $message = 'Test message: ' . base64_encode(random_bytes(33));
+
+        $streamed = \Sodium\crypto_stream_xor($message, $nonce, $key);
+        $this->assertSame(
+            bin2hex($streamed),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_stream_xor($message, $nonce, $key)),
+            'crypto_stream_xor() is not working'
         );
     }
 }

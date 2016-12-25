@@ -27,10 +27,13 @@ class ParagonIE_Sodium_Core_Util
      */
     public static function load_4($string)
     {
-        $result = self::chrToInt($string[0]);
-        $result |= self::chrToInt($string[1]) << 8;
-        $result |= self::chrToInt($string[2]) << 16;
-        $result |= self::chrToInt($string[3]) << 24;
+        if (self::strlen($string) < 4) {
+            throw new Exception('String must be 4 bytes or more');
+        }
+        $result = self::chrToInt($string[0]) & 0xff;
+        $result |= (self::chrToInt($string[1]) & 0xff) << 8;
+        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
+        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
         return $result;
     }
 
@@ -55,6 +58,18 @@ class ParagonIE_Sodium_Core_Util
             self::intToChr(($int >> 16)    & 0xff) .
             self::intToChr(($int >> 8)     & 0xff) .
             self::intToChr( $int           & 0xff);
+    }
+
+    /**
+     * @param $int
+     * @return string
+     */
+    public static function store32_le($int)
+    {
+        return self::intToChr($int      & 0xff) .
+            self::intToChr(($int >> 8)  & 0xff) .
+            self::intToChr(($int >> 16) & 0xff) .
+            self::intToChr(($int >> 24) & 0xff);
     }
 
     /**

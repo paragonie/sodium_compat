@@ -35,10 +35,46 @@ class ParagonIE_Sodium_Crypto
      */
     public static function box($plaintext, $nonce, $pk, $sk)
     {
-        $k = ParagonIE_Sodium_Core_X25519::scalarmult($pk, $sk);
+        $k = self::scalarmult($sk, $pk);
         $c = self::secretbox($plaintext, $nonce, $k);
         ParagonIE_Sodium_Compat::memzero($k);
         return $c;
+    }
+
+    /**
+     * @return string
+     */
+    public static function box_keypair()
+    {
+        $sk = random_bytes(32);
+        $pk = self::scalarmult_base($sk);
+        return $sk . $pk;
+    }
+
+    /**
+     * @param string $keypair
+     * @return string
+     */
+    public static function box_secretkey($keypair)
+    {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
+            throw new RangeException('Must be a keypair.');
+        }
+        $sk = ParagonIE_Sodium_Core_Util::substr($keypair, 0, 32);
+        return $sk;
+    }
+
+    /**
+     * @param string $keypair
+     * @return string
+     */
+    public static function box_publickey($keypair)
+    {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
+            throw new RangeException('Must be a keypair.');
+        }
+        $sk = ParagonIE_Sodium_Core_Util::substr($keypair, 32, 32);
+        return $sk;
     }
 
     /**
@@ -50,10 +86,29 @@ class ParagonIE_Sodium_Crypto
      */
     public static function box_open($ciphertext, $nonce, $pk, $sk)
     {
-        $k = ParagonIE_Sodium_Core_X25519::scalarmult($pk, $sk);
+        $k = self::scalarmult($sk, $pk);
         $p = self::secretbox_open($ciphertext, $nonce, $k);
         ParagonIE_Sodium_Compat::memzero($k);
         return $p;
+    }
+
+    /**
+     * @param string $n
+     * @param string $p
+     * @return string
+     */
+    public static function scalarmult($n, $p)
+    {
+        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($n, $p);
+    }
+
+    /**
+     * @param string $n
+     * @return string
+     */
+    public static function scalarmult_base($n)
+    {
+        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($n);
     }
 
     /**
@@ -65,6 +120,7 @@ class ParagonIE_Sodium_Crypto
     public static function secretbox($plaintext, $nonce, $key)
     {
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key, null);
+        
     }
 
     /**
