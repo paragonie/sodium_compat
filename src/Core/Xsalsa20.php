@@ -3,7 +3,7 @@
 /**
  * Class ParagonIE_Sodium_Core_XSalsa20
  */
-class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSalsa20
+abstract class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSalsa20
 {
     /**
      * @param string $len

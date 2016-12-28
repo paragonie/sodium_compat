@@ -7,6 +7,10 @@ class UtilTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::bin2hex()
+     * @covers ParagonIE_Sodium_Core_Util::hex2bin()
+     */
     public function testBin2hex()
     {
         $data = random_bytes(32);
@@ -22,8 +26,20 @@ class UtilTest extends PHPUnit_Framework_TestCase
             ),
             'bin2hex and hex2bin should decode a string to itself'
         );
+        $this->assertSame(
+            $data,
+            ParagonIE_Sodium_Core_Util::hex2bin(
+                bin2hex($data)
+            ),
+            'hex2bin should be compatible with PHP'
+        );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::randombytes_buf()
+     * @covers ParagonIE_Sodium_Compat::randombytes_random16()
+     * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
+     */
     public function testRandombytes()
     {
         $random = ParagonIE_Sodium_Compat::randombytes_buf(32);
@@ -35,8 +51,16 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $int = ParagonIE_Sodium_Compat::randombytes_uniform(1000);
         $this->assertLessThan(1000, $int, 'Out of bounds (> 1000)');
         $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+
+        $int = ParagonIE_Sodium_Compat::randombytes_random16();
+        $this->assertLessThan(65536, $int, 'Out of bounds (> 65535)');
+        $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::intArrayToString()
+     * @covers ParagonIE_Sodium_Core_Util::stringToIntArray()
+     */
     public function testConversion()
     {
         $sample = array(80, 97, 114, 97, 103, 111, 110);

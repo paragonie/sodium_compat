@@ -155,7 +155,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             'd8e7f39643da186a4a690c8cf6a7987bc4d2fb7bede4e7cec89f8175da27730a',
             bin2hex($reduced),
-            'sd_ceduce is not working'
+            'sd_reduce is not working'
         );
     }
 
@@ -407,7 +407,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testGeScalarmultBase()
     {
         $nonce = hex2bin(
-            'a5cdb7382d5282472312e739b7b8fded4b0bc73a8d3b7ac24e6ee259df74800ac19b35ef3130ed0474e0f0cc4d9ee277788775036b7025aed15c3beb29ff4eab'
+            'a5cdb7382d5282472312e739b7b8fded4b0bc73a8d3b7ac24e6ee259df74800a' .
+            'c19b35ef3130ed0474e0f0cc4d9ee277788775036b7025aed15c3beb29ff4eab'
         );
         $R = ParagonIE_Sodium_Core_Curve25519::ge_scalarmult_base($nonce);
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
@@ -474,6 +475,9 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Curve25519::ge_double_scalarmult_vartime()
+     */
     public function testGeDoubleScalarMultVartime()
     {
         $h = hex2bin(

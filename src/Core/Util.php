@@ -3,7 +3,7 @@
 /**
  * Class ParagonIE_Sodium_Core_Util
  */
-class ParagonIE_Sodium_Core_Util
+abstract class ParagonIE_Sodium_Core_Util
 {
     /**
      * Load a 3 character substring into an integer
@@ -23,7 +23,8 @@ class ParagonIE_Sodium_Core_Util
      * Load a 4 character substring into an integer
      *
      * @param $string
-     * @return int;
+     * @return int
+     * @throws Exception
      */
     public static function load_4($string)
     {
@@ -308,6 +309,20 @@ class ParagonIE_Sodium_Core_Util
         } else {
             return substr($str, $start);
         }
+    }
+
+    /**
+     * @param string $a
+     * @param string $b
+     * @return bool
+     */
+    public static function verify_16($a, $b)
+    {
+        $diff = self::strlen($a) ^ self::strlen($b);
+        for ($i = 0; $i < 16; ++$i) {
+            $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
+        }
+        return $diff === 0;
     }
 
     /**

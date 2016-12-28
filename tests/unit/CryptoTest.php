@@ -7,6 +7,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
+     */
     public function testScalarmultBase()
     {
         $alice_secret = hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
@@ -18,6 +21,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Crypto::scalarmult()
+     */
     public function testScalarmult()
     {
         $alice_secret = hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
@@ -31,6 +37,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Crypto::sign_detached()
+     */
     public function testSignDetached()
     {
         $secret = hex2bin(
@@ -52,6 +61,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Crypto::sign_verify_detached()
+     */
     public function testVerifyDetached()
     {
         $public = hex2bin('ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc');

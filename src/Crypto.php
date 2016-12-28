@@ -1,7 +1,28 @@
 <?php
 
-class ParagonIE_Sodium_Crypto
+/**
+ * Class ParagonIE_Sodium_Crypto
+ */
+abstract class ParagonIE_Sodium_Crypto
 {
+    const box_curve25519xsalsa20poly1305_SEEDBYTES = 32;
+    const box_curve25519xsalsa20poly1305_PUBLICKEYBYTES = 32;
+    const box_curve25519xsalsa20poly1305_SECRETKEYBYTES = 32;
+    const box_curve25519xsalsa20poly1305_BEFORENMBYTES = 32;
+    const box_curve25519xsalsa20poly1305_NONCEBYTES = 24;
+    const box_curve25519xsalsa20poly1305_MACBYTES = 16;
+    const box_curve25519xsalsa20poly1305_BOXZEROBYTES = 16;
+    const box_curve25519xsalsa20poly1305_ZEROBYTES = 32;
+
+    const onetimeauth_poly1305_BYTES = 16;
+    const onetimeauth_poly1305_KEYBYTES = 32;
+
+    const secretbox_xsalsa20poly1305_KEYBYTES = 32;
+    const secretbox_xsalsa20poly1305_NONCEBYTES = 24;
+    const secretbox_xsalsa20poly1305_MACBYTES = 16;
+    const secretbox_xsalsa20poly1305_BOXZEROBYTES = 16;
+    const secretbox_xsalsa20poly1305_ZEROBYTES = 32;
+
     /**
      * @param string $message
      * @param string $key
@@ -119,8 +140,50 @@ class ParagonIE_Sodium_Crypto
      */
     public static function secretbox($plaintext, $nonce, $key)
     {
-        $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key, null);
-        
+        $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
+
+        $block0 = str_repeat("\x00", 32);
+        $mlen = ParagonIE_Sodium_Core_Util::strlen($plaintext);
+        $mlen0 = $mlen;
+        if ($mlen0 > 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES) {
+            $mlen0 = 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES;
+        }
+        for ($i = 0; $i < $mlen0; ++$i) {
+            $block0[$i + self::secretbox_xsalsa20poly1305_ZEROBYTES] = $plaintext[$i];
+        }
+        $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20_xor(
+            $block0,
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
+            $subkey
+        );
+        $state = new ParagonIE_Sodium_Core_Poly1305_State(
+            ParagonIE_Sodium_Core_Util::substr(
+                $block0,
+                0,
+                self::onetimeauth_poly1305_KEYBYTES
+            )
+        );
+
+        $c = ParagonIE_Sodium_Core_Util::substr(
+            $block0,
+            self::secretbox_xsalsa20poly1305_ZEROBYTES
+        );
+        if ($mlen > $mlen0) {
+            $c .= ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
+                ParagonIE_Sodium_Core_Util::substr($plaintext, $mlen0),
+                $nonce,
+                1,
+                $subkey
+            );
+        }
+        ParagonIE_Sodium_Compat::memzero($block0);
+        ParagonIE_Sodium_Compat::memzero($subkey);
+
+        $state->update($c);
+        $c = $state->finish() . $c;
+        unset($state);
+
+        return $c;
     }
 
     /**

@@ -2,6 +2,9 @@
 
 class Salsa20Test extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers ParagonIE_Sodium_Core_Salsa20::rotate()
+     */
     public function testRotate()
     {
         $this->assertEquals(
@@ -19,6 +22,11 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
             0x10000000,
             ParagonIE_Sodium_Core_Salsa20::rotate(0x00000001, 28),
             'Left rotate by 28'
+        );
+        $this->assertEquals(
+            0x80000000,
+            ParagonIE_Sodium_Core_Salsa20::rotate(0x00000001, 31),
+            'Left rotate by 31'
         );
         $this->assertEquals(
             0x00000001,

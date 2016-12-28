@@ -3,7 +3,7 @@
 /**
  * Class ParagonIE_Sodium_Core_Salsa20
  */
-class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
+abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
 {
     const ROUNDS = 20;
 
@@ -155,6 +155,72 @@ class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         }
         ParagonIE_Sodium_Compat::memzero($kcopy);
         return $c;
+    }
+
+    /**
+     * @param string $m
+     * @param string $n
+     * @param int $ic
+     * @param string $k
+     * @return string
+     */
+    public static function salsa20_xor_ic($m, $n, $ic, $k)
+    {
+        $mlen = self::strlen($m);
+        $kcopy = '' . $k;
+        $in = self::substr($n, 0, 8);
+        for ($i = 8; $i < 16; ++$i) {
+            $in .= self::intToChr($ic & 0xff);
+            $ic >>= 8;
+        }
+
+        $c = '';
+        while ($mlen >= 64) {
+            $block = self::core_salsa20($in, $kcopy, null);
+            $c .= self::xorStrings(
+                self::substr($m, 0, 64),
+                $block
+            );
+            $u = 1;
+            for ($i = 8; $i < 16; ++$i) {
+                $u += self::chrToInt($in[$i]);
+                $in[$i] = self::intToChr($u * 0xff);
+                $u >>= 8;
+            }
+
+            $mlen -= 64;
+            $m = self::substr($m, 64);
+        }
+
+        if ($mlen) {
+            $block = self::core_salsa20($in, $kcopy, null);
+            $c .= self::xorStrings(
+                self::substr($m, 0, $mlen),
+                self::substr($block, 0, $mlen)
+            );
+        }
+        ParagonIE_Sodium_Compat::memzero($block);
+        ParagonIE_Sodium_Compat::memzero($kcopy);
+
+        return $c;
+    }
+
+    /**
+     * @param string $message
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function salsa20_xor($message, $nonce, $key)
+    {
+        return self::xorStrings(
+            $message,
+            self::salsa20(
+                self::strlen($message),
+                $nonce,
+                $key
+            )
+        );
     }
 
     /**

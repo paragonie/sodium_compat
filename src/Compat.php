@@ -328,6 +328,24 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_sign_publickey($kp)
+    {
+        return ParagonIE_Sodium_Core_Ed25519::publickey($kp);
+    }
+
+    /**
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_sign_secretkey($kp)
+    {
+        return ParagonIE_Sodium_Core_Ed25519::secretkey($kp);
+    }
+
+    /**
      * @param string $message
      * @param string $sk
      * @return string

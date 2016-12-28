@@ -8,14 +8,16 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!extension_loaded('libsodium')) {
-            $this->markTestSkipped('Libsodium is not installed');
+            $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
         }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = false;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::compare()
+     */
     public function testCompare()
     {
-
         $a = pack('H*', '589a84d7ec2db8f982841cedca674ec1');
         $b = $a;
         $b[15] = 'a';
@@ -36,6 +38,9 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::bin2hex()
+     */
     public function testBin2hex()
     {
         $str = random_bytes(random_int(1, 63));
@@ -45,6 +50,9 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::hex2bin()
+     */
     public function testHex2bin()
     {
         $str = bin2hex(random_bytes(random_int(1, 63)));
@@ -54,6 +62,12 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_sign()
+     * @covers ParagonIE_Sodium_Compat::crypto_sign_open()
+     * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
+     * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
+     */
     public function testCryptoSign()
     {
         $keypair = hex2bin(
@@ -63,6 +77,17 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
         $secret = \Sodium\crypto_sign_secretkey($keypair);
         $public = \Sodium\crypto_sign_publickey($keypair);
+
+        $this->assertSame(
+            $secret,
+            ParagonIE_Sodium_Compat::crypto_sign_secretkey($keypair),
+            'crypto_sign_secretkey() is broken'
+        );
+        $this->assertSame(
+            $public,
+            ParagonIE_Sodium_Compat::crypto_sign_publickey($keypair),
+            'crypto_sign_publickey() is broken'
+        );
 
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         $expected =
@@ -100,6 +125,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             'Signature verification failed in compatibility test.'
         );
 
+        // Signed messages (NaCl compatibility):
         $signed = \Sodium\crypto_sign($message, $secret);
         $this->assertSame(
             bin2hex($signed),
@@ -114,6 +140,25 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
+     */
+    public function testCryptoSecretBox()
+    {
+        $key = str_repeat("\x80", 32);
+        $nonce = str_repeat("\x00", 24);
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            'secretbox'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_stream()
+     */
     public function testCryptoStream()
     {
         $key = str_repeat("\x80", 32);
@@ -136,11 +181,14 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_stream_xor()
+     */
     public function testCryptoStreamXor()
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
-        $message ='Test message';
+        $message = 'Test message';
 
         $streamed = \Sodium\crypto_stream_xor($message, $nonce, $key);
         $this->assertSame(

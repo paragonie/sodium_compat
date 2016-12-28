@@ -3,7 +3,7 @@
 /**
  * Class ParagonIE_Sodium_Core_Ed25519
  */
-class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve25519
+abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve25519
 {
     const KEYPAIR_BYTES = 96;
     const SEED_BYTES = 32;

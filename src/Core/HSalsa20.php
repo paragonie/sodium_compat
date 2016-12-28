@@ -3,7 +3,7 @@
 /**
  * Class ParagonIE_Sodium_Core_HSalsa20
  */
-class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Salsa20
+abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Salsa20
 {
     /**
      * Calculate an hsalsa20 hash of a single block
