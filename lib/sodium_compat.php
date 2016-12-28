@@ -13,7 +13,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'bin2hex'),
-                array($string)
+                func_get_args()
             );
         }
     }
@@ -27,7 +27,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'compare'),
-                array($a, $b)
+                func_get_args()
             );
         }
     }
@@ -41,7 +41,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'memcmp'),
-                array($a, $b)
+                func_get_args()
             );
         }
     }
@@ -55,7 +55,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_detached'),
-                array($message, $sk)
+                func_get_args()
             );
         }
     }
@@ -69,7 +69,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign'),
-                array($message, $sk)
+                func_get_args()
             );
         }
     }
@@ -83,7 +83,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_open'),
-                array($signedMessage, $pk)
+                func_get_args()
             );
         }
     }
@@ -96,7 +96,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_publickey'),
-                array($keypair)
+                func_get_args()
             );
         }
     }
@@ -109,7 +109,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_publickey_from_secretkey'),
-                array($sk)
+                func_get_args()
             );
         }
     }
@@ -122,7 +122,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_secretkey'),
-                array($keypair)
+                func_get_args()
             );
         }
     }
@@ -137,7 +137,37 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign_verify_detached'),
-                array($signature, $message, $pk)
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_stream')) {
+        /**
+         * @param int $len
+         * @param string $nonce
+         * @param string $key
+         * @return string
+         */
+        function crypto_stream($len, $nonce, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_stream'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_stream_xor')) {
+        /**
+         * @param $message
+         * @param $nonce
+         * @param $key
+         * @return mixed
+         */
+        function crypto_stream_xor($message, $nonce, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_stream_xor'),
+                func_get_args()
             );
         }
     }
@@ -150,7 +180,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'hex2bin'),
-                array($string)
+                func_get_args()
             );
         }
     }
@@ -163,7 +193,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'randombytes_buf'),
-                array($amount)
+                func_get_args()
             );
         }
     }
@@ -177,7 +207,7 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'randombytes_uniform'),
-                array($upperLimit)
+                func_get_args()
             );
         }
     }
