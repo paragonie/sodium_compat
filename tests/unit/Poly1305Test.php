@@ -8,8 +8,8 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
      */
     public function testVectorA()
     {
-        $msg = hex2bin('0000000000000000000000000000000000000000000000000000000000000000');
-        $key = hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
+        $msg = ParagonIE_Sodium_Core_Util::hex2bin('0000000000000000000000000000000000000000000000000000000000000000');
+        $key = ParagonIE_Sodium_Core_Util::hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
         $this->assertSame(
             '49ec78090e481ec6c26b33b91ccc0307',
             bin2hex(ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)),
@@ -24,8 +24,8 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
     public function testVectorB()
     {
 
-        $msg = hex2bin('48656c6c6f20776f726c6421');
-        $key = hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
+        $msg = ParagonIE_Sodium_Core_Util::hex2bin('48656c6c6f20776f726c6421');
+        $key = ParagonIE_Sodium_Core_Util::hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
         $this->assertSame(
             'a6f745008f81c916a20dcc74eef2b2f0',
             bin2hex(ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)),

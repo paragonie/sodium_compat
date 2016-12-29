@@ -150,7 +150,10 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      */
     public function testReduce()
     {
-        $input = hex2bin("dc0e1b48b1f2d9d3a6638a43c986c49ecbfafba209fff7a801f9d8f776c1fc795dd9dd8f4c272b92210c923ba7940955136f7e68c4bee52a6562f8171785ce10");
+        $input = ParagonIE_Sodium_Core_Util::hex2bin(
+            "dc0e1b48b1f2d9d3a6638a43c986c49ecbfafba209fff7a801f9d8f776c1fc79" .
+            "5dd9dd8f4c272b92210c923ba7940955136f7e68c4bee52a6562f8171785ce10"
+        );
         $reduced = ParagonIE_Sodium_Core_Curve25519::sc_reduce($input);
         $this->assertSame(
             'd8e7f39643da186a4a690c8cf6a7987bc4d2fb7bede4e7cec89f8175da27730a',
@@ -406,7 +409,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     
     public function testGeScalarmultBase()
     {
-        $nonce = hex2bin(
+        $nonce = ParagonIE_Sodium_Core_Util::hex2bin(
             'a5cdb7382d5282472312e739b7b8fded4b0bc73a8d3b7ac24e6ee259df74800a' .
             'c19b35ef3130ed0474e0f0cc4d9ee277788775036b7025aed15c3beb29ff4eab'
         );
@@ -480,7 +483,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      */
     public function testGeDoubleScalarMultVartime()
     {
-        $h = hex2bin(
+        $h = ParagonIE_Sodium_Core_Util::hex2bin(
             'fc2ef90e2ddab38c55d0edbf41167048061a03b99d00112dcc92777c1b17300c' .
             'bd84d56b93d272eb01a2ffb5557bda3922360e402c29d05cda3f0debabaf5ce5'
         );
@@ -505,7 +508,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
                 -28155508, 13944970, 2511703, 16462880, 15250894, -7952383, -19629302, 16022930, 1783986, 16320964
             ))
         );
-        $sig = hex2bin(
+        $sig = ParagonIE_Sodium_Core_Util::hex2bin(
             '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
             '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
         );

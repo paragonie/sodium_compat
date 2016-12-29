@@ -116,7 +116,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
      */
     public function testCryptoSign()
     {
-        $keypair = hex2bin(
+        $keypair = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
             'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc' .
             'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
