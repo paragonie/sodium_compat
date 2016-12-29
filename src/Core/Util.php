@@ -29,12 +29,7 @@ abstract class ParagonIE_Sodium_Core_Util
     public static function load_4($string)
     {
         if (self::strlen($string) < 4) {
-            do {
-                $string .= "\x00";
-            } while (self::strlen($string) < 4);
-            /*
             throw new Exception('String must be 4 bytes or more; ' . self::strlen($string) . ' given.');
-            */
         }
         $result = self::chrToInt($string[0]) & 0xff;
         $result |= (self::chrToInt($string[1]) & 0xff) << 8;
