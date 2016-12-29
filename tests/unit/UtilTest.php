@@ -115,4 +115,26 @@ class UtilTest extends PHPUnit_Framework_TestCase
             'Unexpected result from load_4'
         );
     }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::strlen()
+     */
+    public function testStrlen()
+    {
+        $this->assertSame(4, ParagonIE_Sodium_Core_Util::strlen("\xF0\x9D\x92\xB3"));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::strlen()
+     */
+    public function testSubstr()
+    {
+        $string = \str_repeat("\xF0\x9D\x92\xB3", 4);
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 1), "\xF0");
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 1, 1), "\x9D");
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 1), "\x92");
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 3, 1), "\xB3");
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
+        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
+    }
 }

@@ -1037,6 +1037,11 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function slide($a)
     {
+        if (self::strlen($a) < 256) {
+            if (self::strlen($a) < 16) {
+                $a = str_pad($a, 256, '0', STR_PAD_RIGHT);
+            }
+        }
         $r = array();
         for ($i = 0; $i < 256; ++$i) {
             $r[$i] = 1 & (

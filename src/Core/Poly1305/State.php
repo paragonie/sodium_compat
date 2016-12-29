@@ -88,9 +88,9 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 $mi = self::chrToInt($message[$i]);
                 $this->buffer[$this->leftover + $i] = $mi;
             }
-            $bytes -= $want;
             // We snip off the leftmost bytes.
             $message = self::substr($message, $want);
+            $bytes = self::strlen($message);
             $this->leftover += $want;
             if ($this->leftover < ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
                 // We still don't have enough to run $this->blocks()
@@ -107,12 +107,14 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         /* process full blocks */
         if ($bytes >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
             $want = $bytes & ~(ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE - 1);
-            $this->blocks(
-                self::substr($message, 0, $want),
-                $want
-            );
-            $message = self::substr($message, $want);
-            $bytes -= $want;
+            if ($want >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
+                $block = self::substr($message, 0, $want);
+                if (self::strlen($block) >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
+                    $this->blocks($block, $want);
+                    $message = self::substr($message, $want);
+                    $bytes = self::strlen($message);
+                }
+            }
         }
 
         /* store leftover */
@@ -133,6 +135,9 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      */
     public function blocks($message, $bytes)
     {
+        if (self::strlen($message) < 16) {
+            $message = str_pad($message, 16, "\x00", STR_PAD_RIGHT);
+        }
         $hibit = $this->final ? 0 : 1 << 24; /* 1 << 128 */
         $r0 = (int) $this->r[0];
         $r1 = (int) $this->r[1];

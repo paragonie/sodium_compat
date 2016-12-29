@@ -52,7 +52,7 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * @param string $plaintext
      * @param string $nonce
-     * @para, string $keypair
+     * @param string $keypair
      * @return string
      */
     public static function box($plaintext, $nonce, $keypair)
@@ -123,7 +123,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $ciphertext
      * @param string $nonce
      * @param string $nonce
-     * @para, string $keypair
+     * @param string $keypair
      * @return string
      */
     public static function box_open($ciphertext, $nonce, $keypair)

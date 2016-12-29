@@ -29,7 +29,12 @@ abstract class ParagonIE_Sodium_Core_Util
     public static function load_4($string)
     {
         if (self::strlen($string) < 4) {
-            throw new Exception('String must be 4 bytes or more');
+            do {
+                $string .= "\x00";
+            } while (self::strlen($string) < 4);
+            /*
+            throw new Exception('String must be 4 bytes or more; ' . self::strlen($string) . ' given.');
+            */
         }
         $result = self::chrToInt($string[0]) & 0xff;
         $result |= (self::chrToInt($string[1]) & 0xff) << 8;
@@ -272,6 +277,9 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function strlen($str)
     {
+        if (!is_string($str)) {
+            throw new InvalidArgumentException('String expected');
+        }
         if (function_exists('mb_strlen')) {
             return mb_strlen($str, '8bit');
         } else {
@@ -284,15 +292,20 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @ref mbstring.func_overload
      *
-     * @static bool $exists
      * @param string $str
      * @param int $start
      * @param int $length
      * @return string
-     * @throws TypeError
+     * @throws InvalidArgumentException
      */
     public static function substr($str, $start = 0, $length = null)
     {
+        if (!is_string($str)) {
+            throw new InvalidArgumentException('String expected');
+        }
+        if (PHP_VERSION_ID < 50400 && $length === null) {
+            $length = self::strlen($str);
+        }
         if (function_exists('mb_substr')) {
             // $length calculation above might result in a 0-length string
             if ($length === 0) {
