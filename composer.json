@@ -21,6 +21,6 @@
     "paragonie/random_compat": "^1|^2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5"
+    "phpunit/phpunit": "*"
   }
 }
