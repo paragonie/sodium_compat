@@ -1,5 +1,10 @@
 # Sodium Compat
 
+[![Build Status](https://travis-ci.org/paragonie/sodium_compat.svg?branch=master)](https://travis-ci.org/paragonie/sodium_compat)
+[![Latest Stable Version](https://poser.pugx.org/paragonie/sodium_compat/v/stable)](https://packagist.org/packages/paragonie/sodium_compat)
+[![Latest Unstable Version](https://poser.pugx.org/paragonie/sodium_compat/v/unstable)](https://packagist.org/packages/paragonie/sodium_compat)
+[![License](https://poser.pugx.org/paragonie/sodium_compat/license)](https://packagist.org/packages/paragonie/sodium_compat)
+
 Sodium Compat is a pure PHP polyfill for the Sodium cryptography library 
 (libsodium), otherwise [available in PECL](https://pecl.php.net/package/libsodium).
 

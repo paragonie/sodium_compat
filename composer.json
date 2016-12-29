@@ -1,6 +1,18 @@
 {
   "name": "paragonie/sodium_compat",
   "description": "Pure PHP implementation of libsodium; uses the PHP extension if it exists",
+  "keywords": ["PHP", "cryptography", "elliptic curve", "side-channel resistant"],
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Paragon Initiative Enterprises",
+      "email": "security@paragonie.com"
+    },
+    {
+      "name": "Frank Denis",
+      "email": "jedisct1@pureftpd.org"
+    }
+  ],
   "autoload": {
     "files": ["autoload.php"]
   },
