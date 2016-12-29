@@ -174,13 +174,58 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_box($plaintext, $nonce, $kp)
     {
-        if (self::use_fallback('memcmp')) {
+        if (self::use_fallback('crypto_box')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box',
                 array($plaintext, $nonce, $kp)
             );
         }
         return ParagonIE_Sodium_Crypto::box($plaintext, $nonce, $kp);
+    }
+
+    /**
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_box_publickey($kp)
+    {
+        if (self::use_fallback('crypto_box_publickey')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_publickey',
+                array($kp)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_publickey($kp);
+    }
+
+    /**
+     * @param string $sk
+     * @return string
+     */
+    public static function crypto_box_publickey_from_secretkey($sk)
+    {
+        if (self::use_fallback('crypto_box_publickey_from_secretkey')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_publickey_from_secretkey',
+                array($sk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_publickey_from_secretkey($sk);
+    }
+
+    /**
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_box_secretkey($kp)
+    {
+        if (self::use_fallback('crypto_box_secretkey')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_secretkey',
+                array($kp)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_secretkey($kp);
     }
 
     /**
@@ -191,13 +236,13 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_box_open($ciphertext, $nonce, $key)
     {
-        if (self::use_fallback('memcmp')) {
+        if (self::use_fallback('crypto_box_open')) {
             return call_user_func_array(
-                '\\Sodium\\crypto_secretbox_open',
+                '\\Sodium\\crypto_box_open',
                 array($ciphertext, $nonce, $key)
             );
         }
-        return ParagonIE_Sodium_Crypto::secretbox_open($ciphertext, $nonce, $key);
+        return ParagonIE_Sodium_Crypto::box_open($ciphertext, $nonce, $key);
     }
 
     /**
@@ -324,6 +369,11 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_sign_keypair()
     {
+        if (self::use_fallback('crypto_sign_keypair')) {
+            return call_user_func(
+                '\\Sodium\\crypto_sign_keypair'
+            );
+        }
         return ParagonIE_Sodium_Core_Ed25519::keypair();
     }
 
@@ -333,6 +383,12 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_sign_publickey($kp)
     {
+        if (self::use_fallback('crypto_sign_publickey')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_publickey',
+                array($kp)
+            );
+        }
         return ParagonIE_Sodium_Core_Ed25519::publickey($kp);
     }
 

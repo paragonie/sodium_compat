@@ -23,6 +23,8 @@ abstract class ParagonIE_Sodium_Crypto
     const secretbox_xsalsa20poly1305_BOXZEROBYTES = 16;
     const secretbox_xsalsa20poly1305_ZEROBYTES = 32;
 
+    const stream_salsa20_KEYBYTES = 32;
+
     /**
      * @param string $message
      * @param string $key
@@ -50,13 +52,15 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * @param string $plaintext
      * @param string $nonce
-     * @param string $pk
-     * @param string $sk
+     * @para, string $keypair
      * @return string
      */
-    public static function box($plaintext, $nonce, $pk, $sk)
+    public static function box($plaintext, $nonce, $keypair)
     {
-        $k = self::scalarmult($sk, $pk);
+        $k = self::scalarmult(
+            self::box_secretkey($keypair),
+            self::box_publickey($keypair)
+        );
         $c = self::secretbox($plaintext, $nonce, $k);
         ParagonIE_Sodium_Compat::memzero($k);
         return $c;
@@ -72,6 +76,12 @@ abstract class ParagonIE_Sodium_Crypto
         return $sk . $pk;
     }
 
+    public static function box_keypair_from_secretkey_and_publickey($sk, $pk)
+    {
+        return ParagonIE_Sodium_Core_Util::substr($sk, 0, 32) .
+            ParagonIE_Sodium_Core_Util::substr($pk, 0, 32);
+    }
+
     /**
      * @param string $keypair
      * @return string
@@ -81,8 +91,7 @@ abstract class ParagonIE_Sodium_Crypto
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
             throw new RangeException('Must be a keypair.');
         }
-        $sk = ParagonIE_Sodium_Core_Util::substr($keypair, 0, 32);
-        return $sk;
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 0, 32);
     }
 
     /**
@@ -94,20 +103,35 @@ abstract class ParagonIE_Sodium_Crypto
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
             throw new RangeException('Must be a keypair.');
         }
-        $sk = ParagonIE_Sodium_Core_Util::substr($keypair, 32, 32);
-        return $sk;
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 32, 32);
+    }
+
+    /**
+     * @param $sk
+     * @return string
+     * @throws RangeException
+     */
+    public static function box_publickey_from_secretkey($sk)
+    {
+        if (ParagonIE_Sodium_Core_Util::strlen($sk) !== 32) {
+            throw new RangeException('Must be 32 bytes long.');
+        }
+        return self::scalarmult_base($sk);
     }
 
     /**
      * @param string $ciphertext
      * @param string $nonce
-     * @param string $pk
-     * @param string $sk
+     * @param string $nonce
+     * @para, string $keypair
      * @return string
      */
-    public static function box_open($ciphertext, $nonce, $pk, $sk)
+    public static function box_open($ciphertext, $nonce, $keypair)
     {
-        $k = self::scalarmult($sk, $pk);
+        $k = self::scalarmult(
+            self::box_secretkey($keypair),
+            self::box_publickey($keypair)
+        );
         $p = self::secretbox_open($ciphertext, $nonce, $k);
         ParagonIE_Sodium_Compat::memzero($k);
         return $p;
@@ -170,7 +194,10 @@ abstract class ParagonIE_Sodium_Crypto
         );
         if ($mlen > $mlen0) {
             $c .= ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
-                ParagonIE_Sodium_Core_Util::substr($plaintext, $mlen0),
+                ParagonIE_Sodium_Core_Util::substr(
+                    $plaintext,
+                    self::secretbox_xsalsa20poly1305_ZEROBYTES
+                ),
                 $nonce,
                 1,
                 $subkey
@@ -191,10 +218,48 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws Exception
      */
     public static function secretbox_open($ciphertext, $nonce, $key)
     {
+        $mac = ParagonIE_Sodium_Core_Util::substr(
+            $ciphertext,
+            0,
+            self::box_curve25519xsalsa20poly1305_MACBYTES
+        );
+        $c = ParagonIE_Sodium_Core_Util::substr(
+            $ciphertext,
+            self::box_curve25519xsalsa20poly1305_MACBYTES
+        );
+        $clen = ParagonIE_Sodium_Core_Util::strlen($c);
 
+        $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
+        $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20(
+            64,
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
+            $subkey
+        );
+        if (!ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, $block0)) {
+            ParagonIE_Sodium_Compat::memzero($subkey);
+            throw new Exception('Invalid MAC');
+        }
+
+        $m = ParagonIE_Sodium_Core_Util::xorStrings(
+            ParagonIE_Sodium_Core_Util::substr($block0, self::secretbox_xsalsa20poly1305_ZEROBYTES),
+            ParagonIE_Sodium_Core_Util::substr($c, 0, self::secretbox_xsalsa20poly1305_ZEROBYTES)
+        );
+        if ($clen > self::secretbox_xsalsa20poly1305_ZEROBYTES) {
+            $m .= ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
+                ParagonIE_Sodium_Core_Util::substr(
+                    $c,
+                    self::secretbox_xsalsa20poly1305_ZEROBYTES
+                ),
+                $nonce,
+                1,
+                $subkey
+            );
+        }
+        return $m;
     }
 
     /**

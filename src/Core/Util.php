@@ -16,7 +16,7 @@ abstract class ParagonIE_Sodium_Core_Util
         $result = self::chrToInt($string[0]);
         $result |= self::chrToInt($string[1]) << 8;
         $result |= self::chrToInt($string[2]) << 16;
-        return $result;
+        return $result & 0xffffff;
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class ParagonIE_Sodium_Core_Util
         $result |= (self::chrToInt($string[1]) & 0xff) << 8;
         $result |= (self::chrToInt($string[2]) & 0xff) << 16;
         $result |= (self::chrToInt($string[3]) & 0xff) << 24;
-        return $result;
+        return $result & 0xffffffff;
     }
 
     /**

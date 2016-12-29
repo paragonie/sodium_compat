@@ -41,6 +41,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      */
     public function __construct($key = '')
     {
+        if (self::strlen($key) < 32) {
+            throw new InvalidArgumentException(
+                'Poly1305 requires a 32-byte key'
+            );
+        }
         /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
         $this->r = array(
             (self::load_4(self::substr($key,  0, 4))     ) & 0x3ffffff,
@@ -84,9 +89,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 $this->buffer[$this->leftover + $i] = $mi;
             }
             $bytes -= $want;
+            // We snip off the leftmost bytes.
             $message = self::substr($message, $want);
             $this->leftover += $want;
             if ($this->leftover < ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
+                // We still don't have enough to run $this->blocks()
                 return $this;
             }
 
@@ -101,9 +108,10 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         if ($bytes >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
             $want = $bytes & ~(ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE - 1);
             $this->blocks(
-                $message,
+                self::substr($message, 0, $want),
                 $want
             );
+            $message = self::substr($message, $want);
             $bytes -= $want;
         }
 
@@ -113,7 +121,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 $mi = self::chrToInt($message[$i]);
                 $this->buffer[$this->leftover + $i] = $mi;
             }
-            $this->leftover += $bytes;
+            $this->leftover = (int) $this->leftover + $bytes;
         }
         return $this;
     }
@@ -209,11 +217,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
 
         $this->h = array(
-            (int) $h0,
-            (int) $h1,
-            (int) $h2,
-            (int) $h3,
-            (int) $h4
+            (int) $h0 & 0xffffffff,
+            (int) $h1 & 0xffffffff,
+            (int) $h2 & 0xffffffff,
+            (int) $h3 & 0xffffffff,
+            (int) $h4 & 0xffffffff
         );
         return $this;
     }
@@ -223,6 +231,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      */
     public function finish()
     {
+        /* process the remaining block */
         if ($this->leftover) {
             $i = $this->leftover;
             $this->buffer[$i++] = 1;
@@ -230,9 +239,12 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 $this->buffer[$i] = 0;
             }
             $this->final = true;
-
             $this->blocks(
-                static::intArrayToString($this->buffer),
+                self::substr(
+                    static::intArrayToString($this->buffer),
+                    0,
+                    ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE
+                ),
                 ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE
             );
         }
@@ -258,7 +270,6 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $g4 = ($h4 + $c - (1 << 26)) & 0xffffffff;
 
         /* select h if h < p, or h + -p if h >= p */
-        // $mask = ($g4 >> ((PHP_INT_SIZE * 8) - 1)) - 1;
         $mask = ($g4 >> 31) - 1;
 
         $g0 &= $mask;
@@ -281,18 +292,18 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $h3 = (($h3 >> 18) | ($h4 <<  8)) & 0xffffffff;
 
         /* mac = (h + pad) % (2^128) */
-        $f = ($h0 + $this->pad[0]) & 0xffffffff;
+        $f = ($h0 + $this->pad[0]);
         $h0 = (int) $f;
-        $f = ($h1 + $this->pad[1] + ($f >> 32)) & 0xffffffff;
+        $f = ($h1 + $this->pad[1] + ($f >> 32));
         $h1 = (int) $f;
-        $f = ($h2 + $this->pad[2] + ($f >> 32)) & 0xffffffff;
+        $f = ($h2 + $this->pad[2] + ($f >> 32));
         $h2 = (int) $f;
-        $f = ($h3 + $this->pad[3] + ($f >> 32)) & 0xffffffff;
+        $f = ($h3 + $this->pad[3] + ($f >> 32));
         $h3 = (int) $f;
 
-        return self::store32_le($h0) .
-            self::store32_le($h1) .
-            self::store32_le($h2) .
-            self::store32_le($h3);
+        return self::store32_le($h0 & 0xffffffff) .
+            self::store32_le($h1 & 0xffffffff) .
+            self::store32_le($h2 & 0xffffffff) .
+            self::store32_le($h3 & 0xffffffff);
     }
 }

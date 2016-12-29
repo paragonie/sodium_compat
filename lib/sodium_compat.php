@@ -31,7 +31,7 @@ if (!extension_loaded('libsodium')) {
             );
         }
     }
-    if (!is_callable('\\Sodium\\compare')) {
+    if (!is_callable('\\Sodium\\memcmp')) {
         /**
          * @param string $a
          * @param string $b
@@ -41,6 +41,86 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'memcmp'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box')) {
+        /**
+         * @param string $message
+         * @param string $nonce
+         * @param string $kp
+         * @return string
+         */
+        function crypto_box($message, $nonce, $kp)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_keypair')) {
+        /**
+         * @return string
+         */
+        function crypto_box_keypair()
+        {
+            return call_user_func(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_keypair')
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_publickey')) {
+        /**
+         * @param string $keypair
+         * @return string
+         */
+        function crypto_box_publickey($keypair)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_publickey'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_publickey_from_secretkey')) {
+        /**
+         * @param string $sk
+         * @return string
+         */
+        function crypto_box_publickey_from_secretkey($sk)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_publickey_from_secretkey'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_secretkey')) {
+        /**
+         * @param string $keypair
+         * @return string
+         */
+        function crypto_box_secretkey($keypair)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_secretkey'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_open')) {
+        /**
+         * @param string $message
+         * @param string $nonce
+         * @param string $kp
+         * @return string
+         */
+        function crypto_box_open($message, $nonce, $kp)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_open'),
                 func_get_args()
             );
         }
@@ -70,6 +150,17 @@ if (!extension_loaded('libsodium')) {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_sign'),
                 func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_sign_keypair')) {
+        /**
+         * @return string
+         */
+        function crypto_sign_keypair()
+        {
+            return call_user_func(
+                array('ParagonIE_Sodium_Compat', 'crypto_sign_keypair')
             );
         }
     }

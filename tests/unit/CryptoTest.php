@@ -7,6 +7,32 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    public function testCryptoBox()
+    {
+        $nonce = str_repeat("\x00", 24);
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+        $alice_secret = hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
+        $alice_public = hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
+        $bob_secret = hex2bin('b581fb5ae182a16f603f39270d4e3b95bc008310b727a11dd4e784a0044d461b');
+        $bob_public = hex2bin('e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754');
+
+        $alice_to_bob = ParagonIE_Sodium_Crypto::box_keypair_from_secretkey_and_publickey(
+            $alice_secret,
+            $bob_public
+        );
+        $bob_to_alice = ParagonIE_Sodium_Crypto::box_keypair_from_secretkey_and_publickey(
+            $bob_secret,
+            $alice_public
+        );
+
+        $this->assertSame(
+            bin2hex(ParagonIE_Sodium_Crypto::box($message, $nonce, $bob_to_alice)),
+            bin2hex(ParagonIE_Sodium_Crypto::box($message, $nonce, $alice_to_bob)),
+            'box'
+        );
+    }
+
     /**
      * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
      */
