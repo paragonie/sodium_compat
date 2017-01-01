@@ -160,7 +160,7 @@ abstract class ParagonIE_Sodium_Crypto
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outlen);
         ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $in, $in->count());
 
-        $out = new SplFixedArray(ParagonIE_Sodium_Core_BLAKE2b::OUTBYTES);
+        $out = new SplFixedArray($outlen);
         ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
         return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
     }
