@@ -71,7 +71,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $y
      * @return SplFixedArray
      */
-    protected function add64($x, $y)
+    protected static function add64($x, $y)
     {
         $l = ($x[1] + $y[1]) & 0xffffffff;
         return self::new64($x[0] + $y[0] + (($l < $x[1]) ? 1 : 0), $l);
@@ -83,7 +83,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $z
      * @return SplFixedArray
      */
-    protected function add364($x, $y, $z)
+    protected static function add364($x, $y, $z)
     {
         return self::add64($x, self::add64($y, $z));
     }
@@ -93,7 +93,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $y
      * @return SplFixedArray
      */
-    protected function xor64($x, $y)
+    protected static function xor64($x, $y)
     {
         return self::new64($x[0] ^ $y[0], $x[1] ^ $y[1]);
     }
@@ -103,7 +103,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param int $c
      * @return SplFixedArray
      */
-    protected function rotr64($x, $c)
+    protected static function rotr64($x, $c)
     {
         $h0 = 0;
         $l0 = 0;
@@ -134,7 +134,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $x
      * @return int
      */
-    protected function flatten64($x)
+    protected static function flatten64($x)
     {
         return ($x[0] * 4294967296 + $x[1]);
     }
@@ -144,7 +144,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param $i
      * @return SplFixedArray
      */
-    protected function load64($x, $i)
+    protected static function load64($x, $i)
     {
         $l = $x[$i]   | ($x[$i+1]<<8) | ($x[$i+2]<<16) | ($x[$i+3]<<24);
         $h = $x[$i+4] | ($x[$i+5]<<8) | ($x[$i+6]<<16) | ($x[$i+7]<<24);
@@ -156,7 +156,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param $i
      * @param $u
      */
-    protected function store64($x, $i, $u)
+    protected static function store64($x, $i, $u)
     {
         $x[$i]   = ($u[1] & 0xff); $u[1] >>= 8;
         $x[$i+1] = ($u[1] & 0xff); $u[1] >>= 8;
@@ -193,7 +193,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
     /**
      * @return SplFixedArray
      */
-    protected function context()
+    protected static function context()
     {
         $ctx    = new SplFixedArray(5);
         $ctx[0] = new SplFixedArray(8);   // h
@@ -222,7 +222,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param $ctx
      * @param $buf
      */
-    protected function compress($ctx, $buf)
+    protected static function compress($ctx, $buf)
     {
         $m = new SplFixedArray(16);
         $v = new SplFixedArray(16);
@@ -278,7 +278,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $ctx
      * @param int $inc
      */
-    protected function increment_counter($ctx, $inc)
+    protected static function increment_counter($ctx, $inc)
     {
         $t = self::to64($inc);
         $ctx[1][0] = self::add64($ctx[1][0], $t);
