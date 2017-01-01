@@ -109,6 +109,30 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Core_Util::compare()
+     */
+    public function testCryptoGenerichash()
+    {
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_generichash('apple')),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple')),
+            'BLAKE2b implementation'
+        );
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_generichash('apple', 'catastrophic failure')),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple', 'catastrophic failure')),
+            'BLAKE2b with a key'
+        );
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_generichash('apple', null, 64)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple', null, 64)),
+            'BLAKE2b implementation with output length'
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_sign()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_open()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
