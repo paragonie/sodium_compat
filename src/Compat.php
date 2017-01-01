@@ -246,6 +246,23 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $message
+     * @param string $key
+     * @param int $length
+     * @return string
+     */
+    public static function crypto_generichash($message, $key = '', $length = 32)
+    {
+        if (self::use_fallback('crypto_generichash')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_generichash',
+                array($message, $key, $length)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::generichash($message, $key, $length);
+    }
+
+    /**
      * @param string $sk
      * @param string $pk
      * @return string
