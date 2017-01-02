@@ -328,7 +328,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
     }
 
     /**
-     * @param SplFixedArraay $ctx
+     * @param SplFixedArray $ctx
      * @param SplFixedArray $out
      * @return SplFixedArray
      */

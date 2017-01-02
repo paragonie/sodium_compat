@@ -263,6 +263,7 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+<<<<<<< HEAD
      * @param string $key
      * @param int $length
      * @return string
@@ -309,6 +310,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+=======
+>>>>>>> origin/generichash
      * @param string $sk
      * @param string $pk
      * @return string

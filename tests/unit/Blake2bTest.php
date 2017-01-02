@@ -32,5 +32,4 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         );
         */
     }
-
 }
