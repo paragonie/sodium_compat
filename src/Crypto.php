@@ -57,13 +57,27 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function box($plaintext, $nonce, $keypair)
     {
-        $k = self::scalarmult(
+        $k = self::box_beforenm(
             self::box_secretkey($keypair),
             self::box_publickey($keypair)
         );
         $c = self::secretbox($plaintext, $nonce, $k);
         ParagonIE_Sodium_Compat::memzero($k);
         return $c;
+    }
+
+    /**
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     */
+    public static function box_beforenm($sk, $pk)
+    {
+        $s = self::scalarmult($sk, $pk);
+        return ParagonIE_Sodium_Core_HSalsa20::hsalsa20(
+            str_repeat("\x00", 16),
+            $s
+        );
     }
 
     /**
@@ -128,7 +142,7 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function box_open($ciphertext, $nonce, $keypair)
     {
-        $k = self::scalarmult(
+        $k = self::box_beforenm(
             self::box_secretkey($keypair),
             self::box_publickey($keypair)
         );

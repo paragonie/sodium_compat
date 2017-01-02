@@ -10,7 +10,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         if (!extension_loaded('libsodium')) {
             $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
         }
-        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = false;
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
@@ -245,6 +245,46 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
             bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
             'secretbox - medium messages'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_scalarmult_base()
+     */
+    public function testCryptoScalarmultBase()
+    {
+        $keypair = \Sodium\crypto_box_keypair();
+        $secret = \Sodium\crypto_box_secretkey($keypair);
+        $public = \Sodium\crypto_box_publickey($keypair);
+
+        $this->assertSame(
+            $public,
+            ParagonIE_Sodium_Compat::crypto_scalarmult_base($secret)
+        );
+    }
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_scalarmult()
+     */
+    public function testCryptoScalarmult()
+    {
+        $keypair = \Sodium\crypto_box_keypair();
+
+        $alice_box_kp = \Sodium\crypto_box_keypair();
+        $alice_box_secretkey = \Sodium\crypto_box_secretkey($alice_box_kp);
+        $alice_box_publickey = \Sodium\crypto_box_publickey($alice_box_kp);
+
+        $bob_box_kp = \Sodium\crypto_box_keypair();
+        $bob_box_secretkey = \Sodium\crypto_box_secretkey($bob_box_kp);
+        $bob_box_publickey = \Sodium\crypto_box_publickey($bob_box_kp);
+
+        $this->assertSame(
+            \Sodium\crypto_scalarmult($alice_box_secretkey, $bob_box_publickey),
+            ParagonIE_Sodium_Compat::crypto_scalarmult($alice_box_secretkey, $bob_box_publickey)
+        );
+
+        $this->assertSame(
+            \Sodium\crypto_scalarmult($bob_box_secretkey, $alice_box_publickey),
+            ParagonIE_Sodium_Compat::crypto_scalarmult($bob_box_secretkey, $alice_box_publickey)
         );
     }
 
