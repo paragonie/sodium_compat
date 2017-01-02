@@ -71,6 +71,35 @@ if (!extension_loaded('libsodium')) {
             );
         }
     }
+    if (!is_callable('\\Sodium\\crypto_generichash')) {
+        /**
+         * @param string $message
+         * @param string|null $key
+         * @param int $outputLength
+         * @return string
+         */
+        function crypto_generichash($message, $key = null, $outLen = 32)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_generichash'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_init')) {
+        /**
+         * @param string|null $key
+         * @param int $outputLength
+         * @return string
+         */
+        function crypto_generichash_init($key = null, $outLen = 32)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_generichash_init'),
+                func_get_args()
+            );
+        }
+    }
     if (!is_callable('\\Sodium\\crypto_box_publickey')) {
         /**
          * @param string $keypair

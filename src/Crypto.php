@@ -152,6 +152,34 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @param string $message
+     * @param string|null $key
+     * @param int $outlen
+     * @return string
+     * @throws Exception
+     */
+    public static function generichash($message, $key = '', $outlen = 32)
+    {
+        ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
+
+        $k = null;
+        if (!empty($key)) {
+            $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);
+            if ($k->count() > ParagonIE_Sodium_Core_BLAKE2b::KEYBYTES) {
+                throw new Exception('Invalid key size');
+            }
+        }
+
+        $in = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($message);
+        $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outlen);
+        ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $in, $in->count());
+
+        $out = new SplFixedArray($outlen);
+        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
+    }
+
+    /**
      * @param string $n
      * @param string $p
      * @return string
