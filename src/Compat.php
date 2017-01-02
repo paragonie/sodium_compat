@@ -263,6 +263,52 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $key
+     * @param int $length
+     * @return string
+     */
+    public static function crypto_generichash_init($key = '', $length = 32)
+    {
+        if (self::use_fallback('crypto_generichash_init')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_generichash_init',
+                array($key, $length)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::generichash_init($key, $length);
+    }
+
+    /**
+     * @param string $key
+     * @param string $message
+     * @return void
+     */
+    public static function crypto_generichash_update(&$ctx, $message)
+    {
+        $ctxRef =& $ctx;
+        if (self::use_fallback('crypto_generichash_update')) {
+            $func = '\\Sodium\\crypto_generichash_update';
+            $func($ctxRef, $message);
+        }
+        ParagonIE_Sodium_Crypto::generichash_update($ctxRef, $message);
+    }
+
+    /**
+     * @param string $key
+     * @param int $length
+     * @return string
+     */
+    public static function crypto_generichash_final(&$ctx, $length = 32)
+    {
+        $ctxRef =& $ctx;
+        if (self::use_fallback('crypto_generichash_final')) {
+            $func = '\\Sodium\\crypto_generichash_final';
+            $func($ctxRef, $length);
+        }
+        return ParagonIE_Sodium_Crypto::generichash_final($ctxRef, $length);
+    }
+
+    /**
      * @param string $sk
      * @param string $pk
      * @return string
