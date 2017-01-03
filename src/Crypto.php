@@ -220,6 +220,9 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function generichash_final($ctx, $outlen = 32)
     {
+        if (!is_string($ctx)) {
+            throw new InvalidArgumentException('Context must be a string');
+        }
         $out = new SplFixedArray($outlen);
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
         $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
