@@ -173,9 +173,56 @@ abstract class ParagonIE_Sodium_Crypto
         $in = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($message);
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outlen);
         ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $in, $in->count());
-
         $out = new SplFixedArray($outlen);
         $out = ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
+    }
+
+    /**
+     * @param string $key
+     * @param int $outputLength
+     * @return string
+     * @throws Exception
+     */
+    public static function generichash_init($key, $outputLength = 32)
+    {
+        ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
+
+        $k = null;
+        if (!empty($key)) {
+            $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);
+            if ($k->count() > ParagonIE_Sodium_Core_BLAKE2b::KEYBYTES) {
+                throw new Exception('Invalid key size');
+            }
+        }
+
+        $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outputLength);
+        return ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx);
+    }
+
+    /**
+     * @param string $ctx
+     * @param string $message
+     * @return string
+     */
+    public static function generichash_update($ctx, $message)
+    {
+        ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
+        $in = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($message);
+        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+        ParagonIE_Sodium_Core_BLAKE2b::update($context, $in, $in->count());
+        return ParagonIE_Sodium_Core_BLAKE2b::contextToString($context);
+    }
+
+    /**
+     * @param string $ctx
+     * @param int $outlen
+     */
+    public static function generichash_final($ctx, $outlen = 32)
+    {
+        $out = new SplFixedArray($outlen);
+        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
         return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
     }
 

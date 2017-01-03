@@ -5,7 +5,7 @@
  *
  * Based on the work of Devi Mandiri in devi/salt.
  */
-abstract class ParagonIE_Sodium_Core_BLAKE2b
+abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 {
     /**
      * @var SplFixedArray[]
@@ -93,8 +93,20 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      * @param SplFixedArray $y
      * @return SplFixedArray
      */
-    protected static function xor64($x, $y)
+    protected static function xor64(SplFixedArray $x, SplFixedArray $y)
     {
+        if (!is_numeric($x[0])) {
+            throw new Exception('x[0] is not an integer');
+        }
+        if (!is_numeric($x[1])) {
+            throw new Exception('x[1] is not an integer');
+        }
+        if (!is_numeric($y[0])) {
+            throw new Exception('y[0] is not an integer');
+        }
+        if (!is_numeric($y[1])) {
+            throw new Exception('y[1] is not an integer');
+        }
         return self::new64($x[0] ^ $y[0], $x[1] ^ $y[1]);
     }
 
@@ -436,102 +448,68 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b
      */
     public static function contextToString(SplFixedArray $ctx)
     {
-        return implode(
-            '',
-            array(
-                self::SplFixedArrayToString($ctx[0]),
-                self::SplFixedArrayToString($ctx[1][0]),
-                self::SplFixedArrayToString($ctx[1][1]),
-                self::SplFixedArrayToString($ctx[2][0]),
-                self::SplFixedArrayToString($ctx[2][1]),
-                self::SplFixedArrayToString($ctx[3]),
-                ParagonIE_Sodium_Core_Util::intToChr($ctx[4] & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 8) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 16) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 24) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 32) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 40) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 48) & 0xff),
-                ParagonIE_Sodium_Core_Util::intToChr(($ctx[4] << 56) & 0xff)
-            )
-        );
+        $str = '';
+        $ctxA = $ctx[0]->toArray();
+        for ($i = 0; $i < 8; ++$i) {
+            $str .= self::store32_le($ctxA[$i][1]);
+            $str .= self::store32_le($ctxA[$i][0]);
+        }
+        for ($i = 0; $i < 2; ++$i) {
+            $ctxA = $ctx[$i + 1]->toArray();
+            $str .= self::store32_le($ctxA[0][1]);
+            $str .= self::store32_le($ctxA[0][0]);
+            $str .= self::store32_le($ctxA[1][1]);
+            $str .= self::store32_le($ctxA[1][0]);
+        }
+        $str .= self::SplFixedArrayToString($ctx[3]);
+        $str .= implode('', array(
+            self::intToChr($ctx[4] & 0xff),
+            self::intToChr(($ctx[4] << 8) & 0xff),
+            self::intToChr(($ctx[4] << 16) & 0xff),
+            self::intToChr(($ctx[4] << 24) & 0xff),
+            self::intToChr(($ctx[4] << 32) & 0xff),
+            self::intToChr(($ctx[4] << 40) & 0xff),
+            self::intToChr(($ctx[4] << 48) & 0xff),
+            self::intToChr(($ctx[4] << 56) & 0xff)
+        ));
+        return $str . "\x00";
     }
 
     /**
+     * Creates an SplFixedArray containing other SplFixedArray elements, from
+     * a string (compatible with \Sodium\crypto_generichash_{init, update, final})
+     *
      * @param $string
      * @return SplFixedArray
      */
     public static function stringToContext($string)
     {
-        $ctx    = self::context();
-        $ctx[0] = self::stringToSplFixedArray(
-            ParagonIE_Sodium_Core_Util::substr($string, 0, 32)
-        );
-
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 32, 4);
-        $intA = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 36, 4);
-        $intB = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $int64 = self::new64($intA, $intB);
-        $ctx[1][0] = $int64;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 40, 4);
-        $intA = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 44, 4);
-        $intB = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $int64 = self::new64($intA, $intB);
-        $ctx[1][1] = $int64;
-
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 48, 4);
-        $intA = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 52, 4);
-        $intB = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $int64 = self::new64($intA, $intB);
-        $ctx[2][0] = $int64;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 56, 4);
-        $intA = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intA |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 60, 4);
-        $intB = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $intB |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $int64 = self::new64($intA, $intB);
-        $ctx[2][1] = $int64;
-
-        $ctx[3] = self::stringToSplFixedArray(
-            ParagonIE_Sodium_Core_Util::substr($string, 64, 256)
-        );
-        $str = ParagonIE_Sodium_Core_Util::substr($string, 360);
-        $int = ParagonIE_Sodium_Core_Util::chrToInt($str[0]);
-        /*
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[1]) << 8;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[2]) << 16;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[3]) << 24;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[4]) << 32;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[5]) << 40;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[6]) << 48;
-        $int |= ParagonIE_Sodium_Core_Util::chrToInt($str[7]) << 56;
-        */
+        $ctx = self::context();
+        for ($i = 0; $i < 8; ++$i) {
+            $ctx[0][$i] = SplFixedArray::fromArray(
+                array(
+                    self::load_4(
+                        self::substr($string, (8 * $i + 4), 4)
+                    ),
+                    self::load_4(
+                        self::substr($string, (8 * $i + 0), 4)
+                    )
+                )
+            );
+        }
+        $ctx[1][0][1] = self::load_4(self::substr($string, 64, 4));
+        $ctx[1][0][0] = self::load_4(self::substr($string, 68, 4));
+        $ctx[1][1][1] = self::load_4(self::substr($string, 72, 4));
+        $ctx[1][1][0] = self::load_4(self::substr($string, 76, 4));
+        $ctx[2][0][1] = self::load_4(self::substr($string, 80, 4));
+        $ctx[2][0][0] = self::load_4(self::substr($string, 84, 4));
+        $ctx[2][1][1] = self::load_4(self::substr($string, 88, 4));
+        $ctx[2][1][0] = self::load_4(self::substr($string, 92, 4));
+        $ctx[3] = self::stringToSplFixedArray(self::substr($string, 96, 256));
+        $int = 0;
+        for ($i = 0; $i < 8; ++$i) {
+            $int |= self::chrToInt($string[352 + $i]) << (8 * $i);
+        }
         $ctx[4] = $int;
         return $ctx;
     }

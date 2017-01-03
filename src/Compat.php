@@ -263,7 +263,6 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-<<<<<<< HEAD
      * @param string $key
      * @param int $length
      * @return string
@@ -280,18 +279,21 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @param string $key
+     * @param string& $ctx
      * @param string $message
      * @return void
      */
     public static function crypto_generichash_update(&$ctx, $message)
     {
-        $ctxRef =& $ctx;
         if (self::use_fallback('crypto_generichash_update')) {
             $func = '\\Sodium\\crypto_generichash_update';
-            $func($ctxRef, $message);
+            $func($ctx, $message);
         }
-        ParagonIE_Sodium_Crypto::generichash_update($ctxRef, $message);
+        $context = '';
+        for ($i = 0; $i < ParagonIE_Sodium_Core_Util::strlen($ctx); ++$i) {
+            $context .= $ctx[$i];
+        }
+        $ctx = ParagonIE_Sodium_Crypto::generichash_update($context, $message);
     }
 
     /**
@@ -301,17 +303,14 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_generichash_final(&$ctx, $length = 32)
     {
-        $ctxRef =& $ctx;
         if (self::use_fallback('crypto_generichash_final')) {
             $func = '\\Sodium\\crypto_generichash_final';
-            $func($ctxRef, $length);
+            $func($ctx, $length);
         }
-        return ParagonIE_Sodium_Crypto::generichash_final($ctxRef, $length);
+        return ParagonIE_Sodium_Crypto::generichash_final($ctx, $length);
     }
 
     /**
-=======
->>>>>>> origin/generichash
      * @param string $sk
      * @param string $pk
      * @return string
