@@ -1,7 +1,12 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-spl_autoload_register(function($class) {
+/**
+ * @param string $class
+ * @return bool
+ */
+function sodiumCompatAutoader($class)
+{
     $namespace = 'ParagonIE_Sodium_';
     // does the class use the namespace prefix?
     $len = strlen($namespace);
@@ -20,7 +25,9 @@ spl_autoload_register(function($class) {
         require $file;
         return true;
     }
-});
+    return false;
+}
+spl_autoload_register('sodiumCompatAutoader');
 
 if (PHP_VERSION_ID >= 50300) {
     // Namespaces didn't exist before 5.3.0, so don't even try to use this

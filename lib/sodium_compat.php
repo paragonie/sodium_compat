@@ -1,6 +1,8 @@
 <?php
 namespace Sodium;
 
+use ParagonIE_Sodium_Compat;
+
 /* If the PHP extension is installed, don't do anything
  */
 if (!extension_loaded('libsodium')) {
@@ -89,7 +91,7 @@ if (!extension_loaded('libsodium')) {
     if (!is_callable('\\Sodium\\crypto_generichash_init')) {
         /**
          * @param string|null $key
-         * @param int $outputLength
+         * @param int $outLen
          * @return string
          */
         function crypto_generichash_init($key = null, $outLen = 32)
@@ -98,6 +100,28 @@ if (!extension_loaded('libsodium')) {
                 array('ParagonIE_Sodium_Compat', 'crypto_generichash_init'),
                 func_get_args()
             );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_update')) {
+        /**
+         * @param string|null $ctx
+         * @param string $message
+         * @return void
+         */
+        function crypto_generichash_update(&$ctx, $message = '')
+        {
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_final')) {
+        /**
+         * @param string|null $ctx
+         * @param int $outputLength
+         * @return string
+         */
+        function crypto_generichash_final(&$ctx, $outputLength = 32)
+        {
+            return ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, $outputLength);
         }
     }
     if (!is_callable('\\Sodium\\crypto_box_publickey')) {
