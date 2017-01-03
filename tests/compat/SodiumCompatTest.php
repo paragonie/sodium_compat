@@ -183,13 +183,11 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             'generichash_update() 2'
         );
 
-        /*
         $this->assertSame(
             bin2hex(\Sodium\crypto_generichash_final($nativeCtx, 32)),
             bin2hex(ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, 32)),
             'generichash_final()'
         );
-        */
     }
 
     /**
