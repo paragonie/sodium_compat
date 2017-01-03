@@ -109,7 +109,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::compare()
+     * @covers ParagonIE_Sodium_Crypto::generichash()
      */
     public function testCryptoGenerichash()
     {
@@ -129,6 +129,64 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex(\Sodium\crypto_generichash('apple', null, 64)),
             bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple', null, 64)),
             'BLAKE2b implementation with output length'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Crypto::generichash_init()
+     * @covers ParagonIE_Sodium_Crypto::generichash_update()
+     * @covers ParagonIE_Sodium_Crypto::generichash_final()
+     */
+    public function testCryptoGenerichashStream()
+    {
+        $key =  "\x1c" . str_repeat("\x80", 30) . "\xaf";
+        $ctx = \Sodium\crypto_generichash_init($key);
+        $this->assertSame(
+            bin2hex($ctx),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash_init($key)),
+            'BLAKE2b Context Serialization'
+        );
+
+        $subCtx = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+        $this->assertSame(
+            bin2hex($ctx),
+            bin2hex(ParagonIE_Sodium_Core_BLAKE2b::contextToString($subCtx)),
+            'Context serialization / deserialization'
+        );
+        $this->assertEquals(
+            $subCtx,
+            ParagonIE_Sodium_Core_BLAKE2b::stringToContext(
+                ParagonIE_Sodium_Core_BLAKE2b::contextToString($subCtx)
+            ),
+            'Determinism'
+        );
+
+        $nativeCtx = '';
+        for ($i = 0; $i < ParagonIE_Sodium_Core_Util::strlen($ctx); ++$i) {
+            $nativeCtx .= $ctx[$i];
+        }
+
+        \Sodium\crypto_generichash_update($nativeCtx, 'Paragon Initiative');
+        ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, 'Paragon Initiative');
+
+        $this->assertSame(
+            bin2hex($nativeCtx),
+            bin2hex($ctx),
+            'generichash_update() 1'
+        );
+        \Sodium\crypto_generichash_update($nativeCtx, ' Enterprises, LLC');
+        ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, ' Enterprises, LLC');
+
+        $this->assertSame(
+            bin2hex($nativeCtx),
+            bin2hex($ctx),
+            'generichash_update() 2'
+        );
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_generichash_final($nativeCtx, 32)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, 32)),
+            'generichash_final()'
         );
     }
 
