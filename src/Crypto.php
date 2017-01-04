@@ -67,6 +67,56 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @param string $message
+     * @param string $publicKey
+     * @return string
+     */
+    public static function box_seal($message, $publicKey)
+    {
+        $eKeypair = self::box_keypair();
+        $eSK = self::box_secretkey($eKeypair);
+        $ePK = self::box_publickey($eKeypair);
+
+        $nonce = self::generichash(
+            $ePK . $publicKey,
+            '',
+            24
+        );
+        $kp = self::box_keypair_from_secretkey_and_publickey($eSK, $publicKey);
+
+        $c = self::box($message, $nonce, $kp);
+        ParagonIE_Sodium_Compat::memzero($eSK);
+        ParagonIE_Sodium_Compat::memzero($nonce);
+        return $ePK . $c;
+    }
+
+    /**
+     * @param string $message
+     * @param string $keypair
+     * @return string
+     */
+    public static function box_seal_open($message, $keypair)
+    {
+        $ePK = ParagonIE_Sodium_Core_Util::substr($message, 0, 32);
+        $c = ParagonIE_Sodium_Core_Util::substr($message, 32);
+
+        $secretKey = self::box_secretkey($keypair);
+        $publicKey = self::box_publickey($keypair);
+
+        $nonce = self::generichash(
+            $ePK . $publicKey,
+            '',
+            24
+        );
+        $kp = self::box_keypair_from_secretkey_and_publickey($secretKey, $ePK);
+        $m = self::box_open($c, $nonce, $kp);
+        ParagonIE_Sodium_Compat::memzero($secretKey);
+        ParagonIE_Sodium_Compat::memzero($ePK);
+        ParagonIE_Sodium_Compat::memzero($nonce);
+        return $m;
+    }
+
+    /**
      * @param string $sk
      * @param string $pk
      * @return string

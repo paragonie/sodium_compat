@@ -167,6 +167,9 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     public static function salsa20_xor_ic($m, $n, $ic, $k)
     {
         $mlen = self::strlen($m);
+        if ($mlen < 1) {
+            return '';
+        }
         $kcopy = '' . $k;
         $in = self::substr($n, 0, 8);
         for ($i = 8; $i < 16; ++$i) {
@@ -184,7 +187,7 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
             $u = 1;
             for ($i = 8; $i < 16; ++$i) {
                 $u += self::chrToInt($in[$i]);
-                $in[$i] = self::intToChr($u * 0xff);
+                $in[$i] = self::intToChr($u & 0xff);
                 $u >>= 8;
             }
 

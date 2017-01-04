@@ -11,6 +11,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     {
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        $message .= str_repeat("\x20", 64);
 
         $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
         $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
@@ -30,6 +31,28 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             bin2hex(ParagonIE_Sodium_Crypto::box($message, $nonce, $bob_to_alice)),
             bin2hex(ParagonIE_Sodium_Crypto::box($message, $nonce, $alice_to_bob)),
             'box'
+        );
+    }
+
+    public function testBoxSeal()
+    {
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
+            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+
+        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal($message, $alice_box_publickey);
+
+        $alice_opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp);
+        $this->assertSame(
+            $message,
+            $alice_opened,
+            'Decryption failed'
         );
     }
 
