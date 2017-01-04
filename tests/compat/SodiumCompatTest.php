@@ -107,7 +107,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $message = str_repeat("Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", 4);
+        $message = str_repeat("Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", 8);
         $this->assertSame(
             bin2hex(\Sodium\crypto_box($message, $nonce, $alice_to_bob)),
             bin2hex(ParagonIE_Sodium_Compat::crypto_box($message, $nonce, $alice_to_bob)),
@@ -127,7 +127,6 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
 
     public function testCryptoBoxSeal()
     {
-        /*
         $msg = ParagonIE_Sodium_Core_Util::hex2bin(
             '7375f4094f1151640bd853cb13dbc1a0ee9e13b0287a89d34fa2f6732be9de13f88457553d'.
             '768347116522d6d32c9cb353ef07aa7c83bd129b2bb5db35b28334c935b24f2639405a0604'
@@ -142,7 +141,6 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex($alice_opened2),
             'Decryption failed #2'
         );
-        */
         $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
             '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
             'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
@@ -150,33 +148,32 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
             'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
         );
+        $anonymous_message_to_alice = \Sodium\crypto_box_seal(
+            'Anonymous message',
+            $alice_box_publickey);
+        $decrypted_message = ParagonIE_Sodium_Compat::crypto_box_seal_open(
+            $anonymous_message_to_alice,
+            $alice_box_kp
+        );
+        $this->assertSame(
+            'Anonymous message',
+            $decrypted_message
+        );
 
         $messages = array(
             'test',
             'slightly longer message',
-            /*
             str_repeat('a', 29) . ' 32',
             str_repeat('a', 30) . ' 33',
             str_repeat('a', 31) . ' 34',
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            */
         );
         foreach ($messages as $message) {
-
-            $anonymous_message_to_alice = \Sodium\crypto_box_seal('Anonymous message',
-                $alice_box_publickey);
-            $decrypted_message = ParagonIE_Sodium_Compat::crypto_box_seal_open(
-                $anonymous_message_to_alice,
-                $alice_box_kp
-            );
-            $this->assertSame(
-                'Anonymous message',
-                $decrypted_message,
-                $message
-            );
-
             $sealed_to_alice1 = \Sodium\crypto_box_seal($message, $alice_box_publickey);
-            $sealed_to_alice2 = ParagonIE_Sodium_Compat::crypto_box_seal($message, $alice_box_publickey);
+            $sealed_to_alice2 = ParagonIE_Sodium_Compat::crypto_box_seal(
+                $message,
+                $alice_box_publickey
+            );
 
             $this->assertSame(
                 strlen($sealed_to_alice1),
@@ -184,17 +181,42 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
                 'String length should not differ'
             );
 
-            $alice_opened2 = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice2, $alice_box_kp);
+            $alice_opened1 = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice1, $alice_box_kp);
+            $this->assertSame(
+                bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice1, $alice_box_kp)),
+                bin2hex($message),
+                'Decryption failed #1: ' . $message
+            );
+            $this->assertSame(
+                bin2hex($message),
+                bin2hex($alice_opened1),
+                'Decryption failed #1: ' . $message
+            );
+            $this->assertSame(
+                bin2hex($alice_opened1),
+                bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice1, $alice_box_kp)),
+                'Decryption failed #1: ' . $message
+            );
+
+            $alice_opened2 = ParagonIE_Sodium_Compat::crypto_box_seal_open(
+                $sealed_to_alice2,
+                $alice_box_kp
+            );
+
+            $this->assertSame(
+                $message,
+                $alice_opened2,
+                'Decryption failed #2: ' . $message
+            );
+            $this->assertSame(
+                bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice2, $alice_box_kp)),
+                bin2hex($message),
+                'Decryption failed #2: ' . $message
+            );
             $this->assertSame(
                 bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice2, $alice_box_kp)),
                 bin2hex($alice_opened2),
                 'Decryption failed #2: ' . $message
-            );
-            $alice_opened1 = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice1, $alice_box_kp);
-            $this->assertSame(
-                bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice1, $alice_box_kp)),
-                bin2hex($alice_opened1),
-                'Decryption failed #1: ' . $message
             );
         }
     }
