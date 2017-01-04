@@ -10,6 +10,75 @@ class CryptoBoxSealTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    public function testBackward()
+    {
+        $message = str_repeat('a', 97);
+        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
+            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $sealed_to_alice = \Sodium\crypto_box_seal(
+            $message,
+            $alice_box_publickey
+        );
+        $this->assertSame(
+            bin2hex(ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
+            bin2hex($message)
+        );
+    }
+
+    public function testForward()
+    {
+        $message = str_repeat('a', 97);
+        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
+            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal(
+            $message,
+            $alice_box_publickey
+        );
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
+            bin2hex($message)
+        );
+    }
+
+    public function testSelfConsistency()
+    {
+        $message = str_repeat('a', 97);
+        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
+            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
+        );
+        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal(
+            $message,
+            $alice_box_publickey
+        );
+        $this->assertSame(
+            bin2hex(ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
+            bin2hex($message)
+        );
+
+        $sealed_to_alice = \Sodium\crypto_box_seal(
+            $message,
+            $alice_box_publickey
+        );
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
+            bin2hex($message)
+        );
+    }
+
     /**
      * This is currently the breaking test case.
      */
@@ -39,7 +108,10 @@ class CryptoBoxSealTest extends PHPUnit_Framework_TestCase
             'String length should not differ'
         );
 
-        $alice_opened1 = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice1, $alice_box_kp);
+        $alice_opened1 = ParagonIE_Sodium_Compat::crypto_box_seal_open(
+            $sealed_to_alice1,
+            $alice_box_kp
+        );
         $this->assertSame(
             bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice1, $alice_box_kp)),
             bin2hex($message),
