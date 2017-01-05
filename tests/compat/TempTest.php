@@ -10,75 +10,6 @@ class CryptoBoxSealTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testBackward()
-    {
-        $message = str_repeat('a', 97);
-        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
-            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $sealed_to_alice = \Sodium\crypto_box_seal(
-            $message,
-            $alice_box_publickey
-        );
-        $this->assertSame(
-            bin2hex(ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
-            bin2hex($message)
-        );
-    }
-
-    public function testForward()
-    {
-        $message = str_repeat('a', 97);
-        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
-            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal(
-            $message,
-            $alice_box_publickey
-        );
-        $this->assertSame(
-            bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
-            bin2hex($message)
-        );
-    }
-
-    public function testSelfConsistency()
-    {
-        $message = str_repeat('a', 97);
-        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
-            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal(
-            $message,
-            $alice_box_publickey
-        );
-        $this->assertSame(
-            bin2hex(ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
-            bin2hex($message)
-        );
-
-        $sealed_to_alice = \Sodium\crypto_box_seal(
-            $message,
-            $alice_box_publickey
-        );
-        $this->assertSame(
-            bin2hex(\Sodium\crypto_box_seal_open($sealed_to_alice, $alice_box_kp)),
-            bin2hex($message)
-        );
-    }
-
     /**
      * This is currently the breaking test case.
      */
@@ -204,6 +135,48 @@ class CryptoBoxSealTest extends PHPUnit_Framework_TestCase
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
         $message = str_repeat('a', 97);
+
+        $this->assertSame(
+            substr(
+                bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
+                0, 32
+            ),
+            substr(
+                bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+                0, 32
+            ),
+            'secretbox - short messages'
+        );
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Crypto::secretbox_open(
+                \Sodium\crypto_secretbox($message, $nonce, $key),
+                $nonce,
+                $key
+            )
+        );
+        $this->assertSame(
+            $message,
+            \Sodium\crypto_secretbox_open(
+                ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key),
+                $nonce,
+                $key
+            )
+        );
+        $key = ParagonIE_Sodium_Core_Util::hex2bin('97418f9716ff5701ac4c6b3fe191b3f4afb5883780f39f6a37de0a63bb8c2719');
+        $nonce = ParagonIE_Sodium_Core_Util::hex2bin('72a5f5901207809fb1f6576ce0c00c947e3443770f72a62e');
+        $message = str_repeat('a', 97);
+        $this->assertSame(
+            substr(
+                bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
+                32
+            ),
+            substr(
+                bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+                32
+            ),
+            'secretbox'
+        );
 
         $this->assertSame(
             substr(

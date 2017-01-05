@@ -314,9 +314,7 @@ abstract class ParagonIE_Sodium_Crypto
         if ($mlen0 > 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES) {
             $mlen0 = 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES;
         }
-        for ($i = 0; $i < $mlen0; ++$i) {
-            $block0[$i + self::secretbox_xsalsa20poly1305_ZEROBYTES] = $plaintext[$i];
-        }
+        $block0 .= ParagonIE_Sodium_Core_Util::substr($plaintext, 0, $mlen0);
         $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20_xor(
             $block0,
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
@@ -340,7 +338,7 @@ abstract class ParagonIE_Sodium_Crypto
                     $plaintext,
                     self::secretbox_xsalsa20poly1305_ZEROBYTES
                 ),
-                $nonce,
+                ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
                 1,
                 $subkey
             );
@@ -396,7 +394,7 @@ abstract class ParagonIE_Sodium_Crypto
                     $c,
                     self::secretbox_xsalsa20poly1305_ZEROBYTES
                 ),
-                $nonce,
+                ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
                 1,
                 $subkey
             );

@@ -101,4 +101,41 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
             'Test vector #1 failed!'
         );
     }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Salsa20::core_salsa20()
+     */
+    public function testCoreSalsa20()
+    {
+        $key = random_bytes(32);
+        $iv = random_bytes(8);
+        $outA = ParagonIE_Sodium_Core_Salsa20::salsa20(192, $iv, $key);
+
+        // First block
+        $outB = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . str_repeat("\x00", 8), $key);
+        $this->assertSame(
+            bin2hex(
+                ParagonIE_Sodium_Core_Util::substr($outA, 0, 64)
+            ),
+            bin2hex($outB)
+        );
+
+        // Second block
+        $outC = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x01" . str_repeat("\x00", 7), $key);
+        $this->assertSame(
+            bin2hex(
+                ParagonIE_Sodium_Core_Util::substr($outA, 64, 64)
+            ),
+            bin2hex($outC)
+        );
+
+        // Third block
+        $outD = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x02" . str_repeat("\x00", 7), $key);
+        $this->assertSame(
+            bin2hex(
+                ParagonIE_Sodium_Core_Util::substr($outA, 128, 64)
+            ),
+            bin2hex($outD)
+        );
+    }
 }
