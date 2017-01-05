@@ -92,6 +92,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @return SplFixedArray
+     * @throws Exception
      */
     protected static function xor64(SplFixedArray $x, SplFixedArray $y)
     {
@@ -117,7 +118,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     protected static function rotr64($x, $c)
     {
-        $h0 = 0;
         $l0 = 0;
         $c = 64 - $c;
 
@@ -129,7 +129,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         }
 
         $h1 = 0;
-        $l1 = 0;
         $c1 = 64 - $c;
 
         if ($c1 < 32) {
@@ -307,7 +306,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     public static function update(SplFixedArray $ctx, $p, $plen)
     {
-        $offset = 0; $left = 0; $fill = 0;
+        $offset = 0;
         while ($plen > 0) {
             $left = $ctx[4];
             $fill = 256 - $left;
@@ -376,6 +375,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $key
      * @param int $outlen
      * @return SplFixedArray
+     * @throws Exception
      */
     public static function init($key = null, $outlen = 64)
     {

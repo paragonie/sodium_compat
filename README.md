@@ -107,7 +107,7 @@ polyfill without additional code changes.
 - [x] Poly1305: one-time message authentication (`crypto_onetimeauth`)
 - [x] Public-key authenticated encryption (`crypto_box`)
 - [x] Secret-key authenticated encryption (`crypto_secretbox`)
-- [ ] Anonymous public-key encryption (`crypto_box_seal`)
+- [x] Anonymous public-key encryption (`crypto_box_seal`)
 - [ ] SipHash: fast collision-resistant hashing (`crypto_shorthash`)
 - [ ] HMAC-SHA-512/256: Secret-key message authentication (`crypto_auth`)
 - [x] BLAKE2b: Cryptographic hashing (`crypto_generichash`)

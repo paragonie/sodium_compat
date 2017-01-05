@@ -62,6 +62,34 @@ if (!extension_loaded('libsodium')) {
             );
         }
     }
+    if (!is_callable('\\Sodium\\crypto_box_seal')) {
+        /**
+         * @param string $message
+         * @param string $publicKey
+         * @return string
+         */
+        function crypto_box_seal($message, $publicKey)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_seal'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_seal_open')) {
+        /**
+         * @param string $message
+         * @param string $kp
+         * @return string
+         */
+        function crypto_box_seal_open($message, $kp)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_seal_open'),
+                func_get_args()
+            );
+        }
+    }
     if (!is_callable('\\Sodium\\crypto_box_keypair')) {
         /**
          * @return string
@@ -71,57 +99,6 @@ if (!extension_loaded('libsodium')) {
             return call_user_func(
                 array('ParagonIE_Sodium_Compat', 'crypto_box_keypair')
             );
-        }
-    }
-    if (!is_callable('\\Sodium\\crypto_generichash')) {
-        /**
-         * @param string $message
-         * @param string|null $key
-         * @param int $outputLength
-         * @return string
-         */
-        function crypto_generichash($message, $key = null, $outLen = 32)
-        {
-            return call_user_func_array(
-                array('ParagonIE_Sodium_Compat', 'crypto_generichash'),
-                func_get_args()
-            );
-        }
-    }
-    if (!is_callable('\\Sodium\\crypto_generichash_init')) {
-        /**
-         * @param string|null $key
-         * @param int $outLen
-         * @return string
-         */
-        function crypto_generichash_init($key = null, $outLen = 32)
-        {
-            return call_user_func_array(
-                array('ParagonIE_Sodium_Compat', 'crypto_generichash_init'),
-                func_get_args()
-            );
-        }
-    }
-    if (!is_callable('\\Sodium\\crypto_generichash_update')) {
-        /**
-         * @param string|null $ctx
-         * @param string $message
-         * @return void
-         */
-        function crypto_generichash_update(&$ctx, $message = '')
-        {
-            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
-        }
-    }
-    if (!is_callable('\\Sodium\\crypto_generichash_final')) {
-        /**
-         * @param string|null $ctx
-         * @param int $outputLength
-         * @return string
-         */
-        function crypto_generichash_final(&$ctx, $outputLength = 32)
-        {
-            return ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, $outputLength);
         }
     }
     if (!is_callable('\\Sodium\\crypto_box_publickey')) {
@@ -176,6 +153,57 @@ if (!extension_loaded('libsodium')) {
                 array('ParagonIE_Sodium_Compat', 'crypto_box_open'),
                 func_get_args()
             );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash')) {
+        /**
+         * @param string $message
+         * @param string|null $key
+         * @param int $outputLength
+         * @return string
+         */
+        function crypto_generichash($message, $key = null, $outLen = 32)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_generichash'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_init')) {
+        /**
+         * @param string|null $key
+         * @param int $outLen
+         * @return string
+         */
+        function crypto_generichash_init($key = null, $outLen = 32)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_generichash_init'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_update')) {
+        /**
+         * @param string|null $ctx
+         * @param string $message
+         * @return void
+         */
+        function crypto_generichash_update(&$ctx, $message = '')
+        {
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_generichash_final')) {
+        /**
+         * @param string|null $ctx
+         * @param int $outputLength
+         * @return string
+         */
+        function crypto_generichash_final(&$ctx, $outputLength = 32)
+        {
+            return ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, $outputLength);
         }
     }
     if (!is_callable('\\Sodium\\crypto_sign_detached')) {

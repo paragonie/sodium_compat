@@ -184,6 +184,38 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $plaintext
+     * @param string $pk
+     * @return string
+     */
+    public static function crypto_box_seal($plaintext, $pk)
+    {
+        if (self::use_fallback('crypto_box_seal')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_seal',
+                array($plaintext, $pk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_seal($plaintext, $pk);
+    }
+
+    /**
+     * @param string $plaintext
+     * @param string $kp
+     * @return string
+     */
+    public static function crypto_box_seal_open($plaintext, $kp)
+    {
+        if (self::use_fallback('crypto_box_seal_open')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_seal_open',
+                array($plaintext, $kp)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_seal_open($plaintext, $kp);
+    }
+
+    /**
      * @param string $kp
      * @return string
      */
