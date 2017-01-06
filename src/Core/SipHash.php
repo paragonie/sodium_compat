@@ -13,8 +13,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
     {
         # v0 += v1;
         list($v[0], $v[1]) = self::add(
-            array_slice($v, 0, 2),
-            array_slice($v, 2, 2)
+            array($v[0], $v[1]),
+            array($v[2], $v[3])
         );
         #  v1=ROTL(v1,13);
         list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 13);
@@ -26,8 +26,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v2 += v3;
         list($v[4], $v[5]) = self::add(
-            array_slice($v, 4, 2),
-            array_slice($v, 6, 2)
+            array($v[4], $v[5]),
+            array($v[6], $v[7])
         );
         # v3=ROTL(v3,16);
         list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 16);
@@ -37,8 +37,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v0 += v3;
         list($v[0], $v[1]) = self::add(
-            array_slice($v, 0, 2),
-            array_slice($v, 6, 2)
+            array($v[0], $v[1]),
+            array($v[6], $v[7])
         );
         # v3=ROTL(v3,21);
         list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 21);
@@ -48,8 +48,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v2 += v1;
         list($v[4], $v[5]) = self::add(
-            array_slice($v, 4, 2),
-            array_slice($v, 2, 2)
+            array($v[4], $v[5]),
+            array($v[2], $v[3])
         );
         # v1=ROTL(v1,17);
         list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 17);
@@ -255,8 +255,9 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         $v[0] ^= $b[0];
         $v[1] ^= $b[1];
 
+        // Flip the lower 8 bits of v2 which is ($v[4], $v[5]) in our implementation
         # v2 ^= 0xff;
-        $v[3] ^= 0xff;
+        $v[5] ^= 0xff;
 
         # SIPROUND;
         # SIPROUND;

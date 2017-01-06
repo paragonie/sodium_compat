@@ -583,5 +583,11 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex(\Sodium\crypto_shorthash($message, $key)),
             bin2hex(ParagonIE_Sodium_Compat::crypto_shorthash($message, $key))
         );
+
+        $message = random_bytes(random_int(1, 100));
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_shorthash($message, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_shorthash($message, $key))
+        );
     }
 }
