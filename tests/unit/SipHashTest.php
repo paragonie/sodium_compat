@@ -80,7 +80,7 @@ class SipHashTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             array(0x80000000, 0x00000000),
             ParagonIE_Sodium_Core_SipHash::rotl_64(0x00000001, 0x00000000, 95),
-            'rotl_64 by 95'
+            'rotl_64 by 95 (reduce to 31)'
         );
         $this->assertSame(
             array(0x00000000, 0x00000001),

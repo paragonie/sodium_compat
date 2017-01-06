@@ -16,11 +16,14 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             array($v[0], $v[1]),
             array($v[2], $v[3])
         );
+
         #  v1=ROTL(v1,13);
         list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 13);
+
         #  v1 ^= v0;
         $v[2] ^= $v[0];
         $v[3] ^= $v[1];
+
         #  v0=ROTL(v0,32);
         list($v[0], $v[1]) = self::rotl_64($v[0], $v[1], 32);
 
@@ -29,8 +32,10 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             array($v[4], $v[5]),
             array($v[6], $v[7])
         );
+
         # v3=ROTL(v3,16);
         list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 16);
+
         #  v3 ^= v2;
         $v[6] ^= $v[4];
         $v[7] ^= $v[5];
@@ -40,8 +45,10 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             array($v[0], $v[1]),
             array($v[6], $v[7])
         );
+
         # v3=ROTL(v3,21);
         list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 21);
+
         # v3 ^= v0;
         $v[6] ^= $v[0];
         $v[7] ^= $v[1];
@@ -51,11 +58,14 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             array($v[4], $v[5]),
             array($v[2], $v[3])
         );
+
         # v1=ROTL(v1,17);
         list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 17);
+
         #  v1 ^= v2;;
         $v[2] ^= $v[4];
         $v[3] ^= $v[5];
+
         # v2=ROTL(v2,32)
         list($v[4], $v[5]) = self::rotl_64($v[4], $v[5], 32);
 
@@ -157,10 +167,10 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         # u64 k0 = LOAD64_LE( k );
         # u64 k1 = LOAD64_LE( k + 8 );
         $k = array(
-            self::load_4(self::substr($key, 0, 4)),
             self::load_4(self::substr($key, 4, 4)),
-            self::load_4(self::substr($key, 8, 4)),
-            self::load_4(self::substr($key, 12, 4))
+            self::load_4(self::substr($key, 0, 4)),
+            self::load_4(self::substr($key, 12, 4)),
+            self::load_4(self::substr($key, 8, 4))
         );
         // k0 => $k[0], $k[1]
         // k1 => $k[2], $k[3]
@@ -190,8 +200,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         while ($left >= 8) {
             # m = LOAD64_LE( in );
             $m = array(
-                self::load_4(self::substr($in, 0, 4)),
-                self::load_4(self::substr($in, 4, 4))
+                self::load_4(self::substr($in, 4, 4)),
+                self::load_4(self::substr($in, 0, 4))
             );
 
             # v3 ^= m;
@@ -270,7 +280,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # b = v0 ^ v1 ^ v2 ^ v3;
         # STORE64_LE( out, b );
-        return self::store32_le($v[0] ^ $v[2] ^ $v[4] ^ $v[6]) .
-            self::store32_le($v[1] ^ $v[3] ^ $v[5] ^ $v[7]);
+        return  self::store32_le($v[1] ^ $v[3] ^ $v[5] ^ $v[7]) .
+            self::store32_le($v[0] ^ $v[2] ^ $v[4] ^ $v[6]);
     }
 }
