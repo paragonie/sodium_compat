@@ -2,6 +2,11 @@
 
 /**
  * Class ParagonIE_Sodium_Crypto
+ *
+ * ATTENTION!
+ *
+ * If you are using this library, you should be using
+ * ParagonIE_Sodium_Compat in your code, not this class.
  */
 abstract class ParagonIE_Sodium_Crypto
 {
@@ -32,7 +37,11 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function auth($message, $key)
     {
-
+        return ParagonIE_Sodium_Core_Util::substr(
+            hash_hmac('sha512', $message, $key, true),
+            0,
+            32
+        );
     }
 
     /**
