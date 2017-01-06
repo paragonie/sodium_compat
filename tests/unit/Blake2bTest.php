@@ -2,6 +2,11 @@
 
 class Blake2bTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_generichash()
      */

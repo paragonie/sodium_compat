@@ -2,6 +2,11 @@
 
 class Salsa20Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     /**
      * @covers ParagonIE_Sodium_Core_Salsa20::rotate()
      */
