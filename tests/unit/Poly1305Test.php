@@ -2,6 +2,11 @@
 
 class Poly1305Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     /**
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      * @ref https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#page-12

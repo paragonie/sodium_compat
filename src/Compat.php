@@ -401,7 +401,7 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_secretbox_open($ciphertext, $nonce, $key)
     {
-        if (self::use_fallback('memcmp')) {
+        if (self::use_fallback('crypto_secretbox_open')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_secretbox_open',
                 array($ciphertext, $nonce, $key)
@@ -418,7 +418,29 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_stream($len, $nonce, $key)
     {
+        if (self::use_fallback('crypto_stream')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_stream',
+                array($len, $nonce, $key)
+            );
+        }
         return ParagonIE_Sodium_Core_Xsalsa20::xsalsa20($len, $nonce, $key);
+    }
+
+    /**
+     * @param string $message
+     * @param string $key
+     * @return string
+     */
+    public static function crypto_shorthash($message, $key)
+    {
+        if (self::use_fallback('crypto_shorthash')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_shorthash',
+                array($message, $key)
+            );
+        }
+        return ParagonIE_Sodium_Core_SipHash::sipHash24($message, $key);
     }
 
     /**

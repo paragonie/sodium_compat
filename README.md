@@ -108,7 +108,7 @@ polyfill without additional code changes.
 - [x] Public-key authenticated encryption (`crypto_box`)
 - [x] Secret-key authenticated encryption (`crypto_secretbox`)
 - [x] Anonymous public-key encryption (`crypto_box_seal`)
-- [ ] SipHash: fast collision-resistant hashing (`crypto_shorthash`)
+- [x] SipHash: fast collision-resistant hashing (`crypto_shorthash`)
 - [ ] HMAC-SHA-512/256: Secret-key message authentication (`crypto_auth`)
 - [x] BLAKE2b: Cryptographic hashing (`crypto_generichash`)
 - [ ] Argon2i: Password hashing / key derivation (`crypto_pwhash`)

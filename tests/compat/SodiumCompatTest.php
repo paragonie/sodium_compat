@@ -570,4 +570,18 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             'crypto_stream_xor() is not working'
         );
     }
+
+    /**
+     *
+     */
+    public function testCryptoShorthash()
+    {
+        $message = 'predictable input';
+        $key = random_bytes(16);
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_shorthash($message, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_shorthash($message, $key))
+        );
+    }
 }
