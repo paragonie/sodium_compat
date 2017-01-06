@@ -7,6 +7,64 @@ class SipHashTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_SipHash::add()
+     */
+    public function testAdd()
+    {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Test should be performed on a 64-bit OS');
+            return;
+        }
+
+        $vectors = array(
+            array(
+                0x0123456789abcdef,
+                0x456789abcdef0123,
+                0x468acf13579acf12
+            ),
+            array(
+                0x0000000100000000,
+                0x0000000000000100,
+                0x0000000100000100
+            ),
+            array(
+                0x0000000100000000,
+                0x0000000000000100,
+                0x0000000100000100
+            ),
+            array(
+                0x0fffffffffffffff,
+                0x0000000000000001,
+                0x1000000000000000
+            )
+        );
+        foreach ($vectors as $v) {
+            list($a, $b, $c) = $v;
+            # $this->assertSame($c, PHP_INT_MAX & ($a + $b));
+
+            $sA = array(
+                $a >> 32,
+                $a & 0xffffffff
+            );
+            $sB = array(
+                $b >> 32,
+                $b & 0xffffffff
+            );
+            $sC = array(
+                ($c >> 32) & 0xffffffff,
+                $c & 0xffffffff
+            );
+            $this->assertSame(
+                $sC,
+                ParagonIE_Sodium_Core_SipHash::add($sA, $sB)
+            );
+        }
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_SipHash::rotl_64()
+     */
     public function testRotl64()
     {
         $this->assertSame(
