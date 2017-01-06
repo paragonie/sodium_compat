@@ -63,6 +63,24 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testCryptoAuth()
+    {
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        $key = random_bytes(32);
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_auth($message, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_auth($message, $key))
+        );
+        $mac = \Sodium\crypto_auth($message, $key);
+        $this->assertTrue(
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key)
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */

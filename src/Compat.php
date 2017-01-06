@@ -167,6 +167,39 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param $message
+     * @param $key
+     * @return string
+     */
+    public static function crypto_auth($message, $key)
+    {
+        if (self::use_fallback('crypto_auth')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_auth',
+                array($message, $key)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::auth($message, $key);
+    }
+
+    /**
+     * @param string $mac
+     * @param string $message
+     * @param string $key
+     * @return bool
+     */
+    public static function crypto_auth_verify($mac, $message, $key)
+    {
+        if (self::use_fallback('crypto_auth_verify')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_auth_verify',
+                array($mac, $message, $key)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::auth_verify($mac, $message, $key);
+    }
+
+    /**
      * @param string $plaintext
      * @param string $nonce
      * @param string $kp
