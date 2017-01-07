@@ -235,6 +235,66 @@ if (!extension_loaded('libsodium')) {
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
         }
     }
+    if (!is_callable('\\Sodium\\crypto_kx')) {
+        /**
+         * @param string $my_secret
+         * @param string $their_public
+         * @param string $client_public
+         * @param string $server_public
+         * @return string
+         */
+        function crypto_kx($my_secret, $their_public, $client_public, $server_public)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_kx'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_scalarmult')) {
+        /**
+         * @param string $n
+         * @param string $p
+         * @return string
+         */
+        function crypto_scalarmult($n, $p)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_scalarmult'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_secretbox')) {
+        /**
+         * @param string $message
+         * @param string $nonce
+         * @param string $key
+         * @return string
+         */
+        function crypto_secretbox($message, $nonce, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_secretbox'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_secretbox_open')) {
+        /**
+         * @param string $message
+         * @param string $nonce
+         * @param string $key
+         * @return string
+         */
+        function crypto_secretbox_open($message, $nonce, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_secretbox_open'),
+                func_get_args()
+            );
+        }
+    }
     if (!is_callable('\\Sodium\\crypto_sign')) {
         /**
          * @param string $message

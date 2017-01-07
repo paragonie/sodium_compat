@@ -102,7 +102,7 @@ polyfill without additional code changes.
 #### Libsodium Features Implemented and Tested
 
 - [x] Ed25519: public key signatures (`crypto_sign`)
-- [x] X25519: public key exchange (`crypto_scalarmult`)
+- [x] X25519: public key exchange (`crypto_scalarmult`, `crypto_kx`)
 - [x] Xsalsa20: unauthenticated secret-key encryption (`crypto_stream`)
 - [x] Poly1305: one-time message authentication (`crypto_onetimeauth`)
 - [x] Public-key authenticated encryption (`crypto_box`)

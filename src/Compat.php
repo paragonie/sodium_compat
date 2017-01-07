@@ -14,6 +14,48 @@ class ParagonIE_Sodium_Compat
     const LIBRARY_VERSION_MINOR = 3;
     const VERSION_STRING = 'polyfill-1.0.11';
 
+    // From libsodium
+    const CRYPTO_AUTH_BYTES = 32;
+    const CRYPTO_AUTH_KEYBYTES = 32;
+    const CRYPTO_BOX_SEALBYTES = 16;
+    const CRYPTO_BOX_SECRETKEYBYTES = 32;
+    const CRYPTO_BOX_PUBLICKEYBYTES = 32;
+    const CRYPTO_BOX_KEYPAIRBYTES = 64;
+    const CRYPTO_BOX_MACBYTES = 16;
+    const CRYPTO_BOX_NONCEBYTES = 24;
+    const CRYPTO_BOX_SEEDBYTES = 32;
+    const CRYPTO_KX_BYTES = 32;
+    const CRYPTO_KX_PUBLICKEYBYTES = 32;
+    const CRYPTO_KX_SECRETKEYBYTES = 32;
+    const CRYPTO_GENERICHASH_BYTES = 32;
+    const CRYPTO_GENERICHASH_BYTES_MIN = 16;
+    const CRYPTO_GENERICHASH_BYTES_MAX = 64;
+    const CRYPTO_GENERICHASH_KEYBYTES = 32;
+    const CRYPTO_GENERICHASH_KEYBYTES_MIN = 16;
+    const CRYPTO_GENERICHASH_KEYBYTES_MAX = 64;
+    const CRYPTO_PWHASH_SALTBYTES = 16;
+    const CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
+    const CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE = 4;
+    const CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
+    const CRYPTO_PWHASH_OPSLIMIT_MODERATE = 6;
+    const CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
+    const CRYPTO_PWHASH_OPSLIMIT_SENSITIVE = 8;
+    const CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
+    const CRYPTO_SCALARMULT_BYTES = 32;
+    const CRYPTO_SCALARMULT_SCALARBYTES = 32;
+    const CRYPTO_SHORTHASH_BYTES = 8;
+    const CRYPTO_SHORTHASH_KEYBYTES = 16;
+    const CRYPTO_SECRETBOX_KEYBYTES = 32;
+    const CRYPTO_SECRETBOX_MACBYTES = 16;
+    const CRYPTO_SECRETBOX_NONCEBYTES = 24;
+    const CRYPTO_SIGN_BYTES = 64;
+    const CRYPTO_SIGN_SEEDBYTES = 32;
+    const CRYPTO_SIGN_PUBLICKEYBYTES = 32;
+    const CRYPTO_SIGN_SECRETKEYBYTES = 64;
+    const CRYPTO_SIGN_KEYPAIRBYTES = 96;
+    const CRYPTO_STREAM_KEYBYTES = 32;
+    const CRYPTO_STREAM_NONCEBYTES = 24;
+
     /**
      * @param $string
      * @return string
@@ -43,127 +85,6 @@ class ParagonIE_Sodium_Compat
             );
         }
         return ParagonIE_Sodium_Core_Util::compare($left, $right);
-    }
-
-    /**
-     * @param $string
-     * @return string
-     */
-    public static function hex2bin($string)
-    {
-        if (self::use_fallback('hex2bin')) {
-            return call_user_func_array(
-                '\\Sodium\\hex2bin',
-                array($string)
-            );
-        }
-        return ParagonIE_Sodium_Core_Util::hex2bin($string);
-    }
-
-    /**
-     * @return int
-     */
-    public static function library_version_major()
-    {
-        if (self::use_fallback('hex2bin')) {
-            return (int) call_user_func('\\Sodium\\library_version_minor');
-        }
-        return self::LIBRARY_VERSION_MAJOR;
-    }
-
-    /**
-     * @return int
-     */
-    public static function library_version_minor()
-    {
-        if (self::use_fallback('library_version_minor')) {
-            return (int) call_user_func('\\Sodium\\library_version_minor');
-        }
-        return self::LIBRARY_VERSION_MINOR;
-    }
-
-    /**
-     * @param string $left
-     * @param string $right
-     * @return int
-     */
-    public static function memcmp($left, $right)
-    {
-        if (self::use_fallback('memcmp')) {
-            return call_user_func_array(
-                '\\Sodium\\memcmp',
-                array($left, $right)
-            );
-        }
-        return ParagonIE_Sodium_Core_Util::memcmp($left, $right);
-    }
-
-    /**
-     * @param &string $var
-     */
-    public static function memzero(&$var)
-    {
-        if (self::use_fallback('memzero')) {
-            call_user_func_array(
-                '\\Sodium\\memzero',
-                array(&$var)
-            );
-            return;
-        }
-        // This is the best we can do.
-        unset($var);
-    }
-
-    /**
-     * @param int $numBytes
-     * @return string
-     */
-    public static function randombytes_buf($numBytes)
-    {
-        if (self::use_fallback('randombytes_buf')) {
-            return call_user_func_array(
-                '\\Sodium\\randombytes_buf',
-                array($numBytes)
-            );
-        }
-        return random_bytes($numBytes);
-    }
-
-    /**
-     * @param $range
-     * @return int
-     */
-    public static function randombytes_uniform($range)
-    {
-        if (self::use_fallback('randombytes_uniform')) {
-            return (int) call_user_func_array(
-                '\\Sodium\\randombytes_uniform',
-                array($range)
-            );
-        }
-        return random_int(0, $range - 1);
-    }
-
-    /**
-     * @return int
-     */
-    public static function randombytes_random16()
-    {
-        if (self::use_fallback('randombytes_random16')) {
-            return (int) call_user_func('\\Sodium\\randombytes_random16');
-        }
-        return random_int(0, 65535);
-    }
-
-    /**
-     * @return int
-     */
-    public static function version_string()
-    {
-        if (self::use_fallback('version_string')) {
-            return (int) call_user_func('\\Sodium\\version_string');
-        }
-        return self::VERSION_STRING;
     }
 
     /**
@@ -371,6 +292,29 @@ class ParagonIE_Sodium_Compat
             $context .= $ctx[$i];
         }
         $ctx = ParagonIE_Sodium_Crypto::generichash_update($context, $message);
+    }
+
+    /**
+     * @param string $my_secret
+     * @param string $their_public
+     * @param string $client_public
+     * @param string $server_public
+     * @return string
+     */
+    public static function crypto_kx($my_secret, $their_public, $client_public, $server_public)
+    {
+        if (self::use_fallback('crypto_kx')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_kx',
+                func_get_args()
+            );
+        }
+        return ParagonIE_Sodium_Crypto::crypto_kx(
+            $my_secret,
+            $their_public,
+            $client_public,
+            $server_public
+        );
     }
 
     /**
@@ -598,6 +542,127 @@ class ParagonIE_Sodium_Compat
             );
         }
         return ParagonIE_Sodium_Crypto::sign_verify_detached($signature, $message, $pk);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function hex2bin($string)
+    {
+        if (self::use_fallback('hex2bin')) {
+            return call_user_func_array(
+                '\\Sodium\\hex2bin',
+                array($string)
+            );
+        }
+        return ParagonIE_Sodium_Core_Util::hex2bin($string);
+    }
+
+    /**
+     * @return int
+     */
+    public static function library_version_major()
+    {
+        if (self::use_fallback('hex2bin')) {
+            return (int) call_user_func('\\Sodium\\library_version_minor');
+        }
+        return self::LIBRARY_VERSION_MAJOR;
+    }
+
+    /**
+     * @return int
+     */
+    public static function library_version_minor()
+    {
+        if (self::use_fallback('library_version_minor')) {
+            return (int) call_user_func('\\Sodium\\library_version_minor');
+        }
+        return self::LIBRARY_VERSION_MINOR;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return int
+     */
+    public static function memcmp($left, $right)
+    {
+        if (self::use_fallback('memcmp')) {
+            return call_user_func_array(
+                '\\Sodium\\memcmp',
+                array($left, $right)
+            );
+        }
+        return ParagonIE_Sodium_Core_Util::memcmp($left, $right);
+    }
+
+    /**
+     * @param &string $var
+     */
+    public static function memzero(&$var)
+    {
+        if (self::use_fallback('memzero')) {
+            call_user_func_array(
+                '\\Sodium\\memzero',
+                array(&$var)
+            );
+            return;
+        }
+        // This is the best we can do.
+        unset($var);
+    }
+
+    /**
+     * @param int $numBytes
+     * @return string
+     */
+    public static function randombytes_buf($numBytes)
+    {
+        if (self::use_fallback('randombytes_buf')) {
+            return call_user_func_array(
+                '\\Sodium\\randombytes_buf',
+                array($numBytes)
+            );
+        }
+        return random_bytes($numBytes);
+    }
+
+    /**
+     * @param $range
+     * @return int
+     */
+    public static function randombytes_uniform($range)
+    {
+        if (self::use_fallback('randombytes_uniform')) {
+            return (int) call_user_func_array(
+                '\\Sodium\\randombytes_uniform',
+                array($range)
+            );
+        }
+        return random_int(0, $range - 1);
+    }
+
+    /**
+     * @return int
+     */
+    public static function randombytes_random16()
+    {
+        if (self::use_fallback('randombytes_random16')) {
+            return (int) call_user_func('\\Sodium\\randombytes_random16');
+        }
+        return random_int(0, 65535);
+    }
+
+    /**
+     * @return int
+     */
+    public static function version_string()
+    {
+        if (self::use_fallback('version_string')) {
+            return (int) call_user_func('\\Sodium\\version_string');
+        }
+        return self::VERSION_STRING;
     }
 
     /**

@@ -243,7 +243,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @return string
      * @throws Exception
      */
-    public static function generichash_init($key, $outputLength = 32)
+    public static function generichash_init($key = '', $outputLength = 32)
     {
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
 
@@ -261,6 +261,22 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * @param string $ctx
+     * @param int $outlen
+     * @return string
+     */
+    public static function generichash_final($ctx, $outlen = 32)
+    {
+        if (!is_string($ctx)) {
+            throw new InvalidArgumentException('Context must be a string');
+        }
+        $out = new SplFixedArray($outlen);
+        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
+        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
+    }
+
+    /**
+     * @param string $ctx
      * @param string $message
      * @return string
      */
@@ -274,18 +290,19 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * @param string $ctx
-     * @param int $outlen
+     * @param string $my_sk
+     * @param string $their_pk
+     * @param string $client_pk
+     * @param string $server_pk
+     * @return string
      */
-    public static function generichash_final($ctx, $outlen = 32)
+    public static function crypto_kx($my_sk, $their_pk, $client_pk, $server_pk)
     {
-        if (!is_string($ctx)) {
-            throw new InvalidArgumentException('Context must be a string');
-        }
-        $out = new SplFixedArray($outlen);
-        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
-        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
-        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
+        return self::generichash(
+            self::scalarmult($my_sk, $their_pk) .
+            $client_pk .
+            $server_pk
+        );
     }
 
     /**
