@@ -54,7 +54,7 @@ if (!extension_loaded('libsodium')) {
          * @param string $key
          * @return bool
          */
-        function crypto_auth($mac, $message, $key)
+        function crypto_auth_verify($mac, $message, $key)
         {
             return call_user_func_array(
                 array('ParagonIE_Sodium_Compat', 'crypto_auth_verify'),
