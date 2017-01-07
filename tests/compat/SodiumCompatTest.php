@@ -257,8 +257,8 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertSame(
-            bin2hex(\Sodium\crypto_generichash('apple', null, 64)),
-            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple', null, 64)),
+            bin2hex(\Sodium\crypto_generichash('apple', '', 64)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_generichash('apple', '', 64)),
             'BLAKE2b implementation with output length'
         );
 
