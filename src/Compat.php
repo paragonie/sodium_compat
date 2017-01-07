@@ -248,6 +248,17 @@ class ParagonIE_Sodium_Compat
         return ParagonIE_Sodium_Crypto::box_seal_open($plaintext, $kp);
     }
 
+    public static function crypto_box_keypair_from_secretkey_and_publickey($sk, $pk)
+    {
+        if (self::use_fallback('box_keypair_from_secretkey_and_publickey')) {
+            return call_user_func_array(
+                '\\Sodium\\box_keypair_from_secretkey_and_publickey',
+                array($sk, $pk)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_keypair_from_secretkey_and_publickey($sk, $pk);
+    }
+
     /**
      * @param string $kp
      * @return string

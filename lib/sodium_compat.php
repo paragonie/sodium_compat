@@ -47,6 +47,35 @@ if (!extension_loaded('libsodium')) {
             );
         }
     }
+    if (!is_callable('\\Sodium\\crypto_auth')) {
+        /**
+         * @param string $message
+         * @param string $key
+         * @return string
+         */
+        function crypto_auth($message, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_auth'),
+                func_get_args()
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_auth_verify')) {
+        /**
+         * @param string $mac
+         * @param string $message
+         * @param string $key
+         * @return bool
+         */
+        function crypto_auth($mac, $message, $key)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_auth_verify'),
+                func_get_args()
+            );
+        }
+    }
     if (!is_callable('\\Sodium\\crypto_box')) {
         /**
          * @param string $message
@@ -98,6 +127,20 @@ if (!extension_loaded('libsodium')) {
         {
             return call_user_func(
                 array('ParagonIE_Sodium_Compat', 'crypto_box_keypair')
+            );
+        }
+    }
+    if (!is_callable('\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey')) {
+        /**
+         * @param string $sk
+         * @param string $pk
+         * @return string
+         */
+        function crypto_box_keypair_from_secretkey_and_publickey($sk, $pk)
+        {
+            return call_user_func_array(
+                array('ParagonIE_Sodium_Compat', 'crypto_box_keypair_from_secretkey_and_publickey'),
+                func_get_args()
             );
         }
     }
