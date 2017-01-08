@@ -57,6 +57,8 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_STREAM_NONCEBYTES = 24;
 
     /**
+     * Cache-timing-safe implementation of bin2hex().
+     *
      * @param $string
      * @return string
      * @throws TypeError
@@ -76,6 +78,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Compare two strings, in constant-time.
+     *
      * @param string $left
      * @param string $right
      * @return int
@@ -99,8 +103,17 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @param $message
-     * @param $key
+     * Authenticate a message. Uses symmetric-key cryptography.
+     *
+     * Algorithm:
+     *     HMAC-SHA512-256. Which is HMAC-SHA-512 truncated to 256 bits.
+     *     Not to be confused with HMAC-SHA-512/256 which would use the
+     *     SHA-512/256 hash function (uses different initial parameters
+     *     but still truncates to 256 bits to sidestep length-extension
+     *     attacks.
+     *
+     * @param string $message
+     * @param string $key
      * @return string
      * @throws Error
      * @throws TypeError
@@ -126,6 +139,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Verify the MAC of a message previously authenticated with crypto_auth.
+     *
      * @param string $mac
      * @param string $message
      * @param string $key
@@ -157,6 +172,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Authenticated asymmetric-key encryption. Both the sender and recipient
+     * may decrypt messages.
+     *
+     * Algorithm: X25519-Xsalsa20-Poly1305.
+     *     X25519: Elliptic-Curve Diffie Hellman over Curve25519.
+     *     Xsalsa20: Extended-nonce variant of salsa20.
+     *     Poyl1305: Polynomial MAC for one-time message authentication.
+     *
      * @param string $plaintext
      * @param string $nonce
      * @param string $kp
@@ -191,6 +214,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Anonymous public-key encryption. Only the recipient may decrypt messages.
+     *
+     * Algorithm: X25519-Xsalsa20-Poly1305, as with crypto_box.
+     *     The sender's X25519 keypair is ephemeral.
+     *     Nonce is generated from the BLAKE2b hash of both public keys.
+     *
+     * This provides ciphertext integrity.
+     *
      * @param string $plaintext
      * @param string $pk
      * @return string
@@ -218,6 +249,11 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Opens a message encrypted with crypto_box_seal(). Requires
+     * the recipient's keypair (sk || pk) to decrypt successfully.
+     *
+     * This validates ciphertext integrity.
+     *
      * @param string $ciphertext
      * @param string $kp
      * @return string
@@ -245,6 +281,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Combine two keys into a keypair for use in library methods that expect
+     * a keypair.
+     *
      * @param string $sk
      * @param string $pk
      * @return string
@@ -275,6 +314,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Extract the public key from a crypto_box keypair.
+     *
      * @param string $kp
      * @return string
      * @throws Error
@@ -298,6 +339,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculate the X25519 public key from a given X25519 secret key.
+     *
      * @param string $sk
      * @return string
      * @throws Error
@@ -321,6 +364,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Extract the secret key from a crypto_box keypair.
+     *
      * @param string $kp
      * @return string
      * @throws Error
@@ -344,6 +389,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Decrypt a message previously encrypted with crypto_box().
+     *
      * @param string $ciphertext
      * @param string $nonce
      * @param string $kp
@@ -381,6 +428,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculates a BLAKE2b hash, with an optional key.
+     *
      * @param string $message
      * @param string $key
      * @param int $length
@@ -401,6 +450,14 @@ class ParagonIE_Sodium_Compat
                 $length = (int) $length;
             } else {
                 throw new TypeError('Argument 3 must be an integer');
+            }
+        }
+        if (!empty($key)) {
+            if (ParagonIE_Sodium_Core_Util::strlen($key) < self::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
+                throw new Error('Unsupported key size. Must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes long.');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) > self::CRYPTO_GENERICHASH_KEYBYTES_MAX) {
+                throw new Error('Unsupported key size. Must be at most CRYPTO_GENERICHASH_KEYBYTES_MAX bytes long.');
             }
         }
         if (self::use_fallback('crypto_generichash')) {
@@ -457,6 +514,14 @@ class ParagonIE_Sodium_Compat
                 $length = (int) $length;
             } else {
                 throw new TypeError('Argument 2 must be an integer');
+            }
+        }
+        if (!empty($key)) {
+            if (ParagonIE_Sodium_Core_Util::strlen($key) < self::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
+                throw new Error('Unsupported key size. Must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes long.');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) > self::CRYPTO_GENERICHASH_KEYBYTES_MAX) {
+                throw new Error('Unsupported key size. Must be at most CRYPTO_GENERICHASH_KEYBYTES_MAX bytes long.');
             }
         }
         if (self::use_fallback('crypto_generichash_init')) {
