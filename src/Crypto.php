@@ -296,7 +296,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $server_pk
      * @return string
      */
-    public static function crypto_kx($my_sk, $their_pk, $client_pk, $server_pk)
+    public static function kx($my_sk, $their_pk, $client_pk, $server_pk)
     {
         return self::generichash(
             self::scalarmult($my_sk, $their_pk) .

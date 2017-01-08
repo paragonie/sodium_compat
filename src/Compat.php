@@ -470,6 +470,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Get the final BLAKE2b hash output for a given context.
+     *
      * @param string& $ctx
      * @param int $length
      * @return string
@@ -498,6 +500,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Initialize a BLAKE2b hashing context, for use in a streaming interface.
+     *
      * @param string $key
      * @param int $length
      * @return string
@@ -534,6 +538,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Update a BLAKE2b hashing context with additional data.
+     *
      * @param string& $ctx
      * @param string $message
      * @return void
@@ -552,14 +558,12 @@ class ParagonIE_Sodium_Compat
             $func($ctx, $message);
             return;
         }
-        $context = '';
-        for ($i = 0; $i < ParagonIE_Sodium_Core_Util::strlen($ctx); ++$i) {
-            $context .= $ctx[$i];
-        }
-        $ctx = ParagonIE_Sodium_Crypto::generichash_update($context, $message);
+        $ctx = ParagonIE_Sodium_Crypto::generichash_update($ctx, $message);
     }
 
     /**
+     * Perform a key exchange, between a designated client and a server.
+     *
      * @param string $my_secret
      * @param string $their_public
      * @param string $client_public
@@ -600,7 +604,7 @@ class ParagonIE_Sodium_Compat
                 func_get_args()
             );
         }
-        return ParagonIE_Sodium_Crypto::crypto_kx(
+        return ParagonIE_Sodium_Crypto::kx(
             $my_secret,
             $their_public,
             $client_public,
@@ -609,6 +613,11 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculate the shared secret between your secret key and your
+     * recipient's public key.
+     *
+     * Algorithm: X25519 (ECDH over Curve25519)
+     *
      * @param string $sk
      * @param string $pk
      * @return string
@@ -639,6 +648,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculate an X25519 public key from an X25519 secret key.
+     *
      * @param $sk
      * @return string
      * @throws Error
@@ -662,6 +673,10 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Authenticated symmetric-key encryption.
+     *
+     * Algorithm: Xsalsa20-Poly1305
+     *
      * @param string $plaintext
      * @param string $nonce
      * @param string $key
@@ -696,6 +711,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Decrypts a message previously encrypted with crypto_secretbox().
+     *
      * @param string $ciphertext
      * @param string $nonce
      * @param string $key
@@ -730,6 +747,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculates a SipHash-2-4 hash of a message for a given key.
+     *
      * @param string $message
      * @param string $key
      * @return string
@@ -757,6 +776,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Expand a key and nonce into a keystream of pseudorandom bytes.
+     *
      * @param int $len
      * @param string $nonce
      * @param string $key
@@ -795,6 +816,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * DANGER! UNAUTHENTICATED ENCRYPTION!
+     *
+     * Unless you are following expert advice, do not used this feature.
+     *
+     * Algorithm: Xsalsa20
+     *
+     * This DOES NOT provide ciphertext integrity.
+     *
      * @param string $message
      * @param string $nonce
      * @param string $key
@@ -829,6 +858,11 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Returns a signed message. You probably want crypto_sign_detached()
+     * instead, which only returns the signature.
+     *
+     * Algorithm: Ed25519 (EdDSA over Curve25519)
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -856,6 +890,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Validates a signed message then returns the message.
+     *
      * @param string $sm
      * @param string $pk
      * @return string
@@ -883,6 +919,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Generate a new random Ed25519 keypair.
+     *
      * @return string
      */
     public static function crypto_sign_keypair()
@@ -896,6 +934,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Extract an Ed25519 public key from an Ed25519 keypair.
+     *
      * @param string $kp
      * @return string
      * @throws Error
@@ -919,6 +959,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Extract an Ed25519 secret key from an Ed25519 keypair.
+     *
      * @param string $kp
      * @return string
      * @throws Error
@@ -942,6 +984,10 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Calculate the Ed25519 signature of a message and return ONLY the signature.
+     *
+     * Algorithm: Ed25519 (EdDSA over Curve25519)
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -969,6 +1015,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Verify the signature of a message.
+     *
      * @param string $signature
      * @param string $message
      * @param string $pk
@@ -1003,6 +1051,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Cache-timing-safe implementation of hex2bin().
+     *
      * @param $string
      * @return string
      * @throws TypeError
@@ -1044,6 +1094,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Compare two strings.
+     *
      * @param string $left
      * @param string $right
      * @return int
@@ -1067,6 +1119,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * This is a NOP in the userland implementation. It's actually not possible
+     * to zero memory buffers in PHP. You need the native library for that.
+     *
      * @param &string $var
      * @throws TypeError
      */
@@ -1087,6 +1142,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Generate a string of bytes from the kernel's CSPRNG.
+     * Proudly uses /dev/urandom (if getrandom(2) is not available).
+     *
      * @param int $numBytes
      * @return string
      * @throws TypeError
@@ -1110,7 +1168,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @param $range
+     * Generate an integer between 0 and $range (non-inclusive).
+     *
+     * @param int $range
      * @return int
      * @throws TypeError
      */
@@ -1133,6 +1193,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Generate a random 16-bit integer.
+     *
      * @return int
      */
     public static function randombytes_random16()
@@ -1144,7 +1206,7 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @return int
+     * @return string
      */
     public static function version_string()
     {
