@@ -281,6 +281,21 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Generate a new random X25519 keypair.
+     *
+     * @return string
+     */
+    public static function crypto_box_keypair()
+    {
+        if (self::use_fallback('crypto_sign_keypair')) {
+            return call_user_func(
+                '\\Sodium\\crypto_box_keypair'
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_keypair();
+    }
+
+    /**
      * Combine two keys into a keypair for use in library methods that expect
      * a keypair.
      *
