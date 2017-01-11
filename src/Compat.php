@@ -964,6 +964,30 @@ class ParagonIE_Sodium_Compat
         }
         return ParagonIE_Sodium_Core_Ed25519::publickey($kp);
     }
+    /**
+     * Calculate an Ed25519 public key from an Ed25519 secret key.
+     *
+     * @param string $sk
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_sign_publickey_from_secretkey($sk)
+    {
+        if (!is_string($sk)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($sk) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
+            throw new Error('Argument 1 must be CRYPTO_SIGN_SECRETKEYBYTES long.');
+        }
+        if (self::use_fallback('crypto_sign_publickey_from_publickey')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_publickey_from_publickey',
+                array($sk)
+            );
+        }
+        return ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($sk);
+    }
 
     /**
      * Extract an Ed25519 secret key from an Ed25519 keypair.

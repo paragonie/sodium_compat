@@ -17,10 +17,7 @@ if (!is_callable('\\Sodium\\bin2hex')) {
      */
     function bin2hex($string)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'bin2hex'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::bin2hex($string);
     }
 }
 if (!is_callable('\\Sodium\\compare')) {
@@ -31,10 +28,7 @@ if (!is_callable('\\Sodium\\compare')) {
      */
     function compare($a, $b)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'compare'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::compare($a, $b);
     }
 }
 if (!is_callable('\\Sodium\\crypto_auth')) {
@@ -45,10 +39,7 @@ if (!is_callable('\\Sodium\\crypto_auth')) {
      */
     function crypto_auth($message, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_auth'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_auth($message, $key);
     }
 }
 if (!is_callable('\\Sodium\\crypto_auth_verify')) {
@@ -60,10 +51,7 @@ if (!is_callable('\\Sodium\\crypto_auth_verify')) {
      */
     function crypto_auth_verify($mac, $message, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_auth_verify'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box')) {
@@ -75,10 +63,7 @@ if (!is_callable('\\Sodium\\crypto_box')) {
      */
     function crypto_box($message, $nonce, $kp)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box($message, $nonce, $kp);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_keypair')) {
@@ -87,9 +72,7 @@ if (!is_callable('\\Sodium\\crypto_box_keypair')) {
      */
     function crypto_box_keypair()
     {
-        return call_user_func(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_keypair')
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_keypair();
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey')) {
@@ -100,10 +83,7 @@ if (!is_callable('\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey')) {
      */
     function crypto_box_keypair_from_secretkey_and_publickey($sk, $pk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_keypair_from_secretkey_and_publickey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey($sk, $pk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_open')) {
@@ -115,10 +95,7 @@ if (!is_callable('\\Sodium\\crypto_box_open')) {
      */
     function crypto_box_open($message, $nonce, $kp)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_open'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_open($message, $nonce, $kp);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_publickey')) {
@@ -128,10 +105,7 @@ if (!is_callable('\\Sodium\\crypto_box_publickey')) {
      */
     function crypto_box_publickey($keypair)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_publickey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_publickey($keypair);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_publickey_from_secretkey')) {
@@ -141,10 +115,7 @@ if (!is_callable('\\Sodium\\crypto_box_publickey_from_secretkey')) {
      */
     function crypto_box_publickey_from_secretkey($sk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_publickey_from_secretkey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_publickey_from_secretkey($sk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_seal')) {
@@ -155,10 +126,7 @@ if (!is_callable('\\Sodium\\crypto_box_seal')) {
      */
     function crypto_box_seal($message, $publicKey)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_seal'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_seal($message, $publicKey);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_seal_open')) {
@@ -169,10 +137,7 @@ if (!is_callable('\\Sodium\\crypto_box_seal_open')) {
      */
     function crypto_box_seal_open($message, $kp)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_seal_open'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_seal_open($message, $kp);
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_secretkey')) {
@@ -182,10 +147,7 @@ if (!is_callable('\\Sodium\\crypto_box_secretkey')) {
      */
     function crypto_box_secretkey($keypair)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_box_secretkey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_box_secretkey($keypair);
     }
 }
 if (!is_callable('\\Sodium\\crypto_generichash')) {
@@ -197,10 +159,7 @@ if (!is_callable('\\Sodium\\crypto_generichash')) {
      */
     function crypto_generichash($message, $key = null, $outLen = 32)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_generichash'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_generichash($message, $key, $outLen);
     }
 }
 if (!is_callable('\\Sodium\\crypto_generichash_final')) {
@@ -222,10 +181,7 @@ if (!is_callable('\\Sodium\\crypto_generichash_init')) {
      */
     function crypto_generichash_init($key = null, $outLen = 32)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_generichash_init'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_generichash_init($key, $outLen);
     }
 }
 if (!is_callable('\\Sodium\\crypto_generichash_update')) {
@@ -249,9 +205,11 @@ if (!is_callable('\\Sodium\\crypto_kx')) {
      */
     function crypto_kx($my_secret, $their_public, $client_public, $server_public)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_kx'),
-            func_get_args()
+        return ParagonIE_Sodium_Compat::crypto_kx(
+            $my_secret,
+            $their_public,
+            $client_public,
+            $server_public
         );
     }
 }
@@ -263,10 +221,7 @@ if (!is_callable('\\Sodium\\crypto_scalarmult')) {
      */
     function crypto_scalarmult($n, $p)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_scalarmult'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_scalarmult($n, $p);
     }
 }
 if (!is_callable('\\Sodium\\crypto_secretbox')) {
@@ -278,10 +233,7 @@ if (!is_callable('\\Sodium\\crypto_secretbox')) {
      */
     function crypto_secretbox($message, $nonce, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_secretbox'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key);
     }
 }
 if (!is_callable('\\Sodium\\crypto_secretbox_open')) {
@@ -293,10 +245,7 @@ if (!is_callable('\\Sodium\\crypto_secretbox_open')) {
      */
     function crypto_secretbox_open($message, $nonce, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_secretbox_open'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_secretbox_open($message, $nonce, $key);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign')) {
@@ -307,10 +256,7 @@ if (!is_callable('\\Sodium\\crypto_sign')) {
      */
     function crypto_sign($message, $sk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign($message, $sk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_detached')) {
@@ -321,10 +267,7 @@ if (!is_callable('\\Sodium\\crypto_sign_detached')) {
      */
     function crypto_sign_detached($message, $sk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_detached'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_detached($message, $sk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_keypair')) {
@@ -333,9 +276,7 @@ if (!is_callable('\\Sodium\\crypto_sign_keypair')) {
      */
     function crypto_sign_keypair()
     {
-        return call_user_func(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_keypair')
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_keypair();
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_open')) {
@@ -346,10 +287,7 @@ if (!is_callable('\\Sodium\\crypto_sign_open')) {
      */
     function crypto_sign_open($signedMessage, $pk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_open'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_open($signedMessage, $pk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_publickey')) {
@@ -359,10 +297,7 @@ if (!is_callable('\\Sodium\\crypto_sign_publickey')) {
      */
     function crypto_sign_publickey($keypair)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_publickey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_publickey($keypair);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_publickey_from_secretkey')) {
@@ -372,10 +307,7 @@ if (!is_callable('\\Sodium\\crypto_sign_publickey_from_secretkey')) {
      */
     function crypto_sign_publickey_from_secretkey($sk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_publickey_from_secretkey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_publickey_from_secretkey($sk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_secretkey')) {
@@ -385,10 +317,7 @@ if (!is_callable('\\Sodium\\crypto_sign_secretkey')) {
      */
     function crypto_sign_secretkey($keypair)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_secretkey'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_secretkey($keypair);
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_verify_detached')) {
@@ -400,10 +329,7 @@ if (!is_callable('\\Sodium\\crypto_sign_verify_detached')) {
      */
     function crypto_sign_verify_detached($signature, $message, $pk)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_sign_verify_detached'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_sign_verify_detached($signature, $message, $pk);
     }
 }
 if (!is_callable('\\Sodium\\crypto_stream')) {
@@ -415,10 +341,7 @@ if (!is_callable('\\Sodium\\crypto_stream')) {
      */
     function crypto_stream($len, $nonce, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_stream'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_stream($len, $nonce, $key);
     }
 }
 if (!is_callable('\\Sodium\\crypto_stream_xor')) {
@@ -430,10 +353,7 @@ if (!is_callable('\\Sodium\\crypto_stream_xor')) {
      */
     function crypto_stream_xor($message, $nonce, $key)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'crypto_stream_xor'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::crypto_stream_xor($message, $nonce, $key);
     }
 }
 if (!is_callable('\\Sodium\\hex2bin')) {
@@ -443,10 +363,7 @@ if (!is_callable('\\Sodium\\hex2bin')) {
      */
     function hex2bin($string)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'hex2bin'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::hex2bin($string);
     }
 }
 if (!is_callable('\\Sodium\\memcmp')) {
@@ -457,10 +374,7 @@ if (!is_callable('\\Sodium\\memcmp')) {
      */
     function memcmp($a, $b)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'memcmp'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::memcmp($a, $b);
     }
 }
 if (!is_callable('\\Sodium\\randombytes_buf')) {
@@ -470,10 +384,7 @@ if (!is_callable('\\Sodium\\randombytes_buf')) {
      */
     function randombytes_buf($amount)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'randombytes_buf'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::randombytes_buf($amount);
     }
 }
 
@@ -484,10 +395,7 @@ if (!is_callable('\\Sodium\\randombytes_uniform')) {
      */
     function randombytes_uniform($upperLimit)
     {
-        return call_user_func_array(
-            array('ParagonIE_Sodium_Compat', 'randombytes_uniform'),
-            func_get_args()
-        );
+        return ParagonIE_Sodium_Compat::randombytes_uniform($upperLimit);
     }
 }
 
@@ -497,8 +405,6 @@ if (!is_callable('\\Sodium\\randombytes_random16')) {
      */
     function randombytes_random16()
     {
-        return call_user_func(
-            array('ParagonIE_Sodium_Compat', 'randombytes_random16')
-        );
+        return ParagonIE_Sodium_Compat::randombytes_random16();
     }
 }
