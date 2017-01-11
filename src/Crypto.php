@@ -102,7 +102,7 @@ abstract class ParagonIE_Sodium_Crypto
         $keypair = self::box_keypair_from_secretkey_and_publickey($ephemeralSK, $publicKey);
 
         $c = self::box($message, $nonce, $keypair);
-        ParagonIE_Sodium_Compat::memzero($ephemeralKeypairSK);
+        ParagonIE_Sodium_Compat::memzero($ephemeralSK);
         ParagonIE_Sodium_Compat::memzero($nonce);
         return $ephemeralPK . $c;
     }
