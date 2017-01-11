@@ -6,6 +6,8 @@
 abstract class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSalsa20
 {
     /**
+     * Expand a key and nonce into an xsalsa20 keystream.
+     *
      * @param string $len
      * @param string $nonce
      * @param string $key
@@ -20,6 +22,8 @@ abstract class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSal
     }
 
     /**
+     * Encrypt a string with Xsalsa20. Doesn't provide integrity.
+     *
      * @param string $message
      * @param string $nonce
      * @param string $key

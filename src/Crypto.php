@@ -82,21 +82,21 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function box_seal($message, $publicKey)
     {
-        $eKeypair = self::box_keypair();
-        $eSK = self::box_secretkey($eKeypair);
-        $ePK = self::box_publickey($eKeypair);
+        $ephemeralKeypair = self::box_keypair();
+        $ephemeralSK = self::box_secretkey($ephemeralKeypair);
+        $ephemeralPK = self::box_publickey($ephemeralKeypair);
 
         $nonce = self::generichash(
-            $ePK . $publicKey,
+            $ephemeralPK . $publicKey,
             '',
             24
         );
-        $kp = self::box_keypair_from_secretkey_and_publickey($eSK, $publicKey);
+        $keypair = self::box_keypair_from_secretkey_and_publickey($ephemeralSK, $publicKey);
 
-        $c = self::box($message, $nonce, $kp);
-        ParagonIE_Sodium_Compat::memzero($eSK);
+        $c = self::box($message, $nonce, $keypair);
+        ParagonIE_Sodium_Compat::memzero($ephemeralKeypairSK);
         ParagonIE_Sodium_Compat::memzero($nonce);
-        return $ePK . $c;
+        return $ephemeralPK . $c;
     }
 
     /**
@@ -106,21 +106,21 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function box_seal_open($message, $keypair)
     {
-        $ePK = ParagonIE_Sodium_Core_Util::substr($message, 0, 32);
+        $ephemeralPK = ParagonIE_Sodium_Core_Util::substr($message, 0, 32);
         $c = ParagonIE_Sodium_Core_Util::substr($message, 32);
 
         $secretKey = self::box_secretkey($keypair);
         $publicKey = self::box_publickey($keypair);
 
         $nonce = self::generichash(
-            $ePK . $publicKey,
+            $ephemeralPK . $publicKey,
             '',
             24
         );
-        $kp = self::box_keypair_from_secretkey_and_publickey($secretKey, $ePK);
-        $m = self::box_open($c, $nonce, $kp);
+        $keypair = self::box_keypair_from_secretkey_and_publickey($secretKey, $ephemeralPK);
+        $m = self::box_open($c, $nonce, $keypair);
         ParagonIE_Sodium_Compat::memzero($secretKey);
-        ParagonIE_Sodium_Compat::memzero($ePK);
+        ParagonIE_Sodium_Compat::memzero($ephemeralPK);
         ParagonIE_Sodium_Compat::memzero($nonce);
         return $m;
     }

@@ -39,6 +39,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Store a 24-bit integer into a string, treating it as big-endian.
+     *
      * @param $int
      * @return string
      */
@@ -50,6 +52,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Store a 32-bit integer into a string, treating it as big-endian.
+     *
      * @param $int
      * @return string
      */
@@ -62,6 +66,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Store a 32-bit integer into a string, treating it as little-endian.
+     *
      * @param $int
      * @return string
      */
@@ -122,6 +128,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Compares two strings.
+     *
      * @param string $left
      * @param string $right
      * @param int $len
@@ -249,6 +257,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Turn an array of integers into a string
+     *
      * @param int[] $ints
      * @return string
      */
@@ -320,6 +330,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Compare a 16-character byte string in constant time.
+     *
      * @param string $a
      * @param string $b
      * @return bool
@@ -334,6 +346,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Compare a 32-character byte string in constant time.
+     *
      * @param string $a
      * @param string $b
      * @return bool
@@ -348,6 +362,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Calculate $a ^ $b for two strings.
+     *
      * @param string $a
      * @param string $b
      * @return string

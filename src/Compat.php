@@ -174,12 +174,12 @@ class ParagonIE_Sodium_Compat
      *
      * @param string $plaintext
      * @param string $nonce
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box($plaintext, $nonce, $kp)
+    public static function crypto_box($plaintext, $nonce, $keypair)
     {
         if (!is_string($plaintext)) {
             throw new TypeError('Argument 1 must be a string');
@@ -187,22 +187,22 @@ class ParagonIE_Sodium_Compat
         if (!is_string($nonce)) {
             throw new TypeError('Argument 2 must be a string');
         }
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 3 must be a string');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_BOX_NONCEBYTES) {
             throw new Error('Argument 2 must be CRYPTO_BOX_NONCEBYTES long.');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new Error('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_box')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box',
-                array($plaintext, $nonce, $kp)
+                array($plaintext, $nonce, $keypair)
             );
         }
-        return ParagonIE_Sodium_Crypto::box($plaintext, $nonce, $kp);
+        return ParagonIE_Sodium_Crypto::box($plaintext, $nonce, $keypair);
     }
 
     /**
@@ -215,29 +215,29 @@ class ParagonIE_Sodium_Compat
      * This provides ciphertext integrity.
      *
      * @param string $plaintext
-     * @param string $pk
+     * @param string $publicKey
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box_seal($plaintext, $pk)
+    public static function crypto_box_seal($plaintext, $publicKey)
     {
         if (!is_string($plaintext)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (!is_string($pk)) {
+        if (!is_string($publicKey)) {
             throw new TypeError('Argument 2 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($pk) !== self::CRYPTO_BOX_PUBLICKEYBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($publicKey) !== self::CRYPTO_BOX_PUBLICKEYBYTES) {
             throw new Error('Argument 2 must be CRYPTO_BOX_PUBLICKEYBYTES long.');
         }
         if (self::use_fallback('crypto_box_seal')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box_seal',
-                array($plaintext, $pk)
+                array($plaintext, $publicKey)
             );
         }
-        return ParagonIE_Sodium_Crypto::box_seal($plaintext, $pk);
+        return ParagonIE_Sodium_Crypto::box_seal($plaintext, $publicKey);
     }
 
     /**
@@ -247,29 +247,29 @@ class ParagonIE_Sodium_Compat
      * This validates ciphertext integrity.
      *
      * @param string $ciphertext
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box_seal_open($ciphertext, $kp)
+    public static function crypto_box_seal_open($ciphertext, $keypair)
     {
         if (!is_string($ciphertext)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 2 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new Error('Argument 2 must be CRYPTO_BOX_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_box_seal_open')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box_seal_open',
-                array($ciphertext, $kp)
+                array($ciphertext, $keypair)
             );
         }
-        return ParagonIE_Sodium_Crypto::box_seal_open($ciphertext, $kp);
+        return ParagonIE_Sodium_Crypto::box_seal_open($ciphertext, $keypair);
     }
 
     /**
@@ -289,10 +289,10 @@ class ParagonIE_Sodium_Compat
 
     /**
      * Combine two keys into a keypair for use in library methods that expect
-     * a keypair.
+     * a keypair. This doesn't necessarily have to be the same person's keys.
      *
-     * @param string $sk
-     * @param string $pk
+     * @param string $sk Secret key
+     * @param string $pk Public key
      * @return string
      * @throws Error
      * @throws TypeError
@@ -323,26 +323,26 @@ class ParagonIE_Sodium_Compat
     /**
      * Extract the public key from a crypto_box keypair.
      *
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box_publickey($kp)
+    public static function crypto_box_publickey($keypair)
     {
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new Error('Argument 1 must be CRYPTO_BOX_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_box_publickey')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box_publickey',
-                array($kp)
+                array($keypair)
             );
         }
-        return ParagonIE_Sodium_Crypto::box_publickey($kp);
+        return ParagonIE_Sodium_Crypto::box_publickey($keypair);
     }
 
     /**
@@ -373,26 +373,26 @@ class ParagonIE_Sodium_Compat
     /**
      * Extract the secret key from a crypto_box keypair.
      *
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box_secretkey($kp)
+    public static function crypto_box_secretkey($keypair)
     {
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new Error('Argument 1 must be CRYPTO_BOX_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_box_secretkey')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box_secretkey',
-                array($kp)
+                array($keypair)
             );
         }
-        return ParagonIE_Sodium_Crypto::box_secretkey($kp);
+        return ParagonIE_Sodium_Crypto::box_secretkey($keypair);
     }
 
     /**
@@ -400,12 +400,12 @@ class ParagonIE_Sodium_Compat
      *
      * @param string $ciphertext
      * @param string $nonce
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_box_open($ciphertext, $nonce, $kp)
+    public static function crypto_box_open($ciphertext, $nonce, $keypair)
     {
         if (!is_string($ciphertext)) {
             throw new TypeError('Argument 1 must be a string');
@@ -413,7 +413,7 @@ class ParagonIE_Sodium_Compat
         if (!is_string($nonce)) {
             throw new TypeError('Argument 2 must be a string');
         }
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 3 must be a string');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_BOX_MACBYTES) {
@@ -422,16 +422,16 @@ class ParagonIE_Sodium_Compat
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_BOX_NONCEBYTES) {
             throw new Error('Argument 2 must be CRYPTO_BOX_NONCEBYTES long.');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new Error('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_box_open')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_box_open',
-                array($ciphertext, $nonce, $kp)
+                array($ciphertext, $nonce, $keypair)
             );
         }
-        return ParagonIE_Sodium_Crypto::box_open($ciphertext, $nonce, $kp);
+        return ParagonIE_Sodium_Crypto::box_open($ciphertext, $nonce, $keypair);
     }
 
     /**
@@ -943,26 +943,26 @@ class ParagonIE_Sodium_Compat
     /**
      * Extract an Ed25519 public key from an Ed25519 keypair.
      *
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_sign_publickey($kp)
+    public static function crypto_sign_publickey($keypair)
     {
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
             throw new Error('Argument 1 must be CRYPTO_SIGN_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_sign_publickey')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_sign_publickey',
-                array($kp)
+                array($keypair)
             );
         }
-        return ParagonIE_Sodium_Core_Ed25519::publickey($kp);
+        return ParagonIE_Sodium_Core_Ed25519::publickey($keypair);
     }
     /**
      * Calculate an Ed25519 public key from an Ed25519 secret key.
@@ -992,26 +992,26 @@ class ParagonIE_Sodium_Compat
     /**
      * Extract an Ed25519 secret key from an Ed25519 keypair.
      *
-     * @param string $kp
+     * @param string $keypair
      * @return string
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_sign_secretkey($kp)
+    public static function crypto_sign_secretkey($keypair)
     {
-        if (!is_string($kp)) {
+        if (!is_string($keypair)) {
             throw new TypeError('Argument 1 must be a string');
         }
-        if (ParagonIE_Sodium_Core_Util::strlen($kp) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
             throw new Error('Argument 1 must be CRYPTO_SIGN_KEYPAIRBYTES long.');
         }
         if (self::use_fallback('crypto_sign_secretkey')) {
             return call_user_func_array(
                 '\\Sodium\\crypto_sign_secretkey',
-                array($kp)
+                array($keypair)
             );
         }
-        return ParagonIE_Sodium_Core_Ed25519::secretkey($kp);
+        return ParagonIE_Sodium_Core_Ed25519::secretkey($keypair);
     }
 
     /**

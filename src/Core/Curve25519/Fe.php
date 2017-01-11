@@ -2,6 +2,8 @@
 
 /**
  * Class ParagonIE_Sodium_Core_Curve25519_Fe
+ *
+ * This represents a Field Element
  */
 class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
 {

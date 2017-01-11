@@ -35,6 +35,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     const KEYBYTES   = 64;
 
     /**
+     * Turn two 32-bit integers into a fixed array representing a 64-bit integer.
+     *
      * @param int $high
      * @param int $low
      * @return SplFixedArray
@@ -48,6 +50,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Convert an arbitrary number into an SplFixedArray of two 32-bit integers
+     * that represents a 64-bit integer.
+     *
      * @param int $num
      * @return SplFixedArray
      */
@@ -67,6 +72,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Adds two 64-bit integers together, returning their sum as a SplFixedArray
+     * containing two 32-bit integers (representing a 64-bit integer).
+     *
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @return SplFixedArray
@@ -180,7 +188,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     *
+     * This just sets the $iv static variable.
      */
     public static function pseudoConstructor()
     {
@@ -202,6 +210,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Returns a fresh BLAKE2 context.
+     *
      * @return SplFixedArray
      */
     protected static function context()
@@ -230,10 +240,10 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param $ctx
-     * @param $buf
+     * @param SplFixedArray $ctx
+     * @param SplFixedArray $buf
      */
-    protected static function compress($ctx, $buf)
+    protected static function compress(SplFixedArray $ctx, SplFixedArray $buf)
     {
         $m = new SplFixedArray(16);
         $v = new SplFixedArray(16);
@@ -274,7 +284,19 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         }
     }
 
-    public static function G($r, $i, $a, $b, $c, $d, $v, $m) {
+    /**
+     * @param int $r
+     * @param int $i
+     * @param int $a
+     * @param int $b
+     * @param int $c
+     * @param int $d
+     * @param SplFixedArray $v
+     * @param SplFixedArray $m
+     * @return SplFixedArray
+     */
+    public static function G($r, $i, $a, $b, $c, $d, SplFixedArray $v, SplFixedArray $m)
+    {
         $v[$a] = self::add364($v[$a], $v[$b], $m[self::$sigma[$r][2*$i]]);
         $v[$d] = self::rotr64(self::xor64($v[$d], $v[$a]), 32);
         $v[$c] = self::add64($v[$c], $v[$d]);
@@ -300,9 +322,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param $ctx
-     * @param $p
-     * @param $plen
+     * @param SplFixedArray $ctx
+     * @param SplFixedArray $p
+     * @param int $plen
      */
     public static function update(SplFixedArray $ctx, $p, $plen)
     {
@@ -372,7 +394,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param SplFixedArray $key
+     * @param SplFixedArray|null $key
      * @param int $outlen
      * @return SplFixedArray
      * @throws Exception
@@ -422,6 +444,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Convert a string into an SplFixedArray of integers
+     *
      * @param string $str
      * @return SplFixedArray
      */
@@ -432,6 +456,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Convert an SplFixedArray of integers into a string
+     *
      * @param SplFixedArray $a
      * @return string
      */
