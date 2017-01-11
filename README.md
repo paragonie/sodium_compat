@@ -132,4 +132,6 @@ polyfill without additional code changes.
   reliably zero buffers from PHP.
 * `crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2 into PHP and get
   reasonable performance. Users would feel motivated to select parameters that downgrade
-  security to a void denial of service (DoS) attacks.
+  security to avoid denial of service (DoS) attacks.
+  
+  The only winning move is not to play.
