@@ -248,6 +248,17 @@ if (!is_callable('\\Sodium\\crypto_secretbox_open')) {
         return ParagonIE_Sodium_Compat::crypto_secretbox_open($message, $nonce, $key);
     }
 }
+if (!is_callable('\\Sodium\\crypto_shorthash')) {
+    /**
+     * @param string $message
+     * @param string $key
+     * @return string
+     */
+    function crypto_shorthash($message, $key = '')
+    {
+        return ParagonIE_Sodium_Compat::crypto_shorthash($message, $key);
+    }
+}
 if (!is_callable('\\Sodium\\crypto_sign')) {
     /**
      * @param string $message

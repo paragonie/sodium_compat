@@ -555,8 +555,6 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
      */
     public function testCryptoScalarmult()
     {
-        $keypair = \Sodium\crypto_box_keypair();
-
         $alice_box_kp = \Sodium\crypto_box_keypair();
         $alice_box_secretkey = \Sodium\crypto_box_secretkey($alice_box_kp);
         $alice_box_publickey = \Sodium\crypto_box_publickey($alice_box_kp);
@@ -660,7 +658,6 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $alice_box_publickey = \Sodium\crypto_box_publickey($alice_box_kp);
 
         $bob_box_kp = \Sodium\crypto_box_keypair();
-        $bob_box_secretkey = \Sodium\crypto_box_secretkey($bob_box_kp);
         $bob_box_publickey = \Sodium\crypto_box_publickey($bob_box_kp);
 
         // Let's designate Bob as the server.
