@@ -31,6 +31,8 @@ abstract class ParagonIE_Sodium_Crypto
     const stream_salsa20_KEYBYTES = 32;
 
     /**
+     * HMAC-SHA-512-256 (a.k.a. the leftmost 256 bits of HMAC-SHA-512)
+     *
      * @param string $message
      * @param string $key
      * @return string
@@ -45,6 +47,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * HMAC-SHA-512-256 validation. Constant-time via hash_equals().
+     *
      * @param string $mac
      * @param string $message
      * @param string $key
@@ -59,6 +63,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * X25519 key exchange followed by Xsalsa20Poly1305 symmetric encryption
+     *
      * @param string $plaintext
      * @param string $nonce
      * @param string $keypair
@@ -76,6 +82,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * X25519-Xsalsa20-Poly1305 with one ephemeral X25519 keypair.
+     *
      * @param string $message
      * @param string $publicKey
      * @return string
@@ -100,6 +108,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Opens a message encrypted via box_seal().
+     *
      * @param string $message
      * @param string $keypair
      * @return string
@@ -126,6 +136,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Used by crypto_box() to get the crypto_secretbox() key.
+     *
      * @param string $sk
      * @param string $pk
      * @return string
@@ -149,6 +161,11 @@ abstract class ParagonIE_Sodium_Crypto
         return $sk . $pk;
     }
 
+    /**
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     */
     public static function box_keypair_from_secretkey_and_publickey($sk, $pk)
     {
         return ParagonIE_Sodium_Core_Util::substr($sk, 0, 32) .
@@ -193,6 +210,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Decrypt a message encrypted with box().
+     *
      * @param string $ciphertext
      * @param string $nonce
      * @param string $nonce
@@ -211,6 +230,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Calculate a BLAKE2b hash.
+     *
      * @param string $message
      * @param string|null $key
      * @param int $outlen
@@ -238,6 +259,26 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Finalize a BLAKE2b hashing context, returning the hash.
+     *
+     * @param string $ctx
+     * @param int $outlen
+     * @return string
+     */
+    public static function generichash_final($ctx, $outlen = 32)
+    {
+        if (!is_string($ctx)) {
+            throw new InvalidArgumentException('Context must be a string');
+        }
+        $out = new SplFixedArray($outlen);
+        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
+        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
+    }
+
+    /**
+     * Initialize a hashing context for BLAKE2b.
+     *
      * @param string $key
      * @param int $outputLength
      * @return string
@@ -260,22 +301,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * @param string $ctx
-     * @param int $outlen
-     * @return string
-     */
-    public static function generichash_final($ctx, $outlen = 32)
-    {
-        if (!is_string($ctx)) {
-            throw new InvalidArgumentException('Context must be a string');
-        }
-        $out = new SplFixedArray($outlen);
-        $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
-        $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
-        return ParagonIE_Sodium_Core_Util::intArrayToString($out->toArray());
-    }
-
-    /**
+     * Update a hashing context for BLAKE2b with $message
+     *
      * @param string $ctx
      * @param string $message
      * @return string
@@ -290,6 +317,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Libsodium's crypto_kx().
+     *
      * @param string $my_sk
      * @param string $their_pk
      * @param string $client_pk
@@ -306,16 +335,21 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * @param string $n
-     * @param string $p
+     * ECDH over Curve25519
+     *
+     * @param string $sk
+     * @param string $pk
      * @return string
      */
-    public static function scalarmult($n, $p)
+    public static function scalarmult($sk, $pk)
     {
-        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($n, $p);
+        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($sk, $pk);
     }
 
     /**
+     * ECDH over Curve25519, using the basepoint.
+     * Used to get a secret key from a public key.
+     *
      * @param string $n
      * @return string
      */
@@ -325,6 +359,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Xsalsa20-Poly1305 authenticated symmetric-key encryption.
+     *
      * @param string $plaintext
      * @param string $nonce
      * @param string $key
@@ -380,6 +416,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Decrypt a ciphertext generated via secretbox().
+     *
      * @param string $ciphertext
      * @param string $nonce
      * @param string $key
@@ -429,6 +467,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Detached Ed25519 signature.
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -439,6 +479,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Attached Ed25519 signature. (Returns a signed message.)
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -449,6 +491,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Opens a signed message. If valid, returns the message.
+     *
      * @param string $signedMessage
      * @param string $pk
      * @return string
@@ -459,6 +503,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Verify a detached signature of a given message and public key.
+     *
      * @param string $signature
      * @param string $message
      * @param string $pk
