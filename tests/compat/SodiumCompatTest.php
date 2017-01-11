@@ -327,6 +327,62 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSignKeypair()
+    {
+        $seed = random_bytes(32);
+        $kp = \Sodium\crypto_sign_seed_keypair($seed);
+        $this->assertSame(
+            bin2hex($kp),
+            bin2hex(
+                ParagonIE_Sodium_Compat::crypto_sign_seed_keypair($seed)
+            ),
+            'crypto_sign_seed_keypair() is invalid.'
+        );
+        $secret = \Sodium\crypto_sign_secretkey($kp);
+        $public = \Sodium\crypto_sign_publickey($kp);
+
+        $pk = '';
+        $sk = '';
+        ParagonIE_Sodium_Core_Ed25519::seed_keypair($pk, $sk, $seed);
+        $this->assertSame(
+            bin2hex($secret),
+            bin2hex($sk),
+            'Seed secret key'
+        );
+        $this->assertSame(
+            bin2hex($public),
+            bin2hex($pk),
+            'Seed public key'
+        );
+        $keypair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $secret = \Sodium\crypto_sign_secretkey($keypair);
+        $public = \Sodium\crypto_sign_publickey($keypair);
+
+        $this->assertSame(
+            bin2hex($public),
+            bin2hex(
+                \Sodium\crypto_sign_publickey_from_secretkey($secret)
+            ),
+            'Conversion from existing secret key is failing. This is a very bad thing!'
+        );
+
+    }
+
+    public function testSignKeypair2()
+    {
+        $keypair = \Sodium\crypto_sign_keypair();
+        $secret = \Sodium\crypto_sign_secretkey($keypair);
+        $public = \Sodium\crypto_sign_publickey($keypair);
+
+        $this->assertSame(
+            bin2hex($public),
+            bin2hex(
+                ParagonIE_Sodium_Compat::crypto_sign_publickey_from_secretkey($secret)
+            ),
+            'Conversion from existing secret key is failing. This is a very bad thing!'
+        );
+    }
+
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_sign()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_open()
@@ -378,6 +434,11 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
 
         $message = 'Test message: ' . base64_encode(random_bytes(33));
+        $keypair = \Sodium\crypto_sign_keypair();
+        $secret = \Sodium\crypto_sign_secretkey($keypair);
+        $public = \Sodium\crypto_sign_publickey($keypair);
+        $public2 = ParagonIE_Sodium_Compat::crypto_sign_publickey($keypair);
+        $this->assertSame($public, $public2);
 
         $signature = \Sodium\crypto_sign_detached($message, $secret);
         $this->assertSame(

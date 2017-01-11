@@ -7,6 +7,10 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_box()
+     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     */
     public function testCryptoBox()
     {
         $nonce = str_repeat("\x00", 24);
@@ -34,6 +38,11 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         );
     }
 
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_box_seal()
+     * @covers ParagonIE_Sodium_Compat::crypto_box_seal_open()
+     */
     public function testBoxSeal()
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -53,6 +62,48 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             $message,
             $alice_opened,
             'Decryption failed'
+        );
+    }
+
+    /**
+     *
+     */
+    public function testKeypairs()
+    {
+        $box_keypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+        $box_public = ParagonIE_Sodium_Compat::crypto_box_publickey($box_keypair);
+
+        $sealed = ParagonIE_Sodium_Compat::crypto_box_seal('Test message', $box_public);
+        $opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed, $box_keypair);
+        $this->assertSame(
+            'Test message',
+            $opened
+        );
+        #
+
+        $sign_keypair = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
+            'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc' .
+            'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
+        );
+        $sign_secret = ParagonIE_Sodium_Compat::crypto_sign_secretkey($sign_keypair);
+        $sign_public = ParagonIE_Sodium_Compat::crypto_sign_publickey($sign_keypair);
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::substr($sign_secret, 32),
+            $sign_public
+        );
+
+        $sign_keypair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $sign_secret = ParagonIE_Sodium_Compat::crypto_sign_secretkey($sign_keypair);
+        $sign_public = ParagonIE_Sodium_Compat::crypto_sign_publickey($sign_keypair);
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::substr($sign_secret, 32),
+            $sign_public
+        );
+
+        $sig = ParagonIE_Sodium_Compat::crypto_sign_detached('Test message', $sign_secret);
+        $this->assertTrue(
+            ParagonIE_Sodium_Compat::crypto_sign_verify_detached($sig, 'Test message', $sign_public)
         );
     }
 
@@ -107,6 +158,48 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f',
             bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
             'Generated different signatures'
+        );
+
+
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Crypto::sign()
+     * @covers ParagonIE_Sodium_Crypto::sign_open()
+     */
+    public function testSign()
+    {
+        $secret = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
+            'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
+        );
+        $public = ParagonIE_Sodium_Core_Util::hex2bin(
+            'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
+        );
+        $message = random_bytes(random_int(1, 1024));
+        $signed = ParagonIE_Sodium_Compat::crypto_sign($message, $secret);
+        $this->assertSame(
+            bin2hex($message),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_open($signed, $public)),
+            'Signature broken with known good keys'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
+     */
+    public function testSecretbox()
+    {
+        $secret = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $message = random_bytes(random_int(1, 1024));
+        $cipher = ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $secret);
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_secretbox_open($cipher, $nonce, $secret)
         );
     }
 

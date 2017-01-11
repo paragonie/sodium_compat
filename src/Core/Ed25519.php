@@ -17,7 +17,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         $pk = '';
         $sk = '';
         self::seed_keypair($pk, $sk, $seed);
-        return $sk . $pk . $pk;
+        return $sk . $pk;
     }
 
     /**
@@ -30,16 +30,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if (self::strlen($seed) !== self::SEED_BYTES) {
             throw new RangeException('crypto_sign keypair seed must be 32 bytes long');
         }
-        $sk = hash('sha512', $seed, true);
-        $sk[0] = self::intToChr(
-            self::chrToInt($sk[0]) & 248
-        );
-        $sk[31] = self::intToChr(
-            (self::chrToInt($sk[31]) & 63) | 64
-        );
-
-        $pk = self::publickey_from_secretkey($sk);
-        $sk = self::substr($sk, 0, 32) . $pk;
+        $pk = self::publickey_from_secretkey($seed);
+        $sk = self::substr($seed, 0, self::SEED_BYTES) . $pk;
     }
 
     /**
@@ -63,7 +55,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if (self::strlen($keypair) !== self::KEYPAIR_BYTES) {
             throw new RangeException('crypto_sign keypair seed must be 32 bytes long');
         }
-        return self::substr($keypair, 64);
+        return self::substr($keypair, 64, 32);
     }
 
     /**
@@ -72,8 +64,24 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function publickey_from_secretkey($sk)
     {
+        $sk = hash('sha512', self::substr($sk, 0, 32), true);
+        $sk[0] = self::intToChr(
+            self::chrToInt($sk[0]) & 248
+        );
+        $sk[31] = self::intToChr(
+            (self::chrToInt($sk[31]) & 63) | 64
+        );
+        return self::sk_to_pk($sk);
+    }
+
+    /**
+     * @param $sk
+     * @return string
+     */
+    public static function sk_to_pk($sk)
+    {
         return self::ge_p3_tobytes(
-            self::ge_scalarmult_base($sk)
+            self::ge_scalarmult_base(self::substr($sk, 0, 32))
         );
     }
 

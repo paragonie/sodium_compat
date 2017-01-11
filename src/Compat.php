@@ -922,7 +922,7 @@ class ParagonIE_Sodium_Compat
                 array($sm, $pk)
             );
         }
-        return ParagonIE_Sodium_Crypto::sign($sm, $pk);
+        return ParagonIE_Sodium_Crypto::sign_open($sm, $pk);
     }
 
     /**
@@ -938,6 +938,25 @@ class ParagonIE_Sodium_Compat
             );
         }
         return ParagonIE_Sodium_Core_Ed25519::keypair();
+    }
+
+    /**
+     * Generate an Ed25519 keypair from a seed.
+     *
+     * @return string
+     */
+    public static function crypto_sign_seed_keypair($seed)
+    {
+        if (self::use_fallback('crypto_sign_keypair')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_sign_seed_keypair',
+                array($seed)
+            );
+        }
+        $pk = '';
+        $sk = '';
+        ParagonIE_Sodium_Core_Ed25519::seed_keypair($pk, $sk, $seed);
+        return $sk . $pk;
     }
 
     /**
