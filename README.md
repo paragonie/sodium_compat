@@ -74,7 +74,7 @@ extension installed already.
 
 If your users are on PHP < 5.3, or you want to write code that will work
 whether or not the PECL extension is available, you'll want to use the
-**`ParagonIE_Sodium_Compat`** class for all of your libsodium needs.
+**`ParagonIE_Sodium_Compat`** class for most of your libsodium needs.
 
 The above example, written for general use:
 
@@ -99,16 +99,37 @@ Generally: If you replace `\Sodium\ ` with `ParagonIE_Sodium_Compat::`, any
 code already written for the libsodium PHP extension should work with our
 polyfill without additional code changes.
 
-#### Libsodium Features Implemented and Tested
+## API Coverage
 
-- [x] Ed25519: public key signatures (`crypto_sign`)
-- [x] X25519: public key exchange (`crypto_scalarmult`, `crypto_kx`)
-- [x] Xsalsa20: unauthenticated secret-key encryption (`crypto_stream`)
-- [x] Poly1305: one-time message authentication (`crypto_onetimeauth`)
-- [x] Public-key authenticated encryption (`crypto_box`)
-- [x] Secret-key authenticated encryption (`crypto_secretbox`)
-- [x] Anonymous public-key encryption (`crypto_box_seal`)
-- [x] SipHash: fast collision-resistant hashing (`crypto_shorthash`)
-- [x] HMAC-SHA-512-256: Secret-key message authentication (`crypto_auth`)
-- [x] BLAKE2b: Cryptographic hashing (`crypto_generichash`)
-- [ ] Argon2i: Password hashing / key derivation (`crypto_pwhash`)
+* Mainline NaCl Features
+    * `crypto_auth()`
+    * `crypto_auth_verify()`
+    * `crypto_box()`
+    * `crypto_box_open()`
+    * `crypto_scalarmult()`
+    * `crypto_secretbox()`
+    * `crypto_secretbox_open()`
+    * `crypto_sign()`
+    * `crypto_sign_open()`
+* PECL Libsodium Features
+    * `crypto_box_seal()`
+    * `crypto_box_seal_open()`
+    * `crypto_generichash()`
+    * `crypto_generichash_init()`
+    * `crypto_generichash_update()`
+    * `crypto_generichash_final()`
+    * `crypto_kx()`
+    * `crypto_shorthash()`
+    * `crypto_sign_detached()`
+    * `crypto_sign_verify_detached()`
+    * For advanced users only:
+        * `crypto_stream()`
+        * `crypto_stream_xor()`
+
+### Features Excluded from this Polyfill
+
+* `sodium_memzero()` - Although we expose this API endpoint, it's a NOP. We can't
+  reliably zero buffers from PHP.
+* `crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2 into PHP and get
+  reasonable performance. Users would feel motivated to select parameters that downgrade
+  security to a void denial of service (DoS) attacks.

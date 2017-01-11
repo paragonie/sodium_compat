@@ -11,8 +11,8 @@ class ParagonIE_Sodium_Compat
     public static $disableFallbackForUnitTests = false;
 
     const LIBRARY_VERSION_MAJOR = 9;
-    const LIBRARY_VERSION_MINOR = 3;
-    const VERSION_STRING = 'polyfill-1.0.11';
+    const LIBRARY_VERSION_MINOR = 1;
+    const VERSION_STRING = 'polyfill-1.0.8';
 
     // From libsodium
     const CRYPTO_AUTH_BYTES = 32;
@@ -33,14 +33,6 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_GENERICHASH_KEYBYTES = 32;
     const CRYPTO_GENERICHASH_KEYBYTES_MIN = 16;
     const CRYPTO_GENERICHASH_KEYBYTES_MAX = 64;
-    const CRYPTO_PWHASH_SALTBYTES = 16;
-    const CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
-    const CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE = 4;
-    const CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
-    const CRYPTO_PWHASH_OPSLIMIT_MODERATE = 6;
-    const CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
-    const CRYPTO_PWHASH_OPSLIMIT_SENSITIVE = 8;
-    const CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
     const CRYPTO_SCALARMULT_BYTES = 32;
     const CRYPTO_SCALARMULT_SCALARBYTES = 32;
     const CRYPTO_SHORTHASH_BYTES = 8;
