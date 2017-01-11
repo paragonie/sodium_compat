@@ -183,6 +183,17 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             bin2hex(ParagonIE_Sodium_Compat::crypto_sign_open($signed, $public)),
             'Signature broken with known good keys'
         );
+        $sign_keypair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $sign_secret = ParagonIE_Sodium_Compat::crypto_sign_secretkey($sign_keypair);
+        $sign_public = ParagonIE_Sodium_Compat::crypto_sign_publickey($sign_keypair);
+
+        $message = random_bytes(random_int(1, 1024));
+        $signed = ParagonIE_Sodium_Compat::crypto_sign($message, $sign_secret);
+        $this->assertSame(
+            bin2hex($message),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_open($signed, $sign_public)),
+            'Signature broken with random keys'
+        );
     }
 
     /**
