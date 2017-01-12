@@ -99,6 +99,8 @@ Generally: If you replace `\Sodium\ ` with `ParagonIE_Sodium_Compat::`, any
 code already written for the libsodium PHP extension should work with our
 polyfill without additional code changes.
 
+To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://paragonie.com/book/pecl-libsodium).
+
 ## API Coverage
 
 * Mainline NaCl Features
@@ -125,12 +127,13 @@ polyfill without additional code changes.
     * For advanced users only:
         * `crypto_stream()`
         * `crypto_stream_xor()`
+    * Other utilities (e.g. `crypto_*_keypair()`)
 
 ### Features Excluded from this Polyfill
 
-* `sodium_memzero()` - Although we expose this API endpoint, it's a NOP. We can't
+* `\Sodium\memzero()` - Although we expose this API endpoint, it's a NOP. We can't
   reliably zero buffers from PHP.
-* `crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2 into PHP and get
+* `\Sodium\crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2 into PHP and get
   reasonable performance. Users would feel motivated to select parameters that downgrade
   security to avoid denial of service (DoS) attacks.
   
