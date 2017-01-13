@@ -51,7 +51,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Cache-timing-safe implementation of bin2hex().
      *
-     * @param $string
+     * @param string $string
      * @return string
      * @throws TypeError
      */
@@ -479,7 +479,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Get the final BLAKE2b hash output for a given context.
      *
-     * @param string& $ctx
+     * @param string &$ctx
      * @param int $length
      * @return string
      * @throws Error
@@ -547,7 +547,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Update a BLAKE2b hashing context with additional data.
      *
-     * @param string& $ctx
+     * @param string &$ctx
      * @param string $message
      * @return void
      * @throws TypeError
@@ -657,7 +657,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Calculate an X25519 public key from an X25519 secret key.
      *
-     * @param $sk
+     * @param string $sk
      * @return string
      * @throws Error
      * @throws TypeError
@@ -943,6 +943,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Generate an Ed25519 keypair from a seed.
      *
+     * @param string $seed
      * @return string
      */
     public static function crypto_sign_seed_keypair($seed)
@@ -1103,7 +1104,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Cache-timing-safe implementation of hex2bin().
      *
-     * @param $string
+     * @param string $string
      * @return string
      * @throws TypeError
      */
@@ -1173,6 +1174,7 @@ class ParagonIE_Sodium_Compat
      * to zero memory buffers in PHP. You need the native library for that.
      *
      * @param &string $var
+     * @return void
      * @throws TypeError
      */
     public static function memzero(&$var)
@@ -1261,7 +1263,7 @@ class ParagonIE_Sodium_Compat
     public static function version_string()
     {
         if (self::use_fallback('version_string')) {
-            return (int) call_user_func('\\Sodium\\version_string');
+            return (string) call_user_func('\\Sodium\\version_string');
         }
         return self::VERSION_STRING;
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<psalm
+  stopOnFirstError="false"
+  useDocblockTypes="true"
+>
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+    <issueHandlers>
+        <FailedTypeResolution errorLevel="info" />
+        <InvalidArgument errorLevel="info" />
+        <InvalidPropertyAssignment errorLevel="info" />
+        <InvalidFunctionCall errorLevel="info" />
+        <TypeCoercion errorLevel="info" />
+    </issueHandlers>
+</psalm>

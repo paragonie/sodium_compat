@@ -13,7 +13,7 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
      * @param string $in
      * @param string $k
      * @param string|null $c
-     * @return string;
+     * @return string
      */
     public static function core_salsa20($in, $k, $c = null)
     {

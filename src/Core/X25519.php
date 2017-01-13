@@ -11,6 +11,7 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
      * @param int $b
+     * @return void
      */
     public static function fe_cswap(
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
@@ -242,6 +243,7 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     /**
      * @param string $n
      * @return string
+     * @throws TypeError
      */
     public static function crypto_scalarmult_curve25519_ref10_base($n)
     {
@@ -258,7 +260,14 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
         );
 
         $A = self::ge_scalarmult_base($e);
-        $pk = self::edwards_to_montgomery($A->Y, $A->Z);
-        return self::fe_tobytes($pk);
+        if (
+	        !($A->Y instanceof ParagonIE_Sodium_Core_Curve25519_Fe)
+	            ||
+	        !($A->Z instanceof ParagonIE_Sodium_Core_Curve25519_Fe)
+        ) {
+	        throw new TypeError('Null points encountered');
+        }
+	    $pk = self::edwards_to_montgomery($A->Y, $A->Z);
+	    return self::fe_tobytes($pk);
     }
 }

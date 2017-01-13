@@ -327,6 +327,9 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
+	/**
+	 * @covers ParagonIE_Sodium_Compat::crypto_sign_seed_keypair()
+	 */
     public function testSignKeypair()
     {
         $seed = random_bytes(32);

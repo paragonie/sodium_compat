@@ -12,7 +12,7 @@ use ParagonIE_Sodium_Compat;
  */
 if (!is_callable('\\Sodium\\bin2hex')) {
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     function bin2hex($string)
@@ -331,6 +331,16 @@ if (!is_callable('\\Sodium\\crypto_sign_secretkey')) {
         return ParagonIE_Sodium_Compat::crypto_sign_secretkey($keypair);
     }
 }
+if (!is_callable('\\Sodium\\crypto_sign_seed_keypair')) {
+	/**
+	 * @param string $seed
+	 * @return string
+	 */
+	function crypto_sign_seed_keypair($seed)
+	{
+		return ParagonIE_Sodium_Compat::crypto_sign_seed_keypair($seed);
+	}
+}
 if (!is_callable('\\Sodium\\crypto_sign_verify_detached')) {
     /**
      * @param string $signature
@@ -357,10 +367,10 @@ if (!is_callable('\\Sodium\\crypto_stream')) {
 }
 if (!is_callable('\\Sodium\\crypto_stream_xor')) {
     /**
-     * @param $message
-     * @param $nonce
-     * @param $key
-     * @return mixed
+     * @param string $message
+     * @param string $nonce
+     * @param string $key
+     * @return string
      */
     function crypto_stream_xor($message, $nonce, $key)
     {
@@ -369,7 +379,7 @@ if (!is_callable('\\Sodium\\crypto_stream_xor')) {
 }
 if (!is_callable('\\Sodium\\hex2bin')) {
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     function hex2bin($string)

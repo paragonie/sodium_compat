@@ -1367,7 +1367,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
-     * @param string $char
+     * @param int $char
      * @return int (1 = yes, 0 = no)
      */
     public static function negative($char)
@@ -1518,7 +1518,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         /**
          * @var ParagonIE_Sodium_Core_Curve25519_Ge_Precomp[]
          */
-        static $Bi = null;
+        static $Bi = array();
         if (!$Bi) {
             for ($i = 0; $i < 8; ++$i) {
                 $Bi[$i] = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
@@ -1567,7 +1567,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         # for (i = 255;i >= 0;--i) {
         #     if (aslide[i] || bslide[i]) break;
         # }
-        for ($i = 255; $i >= 0; --$i) {
+	    $i = 255;
+        for (; $i >= 0; --$i) {
             if ($aslide[$i] || $bslide[$i]) {
                 break;
             }
