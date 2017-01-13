@@ -11,7 +11,6 @@
         <InvalidArgument errorLevel="info" />
         <InvalidPropertyAssignment errorLevel="info" />
         <InvalidFunctionCall errorLevel="info" />
-        <TooManyArguments errorLevel="info" />
         <TypeCoercion errorLevel="info" />
     </issueHandlers>
 </psalm>
