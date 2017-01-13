@@ -21,6 +21,7 @@
     "paragonie/random_compat": "^1|^2"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "*",
+    "vimeo/psalm": "dev-master"
   }
 }

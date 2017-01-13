@@ -24,6 +24,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @param string $pk
      * @param string $sk
      * @param string $seed
+     * @return string
      */
     public static function seed_keypair(&$pk, &$sk, $seed)
     {
@@ -32,6 +33,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         }
         $pk = self::publickey_from_secretkey($seed);
         $sk = self::substr($seed, 0, self::SEED_BYTES) . $pk;
+        return $sk;
     }
 
     /**
@@ -59,7 +61,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
-     * @param $sk
+     * @param string $sk
      * @return string
      */
     public static function publickey_from_secretkey($sk)
@@ -75,7 +77,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
-     * @param $sk
+     * @param string $sk
      * @return string
      */
     public static function sk_to_pk($sk)

@@ -8,8 +8,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Load a 3 character substring into an integer
      *
-     * @param $string
-     * @return int;
+     * @param string $string
+     * @return int
      */
     public static function load_3($string)
     {
@@ -22,7 +22,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Load a 4 character substring into an integer
      *
-     * @param $string
+     * @param string $string
      * @return int
      * @throws Exception
      */
@@ -41,7 +41,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Store a 24-bit integer into a string, treating it as big-endian.
      *
-     * @param $int
+     * @param int $int
      * @return string
      */
     public static function store_3($int)
@@ -54,7 +54,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Store a 32-bit integer into a string, treating it as big-endian.
      *
-     * @param $int
+     * @param int $int
      * @return string
      */
     public static function store_4($int)
@@ -68,7 +68,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Store a 32-bit integer into a string, treating it as little-endian.
      *
-     * @param $int
+     * @param int $int
      * @return string
      */
     public static function store32_le($int)
@@ -246,7 +246,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Turn a string into an array of integers
      *
-     * @param $string
+     * @param string $string
      * @return int[]
      */
     public static function stringToIntArray($string)

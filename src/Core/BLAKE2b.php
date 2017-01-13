@@ -8,7 +8,7 @@
 abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 {
     /**
-     * @var SplFixedArray[]
+     * @var SplFixedArray
      */
     protected static $iv;
 
@@ -159,11 +159,11 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param $x
-     * @param $i
+     * @param SplFixedArray $x
+     * @param int $i
      * @return SplFixedArray
      */
-    protected static function load64($x, $i)
+    protected static function load64(SplFixedArray $x, $i)
     {
         $l = $x[$i]   | ($x[$i+1]<<8) | ($x[$i+2]<<16) | ($x[$i+3]<<24);
         $h = $x[$i+4] | ($x[$i+5]<<8) | ($x[$i+6]<<16) | ($x[$i+7]<<24);
@@ -171,11 +171,12 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param $x
-     * @param $i
-     * @param $u
+     * @param SplFixedArray $x
+     * @param int $i
+     * @param SplFixedArray $u
+     * @return void
      */
-    protected static function store64($x, $i, $u)
+    protected static function store64(SplFixedArray $x, $i, SplFixedArray $u)
     {
         $x[$i]   = ($u[1] & 0xff); $u[1] >>= 8;
         $x[$i+1] = ($u[1] & 0xff); $u[1] >>= 8;
@@ -189,6 +190,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 
     /**
      * This just sets the $iv static variable.
+     * @return void
      */
     public static function pseudoConstructor()
     {
@@ -242,6 +244,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * @param SplFixedArray $ctx
      * @param SplFixedArray $buf
+     * @return void
      */
     protected static function compress(SplFixedArray $ctx, SplFixedArray $buf)
     {
@@ -311,6 +314,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * @param SplFixedArray $ctx
      * @param int $inc
+     * @return void
      */
     protected static function increment_counter($ctx, $inc)
     {
@@ -325,6 +329,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $ctx
      * @param SplFixedArray $p
      * @param int $plen
+     * @return void
      */
     public static function update(SplFixedArray $ctx, $p, $plen)
     {
@@ -429,7 +434,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             self::load64($p, 0)
         );
 
-        if ($klen > 0) {
+        if ($klen > 0 && $key instanceof SplFixedArray) {
             $block = new SplFixedArray(128);
             for ($i = 128; $i--;) {
                 $block[$i] = 0;
@@ -506,7 +511,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * Creates an SplFixedArray containing other SplFixedArray elements, from
      * a string (compatible with \Sodium\crypto_generichash_{init, update, final})
      *
-     * @param $string
+     * @param string $string
      * @return SplFixedArray
      */
     public static function stringToContext($string)
