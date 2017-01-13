@@ -420,39 +420,99 @@ if (!is_callable('\\Sodium\\randombytes_random16')) {
     }
 }
 
-if (defined('\\Sodium\\CRYPTO_AUTH_BYTES')) {
-	return;
+if (!defined('\\Sodium\\CRYPTO_AUTH_BYTES')) {
+    define('\\Sodium\\CRYPTO_AUTH_BYTES', ParagonIE_Sodium_Compat::CRYPTO_AUTH_BYTES);
 }
-
-const CRYPTO_AUTH_BYTES = ParagonIE_Sodium_Compat::CRYPTO_AUTH_BYTES;
-const CRYPTO_AUTH_KEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES;
-const CRYPTO_BOX_SEALBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_SEALBYTES;
-const CRYPTO_BOX_SECRETKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES;
-const CRYPTO_BOX_PUBLICKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES;
-const CRYPTO_BOX_KEYPAIRBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES;
-const CRYPTO_BOX_MACBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_MACBYTES;
-const CRYPTO_BOX_NONCEBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES;
-const CRYPTO_BOX_SEEDBYTES = ParagonIE_Sodium_Compat::CRYPTO_BOX_SEEDBYTES;
-const CRYPTO_KX_BYTES = ParagonIE_Sodium_Compat::CRYPTO_KX_BYTES;
-const CRYPTO_KX_PUBLICKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_KX_PUBLICKEYBYTES;
-const CRYPTO_KX_SECRETKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_KX_SECRETKEYBYTES;
-const CRYPTO_GENERICHASH_BYTES = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES;
-const CRYPTO_GENERICHASH_BYTES_MIN = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MIN;
-const CRYPTO_GENERICHASH_BYTES_MAX = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MAX;
-const CRYPTO_GENERICHASH_KEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES;
-const CRYPTO_GENERICHASH_KEYBYTES_MIN = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MIN;
-const CRYPTO_GENERICHASH_KEYBYTES_MAX = ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MAX;
-const CRYPTO_SCALARMULT_BYTES = ParagonIE_Sodium_Compat::CRYPTO_SCALARMULT_BYTES;
-const CRYPTO_SCALARMULT_SCALARBYTES = ParagonIE_Sodium_Compat::CRYPTO_SCALARMULT_SCALARBYTES;
-const CRYPTO_SHORTHASH_BYTES = ParagonIE_Sodium_Compat::CRYPTO_SHORTHASH_BYTES;
-const CRYPTO_SHORTHASH_KEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_SHORTHASH_KEYBYTES;
-const CRYPTO_SECRETBOX_KEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES;
-const CRYPTO_SECRETBOX_MACBYTES = ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_MACBYTES;
-const CRYPTO_SECRETBOX_NONCEBYTES = ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES;
-const CRYPTO_SIGN_BYTES = ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES;
-const CRYPTO_SIGN_SEEDBYTES = ParagonIE_Sodium_Compat::CRYPTO_SIGN_SEEDBYTES;
-const CRYPTO_SIGN_PUBLICKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES;
-const CRYPTO_SIGN_SECRETKEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES;
-const CRYPTO_SIGN_KEYPAIRBYTES = ParagonIE_Sodium_Compat::CRYPTO_SIGN_KEYPAIRBYTES;
-const CRYPTO_STREAM_KEYBYTES = ParagonIE_Sodium_Compat::CRYPTO_STREAM_KEYBYTES;
-const CRYPTO_STREAM_NONCEBYTES = ParagonIE_Sodium_Compat::CRYPTO_STREAM_NONCEBYTES;
+if (!defined('\\Sodium\\CRYPTO_AUTH_KEYBYTES')) {
+    define('\\Sodium\\CRYPTO_AUTH_KEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_SEALBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_SEALBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_SEALBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_SECRETKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_SECRETKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_PUBLICKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_PUBLICKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_KEYPAIRBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_KEYPAIRBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_MACBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_MACBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_MACBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_NONCEBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_NONCEBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_BOX_SEEDBYTES')) {
+    define('\\Sodium\\CRYPTO_BOX_SEEDBYTES', ParagonIE_Sodium_Compat::CRYPTO_BOX_SEEDBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_KX_BYTES')) {
+    define('\\Sodium\\CRYPTO_KX_BYTES', ParagonIE_Sodium_Compat::CRYPTO_KX_BYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_KX_PUBLICKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_KX_PUBLICKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_KX_PUBLICKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_KX_SECRETKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_KX_SECRETKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_KX_SECRETKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_BYTES')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_BYTES', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_BYTES_MIN')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_BYTES_MIN', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MIN);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_BYTES_MAX')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_BYTES_MAX', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MAX);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES_MIN')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES_MIN', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MIN);
+}
+if (!defined('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES_MAX')) {
+    define('\\Sodium\\CRYPTO_GENERICHASH_KEYBYTES_MAX', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MAX);
+}
+if (!defined('\\Sodium\\CRYPTO_SCALARMULT_BYTES')) {
+    define('\\Sodium\\CRYPTO_SCALARMULT_BYTES', ParagonIE_Sodium_Compat::CRYPTO_SCALARMULT_BYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SCALARMULT_SCALARBYTES')) {
+    define('\\Sodium\\CRYPTO_SCALARMULT_SCALARBYTES', ParagonIE_Sodium_Compat::CRYPTO_SCALARMULT_SCALARBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SHORTHASH_BYTES')) {
+    define('\\Sodium\\CRYPTO_SHORTHASH_BYTES', ParagonIE_Sodium_Compat::CRYPTO_SHORTHASH_BYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SHORTHASH_KEYBYTES')) {
+    define('\\Sodium\\CRYPTO_SHORTHASH_KEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_SHORTHASH_KEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SECRETBOX_KEYBYTES')) {
+    define('\\Sodium\\CRYPTO_SECRETBOX_KEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SECRETBOX_MACBYTES')) {
+    define('\\Sodium\\CRYPTO_SECRETBOX_MACBYTES', ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_MACBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SECRETBOX_NONCEBYTES')) {
+    define('\\Sodium\\CRYPTO_SECRETBOX_NONCEBYTES', ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SIGN_BYTES')) {
+    define('\\Sodium\\CRYPTO_SIGN_BYTES', ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SIGN_SEEDBYTES')) {
+    define('\\Sodium\\CRYPTO_SIGN_SEEDBYTES', ParagonIE_Sodium_Compat::CRYPTO_SIGN_SEEDBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SIGN_PUBLICKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_SIGN_PUBLICKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SIGN_SECRETKEYBYTES')) {
+    define('\\Sodium\\CRYPTO_SIGN_SECRETKEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_SIGN_KEYPAIRBYTES')) {
+    define('\\Sodium\\CRYPTO_SIGN_KEYPAIRBYTES', ParagonIE_Sodium_Compat::CRYPTO_SIGN_KEYPAIRBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_STREAM_KEYBYTES')) {
+    define('\\Sodium\\CRYPTO_STREAM_KEYBYTES', ParagonIE_Sodium_Compat::CRYPTO_STREAM_KEYBYTES);
+}
+if (!defined('\\Sodium\\CRYPTO_STREAM_NONCEBYTES')) {
+    define('\\Sodium\\CRYPTO_STREAM_NONCEBYTES', ParagonIE_Sodium_Compat::CRYPTO_STREAM_NONCEBYTES);
+}
