@@ -2,7 +2,7 @@ language: php
 sudo: false
 
 matrix:
-include:
+  include:
     - php: "5.3"
       env: USE_PSALM=0
     - php: "5.4"
@@ -13,7 +13,7 @@ include:
       env: USE_PSALM=1
     - php: "7.0"
       env: USE_PSALM=1
-    - php: "7.0"
+    - php: "7.1"
       env: USE_PSALM=1
 
 matrix:
