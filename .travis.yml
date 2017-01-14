@@ -19,6 +19,7 @@ matrix:
 
 install:
     - composer self-update
+    - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:dev-master"; fi
     - composer update
 
 script:
