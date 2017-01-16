@@ -468,6 +468,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     public static function SplFixedArrayToString(SplFixedArray $a)
     {
+        /**
+         * @var array<mixed, int>
+         */
         $arr = $a->toArray();
         $c = $a->count();
         array_unshift($arr, str_repeat('C', $c));

@@ -7,10 +7,10 @@
         <directory name="src" />
     </projectFiles>
     <issueHandlers>
-        <FailedTypeResolution errorLevel="suppress" />
-        <InvalidArgument errorLevel="suppress" />
-        <InvalidPropertyAssignment errorLevel="suppress" />
+        <FailedTypeResolution errorLevel="info" />
+        <InvalidArgument errorLevel="info" />
+        <InvalidPropertyAssignment errorLevel="info" />
         <InvalidFunctionCall errorLevel="suppress" />
-        <TypeCoercion errorLevel="suppress" />
+        <TypeCoercion errorLevel="info" />
     </issueHandlers>
 </psalm>

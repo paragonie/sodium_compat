@@ -259,7 +259,7 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Turn an array of integers into a string
      *
-     * @param int[] $ints
+     * @param array<int, int> $ints
      * @return string
      */
     public static function intArrayToString(array $ints)

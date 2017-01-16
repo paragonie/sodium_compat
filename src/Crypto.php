@@ -255,7 +255,11 @@ abstract class ParagonIE_Sodium_Crypto
         ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $in, $in->count());
         $out = new SplFixedArray($outlen);
         $out = ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
-        return ParagonIE_Sodium_Core_Util::intArrayToString((array) $out->toArray());
+        /**
+         * @var array<int, int>
+         */
+        $outArray = $out->toArray();
+        return ParagonIE_Sodium_Core_Util::intArrayToString($outArray);
     }
 
     /**
@@ -273,9 +277,11 @@ abstract class ParagonIE_Sodium_Crypto
         $out = new SplFixedArray($outlen);
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
         $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
-        return ParagonIE_Sodium_Core_Util::intArrayToString(
-        	$out->toArray()
-        );
+        /**
+         * @var array<int, int>
+         */
+        $outArray = $out->toArray();
+        return ParagonIE_Sodium_Core_Util::intArrayToString($outArray);
     }
 
     /**

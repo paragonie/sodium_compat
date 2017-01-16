@@ -6,7 +6,7 @@
 class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
 {
     /**
-     * @var int[]
+     * @var array<int, int>
      */
     protected $buffer = array();
 
@@ -16,7 +16,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
     protected $final = false;
 
     /**
-     * @var int[]
+     * @var array<int, int>
      */
     public $h;
 
@@ -48,11 +48,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
         /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
         $this->r = array(
-            (self::load_4(self::substr($key,  0, 4))     ) & 0x3ffffff,
-            (self::load_4(self::substr($key,  3, 4)) >> 2) & 0x3ffff03,
-            (self::load_4(self::substr($key,  6, 4)) >> 4) & 0x3ffc0ff,
-            (self::load_4(self::substr($key,  9, 4)) >> 6) & 0x3f03fff,
-            (self::load_4(self::substr($key, 12, 4)) >> 8) & 0x00fffff
+            (int) ((self::load_4(self::substr($key,  0, 4))     ) & 0x3ffffff),
+            (int) ((self::load_4(self::substr($key,  3, 4)) >> 2) & 0x3ffff03),
+            (int) ((self::load_4(self::substr($key,  6, 4)) >> 4) & 0x3ffc0ff),
+            (int) ((self::load_4(self::substr($key,  9, 4)) >> 6) & 0x3f03fff),
+            (int) ((self::load_4(self::substr($key, 12, 4)) >> 8) & 0x00fffff)
         );
 
         /* h = 0 */
@@ -222,11 +222,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
 
         $this->h = array(
-            (int) $h0 & 0xffffffff,
-            (int) $h1 & 0xffffffff,
-            (int) $h2 & 0xffffffff,
-            (int) $h3 & 0xffffffff,
-            (int) $h4 & 0xffffffff
+            (int) ($h0 & 0xffffffff),
+            (int) ($h1 & 0xffffffff),
+            (int) ($h2 & 0xffffffff),
+            (int) ($h3 & 0xffffffff),
+            (int) ($h4 & 0xffffffff)
         );
         return $this;
     }
