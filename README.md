@@ -129,6 +129,16 @@ To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://
         * `crypto_stream_xor()`
     * Other utilities (e.g. `crypto_*_keypair()`)
 
+### Cryptography Primitives Provided
+
+* **X25519** - Elliptic Curve Diffie Hellman over Curve25519
+* **Ed25519** - Edwards curve Digital Signature Algorithm over Curve25519
+* **Xsalsa20** - Extended-nonce Salsa20 stream cipher
+* **ChaCha20** - Stream cipher
+* **Poly1305** - Polynomial Evaluation Message Authentication Code modulo 2^130 - 5
+* **BLAKE2b** - Cryptographic Hash Function
+* **SipHash-2-4** - Fast hash, but not collision-resistant; ideal for hash tables.
+
 ### Features Excluded from this Polyfill
 
 * `\Sodium\memzero()` - Although we expose this API endpoint, we can't reliably
