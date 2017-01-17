@@ -77,7 +77,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      *
      * @param int[] $a
      * @param int[] $b
-     * @return int[]
+     * @return array<int, mixed>
      */
     public static function add(array $a, array $b)
     {
@@ -94,7 +94,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @param int $int0
      * @param int $int1
      * @param int $c
-     * @return int[]
+     * @return array<int, mixed>
      */
     public static function rotl_64($int0, $int1, $c)
     {

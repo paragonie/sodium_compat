@@ -280,13 +280,17 @@ abstract class ParagonIE_Sodium_Core_Util
      * Turn a string into an array of integers
      *
      * @param string $string
-     * @return int[]
+     * @return array<int, mixed>
      */
     public static function stringToIntArray($string)
     {
-        return array_values(
+        /**
+         * @var array<int, int>
+         */
+        $values = array_values(
             unpack('C*', $string)
         );
+        return $values;
     }
 
     /**

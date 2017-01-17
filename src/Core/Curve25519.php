@@ -1036,7 +1036,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * @ref https://github.com/jedisct1/libsodium/blob/157c4a80c13b117608aeae12178b2d38825f9f8f/src/libsodium/crypto_core/curve25519/ref10/curve25519_ref10.c#L1185-L1215
      * @param string $a
-     * @return int[]
+     * @return array<int, mixed>
      */
     public static function slide($a)
     {
