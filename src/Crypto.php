@@ -59,7 +59,11 @@ abstract class ParagonIE_Sodium_Crypto
         );
 
         $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
-        $block0 = null;
+        try {
+            ParagonIE_Sodium_Compat::memzero($block0);
+        } catch (Error $ex) {
+            $block0 = null;
+        }
 
         $state->update($ad);
         $state->update(
