@@ -1296,6 +1296,7 @@ class ParagonIE_Sodium_Compat
      *
      * @param &string $var
      * @return void
+     * @throws Error
      * @throws TypeError
      */
     public static function memzero(&$var)
