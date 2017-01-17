@@ -457,5 +457,5 @@ if (!is_callable('\\Sodium\\randombytes_random16')) {
 }
 
 if (!defined('\\Sodium\\CRYPTO_AUTH_BYTES')) {
-    require_once 'constants.php';
+    require_once __DIR__ . '/constants.php';
 }
