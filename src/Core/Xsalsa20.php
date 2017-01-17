@@ -15,9 +15,11 @@ abstract class ParagonIE_Sodium_Core_Xsalsa20 extends ParagonIE_Sodium_Core_HSal
      */
     public static function xsalsa20($len, $nonce, $key)
     {
-        $subkey = self::hsalsa20($nonce, $key);
-        $ret = self::salsa20($len, self::substr($nonce, 16, 8), $subkey);
-        ParagonIE_Sodium_Compat::memzero($subkey);
+        $ret = self::salsa20(
+            $len,
+            self::substr($nonce, 16, 8),
+            self::hsalsa20($nonce, $key)
+        );
         return $ret;
     }
 

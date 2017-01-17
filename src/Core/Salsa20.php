@@ -153,7 +153,11 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
                 $len
             );
         }
-        ParagonIE_Sodium_Compat::memzero($kcopy);
+        try {
+            ParagonIE_Sodium_Compat::memzero($kcopy);
+        } catch (Error $ex) {
+            $kcopy = null;
+        }
         return $c;
     }
 
@@ -203,8 +207,13 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
                 self::substr($block, 0, $mlen)
             );
         }
-        ParagonIE_Sodium_Compat::memzero($block);
-        ParagonIE_Sodium_Compat::memzero($kcopy);
+        try {
+            ParagonIE_Sodium_Compat::memzero($block);
+            ParagonIE_Sodium_Compat::memzero($kcopy);
+        } catch (Error $ex) {
+            $block = null;
+            $kcopy = null;
+        }
 
         return $c;
     }

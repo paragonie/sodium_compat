@@ -166,7 +166,11 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         $sigAfter = self::sc_muladd($hram, $az, $nonce);
         $sig = self::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);
 
-        ParagonIE_Sodium_Compat::memzero($az);
+        try {
+            ParagonIE_Sodium_Compat::memzero($az);
+        } catch (Error $ex) {
+            $az = null;
+        }
         return $sig;
     }
 

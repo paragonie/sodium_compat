@@ -619,7 +619,11 @@ class ParagonIE_Sodium_Compat
             return $func($ctx, $length);
         }
         $result = ParagonIE_Sodium_Crypto::generichash_final($ctx, $length);
-        self::memzero($ctx);
+        try {
+            self::memzero($ctx);
+        } catch (Error $ex) {
+            $ctx = null;
+        }
         return $result;
     }
 
@@ -1307,7 +1311,9 @@ class ParagonIE_Sodium_Compat
             return;
         }
         // This is the best we can do.
-        unset($var);
+        throw new Error(
+            'This is not implemented, as it is not possible to securely wipe memory from PHP'
+        );
     }
 
     /**
