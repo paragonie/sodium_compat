@@ -58,16 +58,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     protected static function to64($num)
     {
-        $hi = 0; $lo = $num & 0xffffffff;
-
-        if ((+(abs($num))) >= 1) {
-            if ($num > 0) {
-                $hi = min((+(floor($num/4294967296))), 4294967295);
-            } else {
-                $hi = ~~((+(ceil(($num - (+((~~($num)))))/4294967296))));
-            }
-        }
-
+        list($hi, $lo) = self::numericTo64BitInteger($num);
         return self::new64($hi, $lo);
     }
 

@@ -31,6 +31,32 @@ if (!is_callable('\\Sodium\\compare')) {
         return ParagonIE_Sodium_Compat::compare($a, $b);
     }
 }
+if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_decrypt')) {
+    /**
+     * @param string $message
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    function crypto_aead_chacha20poly1305_decrypt($message, $assocData, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt($message, $assocData, $nonce, $key);
+    }
+}
+if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_encrypt')) {
+    /**
+     * @param string $message
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    function crypto_aead_chacha20poly1305_encrypt($message, $assocData, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt($message, $assocData, $nonce, $key);
+    }
+}
 if (!is_callable('\\Sodium\\crypto_auth')) {
     /**
      * @param string $message

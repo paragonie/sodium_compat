@@ -8,6 +8,34 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt()
+     */
+    public function testChapoly()
+    {
+        $message = str_repeat("\x00", 128);
+        $key = str_repeat("\x00", 32);
+        $nonce = str_repeat("\x00", 8);
+        $ad = '';
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt(
+                ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt(
+                    $message,
+                    $ad,
+                    $nonce,
+                    $key
+                ),
+                $ad,
+                $nonce,
+                $key
+            ),
+            'Blank Message decryption'
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */

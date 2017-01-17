@@ -31,8 +31,8 @@ abstract class ParagonIE_Sodium_Core_Util
         if (self::strlen($string) < 4) {
             throw new Exception('String must be 4 bytes or more; ' . self::strlen($string) . ' given.');
         }
-        $result = self::chrToInt($string[0]) & 0xff;
-        $result |= (self::chrToInt($string[1]) & 0xff) << 8;
+        $result  = (self::chrToInt($string[0]) & 0xff);
+        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
         $result |= (self::chrToInt($string[2]) & 0xff) << 16;
         $result |= (self::chrToInt($string[3]) & 0xff) << 24;
         return $result & 0xffffffff;
@@ -74,9 +74,42 @@ abstract class ParagonIE_Sodium_Core_Util
     public static function store32_le($int)
     {
         return self::intToChr($int      & 0xff) .
-            self::intToChr(($int >> 8)  & 0xff) .
-            self::intToChr(($int >> 16) & 0xff) .
-            self::intToChr(($int >> 24) & 0xff);
+               self::intToChr(($int >> 8)  & 0xff) .
+               self::intToChr(($int >> 16) & 0xff) .
+               self::intToChr(($int >> 24) & 0xff);
+    }
+
+    /**
+     * Stores a 64-bit integer as an string.
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function store64_le($int)
+    {
+        if (PHP_INT_SIZE === 8) {
+            return self::intToChr($int & 0xff) .
+               self::intToChr(($int >>  8) & 0xff) .
+               self::intToChr(($int >> 16) & 0xff) .
+               self::intToChr(($int >> 24) & 0xff) .
+               self::intToChr(($int >> 32) & 0xff) .
+               self::intToChr(($int >> 40) & 0xff) .
+               self::intToChr(($int >> 48) & 0xff) .
+               self::intToChr(($int >> 52) & 0xff);
+        }
+        if ($int > PHP_INT_MAX) {
+            list($hiB, $int) = self::numericTo64BitInteger($int);
+        } else {
+            $hiB = 0;
+        }
+        return self::intToChr($hiB & 0xff) .
+           self::intToChr(($hiB >>  8) & 0xff) .
+           self::intToChr(($hiB >> 16) & 0xff) .
+           self::intToChr(($hiB >> 24) & 0xff) .
+           self::intToChr(($int      ) & 0xff) .
+           self::intToChr(($int >>  8) & 0xff) .
+           self::intToChr(($int >> 16) & 0xff) .
+           self::intToChr(($int >> 24) & 0xff);
     }
 
     /**
@@ -270,6 +303,27 @@ abstract class ParagonIE_Sodium_Core_Util
         }
         array_unshift($args, str_repeat('C', count($ints)));
         return call_user_func_array('pack', $args);
+    }
+
+    /**
+     * Convert any arbitrary numbers into two 32-bit integers that represent
+     * a 64-bit integer.
+     *
+     * @param int|float $num
+     * @return array<int, int>
+     */
+    public static function numericTo64BitInteger($num)
+    {
+        $high = 0; $low = $num & 0xffffffff;
+
+        if ((+(abs($num))) >= 1) {
+            if ($num > 0) {
+                $high = min((+(floor($num/4294967296))), 4294967295);
+            } else {
+                $high = ~~((+(ceil(($num - (+((~~($num)))))/4294967296))));
+            }
+        }
+        return array((int) $high, (int) $low);
     }
 
     /**
