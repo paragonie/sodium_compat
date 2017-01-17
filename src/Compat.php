@@ -219,7 +219,7 @@ class ParagonIE_Sodium_Compat
      *     Not to be confused with HMAC-SHA-512/256 which would use the
      *     SHA-512/256 hash function (uses different initial parameters
      *     but still truncates to 256 bits to sidestep length-extension
-     *     attacks.
+     *     attacks).
      *
      * @param string $message
      * @param string $key
@@ -438,6 +438,45 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Decrypt a message previously encrypted with crypto_box().
+     *
+     * @param string $ciphertext
+     * @param string $nonce
+     * @param string $keypair
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_box_open($ciphertext, $nonce, $keypair)
+    {
+        if (!is_string($ciphertext)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (!is_string($keypair)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_BOX_MACBYTES) {
+            throw new Error('Argument 1 must be at least CRYPTO_BOX_MACBYTES long.');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_BOX_NONCEBYTES) {
+            throw new Error('Argument 2 must be CRYPTO_BOX_NONCEBYTES long.');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
+            throw new Error('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES long.');
+        }
+        if (self::use_fallback('crypto_box_open')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_box_open',
+                array($ciphertext, $nonce, $keypair)
+            );
+        }
+        return ParagonIE_Sodium_Crypto::box_open($ciphertext, $nonce, $keypair);
+    }
+
+    /**
      * Extract the public key from a crypto_box keypair.
      *
      * @param string $keypair
@@ -510,45 +549,6 @@ class ParagonIE_Sodium_Compat
             );
         }
         return ParagonIE_Sodium_Crypto::box_secretkey($keypair);
-    }
-
-    /**
-     * Decrypt a message previously encrypted with crypto_box().
-     *
-     * @param string $ciphertext
-     * @param string $nonce
-     * @param string $keypair
-     * @return string
-     * @throws Error
-     * @throws TypeError
-     */
-    public static function crypto_box_open($ciphertext, $nonce, $keypair)
-    {
-        if (!is_string($ciphertext)) {
-            throw new TypeError('Argument 1 must be a string');
-        }
-        if (!is_string($nonce)) {
-            throw new TypeError('Argument 2 must be a string');
-        }
-        if (!is_string($keypair)) {
-            throw new TypeError('Argument 3 must be a string');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_BOX_MACBYTES) {
-            throw new Error('Argument 1 must be at least CRYPTO_BOX_MACBYTES long.');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_BOX_NONCEBYTES) {
-            throw new Error('Argument 2 must be CRYPTO_BOX_NONCEBYTES long.');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_BOX_KEYPAIRBYTES) {
-            throw new Error('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES long.');
-        }
-        if (self::use_fallback('crypto_box_open')) {
-            return call_user_func_array(
-                '\\Sodium\\crypto_box_open',
-                array($ciphertext, $nonce, $keypair)
-            );
-        }
-        return ParagonIE_Sodium_Crypto::box_open($ciphertext, $nonce, $keypair);
     }
 
     /**
@@ -1187,7 +1187,7 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * Verify the signature of a message.
+     * Verify the Ed25519 signature of a message.
      *
      * @param string $signature
      * @param string $message
@@ -1279,7 +1279,7 @@ class ParagonIE_Sodium_Compat
             throw new TypeError('Argument 1 must be a string');
         }
         if (!is_string($right)) {
-            throw new TypeError('Argument 1 must be a string');
+            throw new TypeError('Argument 2 must be a string');
         }
         if (self::use_fallback('memcmp')) {
             return call_user_func_array(
@@ -1291,10 +1291,11 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * This is a NOP in the userland implementation. It's actually not possible
-     * to zero memory buffers in PHP. You need the native library for that.
+     * It's actually not possible to zero memory buffers in PHP. You need the
+     * native library for that.
      *
      * @param &string $var
+     *
      * @return void
      * @throws Error
      * @throws TypeError
@@ -1382,6 +1383,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * This emulats libsodium's version_string() function, except ours is
+     * prefixed with 'polyfill-'.
+     *
      * @return string
      */
     public static function version_string()
@@ -1394,8 +1398,14 @@ class ParagonIE_Sodium_Compat
 
     /**
      * Should we use the libsodium core function instead?
+     * This is always a good idea, if it's available. (Unless we're in the
+     * middle of running our unit test suite.)
+     *
+     * If ext/libsodium is available, use it. Return TRUE.
+     * Otherwise, we have to use the code provided herein. Return FALSE.
      *
      * @param string $sodium_func_name
+     *
      * @return bool
      */
     protected static function use_fallback($sodium_func_name = '')
