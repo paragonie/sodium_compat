@@ -131,10 +131,14 @@ To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://
 
 ### Features Excluded from this Polyfill
 
-* `\Sodium\memzero()` - Although we expose this API endpoint, it's a NOP. We can't
-  reliably zero buffers from PHP.
-* `\Sodium\crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2 into PHP and get
-  reasonable performance. Users would feel motivated to select parameters that downgrade
-  security to avoid denial of service (DoS) attacks.
+* `\Sodium\memzero()` - Although we expose this API endpoint, we can't reliably
+  zero buffers from PHP.
+  
+  If you have the PHP extension installed, sodium_compat
+  will use the native implementation to zero out the string provided. Otherwise
+  it will throw an `Error` (provided as part of the random_compat polyfill).
+* `\Sodium\crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2
+  into PHP and get reasonable performance. Users would feel motivated to select
+  parameters that downgrade security to avoid denial of service (DoS) attacks.
   
   The only winning move is not to play.
