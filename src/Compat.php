@@ -15,6 +15,14 @@ class ParagonIE_Sodium_Compat
     const VERSION_STRING = 'polyfill-1.0.8';
 
     // From libsodium
+    const CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES = 32;
+    const CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES = 0;
+    const CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES = 8;
+    const CRYPTO_AEAD_CHACHA20POLY1305_ABYTES = 16;
+    const CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES = 32;
+    const CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES = 0;
+    const CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES = 12;
+    const CRYPTO_AEAD_CHACHA20POLY1305_IETF_ABYTES = 16;
     const CRYPTO_AUTH_BYTES = 32;
     const CRYPTO_AUTH_KEYBYTES = 32;
     const CRYPTO_BOX_SEALBYTES = 16;
@@ -92,6 +100,115 @@ class ParagonIE_Sodium_Compat
             );
         }
         return ParagonIE_Sodium_Core_Util::compare($left, $right);
+    }
+
+    /**
+     * Authenticated Encryption with Associated Data: Decryption
+     *
+     * Algorithm:
+     *     ChaCha20-Poly1305
+     *
+     * @param string $ciphertext
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     *
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_aead_chacha20poly1305_decrypt(
+        $ciphertext = '',
+        $assocData = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        if (!is_string($ciphertext)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($assocData)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($key)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_encrypt')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_aead_chacha20poly1305_decrypt',
+                array($ciphertext, $assocData, $nonce, $key)
+            );
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_CHACHA20POLY1305_ABYTES) {
+            throw new Error('Message must be at least CRYPTO_AEAD_CHACHA20POLY1305_ABYTES long');
+        }
+        return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_decrypt(
+            $ciphertext,
+            $assocData,
+            $nonce,
+            $key
+        );
+    }
+
+    /**
+     * Authenticated Encryption with Associated Data
+     *
+     * Algorithm:
+     *     ChaCha20-Poly1305
+     *
+     * @param string $plaintext
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     *
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_aead_chacha20poly1305_encrypt(
+        $plaintext = '',
+        $assocData = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        if (!is_string($plaintext)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($assocData)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($key)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_encrypt')) {
+            return call_user_func_array(
+                '\\Sodium\\crypto_aead_chacha20poly1305_encrypt',
+                array($plaintext, $assocData, $nonce, $key)
+            );
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
+        return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_encrypt(
+            $plaintext,
+            $assocData,
+            $nonce,
+            $key
+        );
     }
 
     /**

@@ -10,6 +10,14 @@
  */
 abstract class ParagonIE_Sodium_Crypto
 {
+    const aead_chacha20poly1305_KEYBYTES = 32;
+    const aead_chacha20poly1305_NSECBYTES = 0;
+    const aead_chacha20poly1305_NPUBBYTES = 8;
+    const aead_chacha20poly1305_ABYTES = 16;
+    const aead_chacha20poly1305_IETF_KEYBYTES = 32;
+    const aead_chacha20poly1305_IETF_NSECBYTES = 0;
+    const aead_chacha20poly1305_IETF_NPUBBYTES = 12;
+    const aead_chacha20poly1305_IETF_ABYTES = 16;
     const box_curve25519xsalsa20poly1305_SEEDBYTES = 32;
     const box_curve25519xsalsa20poly1305_PUBLICKEYBYTES = 32;
     const box_curve25519xsalsa20poly1305_SECRETKEYBYTES = 32;
@@ -29,6 +37,109 @@ abstract class ParagonIE_Sodium_Crypto
     const secretbox_xsalsa20poly1305_ZEROBYTES = 32;
 
     const stream_salsa20_KEYBYTES = 32;
+
+    /**
+     * @param string $message
+     * @param string $ad
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws Exception
+     */
+    public static function aead_chacha20poly1305_decrypt(
+        $message = '',
+        $ad = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
+            32,
+            $nonce,
+            $key
+        );
+
+        $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
+        ParagonIE_Sodium_Compat::memzero($block0);
+
+        $state->update($ad);
+        $state->update(
+            ParagonIE_Sodium_Core_Util::store64_le(
+                ParagonIE_Sodium_Core_Util::strlen($ad)
+            )
+        );
+
+        $len = ParagonIE_Sodium_Core_Util::strlen($message);
+        $mac = ParagonIE_Sodium_Core_Util::substr(
+            $message,
+            $len - self::aead_chacha20poly1305_ABYTES,
+            self::aead_chacha20poly1305_ABYTES
+        );
+        $ciphertext = ParagonIE_Sodium_Core_Util::substr(
+            $message,
+            0,
+            $len - self::aead_chacha20poly1305_ABYTES
+        );
+
+        $state->update($ciphertext);
+        $state->update(
+            ParagonIE_Sodium_Core_Util::store64_le($len - 16)
+        );
+
+        $computed_mac = $state->finish();
+
+        if (!ParagonIE_Sodium_Core_Util::verify_16($computed_mac, $mac)) {
+            throw new Exception('Invalid MAC');
+        }
+        return ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $ciphertext,
+            $nonce,
+            $key,
+            ParagonIE_Sodium_Core_Util::store64_le(1)
+        );
+    }
+
+    /**
+     * @param string $message
+     * @param string $ad
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function aead_chacha20poly1305_encrypt(
+        $message = '',
+        $ad = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        # crypto_stream_chacha20(block0, sizeof block0, npub, k);
+        $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
+            32,
+            $nonce,
+            $key
+        );
+        $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
+        ParagonIE_Sodium_Compat::memzero($block0);
+
+        $state->update($ad);
+        $state->update(
+            ParagonIE_Sodium_Core_Util::store64_le(
+                ParagonIE_Sodium_Core_Util::strlen($ad)
+            )
+        );
+        $len = ParagonIE_Sodium_Core_Util::strlen($message);
+
+        $ciphertext = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $message,
+            $nonce,
+            $key,
+            ParagonIE_Sodium_Core_Util::store64_le(1)
+        );
+        $state->update($ciphertext);
+        $state->update(
+            ParagonIE_Sodium_Core_Util::store64_le($len)
+        );
+        return $ciphertext . $state->finish();
+    }
 
     /**
      * HMAC-SHA-512-256 (a.k.a. the leftmost 256 bits of HMAC-SHA-512)
