@@ -171,7 +171,7 @@ abstract class ParagonIE_Sodium_Crypto
     ) {
         $adlen = ParagonIE_Sodium_Core_Util::strlen($ad);
         $len = ParagonIE_Sodium_Core_Util::strlen($message);
-        $clen = $len - self::aead_chacha20poly1305_ABYTES;
+        $clen = $len - self::aead_chacha20poly1305_IETF_ABYTES;
 
         $block0 = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
             32,
@@ -181,13 +181,13 @@ abstract class ParagonIE_Sodium_Crypto
 
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $message,
-            $len - self::aead_chacha20poly1305_ABYTES,
-            self::aead_chacha20poly1305_ABYTES
+            $len - self::aead_chacha20poly1305_IETF_ABYTES,
+            self::aead_chacha20poly1305_IETF_ABYTES
         );
         $ciphertext = ParagonIE_Sodium_Core_Util::substr(
             $message,
             0,
-            $len - self::aead_chacha20poly1305_ABYTES
+            $len - self::aead_chacha20poly1305_IETF_ABYTES
         );
 
         $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
