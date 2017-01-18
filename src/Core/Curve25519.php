@@ -466,24 +466,48 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = $f0g8 + $f1g7_2  + $f2g6    + $f3g5_2  + $f4g4    + $f5g3_2  + $f6g2    + $f7g1_2  + $f8g0    + $f9g9_38;
         $h9 = $f0g9 + $f1g8    + $f2g7    + $f3g6    + $f4g5    + $f5g4    + $f6g3    + $f7g2    + $f8g1    + $f9g0   ;
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25; $h2 += $carry1; $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25; $h6 += $carry5; $h5 -= $carry5 << 25;
+        $carry1 = ($h1 + (1<<24)) >> 25;
+        $h2 += $carry1;
+        $h1 -= $carry1 << 25;
+        $carry5 = ($h5 + (1<<24)) >> 25;
+        $h6 += $carry5;
+        $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26; $h3 += $carry2; $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26; $h7 += $carry6; $h6 -= $carry6 << 26;
+        $carry2 = ($h2 + (1<<25)) >> 26;
+        $h3 += $carry2;
+        $h2 -= $carry2 << 26;
+        $carry6 = ($h6 + (1<<25)) >> 26;
+        $h7 += $carry6;
+        $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25; $h4 += $carry3; $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25; $h8 += $carry7; $h7 -= $carry7 << 25;
+        $carry3 = ($h3 + (1<<24)) >> 25;
+        $h4 += $carry3;
+        $h3 -= $carry3 << 25;
+        $carry7 = ($h7 + (1<<24)) >> 25;
+        $h8 += $carry7;
+        $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26; $h9 += $carry8; $h8 -= $carry8 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
+        $carry8 = ($h8 + (1<<25)) >> 26;
+        $h9 += $carry8;
+        $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25; $h0 += $carry9 * 19; $h9 -= $carry9 << 25;
+        $carry9 = ($h9 + (1<<24)) >> 25;
+        $h0 += $carry9 * 19;
+        $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
 
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -618,24 +642,48 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = $f0f8_2 + $f1f7_4  + $f2f6_2  + $f3f5_4  + $f4f4    + $f9f9_38;
         $h9 = $f0f9_2 + $f1f8_2  + $f2f7_2  + $f3f6_2  + $f4f5_2;
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25; $h2 += $carry1; $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25; $h6 += $carry5; $h5 -= $carry5 << 25;
+        $carry1 = ($h1 + (1<<24)) >> 25;
+        $h2 += $carry1;
+        $h1 -= $carry1 << 25;
+        $carry5 = ($h5 + (1<<24)) >> 25;
+        $h6 += $carry5;
+        $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26; $h3 += $carry2; $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26; $h7 += $carry6; $h6 -= $carry6 << 26;
+        $carry2 = ($h2 + (1<<25)) >> 26;
+        $h3 += $carry2;
+        $h2 -= $carry2 << 26;
+        $carry6 = ($h6 + (1<<25)) >> 26;
+        $h7 += $carry6;
+        $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25; $h4 += $carry3; $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25; $h8 += $carry7; $h7 -= $carry7 << 25;
+        $carry3 = ($h3 + (1<<24)) >> 25;
+        $h4 += $carry3;
+        $h3 -= $carry3 << 25;
+        $carry7 = ($h7 + (1<<24)) >> 25;
+        $h8 += $carry7;
+        $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26; $h9 += $carry8; $h8 -= $carry8 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
+        $carry8 = ($h8 + (1<<25)) >> 26;
+        $h9 += $carry8;
+        $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25; $h0 += $carry9 * 19; $h9 -= $carry9 << 25;
+        $carry9 = ($h9 + (1<<24)) >> 25;
+        $h0 += $carry9 * 19;
+        $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
 
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -766,24 +814,48 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = (int) ($h8 + $h8);
         $h9 = (int) ($h9 + $h9);
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25; $h2 += $carry1; $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25; $h6 += $carry5; $h5 -= $carry5 << 25;
+        $carry1 = ($h1 + (1<<24)) >> 25;
+        $h2 += $carry1;
+        $h1 -= $carry1 << 25;
+        $carry5 = ($h5 + (1<<24)) >> 25;
+        $h6 += $carry5;
+        $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26; $h3 += $carry2; $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26; $h7 += $carry6; $h6 -= $carry6 << 26;
+        $carry2 = ($h2 + (1<<25)) >> 26;
+        $h3 += $carry2;
+        $h2 -= $carry2 << 26;
+        $carry6 = ($h6 + (1<<25)) >> 26;
+        $h7 += $carry6;
+        $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25; $h4 += $carry3; $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25; $h8 += $carry7; $h7 -= $carry7 << 25;
+        $carry3 = ($h3 + (1<<24)) >> 25;
+        $h4 += $carry3;
+        $h3 -= $carry3 << 25;
+        $carry7 = ($h7 + (1<<24)) >> 25;
+        $h8 += $carry7;
+        $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26; $h5 += $carry4; $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26; $h9 += $carry8; $h8 -= $carry8 << 26;
+        $carry4 = ($h4 + (1<<25)) >> 26;
+        $h5 += $carry4;
+        $h4 -= $carry4 << 26;
+        $carry8 = ($h8 + (1<<25)) >> 26;
+        $h9 += $carry8;
+        $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25; $h0 += $carry9 * 19; $h9 -= $carry9 << 25;
+        $carry9 = ($h9 + (1<<24)) >> 25;
+        $h0 += $carry9 * 19;
+        $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26; $h1 += $carry0; $h0 -= $carry0 << 26;
+        $carry0 = ($h0 + (1<<25)) >> 26;
+        $h1 += $carry0;
+        $h0 -= $carry0 << 26;
 
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -1061,7 +1133,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
                         if ($r[$i] + ($r[$i + $b] << $b) <= 15) {
                             $r[$i] += $r[$i + $b] << $b;
                             $r[$i + $b] = 0;
-                        } else if ($r[$i] - ($r[$i + $b] << $b) >= -15) {
+                        } elseif ($r[$i] - ($r[$i + $b] << $b) >= -15) {
                             $r[$i] -= $r[$i + $b] << $b;
                             for ($k = $i + $b; $k < 256; ++$k) {
                                 if (!$r[$k]) {
@@ -1570,7 +1642,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         # for (i = 255;i >= 0;--i) {
         #     if (aslide[i] || bslide[i]) break;
         # }
-	    $i = 255;
+        $i = 255;
         for (; $i >= 0; --$i) {
             if ($aslide[$i] || $bslide[$i]) {
                 break;
@@ -1753,30 +1825,76 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s23 = 0;
 
 
-        $carry0 = ($s0 + (1 << 20)) >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry2 = ($s2 + (1 << 20)) >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry4 = ($s4 + (1 << 20)) >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry6 = ($s6 + (1 << 20)) >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry8 = ($s8 + (1 << 20)) >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry10 = ($s10 + (1 << 20)) >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
-        $carry12 = ($s12 + (1 << 20)) >> 21; $s13 += $carry12; $s12 -= $carry12 * (1 << 21);
-        $carry14 = ($s14 + (1 << 20)) >> 21; $s15 += $carry14; $s14 -= $carry14 * (1 << 21);
-        $carry16 = ($s16 + (1 << 20)) >> 21; $s17 += $carry16; $s16 -= $carry16 * (1 << 21);
-        $carry18 = ($s18 + (1 << 20)) >> 21; $s19 += $carry18; $s18 -= $carry18 * (1 << 21);
-        $carry20 = ($s20 + (1 << 20)) >> 21; $s21 += $carry20; $s20 -= $carry20 * (1 << 21);
-        $carry22 = ($s22 + (1 << 20)) >> 21; $s23 += $carry22; $s22 -= $carry22 * (1 << 21);
+        $carry0 = ($s0 + (1 << 20)) >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry2 = ($s2 + (1 << 20)) >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry4 = ($s4 + (1 << 20)) >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry6 = ($s6 + (1 << 20)) >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry8 = ($s8 + (1 << 20)) >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry10 = ($s10 + (1 << 20)) >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
+        $carry12 = ($s12 + (1 << 20)) >> 21;
+        $s13 += $carry12;
+        $s12 -= $carry12 * (1 << 21);
+        $carry14 = ($s14 + (1 << 20)) >> 21;
+        $s15 += $carry14;
+        $s14 -= $carry14 * (1 << 21);
+        $carry16 = ($s16 + (1 << 20)) >> 21;
+        $s17 += $carry16;
+        $s16 -= $carry16 * (1 << 21);
+        $carry18 = ($s18 + (1 << 20)) >> 21;
+        $s19 += $carry18;
+        $s18 -= $carry18 * (1 << 21);
+        $carry20 = ($s20 + (1 << 20)) >> 21;
+        $s21 += $carry20;
+        $s20 -= $carry20 * (1 << 21);
+        $carry22 = ($s22 + (1 << 20)) >> 21;
+        $s23 += $carry22;
+        $s22 -= $carry22 * (1 << 21);
 
-        $carry1 = ($s1 + (1 << 20)) >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry3 = ($s3 + (1 << 20)) >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry5 = ($s5 + (1 << 20)) >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry7 = ($s7 + (1 << 20)) >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry9 = ($s9 + (1 << 20)) >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry11 = ($s11 + (1 << 20)) >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
-        $carry13 = ($s13 + (1 << 20)) >> 21; $s14 += $carry13; $s13 -= $carry13 * (1 << 21);
-        $carry15 = ($s15 + (1 << 20)) >> 21; $s16 += $carry15; $s15 -= $carry15 * (1 << 21);
-        $carry17 = ($s17 + (1 << 20)) >> 21; $s18 += $carry17; $s17 -= $carry17 * (1 << 21);
-        $carry19 = ($s19 + (1 << 20)) >> 21; $s20 += $carry19; $s19 -= $carry19 * (1 << 21);
-        $carry21 = ($s21 + (1 << 20)) >> 21; $s22 += $carry21; $s21 -= $carry21 * (1 << 21);
+        $carry1 = ($s1 + (1 << 20)) >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry3 = ($s3 + (1 << 20)) >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry5 = ($s5 + (1 << 20)) >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry7 = ($s7 + (1 << 20)) >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry9 = ($s9 + (1 << 20)) >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry11 = ($s11 + (1 << 20)) >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
+        $carry13 = ($s13 + (1 << 20)) >> 21;
+        $s14 += $carry13;
+        $s13 -= $carry13 * (1 << 21);
+        $carry15 = ($s15 + (1 << 20)) >> 21;
+        $s16 += $carry15;
+        $s15 -= $carry15 * (1 << 21);
+        $carry17 = ($s17 + (1 << 20)) >> 21;
+        $s18 += $carry17;
+        $s17 -= $carry17 * (1 << 21);
+        $carry19 = ($s19 + (1 << 20)) >> 21;
+        $s20 += $carry19;
+        $s19 -= $carry19 * (1 << 21);
+        $carry21 = ($s21 + (1 << 20)) >> 21;
+        $s22 += $carry21;
+        $s21 -= $carry21 * (1 << 21);
 
         $s11 += $s23 * 666643;
         $s12 += $s23 * 470296;
@@ -1820,18 +1938,40 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s10 += $s18 * 136657;
         $s11 -= $s18 * 683901;
 
-        $carry6 = ($s6 + (1 << 20)) >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry8 = ($s8 + (1 << 20)) >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry10 = ($s10 + (1 << 20)) >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
-        $carry12 = ($s12 + (1 << 20)) >> 21; $s13 += $carry12; $s12 -= $carry12 * (1 << 21);
-        $carry14 = ($s14 + (1 << 20)) >> 21; $s15 += $carry14; $s14 -= $carry14 * (1 << 21);
-        $carry16 = ($s16 + (1 << 20)) >> 21; $s17 += $carry16; $s16 -= $carry16 * (1 << 21);
+        $carry6 = ($s6 + (1 << 20)) >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry8 = ($s8 + (1 << 20)) >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry10 = ($s10 + (1 << 20)) >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
+        $carry12 = ($s12 + (1 << 20)) >> 21;
+        $s13 += $carry12;
+        $s12 -= $carry12 * (1 << 21);
+        $carry14 = ($s14 + (1 << 20)) >> 21;
+        $s15 += $carry14;
+        $s14 -= $carry14 * (1 << 21);
+        $carry16 = ($s16 + (1 << 20)) >> 21;
+        $s17 += $carry16;
+        $s16 -= $carry16 * (1 << 21);
 
-        $carry7 = ($s7 + (1 << 20)) >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry9 = ($s9 + (1 << 20)) >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry11 = ($s11 + (1 << 20)) >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
-        $carry13 = ($s13 + (1 << 20)) >> 21; $s14 += $carry13; $s13 -= $carry13 * (1 << 21);
-        $carry15 = ($s15 + (1 << 20)) >> 21; $s16 += $carry15; $s15 -= $carry15 * (1 << 21);
+        $carry7 = ($s7 + (1 << 20)) >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry9 = ($s9 + (1 << 20)) >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry11 = ($s11 + (1 << 20)) >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
+        $carry13 = ($s13 + (1 << 20)) >> 21;
+        $s14 += $carry13;
+        $s13 -= $carry13 * (1 << 21);
+        $carry15 = ($s15 + (1 << 20)) >> 21;
+        $s16 += $carry15;
+        $s15 -= $carry15 * (1 << 21);
 
         $s5 += $s17 * 666643;
         $s6 += $s17 * 470296;
@@ -1876,19 +2016,43 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s5 -= $s12 * 683901;
         $s12 = 0;
 
-        $carry0 = ($s0 + (1 << 20)) >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry2 = ($s2 + (1 << 20)) >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry4 = ($s4 + (1 << 20)) >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry6 = ($s6 + (1 << 20)) >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry8 = ($s8 + (1 << 20)) >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry10 = ($s10 + (1 << 20)) >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
+        $carry0 = ($s0 + (1 << 20)) >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry2 = ($s2 + (1 << 20)) >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry4 = ($s4 + (1 << 20)) >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry6 = ($s6 + (1 << 20)) >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry8 = ($s8 + (1 << 20)) >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry10 = ($s10 + (1 << 20)) >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
 
-        $carry1 = ($s1 + (1 << 20)) >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry3 = ($s3 + (1 << 20)) >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry5 = ($s5 + (1 << 20)) >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry7 = ($s7 + (1 << 20)) >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry9 = ($s9 + (1 << 20)) >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry11 = ($s11 + (1 << 20)) >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
+        $carry1 = ($s1 + (1 << 20)) >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry3 = ($s3 + (1 << 20)) >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry5 = ($s5 + (1 << 20)) >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry7 = ($s7 + (1 << 20)) >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry9 = ($s9 + (1 << 20)) >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry11 = ($s11 + (1 << 20)) >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
 
         $s0 += $s12 * 666643;
         $s1 += $s12 * 470296;
@@ -1898,18 +2062,42 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s5 -= $s12 * 683901;
         $s12 = 0;
 
-        $carry0 = $s0 >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry1 = $s1 >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry2 = $s2 >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry3 = $s3 >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry4 = $s4 >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry5 = $s5 >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry6 = $s6 >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry7 = $s7 >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry8 = $s8 >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry9 = $s9 >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry10 = $s10 >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
-        $carry11 = $s11 >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
+        $carry0 = $s0 >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry1 = $s1 >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry2 = $s2 >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry3 = $s3 >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry4 = $s4 >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry5 = $s5 >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry6 = $s6 >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry7 = $s7 >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry8 = $s8 >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry9 = $s9 >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry10 = $s10 >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
+        $carry11 = $s11 >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
 
 
         $s0 += $s12 * 666643;
@@ -1919,17 +2107,39 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s4 += $s12 * 136657;
         $s5 -= $s12 * 683901;
 
-        $carry0 = $s0 >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry1 = $s1 >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry2 = $s2 >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry3 = $s3 >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry4 = $s4 >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry5 = $s5 >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry6 = $s6 >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry7 = $s7 >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry8 = $s8 >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry9 = $s9 >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry10 = $s10 >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
+        $carry0 = $s0 >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry1 = $s1 >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry2 = $s2 >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry3 = $s3 >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry4 = $s4 >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry5 = $s5 >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry6 = $s6 >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry7 = $s7 >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry8 = $s8 >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry9 = $s9 >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry10 = $s10 >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
 
         return self::intArrayToString(
             /**
@@ -2045,18 +2255,40 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s10 += $s18 * 136657;
         $s11 -= $s18 * 683901;
 
-        $carry6 = ($s6 + (1 << 20)) >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry8 = ($s8 + (1 << 20)) >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry10 = ($s10 + (1 << 20)) >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
-        $carry12 = ($s12 + (1 << 20)) >> 21; $s13 += $carry12; $s12 -= $carry12 * (1 << 21);
-        $carry14 = ($s14 + (1 << 20)) >> 21; $s15 += $carry14; $s14 -= $carry14 * (1 << 21);
-        $carry16 = ($s16 + (1 << 20)) >> 21; $s17 += $carry16; $s16 -= $carry16 * (1 << 21);
+        $carry6 = ($s6 + (1 << 20)) >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry8 = ($s8 + (1 << 20)) >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry10 = ($s10 + (1 << 20)) >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
+        $carry12 = ($s12 + (1 << 20)) >> 21;
+        $s13 += $carry12;
+        $s12 -= $carry12 * (1 << 21);
+        $carry14 = ($s14 + (1 << 20)) >> 21;
+        $s15 += $carry14;
+        $s14 -= $carry14 * (1 << 21);
+        $carry16 = ($s16 + (1 << 20)) >> 21;
+        $s17 += $carry16;
+        $s16 -= $carry16 * (1 << 21);
 
-        $carry7 = ($s7 + (1 << 20)) >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry9 = ($s9 + (1 << 20)) >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry11 = ($s11 + (1 << 20)) >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
-        $carry13 = ($s13 + (1 << 20)) >> 21; $s14 += $carry13; $s13 -= $carry13 * (1 << 21);
-        $carry15 = ($s15 + (1 << 20)) >> 21; $s16 += $carry15; $s15 -= $carry15 * (1 << 21);
+        $carry7 = ($s7 + (1 << 20)) >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry9 = ($s9 + (1 << 20)) >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry11 = ($s11 + (1 << 20)) >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
+        $carry13 = ($s13 + (1 << 20)) >> 21;
+        $s14 += $carry13;
+        $s13 -= $carry13 * (1 << 21);
+        $carry15 = ($s15 + (1 << 20)) >> 21;
+        $s16 += $carry15;
+        $s15 -= $carry15 * (1 << 21);
 
         $s5 += $s17 * 666643;
         $s6 += $s17 * 470296;
@@ -2101,19 +2333,43 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s5 -= $s12 * 683901;
         $s12 = 0;
 
-        $carry0 = ($s0 + (1 << 20)) >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry2 = ($s2 + (1 << 20)) >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry4 = ($s4 + (1 << 20)) >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry6 = ($s6 + (1 << 20)) >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry8 = ($s8 + (1 << 20)) >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry10 = ($s10 + (1 << 20)) >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
+        $carry0 = ($s0 + (1 << 20)) >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry2 = ($s2 + (1 << 20)) >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry4 = ($s4 + (1 << 20)) >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry6 = ($s6 + (1 << 20)) >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry8 = ($s8 + (1 << 20)) >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry10 = ($s10 + (1 << 20)) >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
 
-        $carry1 = ($s1 + (1 << 20)) >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry3 = ($s3 + (1 << 20)) >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry5 = ($s5 + (1 << 20)) >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry7 = ($s7 + (1 << 20)) >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry9 = ($s9 + (1 << 20)) >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry11 = ($s11 + (1 << 20)) >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
+        $carry1 = ($s1 + (1 << 20)) >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry3 = ($s3 + (1 << 20)) >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry5 = ($s5 + (1 << 20)) >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry7 = ($s7 + (1 << 20)) >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry9 = ($s9 + (1 << 20)) >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry11 = ($s11 + (1 << 20)) >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
 
         $s0 += $s12 * 666643;
         $s1 += $s12 * 470296;
@@ -2123,18 +2379,42 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s5 -= $s12 * 683901;
         $s12 = 0;
 
-        $carry0 = $s0 >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry1 = $s1 >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry2 = $s2 >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry3 = $s3 >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry4 = $s4 >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry5 = $s5 >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry6 = $s6 >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry7 = $s7 >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry8 = $s8 >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry9 = $s9 >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry10 = $s10 >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
-        $carry11 = $s11 >> 21; $s12 += $carry11; $s11 -= $carry11 * (1 << 21);
+        $carry0 = $s0 >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry1 = $s1 >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry2 = $s2 >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry3 = $s3 >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry4 = $s4 >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry5 = $s5 >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry6 = $s6 >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry7 = $s7 >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry8 = $s8 >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry9 = $s9 >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry10 = $s10 >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
+        $carry11 = $s11 >> 21;
+        $s12 += $carry11;
+        $s11 -= $carry11 * (1 << 21);
 
         $s0 += $s12 * 666643;
         $s1 += $s12 * 470296;
@@ -2143,17 +2423,39 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s4 += $s12 * 136657;
         $s5 -= $s12 * 683901;
 
-        $carry0 = $s0 >> 21; $s1 += $carry0; $s0 -= $carry0 * (1 << 21);
-        $carry1 = $s1 >> 21; $s2 += $carry1; $s1 -= $carry1 * (1 << 21);
-        $carry2 = $s2 >> 21; $s3 += $carry2; $s2 -= $carry2 * (1 << 21);
-        $carry3 = $s3 >> 21; $s4 += $carry3; $s3 -= $carry3 * (1 << 21);
-        $carry4 = $s4 >> 21; $s5 += $carry4; $s4 -= $carry4 * (1 << 21);
-        $carry5 = $s5 >> 21; $s6 += $carry5; $s5 -= $carry5 * (1 << 21);
-        $carry6 = $s6 >> 21; $s7 += $carry6; $s6 -= $carry6 * (1 << 21);
-        $carry7 = $s7 >> 21; $s8 += $carry7; $s7 -= $carry7 * (1 << 21);
-        $carry8 = $s8 >> 21; $s9 += $carry8; $s8 -= $carry8 * (1 << 21);
-        $carry9 = $s9 >> 21; $s10 += $carry9; $s9 -= $carry9 * (1 << 21);
-        $carry10 = $s10 >> 21; $s11 += $carry10; $s10 -= $carry10 * (1 << 21);
+        $carry0 = $s0 >> 21;
+        $s1 += $carry0;
+        $s0 -= $carry0 * (1 << 21);
+        $carry1 = $s1 >> 21;
+        $s2 += $carry1;
+        $s1 -= $carry1 * (1 << 21);
+        $carry2 = $s2 >> 21;
+        $s3 += $carry2;
+        $s2 -= $carry2 * (1 << 21);
+        $carry3 = $s3 >> 21;
+        $s4 += $carry3;
+        $s3 -= $carry3 * (1 << 21);
+        $carry4 = $s4 >> 21;
+        $s5 += $carry4;
+        $s4 -= $carry4 * (1 << 21);
+        $carry5 = $s5 >> 21;
+        $s6 += $carry5;
+        $s5 -= $carry5 * (1 << 21);
+        $carry6 = $s6 >> 21;
+        $s7 += $carry6;
+        $s6 -= $carry6 * (1 << 21);
+        $carry7 = $s7 >> 21;
+        $s8 += $carry7;
+        $s7 -= $carry7 * (1 << 21);
+        $carry8 = $s8 >> 21;
+        $s9 += $carry8;
+        $s8 -= $carry8 * (1 << 21);
+        $carry9 = $s9 >> 21;
+        $s10 += $carry9;
+        $s9 -= $carry9 * (1 << 21);
+        $carry10 = $s10 >> 21;
+        $s11 += $carry10;
+        $s10 -= $carry10 * (1 << 21);
 
         return self::intArrayToString(
             /**

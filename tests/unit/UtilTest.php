@@ -74,7 +74,6 @@ class UtilTest extends PHPUnit_Framework_TestCase
             $sample,
             ParagonIE_Sodium_Core_Util::stringToIntArray('Paragon')
         );
-
     }
 
     /**

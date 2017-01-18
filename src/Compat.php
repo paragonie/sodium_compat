@@ -129,15 +129,6 @@ class ParagonIE_Sodium_Compat
         if (!is_string($key)) {
             throw new TypeError('Argument 4 must be a string');
         }
-        if (self::use_fallback('crypto_aead_chacha20poly1305_decrypt')) {
-            return call_user_func(
-                '\\Sodium\\crypto_aead_chacha20poly1305_decrypt',
-                $ciphertext,
-                $assocData,
-                $nonce,
-                $key
-            );
-        }
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
             throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
         }
@@ -146,6 +137,15 @@ class ParagonIE_Sodium_Compat
         }
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_CHACHA20POLY1305_ABYTES) {
             throw new Error('Message must be at least CRYPTO_AEAD_CHACHA20POLY1305_ABYTES long');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_decrypt')) {
+            return call_user_func(
+                '\\Sodium\\crypto_aead_chacha20poly1305_decrypt',
+                $ciphertext,
+                $assocData,
+                $nonce,
+                $key
+            );
         }
         return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_decrypt(
             $ciphertext,
@@ -188,6 +188,12 @@ class ParagonIE_Sodium_Compat
         if (!is_string($key)) {
             throw new TypeError('Argument 4 must be a string');
         }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
         if (self::use_fallback('crypto_aead_chacha20poly1305_encrypt')) {
             return call_user_func(
                 '\\Sodium\\crypto_aead_chacha20poly1305_encrypt',
@@ -196,12 +202,6 @@ class ParagonIE_Sodium_Compat
                 $nonce,
                 $key
             );
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
-            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
-            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
         }
         return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_encrypt(
             $plaintext,
@@ -244,15 +244,6 @@ class ParagonIE_Sodium_Compat
         if (!is_string($key)) {
             throw new TypeError('Argument 4 must be a string');
         }
-        if (self::use_fallback('crypto_aead_chacha20poly1305_ietf_decrypt')) {
-            return call_user_func(
-                '\\Sodium\\crypto_aead_chacha20poly1305_ietf_decrypt',
-                $ciphertext,
-                $assocData,
-                $nonce,
-                $key
-            );
-        }
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
             throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
         }
@@ -261,6 +252,15 @@ class ParagonIE_Sodium_Compat
         }
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_CHACHA20POLY1305_ABYTES) {
             throw new Error('Message must be at least CRYPTO_AEAD_CHACHA20POLY1305_ABYTES long');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_ietf_decrypt')) {
+            return call_user_func(
+                '\\Sodium\\crypto_aead_chacha20poly1305_ietf_decrypt',
+                $ciphertext,
+                $assocData,
+                $nonce,
+                $key
+            );
         }
         return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_decrypt(
             $ciphertext,
@@ -303,6 +303,12 @@ class ParagonIE_Sodium_Compat
         if (!is_string($key)) {
             throw new TypeError('Argument 4 must be a string');
         }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
         if (self::use_fallback('crypto_aead_chacha20poly1305_ietf_encrypt')) {
             return call_user_func(
                 '\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt',
@@ -311,12 +317,6 @@ class ParagonIE_Sodium_Compat
                 $nonce,
                 $key
             );
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
-            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
-            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
         }
         return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt(
             $plaintext,
@@ -645,7 +645,7 @@ class ParagonIE_Sodium_Compat
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_generichash($message, $key = '', $length = 32)
+    public static function crypto_generichash($message, $key = '', $length = self::CRYPTO_GENERICHASH_BYTES)
     {
         if (!is_string($message)) {
             throw new TypeError('Argument 1 must be a string');
@@ -683,7 +683,7 @@ class ParagonIE_Sodium_Compat
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_generichash_final(&$ctx, $length = 32)
+    public static function crypto_generichash_final(&$ctx, $length = self::CRYPTO_GENERICHASH_BYTES)
     {
         if (!is_string($ctx)) {
             throw new TypeError('Argument 1 must be a string');
@@ -717,7 +717,7 @@ class ParagonIE_Sodium_Compat
      * @throws Error
      * @throws TypeError
      */
-    public static function crypto_generichash_init($key = '', $length = 32)
+    public static function crypto_generichash_init($key = '', $length = self::CRYPTO_GENERICHASH_BYTES)
     {
         if (!is_string($key)) {
             throw new TypeError('Argument 1 must be a string');
@@ -769,6 +769,23 @@ class ParagonIE_Sodium_Compat
 
     /**
      * Perform a key exchange, between a designated client and a server.
+     *
+     * Typically, you would designate one machine to be the client and the
+     * other to be the server. The first two keys are what you'd expect for
+     * scalarmult() below, but the latter two public keys don't swap places.
+     *
+     * | ALICE                          | BOB                                 |
+     * | Client                         | Server                              |
+     * |--------------------------------|-------------------------------------|
+     * | shared = crypto_kx(            | shared = crypto_kx(                 |
+     * |     alice_sk,                  |     bob_sk                          |
+     * |     bob_pk,                    |     alice_pk                        |
+     * |     bob_pk,                    |     bob_pk                          |
+     * |     bob_pk  ,                  |     bob_pk                          |
+     * | )                              |                                     |
+     *
+     * They are used along with the scalarmult product to generate a 256-bit
+     * BLAKE2b hash unique to the client and server keys.
      *
      * @param string $my_secret
      * @param string $their_public

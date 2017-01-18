@@ -33,9 +33,9 @@ class ParagonIE_Sodium_Core_ChaCha20_Ctx extends ParagonIE_Sodium_Core_Util impl
         $this->container[1]  = 0x3320646e;
         $this->container[2]  = 0x79622d32;
         $this->container[3]  = 0x6b206574;
-        $this->container[4]  = self::load_4(self::substr($key,  0, 4));
-        $this->container[5]  = self::load_4(self::substr($key,  4, 4));
-        $this->container[6]  = self::load_4(self::substr($key,  8, 4));
+        $this->container[4]  = self::load_4(self::substr($key, 0, 4));
+        $this->container[5]  = self::load_4(self::substr($key, 4, 4));
+        $this->container[6]  = self::load_4(self::substr($key, 8, 4));
         $this->container[7]  = self::load_4(self::substr($key, 12, 4));
         $this->container[8]  = self::load_4(self::substr($key, 16, 4));
         $this->container[9]  = self::load_4(self::substr($key, 20, 4));

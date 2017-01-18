@@ -200,9 +200,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
             x14 = XOR(x14, LOAD32_LE(m + 56));
             x15 = XOR(x15, LOAD32_LE(m + 60));
             */
-            $x0  ^= self::load_4(self::substr($message,  0, 4));
-            $x1  ^= self::load_4(self::substr($message,  4, 4));
-            $x2  ^= self::load_4(self::substr($message,  8, 4));
+            $x0  ^= self::load_4(self::substr($message, 0, 4));
+            $x1  ^= self::load_4(self::substr($message, 4, 4));
+            $x2  ^= self::load_4(self::substr($message, 8, 4));
             $x3  ^= self::load_4(self::substr($message, 12, 4));
             $x4  ^= self::load_4(self::substr($message, 16, 4));
             $x5  ^= self::load_4(self::substr($message, 20, 4));

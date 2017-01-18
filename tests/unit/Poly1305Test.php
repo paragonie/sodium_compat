@@ -28,7 +28,6 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
      */
     public function testVectorB()
     {
-
         $msg = ParagonIE_Sodium_Core_Util::hex2bin('48656c6c6f20776f726c6421');
         $key = ParagonIE_Sodium_Core_Util::hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
         $this->assertSame(
@@ -47,7 +46,6 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
      */
     public function testVectorC()
     {
-
         $msg = ParagonIE_Sodium_Core_Util::intArrayToString(
             array(
                 0x8e, 0x99, 0x3b, 0x9f, 0x48, 0x68, 0x12, 0x73, 0xc2, 0x96, 0x50, 0xba,
@@ -62,7 +60,8 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
                 0x88, 0xd5, 0xf9, 0xb3, 0x79, 0x73, 0xf6, 0x22, 0xa4, 0x3d, 0x14, 0xa6,
                 0x59, 0x9b, 0x1f, 0x65, 0x4c, 0xb4, 0x5a, 0x74, 0xe3, 0x55, 0xa5
             )
-        );;
+        );
+        ;
         $key = ParagonIE_Sodium_Core_Util::intArrayToString(
             array(
                 0xee, 0xa6, 0xa7, 0x25, 0x1c, 0x1e, 0x72, 0x91, 0x6d, 0x11, 0xc2,

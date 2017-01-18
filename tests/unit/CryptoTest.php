@@ -187,8 +187,6 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
             'Generated different signatures'
         );
-
-
     }
 
     /**

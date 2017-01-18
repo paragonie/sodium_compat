@@ -2,7 +2,6 @@
 
 class ChaCha20Test extends PHPUnit_Framework_TestCase
 {
-
     public function setUp()
     {
         if (!extension_loaded('libsodium')) {
@@ -18,8 +17,8 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
 
         $keystream = ParagonIE_Sodium_Core_ChaCha20::stream(192, $nonce, $key);
 
-        $block1 = ParagonIE_Sodium_Core_Util::substr($keystream,   0, 64);
-        $block2 = ParagonIE_Sodium_Core_Util::substr($keystream,  64, 64);
+        $block1 = ParagonIE_Sodium_Core_Util::substr($keystream, 0, 64);
+        $block2 = ParagonIE_Sodium_Core_Util::substr($keystream, 64, 64);
         $block3 = ParagonIE_Sodium_Core_Util::substr($keystream, 128, 64);
 
         $this->assertSame(

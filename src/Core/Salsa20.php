@@ -26,14 +26,14 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
             $j10 = $x10 = 0x79622d32;
             $j15 = $x15 = 0x6b206574;
         } else {
-            $j0  = $x0  = self::load_4(self::substr($c,  0, 4));
-            $j5  = $x5  = self::load_4(self::substr($c,  4, 4));
-            $j10 = $x10 = self::load_4(self::substr($c,  8, 4));
+            $j0  = $x0  = self::load_4(self::substr($c, 0, 4));
+            $j5  = $x5  = self::load_4(self::substr($c, 4, 4));
+            $j10 = $x10 = self::load_4(self::substr($c, 8, 4));
             $j15 = $x15 = self::load_4(self::substr($c, 12, 4));
         }
-        $j1  = $x1  = self::load_4(self::substr($k,  0, 4));
-        $j2  = $x2  = self::load_4(self::substr($k,  4, 4));
-        $j3  = $x3  = self::load_4(self::substr($k,  8, 4));
+        $j1  = $x1  = self::load_4(self::substr($k, 0, 4));
+        $j2  = $x2  = self::load_4(self::substr($k, 4, 4));
+        $j3  = $x3  = self::load_4(self::substr($k, 8, 4));
         $j4  = $x4  = self::load_4(self::substr($k, 12, 4));
         $j6  = $x6  = self::load_4(self::substr($in, 0, 4));
         $j7  = $x7  = self::load_4(self::substr($in, 4, 4));

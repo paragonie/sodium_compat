@@ -455,9 +455,9 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
-	/**
-	 * @covers ParagonIE_Sodium_Compat::crypto_sign_seed_keypair()
-	 */
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_sign_seed_keypair()
+     */
     public function testSignKeypair()
     {
         $seed = random_bytes(32);
@@ -496,7 +496,6 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             ),
             'Conversion from existing secret key is failing. This is a very bad thing!'
         );
-
     }
 
     public function testSignKeypair2()
@@ -556,7 +555,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex(\Sodium\crypto_sign_detached($message, $secret)),
             bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
             'Generated different signatures'
-        );  
+        );
 
         $this->assertSame(
             $expected,

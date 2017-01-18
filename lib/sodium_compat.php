@@ -384,14 +384,14 @@ if (!is_callable('\\Sodium\\crypto_sign_secretkey')) {
     }
 }
 if (!is_callable('\\Sodium\\crypto_sign_seed_keypair')) {
-	/**
-	 * @param string $seed
-	 * @return string
-	 */
-	function crypto_sign_seed_keypair($seed)
-	{
-		return ParagonIE_Sodium_Compat::crypto_sign_seed_keypair($seed);
-	}
+    /**
+     * @param string $seed
+     * @return string
+     */
+    function crypto_sign_seed_keypair($seed)
+    {
+        return ParagonIE_Sodium_Compat::crypto_sign_seed_keypair($seed);
+    }
 }
 if (!is_callable('\\Sodium\\crypto_sign_verify_detached')) {
     /**

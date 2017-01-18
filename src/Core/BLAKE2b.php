@@ -169,13 +169,19 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     protected static function store64(SplFixedArray $x, $i, SplFixedArray $u)
     {
-        $x[$i]   = ($u[1] & 0xff); $u[1] >>= 8;
-        $x[$i+1] = ($u[1] & 0xff); $u[1] >>= 8;
-        $x[$i+2] = ($u[1] & 0xff); $u[1] >>= 8;
+        $x[$i]   = ($u[1] & 0xff);
+        $u[1] >>= 8;
+        $x[$i+1] = ($u[1] & 0xff);
+        $u[1] >>= 8;
+        $x[$i+2] = ($u[1] & 0xff);
+        $u[1] >>= 8;
         $x[$i+3] = ($u[1] & 0xff);
-        $x[$i+4] = ($u[0] & 0xff); $u[0] >>= 8;
-        $x[$i+5] = ($u[0] & 0xff); $u[0] >>= 8;
-        $x[$i+6] = ($u[0] & 0xff); $u[0] >>= 8;
+        $x[$i+4] = ($u[0] & 0xff);
+        $u[0] >>= 8;
+        $x[$i+5] = ($u[0] & 0xff);
+        $u[0] >>= 8;
+        $x[$i+6] = ($u[0] & 0xff);
+        $u[0] >>= 8;
         $x[$i+7] = ($u[0] & 0xff);
     }
 
@@ -211,7 +217,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     {
         $ctx    = new SplFixedArray(5);
         $ctx[0] = new SplFixedArray(8);   // h
-        $ctx[1] = new SplFixedArray(2);   // t 
+        $ctx[1] = new SplFixedArray(2);   // t
         $ctx[2] = new SplFixedArray(2);   // f
         $ctx[3] = new SplFixedArray(256); // buf
         $ctx[4] = 0;                      // buflen
@@ -261,14 +267,14 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $v[15] = self::xor64($ctx[2][1], self::$iv[7]);
 
         for ($r = 0; $r < 12; ++$r) {
-            $v = self::G($r, 0,  0,  4,  8, 12, $v, $m);
-            $v = self::G($r, 1,  1,  5,  9, 13, $v, $m);
-            $v = self::G($r, 2,  2,  6, 10, 14, $v, $m);
-            $v = self::G($r, 3,  3,  7, 11, 15, $v, $m);
-            $v = self::G($r, 4,  0,  5, 10, 15, $v, $m);
-            $v = self::G($r, 5,  1,  6, 11, 12, $v, $m);
-            $v = self::G($r, 6,  2,  7,  8, 13, $v, $m);
-            $v = self::G($r, 7,  3,  4,  9, 14, $v, $m);
+            $v = self::G($r, 0, 0, 4, 8, 12, $v, $m);
+            $v = self::G($r, 1, 1, 5, 9, 13, $v, $m);
+            $v = self::G($r, 2, 2, 6, 10, 14, $v, $m);
+            $v = self::G($r, 3, 3, 7, 11, 15, $v, $m);
+            $v = self::G($r, 4, 0, 5, 10, 15, $v, $m);
+            $v = self::G($r, 5, 1, 6, 11, 12, $v, $m);
+            $v = self::G($r, 6, 2, 7, 8, 13, $v, $m);
+            $v = self::G($r, 7, 3, 4, 9, 14, $v, $m);
         }
 
         for ($i = 8; $i--;) {
@@ -413,7 +419,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $ctx = self::context();
 
         $p = new SplFixedArray(64);
-        for ($i = 64; --$i;) $p[$i] = 0;
+        for ($i = 64; --$i;) {
+            $p[$i] = 0;
+        }
 
         $p[0] = $outlen; // digest_length
         $p[1] = $klen;   // key_length

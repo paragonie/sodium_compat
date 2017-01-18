@@ -21,14 +21,14 @@ abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Sals
             $x10 = 0x79622d32;
             $x15 = 0x6b206574;
         } else {
-            $x0  = self::load_4(self::substr($c,  0, 4));
-            $x5  = self::load_4(self::substr($c,  4, 4));
-            $x10 = self::load_4(self::substr($c,  8, 4));
+            $x0  = self::load_4(self::substr($c, 0, 4));
+            $x5  = self::load_4(self::substr($c, 4, 4));
+            $x10 = self::load_4(self::substr($c, 8, 4));
             $x15 = self::load_4(self::substr($c, 12, 4));
         }
-        $x1  = self::load_4(self::substr($k,  0, 4));
-        $x2  = self::load_4(self::substr($k,  4, 4));
-        $x3  = self::load_4(self::substr($k,  8, 4));
+        $x1  = self::load_4(self::substr($k, 0, 4));
+        $x2  = self::load_4(self::substr($k, 4, 4));
+        $x3  = self::load_4(self::substr($k, 8, 4));
         $x4  = self::load_4(self::substr($k, 12, 4));
         $x11 = self::load_4(self::substr($k, 16, 4));
         $x12 = self::load_4(self::substr($k, 20, 4));

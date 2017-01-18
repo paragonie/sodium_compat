@@ -48,10 +48,10 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
         /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
         $this->r = array(
-            (int) ((self::load_4(self::substr($key,  0, 4))     ) & 0x3ffffff),
-            (int) ((self::load_4(self::substr($key,  3, 4)) >> 2) & 0x3ffff03),
-            (int) ((self::load_4(self::substr($key,  6, 4)) >> 4) & 0x3ffc0ff),
-            (int) ((self::load_4(self::substr($key,  9, 4)) >> 6) & 0x3f03fff),
+            (int) ((self::load_4(self::substr($key, 0, 4))) & 0x3ffffff),
+            (int) ((self::load_4(self::substr($key, 3, 4)) >> 2) & 0x3ffff03),
+            (int) ((self::load_4(self::substr($key, 6, 4)) >> 4) & 0x3ffc0ff),
+            (int) ((self::load_4(self::substr($key, 9, 4)) >> 6) & 0x3f03fff),
             (int) ((self::load_4(self::substr($key, 12, 4)) >> 8) & 0x00fffff)
         );
 
@@ -158,10 +158,10 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
 
         while ($bytes >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
             /* h += m[i] */
-            $h0 +=  self::load_4(self::substr($message,  0, 4))       & 0x3ffffff;
-            $h1 += (self::load_4(self::substr($message,  3, 4)) >> 2) & 0x3ffffff;
-            $h2 += (self::load_4(self::substr($message,  6, 4)) >> 4) & 0x3ffffff;
-            $h3 += (self::load_4(self::substr($message,  9, 4)) >> 6) & 0x3ffffff;
+            $h0 +=  self::load_4(self::substr($message, 0, 4))       & 0x3ffffff;
+            $h1 += (self::load_4(self::substr($message, 3, 4)) >> 2) & 0x3ffffff;
+            $h2 += (self::load_4(self::substr($message, 6, 4)) >> 4) & 0x3ffffff;
+            $h3 += (self::load_4(self::substr($message, 9, 4)) >> 6) & 0x3ffffff;
             $h4 += (self::load_4(self::substr($message, 12, 4)) >> 8) | $hibit;
 
             /* h *= r */
@@ -205,12 +205,23 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
             );
 
             /* (partial) h %= p */
-                                 $c = $d0 >> 26; $h0 = $d0 & 0x3ffffff;
-            $d1 += $c;           $c = $d1 >> 26; $h1 = $d1 & 0x3ffffff;
-            $d2 += $c;           $c = $d2 >> 26; $h2 = $d2 & 0x3ffffff;
-            $d3 += $c;           $c = $d3 >> 26; $h3 = $d3 & 0x3ffffff;
-            $d4 += $c;           $c = $d4 >> 26; $h4 = $d4 & 0x3ffffff;
-            $h0 += (int) $c * 5; $c = $h0 >> 26; $h0 &= 0x3ffffff;
+                                 $c = $d0 >> 26;
+            $h0 = $d0 & 0x3ffffff;
+            $d1 += $c;
+            $c = $d1 >> 26;
+            $h1 = $d1 & 0x3ffffff;
+            $d2 += $c;
+            $c = $d2 >> 26;
+            $h2 = $d2 & 0x3ffffff;
+            $d3 += $c;
+            $c = $d3 >> 26;
+            $h3 = $d3 & 0x3ffffff;
+            $d4 += $c;
+            $c = $d4 >> 26;
+            $h4 = $d4 & 0x3ffffff;
+            $h0 += (int) $c * 5;
+            $c = $h0 >> 26;
+            $h0 &= 0x3ffffff;
             $h1 += $c;
 
             // Chop off the left 32 bytes.
@@ -260,18 +271,35 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $h3 = (int) $this->h[3];
         $h4 = (int) $this->h[4];
 
-                       $c = $h1 >> 26; $h1 &= 0x3ffffff;
-        $h2 += $c;     $c = $h2 >> 26; $h2 &= 0x3ffffff;
-        $h3 += $c;     $c = $h3 >> 26; $h3 &= 0x3ffffff;
-        $h4 += $c;     $c = $h4 >> 26; $h4 &= 0x3ffffff;
-        $h0 += $c * 5; $c = $h0 >> 26; $h0 &= 0x3ffffff;
+        $c = $h1 >> 26;
+        $h1 &= 0x3ffffff;
+        $h2 += $c;
+        $c = $h2 >> 26;
+        $h2 &= 0x3ffffff;
+        $h3 += $c;
+        $c = $h3 >> 26;
+        $h3 &= 0x3ffffff;
+        $h4 += $c;
+        $c = $h4 >> 26;
+        $h4 &= 0x3ffffff;
+        $h0 += $c * 5;
+        $c = $h0 >> 26;
+        $h0 &= 0x3ffffff;
         $h1 += $c;
 
         /* compute h + -p */
-        $g0 = $h0 +  5; $c = $g0 >> 26; $g0 &= 0x3ffffff;
-        $g1 = $h1 + $c; $c = $g1 >> 26; $g1 &= 0x3ffffff;
-        $g2 = $h2 + $c; $c = $g2 >> 26; $g2 &= 0x3ffffff;
-        $g3 = $h3 + $c; $c = $g3 >> 26; $g3 &= 0x3ffffff;
+        $g0 = $h0 +  5;
+        $c = $g0 >> 26;
+        $g0 &= 0x3ffffff;
+        $g1 = $h1 + $c;
+        $c = $g1 >> 26;
+        $g1 &= 0x3ffffff;
+        $g2 = $h2 + $c;
+        $c = $g2 >> 26;
+        $g2 &= 0x3ffffff;
+        $g3 = $h3 + $c;
+        $c = $g3 >> 26;
+        $g3 &= 0x3ffffff;
         $g4 = ($h4 + $c - (1 << 26)) & 0xffffffff;
 
         /* select h if h < p, or h + -p if h >= p */
@@ -291,7 +319,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $h4 = ($h4 & $mask) | $g4;
 
         /* h = h % (2^128) */
-        $h0 = (($h0      ) | ($h1 << 26)) & 0xffffffff;
+        $h0 = (($h0) | ($h1 << 26)) & 0xffffffff;
         $h1 = (($h1 >>  6) | ($h2 << 20)) & 0xffffffff;
         $h2 = (($h2 >> 12) | ($h3 << 14)) & 0xffffffff;
         $h3 = (($h3 >> 18) | ($h4 <<  8)) & 0xffffffff;
