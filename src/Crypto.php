@@ -39,6 +39,8 @@ abstract class ParagonIE_Sodium_Crypto
     const stream_salsa20_KEYBYTES = 32;
 
     /**
+     * AEAD Decryption with ChaCha20-Poly1305
+     *
      * @param string $message
      * @param string $ad
      * @param string $nonce
@@ -103,6 +105,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * AEAD Encryption with ChaCha20-Poly1305
+     *
      * @param string $message
      * @param string $ad
      * @param string $nonce
