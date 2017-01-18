@@ -129,6 +129,70 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
+    public function testAeadChapolyIetf()
+    {
+        $message = str_repeat("\x00", 128);
+        $key = str_repeat("\x00", 32);
+        $nonce = str_repeat("\x00", 12);
+        $ad = '';
+
+        $pecl = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $compat = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $this->assertSame(bin2hex($pecl), bin2hex($compat), 'Empty test');
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($pecl, $ad, $nonce, $key),
+            'Blank Message decryption'
+        );
+
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        $pecl = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $compat = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $this->assertSame(bin2hex($pecl), bin2hex($compat), 'Static test');
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($pecl, $ad, $nonce, $key),
+            'Static Message decryption'
+        );
+
+        $ad = 'test';
+        $pecl = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $compat = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $this->assertSame(bin2hex($pecl), bin2hex($compat), 'Static test with AD');
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($pecl, $ad, $nonce, $key),
+            'Static Message decryption (with AD)'
+        );
+
+        $key = random_bytes(32);
+        $nonce = random_bytes(12);
+        $ad = '';
+
+        $pecl = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $compat = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $this->assertSame(bin2hex($pecl), bin2hex($compat), 'Random test');
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($pecl, $ad, $nonce, $key),
+            'Random Message decryption'
+        );
+
+        $ad = 'test';
+        $pecl = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $compat = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key);
+        $this->assertSame(bin2hex($pecl), bin2hex($compat), 'Random test with AD');
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($pecl, $ad, $nonce, $key),
+            'Random Message decryption (with AD)'
+        );
+    }
+
+    /**
+     *
+     */
     public function testCryptoAuth()
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";

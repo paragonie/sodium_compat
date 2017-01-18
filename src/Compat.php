@@ -212,6 +212,122 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Authenticated Encryption with Associated Data: Decryption
+     *
+     * Algorithm:
+     *     ChaCha20-Poly1305
+     *
+     * @param string $ciphertext
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     *
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_aead_chacha20poly1305_ietf_decrypt(
+        $ciphertext = '',
+        $assocData = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        if (!is_string($ciphertext)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($assocData)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($key)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_ietf_decrypt')) {
+            return call_user_func(
+                '\\Sodium\\crypto_aead_chacha20poly1305_ietf_decrypt',
+                $ciphertext,
+                $assocData,
+                $nonce,
+                $key
+            );
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_CHACHA20POLY1305_ABYTES) {
+            throw new Error('Message must be at least CRYPTO_AEAD_CHACHA20POLY1305_ABYTES long');
+        }
+        return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_decrypt(
+            $ciphertext,
+            $assocData,
+            $nonce,
+            $key
+        );
+    }
+
+    /**
+     * Authenticated Encryption with Associated Data
+     *
+     * Algorithm:
+     *     ChaCha20-Poly1305
+     *
+     * @param string $plaintext
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     *
+     * @return string
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function crypto_aead_chacha20poly1305_ietf_encrypt(
+        $plaintext = '',
+        $assocData = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        if (!is_string($plaintext)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($assocData)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($key)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::use_fallback('crypto_aead_chacha20poly1305_ietf_encrypt')) {
+            return call_user_func(
+                '\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt',
+                $plaintext,
+                $assocData,
+                $nonce,
+                $key
+            );
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
+            throw new Error('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES) {
+            throw new Error('Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long');
+        }
+        return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt(
+            $plaintext,
+            $assocData,
+            $nonce,
+            $key
+        );
+    }
+
+
+    /**
      * Authenticate a message. Uses symmetric-key cryptography.
      *
      * Algorithm:
