@@ -426,16 +426,16 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return string
+     * @throws TypeError
      */
     public static function xorStrings($a, $b)
     {
-        $aLen = self::strlen($a);
-        $bLen = self::strlen($b);
-        $d = '';
-
-        for ($i = 0; $i < $aLen && $i < $bLen; ++$i) {
-            $d .= self::intToChr(self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]));
+        if (!is_string($a)) {
+            throw new TypeError('Argument 1 must be a string');
         }
-        return $d;
+        if (!is_string($b)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        return $a ^ $b;
     }
 }
