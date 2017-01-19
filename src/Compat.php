@@ -781,7 +781,7 @@ class ParagonIE_Sodium_Compat
      * |     alice_sk,                  |     bob_sk,                         | <- contextual
      * |     bob_pk,                    |     alice_pk,                       | <- contextual
      * |     alice_pk,                  |     alice_pk,                       | <----- static
-     * |     bob_pk,                    |     bob_pk                          | <----- static
+     * |     bob_pk                     |     bob_pk                          | <----- static
      * | )                              | )                                   |
      *
      * They are used along with the scalarmult product to generate a 256-bit
