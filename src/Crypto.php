@@ -14,10 +14,12 @@ abstract class ParagonIE_Sodium_Crypto
     const aead_chacha20poly1305_NSECBYTES = 0;
     const aead_chacha20poly1305_NPUBBYTES = 8;
     const aead_chacha20poly1305_ABYTES = 16;
+
     const aead_chacha20poly1305_IETF_KEYBYTES = 32;
     const aead_chacha20poly1305_IETF_NSECBYTES = 0;
     const aead_chacha20poly1305_IETF_NPUBBYTES = 12;
     const aead_chacha20poly1305_IETF_ABYTES = 16;
+
     const box_curve25519xsalsa20poly1305_SEEDBYTES = 32;
     const box_curve25519xsalsa20poly1305_PUBLICKEYBYTES = 32;
     const box_curve25519xsalsa20poly1305_SECRETKEYBYTES = 32;
@@ -46,7 +48,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $nonce
      * @param string $key
      * @return string
-     * @throws Exception
+     * @throws Error
      */
     public static function aead_chacha20poly1305_decrypt(
         $message = '',
@@ -84,7 +86,7 @@ abstract class ParagonIE_Sodium_Crypto
         $computed_mac = $state->finish();
 
         if (!ParagonIE_Sodium_Core_Util::verify_16($computed_mac, $mac)) {
-            throw new Exception('Invalid MAC');
+            throw new Error('Invalid MAC');
         }
         return ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
             $ciphertext,
@@ -145,7 +147,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $nonce
      * @param string $key
      * @return string
-     * @throws Exception
+     * @throws Error
      */
     public static function aead_chacha20poly1305_ietf_decrypt(
         $message = '',
@@ -190,7 +192,7 @@ abstract class ParagonIE_Sodium_Crypto
         $computed_mac = $state->finish();
 
         if (!ParagonIE_Sodium_Core_Util::verify_16($computed_mac, $mac)) {
-            throw new Exception('Invalid MAC');
+            throw new Error('Invalid MAC');
         }
         return ParagonIE_Sodium_Core_ChaCha20::ietfStreamXorIc(
             $ciphertext,
@@ -405,6 +407,7 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * @param string $keypair
      * @return string
+     * @throws RangeException
      */
     public static function box_secretkey($keypair)
     {
@@ -468,7 +471,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string|null $key
      * @param int $outlen
      * @return string
-     * @throws Exception
+     * @throws RangeException
      */
     public static function generichash($message, $key = '', $outlen = 32)
     {
@@ -478,7 +481,7 @@ abstract class ParagonIE_Sodium_Crypto
         if (!empty($key)) {
             $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);
             if ($k->count() > ParagonIE_Sodium_Core_BLAKE2b::KEYBYTES) {
-                throw new Exception('Invalid key size');
+                throw new RangeException('Invalid key size');
             }
         }
 
@@ -500,11 +503,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $ctx
      * @param int $outlen
      * @return string
+     * @throws TypeError
      */
     public static function generichash_final($ctx, $outlen = 32)
     {
         if (!is_string($ctx)) {
-            throw new InvalidArgumentException('Context must be a string');
+            throw new TypeError('Context must be a string');
         }
         $out = new SplFixedArray($outlen);
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
@@ -522,21 +526,22 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $key
      * @param int $outputLength
      * @return string
-     * @throws Exception
+     * @throws RangeException
      */
     public static function generichash_init($key = '', $outputLength = 32)
     {
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
-
         $k = null;
+
         if (!empty($key)) {
             $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);
             if ($k->count() > ParagonIE_Sodium_Core_BLAKE2b::KEYBYTES) {
-                throw new Exception('Invalid key size');
+                throw new RangeException('Invalid key size');
             }
         }
 
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outputLength);
+
         return ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx);
     }
 
@@ -550,9 +555,13 @@ abstract class ParagonIE_Sodium_Crypto
     public static function generichash_update($ctx, $message)
     {
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
+
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
+
         $in = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($message);
+
         ParagonIE_Sodium_Core_BLAKE2b::update($context, $in, $in->count());
+
         return ParagonIE_Sodium_Core_BLAKE2b::contextToString($context);
     }
 
@@ -565,7 +574,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $server_pk
      * @return string
      */
-    public static function kx($my_sk, $their_pk, $client_pk, $server_pk)
+    public static function keyExchange($my_sk, $their_pk, $client_pk, $server_pk)
     {
         return self::generichash(
             self::scalarmult($my_sk, $their_pk) .
@@ -667,7 +676,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $nonce
      * @param string $key
      * @return string
-     * @throws Exception
+     * @throws Error
      */
     public static function secretbox_open($ciphertext, $nonce, $key)
     {
@@ -694,7 +703,7 @@ abstract class ParagonIE_Sodium_Crypto
             } catch (Error $ex) {
                 $subkey = null;
             }
-            throw new Exception('Invalid MAC');
+            throw new Error('Invalid MAC');
         }
 
         $m = ParagonIE_Sodium_Core_Util::xorStrings(

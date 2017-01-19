@@ -873,7 +873,7 @@ class ParagonIE_Sodium_Compat
                 $server_public
             );
         }
-        return ParagonIE_Sodium_Crypto::kx(
+        return ParagonIE_Sodium_Crypto::keyExchange(
             $my_secret,
             $their_public,
             $client_public,
