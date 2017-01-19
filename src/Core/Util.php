@@ -344,11 +344,8 @@ abstract class ParagonIE_Sodium_Core_Util
         if (!is_string($str)) {
             throw new InvalidArgumentException('String expected');
         }
-        if (function_exists('mb_strlen')) {
-            return mb_strlen($str, '8bit');
-        } else {
-            return strlen($str);
-        }
+
+        return self::isMbStringOverride() ? mb_strlen($str, '8bit') : strlen($str);
     }
 
     /**
@@ -367,25 +364,18 @@ abstract class ParagonIE_Sodium_Core_Util
         if (!is_string($str)) {
             throw new InvalidArgumentException('String expected');
         }
-        if (PHP_VERSION_ID < 50400 && $length === null) {
-            $length = self::strlen($str);
-        }
-        if (function_exists('mb_substr')) {
-            // $length calculation above might result in a 0-length string
-            if ($length === 0) {
-                return '';
-            }
-            return mb_substr($str, $start, $length, '8bit');
-        }
+
+        $length = isset($length) ? (int) $length : self::strlen($str);
+
         if ($length === 0) {
             return '';
         }
-        // Unlike mb_substr(), substr() doesn't accept NULL for length
-        if ($length !== null) {
-            return substr($str, $start, $length);
-        } else {
-            return substr($str, $start);
+
+        if (self::isMbStringOverride()) {
+            return mb_substr($str, $start, $length, '8bit');
         }
+
+        return substr($str, $start, $length);
     }
 
     /**
@@ -437,5 +427,21 @@ abstract class ParagonIE_Sodium_Core_Util
             $d .= self::intToChr(self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]));
         }
         return $d;
+    }
+
+    /**
+     * Returns whether or not mbstring.func_overload is in effect.
+     *
+     * @return bool
+     */
+    protected function isMbStringOverride()
+    {
+        static $mbstring;
+
+        if (!isset($mbstring)) {
+            $mbstring = extension_loaded('mbstring') && (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
+        }
+
+        return $mbstring;
     }
 }
