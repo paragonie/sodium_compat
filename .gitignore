@@ -1,3 +1,4 @@
 /.idea/
 /tests export-ignore
 /vendor/
+/.php_cs.cache

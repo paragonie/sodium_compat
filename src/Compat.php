@@ -780,7 +780,7 @@ class ParagonIE_Sodium_Compat
      * | shared = crypto_kx(            | shared = crypto_kx(                 |
      * |     alice_sk,                  |     bob_sk                          |
      * |     bob_pk,                    |     alice_pk                        |
-     * |     bob_pk,                    |     bob_pk                          |
+     * |     alice_pk,                  |     alice_pk                        |
      * |     bob_pk  ,                  |     bob_pk                          |
      * | )                              |                                     |
      *
