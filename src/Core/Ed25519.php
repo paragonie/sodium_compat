@@ -202,7 +202,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             $d |= self::chrToInt($pk[$i]);
         }
         if ($d === 0) {
-            throw new \Exception('All zero public key');
+            throw new Exception('All zero public key');
         }
 
         $hDigest = hash('sha512', self::substr($sig, 0, 32) . $pk . $message, true);
