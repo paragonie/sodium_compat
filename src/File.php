@@ -15,10 +15,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     public static function sign_file($filePath, $secretKey)
     {
         $fp = fopen($filePath, 'rb');
-        if ($fp === false) {
+        $size = filesize($filePath);
+        if ($size === false || !is_resource($fp)) {
             throw new Error('Could not open file for reading');
         }
-        $size = filesize($filePath);
         # crypto_hash_sha512(az, sk, 32);
         $az = hash('sha512', ParagonIE_Sodium_Core_Ed25519::substr($secretKey, 0, 32), true);
 
@@ -85,10 +85,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     public static function verify_file($sig, $filePath, $publicKey)
     {
         $fp = fopen($filePath, 'rb');
-        if ($fp === false) {
+        $size = filesize($filePath);
+        if ($size === false || !is_resource($fp)) {
             throw new Error('Could not open file for reading');
         }
-        $size = filesize($filePath);
         if (self::strlen($sig) < 64) {
             throw new Exception('Signature is too short');
         }
