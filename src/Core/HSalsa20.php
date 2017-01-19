@@ -8,6 +8,9 @@ abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Sals
     /**
      * Calculate an hsalsa20 hash of a single block
      *
+     * Hsalsa20 doesn't have a counter and will never be used for more than
+     * one block (used to derive a subkey for xsalsa20).
+     *
      * @param string $in
      * @param string $k
      * @param string|null $c

@@ -2,6 +2,8 @@
 
 /**
  * Class ParagonIE_SodiumCompat_Core_SipHash
+ *
+ * Only uses 32-bit arithmetic, while the original SipHash used 64-bit integers
  */
 class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 {

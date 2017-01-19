@@ -12,6 +12,7 @@ class ParagonIE_Sodium_Core_ChaCha20_IetfCtx extends ParagonIE_Sodium_Core_ChaCh
      * @param string $iv      Initialization Vector (a.k.a. nonce).
      * @param string $counter The initial counter value.
      *                        Defaults to 4 0x00 bytes.
+     * @throws InvalidArgumentException
      */
     public function __construct($key = '', $iv = '', $counter = '')
     {

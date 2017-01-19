@@ -2,6 +2,8 @@
 
 /**
  * Class ParagonIE_Sodium_Core_Curve25519_H
+ *
+ * This just contains the constants in the ref10/base.h file
  */
 class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
 {

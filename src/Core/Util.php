@@ -10,9 +10,15 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $string
      * @return int
+     * @throws RangeException
      */
     public static function load_3($string)
     {
+        if (self::strlen($string) < 3) {
+            throw new RangeException(
+                'String must be 3 bytes or more; ' . self::strlen($string) . ' given.'
+            );
+        }
         $result = self::chrToInt($string[0]);
         $result |= self::chrToInt($string[1]) << 8;
         $result |= self::chrToInt($string[2]) << 16;
@@ -24,12 +30,14 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $string
      * @return int
-     * @throws Exception
+     * @throws RangeException
      */
     public static function load_4($string)
     {
         if (self::strlen($string) < 4) {
-            throw new Exception('String must be 4 bytes or more; ' . self::strlen($string) . ' given.');
+            throw new RangeException(
+                'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
+            );
         }
         $result  = (self::chrToInt($string[0]) & 0xff);
         $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
@@ -80,7 +88,7 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Stores a 64-bit integer as an string.
+     * Stores a 64-bit integer as an string, treating it as little-endian.
      *
      * @param int $int
      * @return string
@@ -239,7 +247,7 @@ abstract class ParagonIE_Sodium_Core_Util
             $c_alpha0 = (($c_alpha - 10) ^ ($c_alpha - 16)) >> 8;
             if (($c_num0 | $c_alpha0) === 0) {
                 throw new RangeException(
-                    'hexEncode() only expects hexadecimal characters'
+                    'hex2bin() only expects hexadecimal characters'
                 );
             }
             $c_val = ($c_num0 & $c_num) | ($c_alpha & $c_alpha0);
@@ -280,7 +288,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * Turn a string into an array of integers
      *
      * @param string $string
-     * @return array<int, mixed>
+     * @return array<int, int>
      */
     public static function stringToIntArray($string)
     {
@@ -338,11 +346,12 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $str
      * @return int
+     * @throws TypeError
      */
     public static function strlen($str)
     {
         if (!is_string($str)) {
-            throw new InvalidArgumentException('String expected');
+            throw new TypeError('String expected');
         }
         if (function_exists('mb_strlen')) {
             return mb_strlen($str, '8bit');
@@ -360,12 +369,12 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param int $start
      * @param int $length
      * @return string
-     * @throws InvalidArgumentException
+     * @throws TypeError
      */
     public static function substr($str, $start = 0, $length = null)
     {
         if (!is_string($str)) {
-            throw new InvalidArgumentException('String expected');
+            throw new TypeError('String expected');
         }
         if (PHP_VERSION_ID < 50400 && $length === null) {
             $length = self::strlen($str);

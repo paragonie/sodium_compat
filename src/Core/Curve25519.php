@@ -313,6 +313,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * h = f * g
      *
+     * @security Is multiplication a source of timing leaks? If so, can we do
+     *           anything to prevent that from happening?
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
      * @return ParagonIE_Sodium_Core_Curve25519_Fe

@@ -22,7 +22,9 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
         $state = new ParagonIE_Sodium_Core_Poly1305_State(
             self::substr($key, 0, 32)
         );
-        return $state->update($m)->finish();
+        return $state
+            ->update($m)
+            ->finish();
     }
 
     /**
@@ -41,7 +43,9 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
         $state = new ParagonIE_Sodium_Core_Poly1305_State(
             self::substr($key, 0, 32)
         );
-        $calc = $state->update($m)->finish();
+        $calc = $state
+            ->update($m)
+            ->finish();
         return self::verify_16($calc, $mac);
     }
 }
