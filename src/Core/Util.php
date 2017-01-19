@@ -354,9 +354,11 @@ abstract class ParagonIE_Sodium_Core_Util
             throw new TypeError('String expected');
         }
 
-        return self::isMbStringOverride()
-            ? mb_strlen($str, '8bit')
-            : strlen($str);
+        return (int) (
+            self::isMbStringOverride()
+                ? mb_strlen($str, '8bit')
+                : strlen($str)
+        );
     }
 
     /**
@@ -390,7 +392,7 @@ abstract class ParagonIE_Sodium_Core_Util
         } else {
             $sub = substr($str, $start, $length);
         }
-        if ($sub === false) {
+        if (!is_string($sub)) {
             return '';
         }
         return $sub;
