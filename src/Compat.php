@@ -778,11 +778,11 @@ class ParagonIE_Sodium_Compat
      * | Client                         | Server                              |
      * |--------------------------------|-------------------------------------|
      * | shared = crypto_kx(            | shared = crypto_kx(                 |
-     * |     alice_sk,                  |     bob_sk                          |
-     * |     bob_pk,                    |     alice_pk                        |
-     * |     alice_pk,                  |     alice_pk                        |
-     * |     bob_pk  ,                  |     bob_pk                          |
-     * | )                              |                                     |
+     * |     alice_sk,                  |     bob_sk,                         | <- contextual
+     * |     bob_pk,                    |     alice_pk,                       | <- contextual
+     * |     alice_pk,                  |     alice_pk,                       | <----- static
+     * |     bob_pk,                    |     bob_pk                          | <----- static
+     * | )                              | )                                   |
      *
      * They are used along with the scalarmult product to generate a 256-bit
      * BLAKE2b hash unique to the client and server keys.
