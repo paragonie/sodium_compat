@@ -434,7 +434,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @return bool
      */
-    protected function isMbStringOverride()
+    protected static function isMbStringOverride()
     {
         static $mbstring;
 
