@@ -322,8 +322,8 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             );
 
             $this->assertSame(
-                strlen($sealed_to_alice1),
-                strlen($sealed_to_alice2),
+                ParagonIE_Sodium_Core_Util::strlen($sealed_to_alice1),
+                ParagonIE_Sodium_Core_Util::strlen($sealed_to_alice2),
                 'String length should not differ'
             );
 
@@ -606,11 +606,11 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
         $this->assertSame(
-            substr(
+            ParagonIE_Sodium_Core_Util::substr(
                 bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
                 0, 32
             ),
-            substr(
+            ParagonIE_Sodium_Core_Util::substr(
                 bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
                 0, 32
             ),

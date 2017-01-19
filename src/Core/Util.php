@@ -354,7 +354,9 @@ abstract class ParagonIE_Sodium_Core_Util
             throw new TypeError('String expected');
         }
 
-        return self::isMbStringOverride() ? mb_strlen($str, '8bit') : strlen($str);
+        return self::isMbStringOverride()
+            ? mb_strlen($str, '8bit')
+            : strlen($str);
     }
 
     /**
@@ -374,17 +376,24 @@ abstract class ParagonIE_Sodium_Core_Util
             throw new TypeError('String expected');
         }
 
-        $length = isset($length) ? (int) $length : self::strlen($str);
-
         if ($length === 0) {
             return '';
         }
 
         if (self::isMbStringOverride()) {
-            return mb_substr($str, $start, $length, '8bit');
+            if (PHP_VERSION_ID < 50400 && $length === null) {
+                $length = self::strlen($str);
+            }
+            $sub = mb_substr($str, $start, $length, '8bit');
+        } elseif ($length === null) {
+            $sub = substr($str, $start);
+        } else {
+            return substr($str, $start, $length);
         }
-
-        return substr($str, $start, $length);
+        if ($sub === false) {
+            return '';
+        }
+        return $sub;
     }
 
     /**
@@ -445,10 +454,12 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     protected static function isMbStringOverride()
     {
-        static $mbstring;
+        static $mbstring = null;
 
-        if (!isset($mbstring)) {
-            $mbstring = extension_loaded('mbstring') && (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
+        if ($mbstring === null) {
+            $mbstring = extension_loaded('mbstring')
+                &&
+            (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
         }
 
         return $mbstring;
