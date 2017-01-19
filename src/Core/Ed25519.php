@@ -9,6 +9,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     const SEED_BYTES = 32;
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @return string (96 bytes)
      */
     public static function keypair()
@@ -21,6 +23,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $pk
      * @param string $sk
      * @param string $seed
@@ -37,6 +41,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $keypair
      * @return string
      */
@@ -49,6 +55,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $keypair
      * @return string
      */
@@ -61,6 +69,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $sk
      * @return string
      */
@@ -77,6 +87,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $sk
      * @return string
      */
@@ -88,6 +100,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -99,6 +113,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $pk
      * @return string
@@ -115,6 +131,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -175,6 +193,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $sig
      * @param string $message
      * @param string $pk
@@ -217,6 +237,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $S
      * @return bool
      * @throws Exception

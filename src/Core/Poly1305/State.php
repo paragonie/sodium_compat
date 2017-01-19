@@ -37,6 +37,9 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
 
     /**
      * ParagonIE_Sodium_Core_Poly1305_State constructor.
+     *
+     * @internal You should not use this directly from another application
+     *
      * @param string $key
      */
     public function __construct($key = '')
@@ -71,6 +74,8 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @return self
      */
@@ -129,6 +134,8 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param int $bytes
      * @return self
@@ -243,6 +250,8 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @return string
      */
     public function finish()

@@ -27,6 +27,9 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_Cached
 
     /**
      * ParagonIE_Sodium_Core_Curve25519_Ge_Cached constructor.
+     *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $YplusX
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $YminusX
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $Z

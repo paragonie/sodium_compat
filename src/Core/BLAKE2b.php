@@ -37,6 +37,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * Turn two 32-bit integers into a fixed array representing a 64-bit integer.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $high
      * @param int $low
      * @return SplFixedArray
@@ -53,6 +55,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * Convert an arbitrary number into an SplFixedArray of two 32-bit integers
      * that represents a 64-bit integer.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $num
      * @return SplFixedArray
      */
@@ -66,6 +70,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * Adds two 64-bit integers together, returning their sum as a SplFixedArray
      * containing two 32-bit integers (representing a 64-bit integer).
      *
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @return SplFixedArray
@@ -77,6 +83,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @param SplFixedArray $z
@@ -88,6 +96,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @return SplFixedArray
@@ -111,6 +121,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param int $c
      * @return SplFixedArray
@@ -141,6 +153,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @return int
      */
@@ -150,6 +164,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param int $i
      * @return SplFixedArray
@@ -162,6 +178,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $x
      * @param int $i
      * @param SplFixedArray $u
@@ -187,6 +205,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 
     /**
      * This just sets the $iv static variable.
+     *
+     * @internal You should not use this directly from another application
+     *
      * @return void
      */
     public static function pseudoConstructor()
@@ -210,6 +231,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 
     /**
      * Returns a fresh BLAKE2 context.
+     *
+     * @internal You should not use this directly from another application
      *
      * @return SplFixedArray
      */
@@ -239,6 +262,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $ctx
      * @param SplFixedArray $buf
      * @return void
@@ -285,6 +310,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $r
      * @param int $i
      * @param int $a
@@ -309,6 +336,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $ctx
      * @param int $inc
      * @return void
@@ -323,6 +352,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $ctx
      * @param SplFixedArray $p
      * @param int $plen
@@ -364,6 +395,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray $ctx
      * @param SplFixedArray $out
      * @return SplFixedArray
@@ -396,6 +429,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray|null $key
      * @param int $outlen
      * @return SplFixedArray
@@ -450,6 +485,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * Convert a string into an SplFixedArray of integers
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $str
      * @return SplFixedArray
      */
@@ -461,6 +498,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 
     /**
      * Convert an SplFixedArray of integers into a string
+     *
+     * @internal You should not use this directly from another application
      *
      * @param SplFixedArray $a
      * @return string
@@ -477,6 +516,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param SplFixedArray[SplFixedArray] $ctx
      * @return string
      */
@@ -512,6 +553,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * Creates an SplFixedArray containing other SplFixedArray elements, from
      * a string (compatible with \Sodium\crypto_generichash_{init, update, final})
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $string
      * @return SplFixedArray

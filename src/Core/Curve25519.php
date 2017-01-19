@@ -14,6 +14,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Get a field element of size 10 with a value of 0
      *
+     * @internal You should not use this directly from another application
+     *
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
     public static function fe_0()
@@ -34,6 +36,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
     /**
      * Get a field element of size 10 with a value of 1
+     *
+     * @internal You should not use this directly from another application
      *
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
@@ -56,6 +60,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Add two field elements.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -73,6 +79,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
     /**
      * Constant-time conditional move.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
@@ -96,6 +104,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Create a copy of a field element.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
@@ -108,6 +118,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Give: 32-byte string.
      * Receive: A field element object to use for internal calculations.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $s
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -179,6 +191,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
     /**
      * Convert a field element to a byte string.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $h
      * @return string
@@ -283,6 +297,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Is a field element negative? (1 = yes, 0 = no. Used in calculations.)
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return int
      */
@@ -294,6 +310,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
     /**
      * Returns 0 if this field element results in all NUL bytes.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return bool
@@ -312,6 +330,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * Multiply two field elements
      *
      * h = f * g
+     *
+     * @internal You should not use this directly from another application
      *
      * @security Is multiplication a source of timing leaks? If so, can we do
      *           anything to prevent that from happening?
@@ -533,6 +553,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * h = -f
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
@@ -549,6 +571,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * Square a field element
      *
      * h = f * f
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -709,6 +733,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * Square and double a field element
      *
      * h = 2 * f * f
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -877,6 +903,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $Z
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
@@ -933,6 +961,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @ref https://github.com/jedisct1/libsodium/blob/68564326e1e9dc57ef03746f85734232d20ca6fb/src/libsodium/crypto_core/curve25519/ref10/curve25519_ref10.c#L1054-L1106
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $z
@@ -1058,6 +1088,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * Postconditions:
      * |h| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -1085,6 +1117,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * r = p + q
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Cached $q
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
@@ -1109,6 +1143,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @ref https://github.com/jedisct1/libsodium/blob/157c4a80c13b117608aeae12178b2d38825f9f8f/src/libsodium/crypto_core/curve25519/ref10/curve25519_ref10.c#L1185-L1215
      * @param string $a
      * @return array<int, mixed>
@@ -1156,6 +1192,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $s
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
@@ -1240,6 +1278,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $R
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $q
@@ -1266,6 +1306,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $R
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $q
@@ -1293,6 +1335,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
@@ -1306,6 +1350,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
@@ -1320,6 +1366,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
     public static function ge_p2_0()
@@ -1332,6 +1380,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P2 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
      */
@@ -1353,6 +1403,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
     public static function ge_p3_0()
@@ -1366,6 +1418,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_Cached
      */
@@ -1384,6 +1438,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
@@ -1397,6 +1453,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $h
      * @return string
      */
@@ -1413,6 +1471,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
      */
@@ -1435,6 +1495,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $b
      * @param int $c
      * @return int
@@ -1445,6 +1507,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $char
      * @return int (1 = yes, 0 = no)
      */
@@ -1462,6 +1526,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
     /**
      * Conditional move
+     *
+     * @internal You should not use this directly from another application
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $t
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $u
@@ -1484,6 +1550,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $pos
      * @param int $b
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_Precomp
@@ -1534,6 +1602,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * r = p - q
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_Cached $q
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
@@ -1578,6 +1648,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $a
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A
      * @param string $b
@@ -1705,6 +1777,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $a
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
@@ -1757,6 +1831,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Calculates (ab + c) mod l
      * where l = 2^252 + 27742317777372353535851937790883648493
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $a
      * @param string $b
@@ -2186,6 +2262,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $s
      * @return string
      */

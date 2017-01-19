@@ -8,6 +8,8 @@
 class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 {
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int[] $v
      * @return int[]
      */
@@ -77,6 +79,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
     /**
      * Add two 32 bit integers representing a 64-bit integer.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int[] $a
      * @param int[] $b
      * @return array<int, mixed>
@@ -93,6 +97,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $int0
      * @param int $int1
      * @param int $c
@@ -137,6 +143,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      *     0 => 0xDEADBEEF,
      *     1 => 0xAB10C92D
      * ].
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $in
      * @param string $key

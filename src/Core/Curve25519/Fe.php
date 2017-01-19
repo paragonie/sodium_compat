@@ -27,6 +27,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param array $array
      * @param bool $save_indexes
      * @return self
@@ -55,6 +57,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param mixed $offset
      * @param mixed $value
      * @return void
@@ -72,6 +76,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param mixed $offset
      * @return bool
      */
@@ -81,6 +87,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param mixed $offset
      * @return void
      */
@@ -90,6 +98,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param mixed $offset
      * @return mixed|null
      */
@@ -101,6 +111,8 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @return array
      */
     public function __debugInfo()

@@ -11,6 +11,8 @@ abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Sals
      * Hsalsa20 doesn't have a counter and will never be used for more than
      * one block (used to derive a subkey for xsalsa20).
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $in
      * @param string $k
      * @param string|null $c

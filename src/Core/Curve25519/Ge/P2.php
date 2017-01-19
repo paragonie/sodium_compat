@@ -23,6 +23,8 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_P2
     /**
      * ParagonIE_Sodium_Core_Curve25519_Ge_P2 constructor.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $x
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $y
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $z

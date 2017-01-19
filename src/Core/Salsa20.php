@@ -10,6 +10,8 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     /**
      * Calculate an salsa20 hash of a single block
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $in
      * @param string $k
      * @param string|null $c
@@ -122,6 +124,8 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $len
      * @param string $nonce
      * @param string $key
@@ -162,6 +166,8 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $m
      * @param string $n
      * @param int $ic
@@ -219,6 +225,8 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $nonce
      * @param string $key
@@ -237,6 +245,8 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $u
      * @param int $c
      * @return int

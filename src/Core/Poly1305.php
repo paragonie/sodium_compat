@@ -8,6 +8,8 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
     const BLOCK_SIZE = 16;
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $m
      * @param string $key
      * @return string
@@ -28,6 +30,8 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $mac
      * @param string $m
      * @param string $key

@@ -8,6 +8,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Load a 3 character substring into an integer
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $string
      * @return int
      * @throws RangeException
@@ -27,6 +29,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Load a 4 character substring into an integer
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $string
      * @return int
@@ -49,6 +53,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Store a 24-bit integer into a string, treating it as big-endian.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $int
      * @return string
      */
@@ -61,6 +67,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Store a 32-bit integer into a string, treating it as big-endian.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param int $int
      * @return string
@@ -76,6 +84,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Store a 32-bit integer into a string, treating it as little-endian.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $int
      * @return string
      */
@@ -89,6 +99,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Stores a 64-bit integer as an string, treating it as little-endian.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param int $int
      * @return string
@@ -124,6 +136,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $bin_string (raw binary)
      * @return string
      */
@@ -148,6 +162,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks, returning uppercase letters (as per RFC 4648)
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $bin_string (raw binary)
      * @return string
      */
@@ -170,6 +186,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Compares two strings.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $left
      * @param string $right
@@ -198,6 +216,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $left
      * @param string $right
      * @return int
@@ -213,6 +233,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Convert a hexadecimal string into a binary string without cache-timing
      * leaks
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $hexString
      * @param bool $strictPadding
@@ -264,6 +286,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Cache-timing-safe variant of ord()
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $chr
      * @return int
      */
@@ -276,6 +300,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Cache-timing-safe variant of ord()
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $int
      * @return string
      */
@@ -286,6 +312,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Turn a string into an array of integers
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $string
      * @return array<int, int>
@@ -304,6 +332,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Turn an array of integers into a string
      *
+     * @internal You should not use this directly from another application
+     *
      * @param array<int, int> $ints
      * @return string
      */
@@ -320,6 +350,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Convert any arbitrary numbers into two 32-bit integers that represent
      * a 64-bit integer.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param int|float $num
      * @return array<int, int>
@@ -342,6 +374,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Safe string length
      *
+     * @internal You should not use this directly from another application
+     *
      * @ref mbstring.func_overload
      *
      * @param string $str
@@ -363,6 +397,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Safe substring
+     *
+     * @internal You should not use this directly from another application
      *
      * @ref mbstring.func_overload
      *
@@ -401,6 +437,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Compare a 16-character byte string in constant time.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $a
      * @param string $b
      * @return bool
@@ -417,6 +455,8 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Compare a 32-character byte string in constant time.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param string $a
      * @param string $b
      * @return bool
@@ -432,6 +472,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Calculate $a ^ $b for two strings.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param string $a
      * @param string $b
@@ -451,6 +493,8 @@ abstract class ParagonIE_Sodium_Core_Util
 
     /**
      * Returns whether or not mbstring.func_overload is in effect.
+     *
+     * @internal You should not use this directly from another application
      *
      * @return bool
      */

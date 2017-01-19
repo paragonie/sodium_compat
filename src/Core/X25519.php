@@ -8,6 +8,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     /**
      * Alters the objects passed to this method in place.
      *
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $g
      * @param int $b
@@ -72,6 +74,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
@@ -129,6 +133,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $n
      * @param string $p
      * @return string
@@ -246,6 +252,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $edwardsY
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $edwardsZ
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
@@ -261,6 +269,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $n
      * @return string
      * @throws TypeError

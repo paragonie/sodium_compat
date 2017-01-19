@@ -43,6 +43,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * AEAD Decryption with ChaCha20-Poly1305
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $message
      * @param string $ad
      * @param string $nonce
@@ -99,6 +101,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * AEAD Encryption with ChaCha20-Poly1305
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $message
      * @param string $ad
      * @param string $nonce
@@ -141,6 +145,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * AEAD Decryption with ChaCha20-Poly1305, IETF mode (96-bit nonce)
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $message
      * @param string $ad
@@ -205,6 +211,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * AEAD Encryption with ChaCha20-Poly1305, IETF mode (96-bit nonce)
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $message
      * @param string $ad
      * @param string $nonce
@@ -251,6 +259,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * HMAC-SHA-512-256 (a.k.a. the leftmost 256 bits of HMAC-SHA-512)
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $message
      * @param string $key
      * @return string
@@ -267,6 +277,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * HMAC-SHA-512-256 validation. Constant-time via hash_equals().
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $mac
      * @param string $message
      * @param string $key
@@ -282,6 +294,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * X25519 key exchange followed by Xsalsa20Poly1305 symmetric encryption
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $plaintext
      * @param string $nonce
@@ -303,6 +317,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * X25519-Xsalsa20-Poly1305 with one ephemeral X25519 keypair.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $message
      * @param string $publicKey
@@ -336,6 +352,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Opens a message encrypted via box_seal().
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $message
      * @param string $keypair
@@ -371,6 +389,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Used by crypto_box() to get the crypto_secretbox() key.
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $sk
      * @param string $pk
      * @return string
@@ -384,6 +404,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @return string
      */
     public static function box_keypair()
@@ -394,6 +416,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $sKey
      * @param string $pKey
      * @return string
@@ -405,6 +429,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $keypair
      * @return string
      * @throws RangeException
@@ -418,6 +444,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $keypair
      * @return string
      * @throws RangeException
@@ -431,6 +459,8 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $sKey
      * @return string
      * @throws RangeException
@@ -445,6 +475,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Decrypt a message encrypted with box().
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $ciphertext
      * @param string $nonce
@@ -466,6 +498,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Calculate a BLAKE2b hash.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $message
      * @param string|null $key
@@ -500,6 +534,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Finalize a BLAKE2b hashing context, returning the hash.
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $ctx
      * @param int $outlen
      * @return string
@@ -522,6 +558,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Initialize a hashing context for BLAKE2b.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $key
      * @param int $outputLength
@@ -548,6 +586,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Update a hashing context for BLAKE2b with $message
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $ctx
      * @param string $message
      * @return string
@@ -568,6 +608,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Libsodium's crypto_kx().
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $my_sk
      * @param string $their_pk
      * @param string $client_pk
@@ -585,6 +627,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * ECDH over Curve25519
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $sKey
      * @param string $pKey
@@ -609,6 +653,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Xsalsa20-Poly1305 authenticated symmetric-key encryption.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $plaintext
      * @param string $nonce
@@ -672,6 +718,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Decrypt a ciphertext generated via secretbox().
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $ciphertext
      * @param string $nonce
      * @param string $key
@@ -727,6 +775,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Detached Ed25519 signature.
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $message
      * @param string $sk
      * @return string
@@ -738,6 +788,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Attached Ed25519 signature. (Returns a signed message.)
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $message
      * @param string $sk
@@ -751,6 +803,8 @@ abstract class ParagonIE_Sodium_Crypto
     /**
      * Opens a signed message. If valid, returns the message.
      *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
      * @param string $signedMessage
      * @param string $pk
      * @return string
@@ -762,6 +816,8 @@ abstract class ParagonIE_Sodium_Crypto
 
     /**
      * Verify a detached signature of a given message and public key.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $signature
      * @param string $message

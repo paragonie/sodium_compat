@@ -8,6 +8,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     /**
      * Bitwise left rotation
      *
+     * @internal You should not use this directly from another application
+     *
      * @param int $v
      * @param int $n
      * @return int
@@ -23,6 +25,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
 
     /**
      * The ChaCha20 quarter round function. Works on four 32-bit integers.
+     *
+     * @internal You should not use this directly from another application
      *
      * @param int $a
      * @param int $b
@@ -51,6 +55,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param ParagonIE_Sodium_Core_ChaCha20_Ctx $ctx
      * @param string $message
      *
@@ -285,6 +291,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $len
      * @param string $nonce
      * @param string $key
@@ -299,6 +307,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param int $len
      * @param string $nonce
      * @param string $key
@@ -313,6 +323,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $nonce
      * @param string $key
@@ -328,6 +340,8 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @internal You should not use this directly from another application
+     *
      * @param string $message
      * @param string $nonce
      * @param string $key
