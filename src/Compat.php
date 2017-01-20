@@ -1412,7 +1412,7 @@ class ParagonIE_Sodium_Compat
             throw new TypeError('Argument 1 must be a string');
         }
         if (self::use_fallback('memzero')) {
-            call_user_func('\\Sodium\\memzero', $var);
+            @call_user_func('\\Sodium\\memzero', $var);
             return;
         }
         // This is the best we can do.

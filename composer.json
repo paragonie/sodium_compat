@@ -1,7 +1,30 @@
 {
   "name": "paragonie/sodium_compat",
   "description": "Pure PHP implementation of libsodium; uses the PHP extension if it exists",
-  "keywords": ["PHP", "cryptography", "elliptic curve", "side-channel resistant"],
+  "keywords": [
+    "PHP",
+    "cryptography",
+    "elliptic curve",
+    "elliptic curve cryptography",
+    "Pure-PHP cryptography",
+    "side-channel resistant",
+    "Curve25519",
+    "X25519",
+    "ECDH",
+    "Elliptic Curve Diffie-Hellman",
+    "Ed25519",
+    "EdDSA",
+    "Edwards-curve Digital Signature Algorithm",
+    "ChaCha20",
+    "Salsa20",
+    "Xsalsa20",
+    "BLAKE2b",
+    "public-key cryptography",
+    "secret-key cryptography",
+    "encryption",
+    "authentication",
+    "libsodium"
+  ],
   "license": "ISC",
   "authors": [
     {

@@ -173,8 +173,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         # crypto_hash_sha512_update(&hs, m, mlen);
         # crypto_hash_sha512_final(&hs, hram);
         $hs = hash_init('sha512');
-        hash_update($hs, $sig);
-        hash_update($hs, $pk);
+        hash_update($hs, self::substr($sig, 0, 32));
+        hash_update($hs, self::substr($pk, 0, 32));
         hash_update($hs, $message);
         $hramHash = hash_final($hs, true);
 
@@ -225,7 +225,13 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             throw new Exception('All zero public key');
         }
 
-        $hDigest = hash('sha512', self::substr($sig, 0, 32) . $pk . $message, true);
+        $hDigest = hash(
+            'sha512',
+            self::substr($sig, 0, 32) .
+                self::substr($pk, 0, 32) .
+                $message,
+            true
+        );
         $h = self::sc_reduce($hDigest) . self::substr($hDigest, 32);
         $R = self::ge_double_scalarmult_vartime(
             $h,
