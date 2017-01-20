@@ -67,8 +67,8 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         # crypto_hash_sha512_update(&hs, m, mlen);
         # crypto_hash_sha512_final(&hs, hram);
         $hs = hash_init('sha512');
-        hash_update($hs, $sig);
-        hash_update($hs, $pk);
+        hash_update($hs, self::substr($sig, 0, 32));
+        hash_update($hs, self::substr($pk, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
         $hramHash = hash_final($hs, true);
 
@@ -146,7 +146,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
-        hash_update($hs, $publicKey);
+        hash_update($hs, self::substr($publicKey, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
         $hDigest = hash_final($hs, true);
         $h = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
