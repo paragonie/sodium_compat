@@ -4,7 +4,7 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
 {
     public function testVectors()
     {
-        $secretKey = hex2bin(
+        $secretKey = ParagonIE_Sodium_Core_Util::hex2bin(
             'c4ffb94f252886b1378589af0d7d2004d9564b971ac73f09da827b80a5e39cd5' .
             'c50725d6a9b7df75a49f92accd3ab2cca4264a41d9c42cbd1e57eb2746e531d5'
         );
