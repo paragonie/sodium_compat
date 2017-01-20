@@ -5,6 +5,8 @@
  */
 class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 {
+    const BUFFER_SIZE = 8192;
+
     /**
      * Sign a file (rather than a string). Uses less memory than
      * ParagonIE_Sodium_Compat::crypto_sign_detached(), but produces
@@ -33,50 +35,32 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if ($size === false || !is_resource($fp)) {
             throw new Error('Could not open file for reading');
         }
-        # crypto_hash_sha512(az, sk, 32);
-        $az = hash('sha512', ParagonIE_Sodium_Core_Ed25519::substr($secretKey, 0, 32), true);
+        $az = hash('sha512', self::substr($secretKey, 0, 32), true);
 
-        # az[0] &= 248;
-        # az[31] &= 63;
-        # az[31] |= 64;
         $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
         $az[31] = self::intToChr((self::chrToInt($az[31]) & 63) | 64);
 
-        # crypto_hash_sha512_init(&hs);
-        # crypto_hash_sha512_update(&hs, az + 32, 32);
-        # crypto_hash_sha512_update(&hs, m, mlen);
-        # crypto_hash_sha512_final(&hs, nonce);
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($az, 32, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
         $nonceHash = hash_final($hs, true);
 
-        # memmove(sig + 32, sk + 32, 32);
         $pk = self::substr($secretKey, 32, 32);
 
-        # sc_reduce(nonce);
-        # ge_scalarmult_base(&R, nonce);
-        # ge_p3_tobytes(sig, &R);
         $nonce = ParagonIE_Sodium_Core_Ed25519::sc_reduce($nonceHash) . self::substr($nonceHash, 32);
         $sig = ParagonIE_Sodium_Core_Ed25519::ge_p3_tobytes(
             ParagonIE_Sodium_Core_Ed25519::ge_scalarmult_base($nonce)
         );
 
-        # crypto_hash_sha512_init(&hs);
-        # crypto_hash_sha512_update(&hs, sig, 64);
-        # crypto_hash_sha512_update(&hs, m, mlen);
-        # crypto_hash_sha512_final(&hs, hram);
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
         hash_update($hs, self::substr($pk, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
         $hramHash = hash_final($hs, true);
 
-        # sc_reduce(hram);
-        # sc_muladd(sig + 32, hram, az, nonce);
         $hram = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hramHash);
         $sigAfter = ParagonIE_Sodium_Core_Ed25519::sc_muladd($hram, $az, $nonce);
-        $sig = ParagonIE_Sodium_Core_Ed25519::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);
+        $sig = self::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);
 
         try {
             ParagonIE_Sodium_Compat::memzero($az);
@@ -149,6 +133,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         hash_update($hs, self::substr($publicKey, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
         $hDigest = hash_final($hs, true);
+
         $h = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
         $R = ParagonIE_Sodium_Core_Ed25519::ge_double_scalarmult_vartime(
             $h,
@@ -169,12 +154,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
         fseek($fp, 0, SEEK_SET);
-        for ($i = 0; $i < $size; $i += 8192) {
+        for ($i = 0; $i < $size; $i += self::BUFFER_SIZE) {
             $message = fread(
                 $fp,
-                ($size - ($i * 8192) > 8192)
-                    ? $size - ($i * 8192)
-                    : 8192
+                ($size - $i) > self::BUFFER_SIZE
+                    ? $size - $i
+                    : self::BUFFER_SIZE
             );
             hash_update($hash, $message);
         }
