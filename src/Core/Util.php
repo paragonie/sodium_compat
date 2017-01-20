@@ -422,16 +422,16 @@ abstract class ParagonIE_Sodium_Core_Util
             if (PHP_VERSION_ID < 50400 && $length === null) {
                 $length = self::strlen($str);
             }
-            $sub = mb_substr($str, $start, $length, '8bit');
+            $sub = (string) mb_substr($str, $start, $length, '8bit');
         } elseif ($length === null) {
-            $sub = substr($str, $start);
+            $sub = (string) substr($str, $start);
         } else {
-            $sub = substr($str, $start, $length);
+            $sub = (string) substr($str, $start, $length);
         }
-        if (!is_string($sub)) {
-            return '';
+        if (isset($sub)) {
+            return $sub;
         }
-        return $sub;
+        return '';
     }
 
     /**

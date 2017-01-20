@@ -6,14 +6,28 @@
 class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 {
     /**
-     * @param string $filePath
-     * @param string $secretKey
+     * Sign a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_sign_detached(), but produces
+     * the same result.
      *
-     * @return string
+     * @param string $filePath  Absolute path to a file on the filesystem
+     * @param string $secretKey Secret signing key
+     *
+     * @return string           Ed25519 signature
      * @throws Error
+     * @throws TypeError
      */
     public static function sign_file($filePath, $secretKey)
     {
+        if (!is_string($filePath)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if (!is_string($secretKey)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        if (self::strlen($secretKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES) {
+            throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
+        }
         $fp = fopen($filePath, 'rb');
         $size = filesize($filePath);
         if ($size === false || !is_resource($fp)) {
@@ -74,9 +88,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * @param string $sig
-     * @param string $filePath
-     * @param string $publicKey
+     * Verify a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_sign_verify_detached(), but
+     * produces the same result.
+     *
+     * @param string $sig       Ed25519 signature
+     * @param string $filePath  Absolute path to a file on the filesystem
+     * @param string $publicKey Signing public key
      *
      * @return bool
      * @throws Error
@@ -84,6 +102,21 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     public static function verify_file($sig, $filePath, $publicKey)
     {
+        if (!is_string($sig)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if (!is_string($filePath)) {
+            throw new TypeError('Argument 2 must be a string.');
+        }
+        if (!is_string($publicKey)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (self::strlen($sig) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES) {
+            throw new TypeError('Argument 1 must be CRYPTO_SIGN_BYTES bytes');
+        }
+        if (self::strlen($publicKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES) {
+            throw new TypeError('Argument 3 must be CRYPTO_SIGN_PUBLICKEYBYTES bytes');
+        }
         $fp = fopen($filePath, 'rb');
         $size = filesize($filePath);
         if ($size === false || !is_resource($fp)) {
