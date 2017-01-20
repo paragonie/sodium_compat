@@ -225,7 +225,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             throw new Exception('All zero public key');
         }
 
-        $hDigest = hash('sha512', self::substr($sig, 0, 32) . $pk . $message, true);
+        $hDigest = hash('sha512', self::substr($sig, 0, 32) . self::substr($pk, 0, 32) . $message, true);
         $h = self::sc_reduce($hDigest) . self::substr($hDigest, 32);
         $R = self::ge_double_scalarmult_vartime(
             $h,
