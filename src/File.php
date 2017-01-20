@@ -149,7 +149,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param resource $hash
      * @param resource $fp
      * @param int $size
-     * @return $hash
+     * @return resource
      */
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
