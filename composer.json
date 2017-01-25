@@ -45,5 +45,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*"
+  },
+  "suggest": {
+    "ext-libsodium": "Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
   }
 }
