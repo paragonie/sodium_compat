@@ -286,7 +286,7 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function auth_verify($mac, $message, $key)
     {
-        return hash_equals(
+        return ParagonIE_Sodium_Core_Util::hashEquals(
             $mac,
             self::auth($message, $key)
         );

@@ -216,6 +216,27 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @param string $left
+     * @param string $right
+     * @return bool
+     */
+    public static function hashEquals($left, $right)
+    {
+        if (is_callable('hash_equals')) {
+            return hash_equals($left, $right);
+        }
+        $d = 0;
+        $len = self::strlen($left);
+        if ($len !== self::strlen($right)) {
+            return false;
+        }
+        for ($i = 0; $i < $len; ++$i) {
+            $d |= self::chrToInt($left) ^ self::chrToInt($right);
+        }
+        return $d === 0;
+    }
+
+    /**
      * @internal You should not use this directly from another application
      *
      * @param string $left
@@ -224,7 +245,7 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function memcmp($left, $right)
     {
-        if (hash_equals($left, $right)) {
+        if (self::hashEquals($left, $right)) {
             return 0;
         }
         return -1;

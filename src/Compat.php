@@ -910,6 +910,12 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_scalarmult')) {
             return call_user_func('\\Sodium\\crypto_scalarmult', $secretKey, $publicKey);
         }
+        if (ParagonIE_Sodium_Core_Util::hashEquals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
+            throw new Error('Zero secret key is not allowed');
+        }
+        if (ParagonIE_Sodium_Core_Util::hashEquals($publicKey, str_repeat("\0", self::CRYPTO_BOX_PUBLICKEYBYTES))) {
+            throw new Error('Zero public key is not allowed');
+        }
         $q = ParagonIE_Sodium_Crypto::scalarmult($secretKey, $publicKey);
         $d = 0;
         for ($i = 0; $i < self::CRYPTO_SCALARMULT_BYTES; ++$i) {
@@ -940,7 +946,18 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_scalarmult_base')) {
             return call_user_func('\\Sodium\\crypto_scalarmult_base', $secretKey);
         }
-        return ParagonIE_Sodium_Crypto::scalarmult_base($secretKey);
+        if (ParagonIE_Sodium_Core_Util::hashEquals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
+            throw new Error('Zero secret key is not allowed');
+        }
+        $q = ParagonIE_Sodium_Crypto::scalarmult_base($secretKey);
+        $d = 0;
+        for ($i = 0; $i < self::CRYPTO_SCALARMULT_BYTES; ++$i) {
+            $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
+        }
+        if (-(1 & (($d - 1) >> 8))) {
+            throw new Error('Zero public key returned. This is not safe to use.');
+        }
+        return $q;
     }
 
     /**
