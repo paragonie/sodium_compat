@@ -8,6 +8,26 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_auth()
+     * @covers ParagonIE_Sodium_Compat::crypto_auth_verify()
+     */
+    public function testCryptoAuth()
+    {
+        $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES);
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        $message .= random_bytes(64);
+
+        $mac = ParagonIE_Sodium_Compat::crypto_auth($message, $key);
+        $this->assertTrue(
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key)
+        );
+        $message .= 'wrong';
+        $this->assertFalse(
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key)
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt()
      */

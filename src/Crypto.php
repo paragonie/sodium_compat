@@ -633,10 +633,20 @@ abstract class ParagonIE_Sodium_Crypto
      * @param string $sKey
      * @param string $pKey
      * @return string
+     *
+     * @throws Error
      */
     public static function scalarmult($sKey, $pKey)
     {
-        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($sKey, $pKey);
+        $q =  ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($sKey, $pKey);
+        $d = 0;
+        for ($i = 0; $i < self::box_curve25519xsalsa20poly1305_SECRETKEYBYTES; ++$i) {
+            $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
+        }
+        if (-(1 & (($d - 1) >> 8))) {
+            throw new Error('Zero public key is not allowed');
+        }
+        return $q;
     }
 
     /**
@@ -645,10 +655,20 @@ abstract class ParagonIE_Sodium_Crypto
      *
      * @param string $secret
      * @return string
+     *
+     * @throws Error
      */
     public static function scalarmult_base($secret)
     {
-        return ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secret);
+        $q = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secret);
+        $d = 0;
+        for ($i = 0; $i < self::box_curve25519xsalsa20poly1305_SECRETKEYBYTES; ++$i) {
+            $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
+        }
+        if (-(1 & (($d - 1) >> 8))) {
+            throw new Error('Zero public key is not allowed');
+        }
+        return $q;
     }
 
     /**
