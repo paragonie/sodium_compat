@@ -910,7 +910,15 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_scalarmult')) {
             return call_user_func('\\Sodium\\crypto_scalarmult', $secretKey, $publicKey);
         }
-        return ParagonIE_Sodium_Crypto::scalarmult($secretKey, $publicKey);
+        $q = ParagonIE_Sodium_Crypto::scalarmult($secretKey, $publicKey);
+        $d = 0;
+        for ($i = 0; $i < self::CRYPTO_SCALARMULT_BYTES; ++$i) {
+            $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
+        }
+        if (-(1 & (($d - 1) >> 8))) {
+            throw new Error('Zero public key is not allowed');
+        }
+        return $q;
     }
 
     /**
