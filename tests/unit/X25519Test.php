@@ -5,6 +5,11 @@
  */
 class X25519Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     /**
      * @covers ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base()
      */
@@ -28,6 +33,26 @@ class X25519Test extends PHPUnit_Framework_TestCase
                 ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($secretKey, $staticPk)
             ),
             'Elliptic Curve Diffie-Hellman over Curve25519 is failing'
+        );
+    }
+
+    /**
+     * @expectedException Error
+     */
+    public function testScalarmultZero()
+    {
+        $aliceSk = ParagonIE_Sodium_Core_Util::hex2bin(
+            'b75b0a8b25c58aaef1d14fc9ce2bbaeac607407d1ade104aeaa196f8ac13b93f'
+        );
+        $bobPk = ParagonIE_Sodium_Core_Util::hex2bin(
+            str_repeat('0', 64)
+        );
+        $this->assertNotSame(
+            $bobPk,
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                ParagonIE_Sodium_Compat::crypto_scalarmult($aliceSk, $bobPk)
+            ),
+            'test'
         );
     }
 }
