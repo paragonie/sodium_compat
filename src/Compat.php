@@ -916,7 +916,7 @@ class ParagonIE_Sodium_Compat
             $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
         }
         if (-(1 & (($d - 1) >> 8))) {
-            throw new \Error('Zero public key is not allowed');
+            throw new Error('Zero public key is not allowed');
         }
         return $q;
     }
