@@ -145,7 +145,9 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $arguments = array(
             array(1, 1),
             array(65534, 65534),
-            array(65535, 65534)
+            array(65535, 65534),
+            array(0x7ffffffe, 1),
+            array(0x1fffffff, 0x1fffffff)
         );
         foreach ($arguments as $arg) {
             $this->assertSame(

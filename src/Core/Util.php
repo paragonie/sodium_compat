@@ -521,6 +521,9 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function mul($a, $b)
     {
+        if (PHP_INT_SIZE === 4) {
+            return (int) ($a * $b);
+        }
         return (int) (
             ($a | 0x80000000)
             * ($b | 0x80000000)
