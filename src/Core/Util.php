@@ -513,6 +513,36 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Multiply two 31-bit integers
+     *
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public static function mul($a, $b)
+    {
+        return (int) (
+            ($a | 0x80000000)
+            * ($b | 0x80000000)
+            - ($a << 31)
+            - ($b << 31)
+            - (1 << 62)
+        );
+    }
+
+    /**
+     * Multiply two 15-bit integers
+     *
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public static function mul15($a = 0, $b = 0)
+    {
+        return (($a | 0x80000000) * ($b | 0x80000000)) & 0x3fffffff;
+    }
+
+    /**
      * Returns whether or not mbstring.func_overload is in effect.
      *
      * @internal You should not use this directly from another application

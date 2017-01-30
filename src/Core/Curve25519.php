@@ -373,11 +373,11 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $g7_19 = 19 * $g7;
         $g8_19 = 19 * $g8;
         $g9_19 = 19 * $g9;
-        $f1_2 = 2 * $f1;
-        $f3_2 = 2 * $f3;
-        $f5_2 = 2 * $f5;
-        $f7_2 = 2 * $f7;
-        $f9_2 = 2 * $f9;
+        $f1_2 = $f1 << 1;
+        $f3_2 = $f3 << 1;
+        $f5_2 = $f5 << 1;
+        $f7_2 = $f7 << 1;
+        $f9_2 = $f9 << 1;
         $f0g0    = $f0   * $g0;
         $f0g1    = $f0   * $g1;
         $f0g2    = $f0   * $g2;
@@ -1878,29 +1878,29 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $c10 = 2097151 & (self::load_3(self::substr($c, 26, 3)) >> 2);
         $c11 = (self::load_4(self::substr($c, 28, 4)) >> 7);
 
-        $s0 = $c0 + $a0 * $b0;
-        $s1 = $c1 + $a0 * $b1 + $a1 * $b0;
-        $s2 = $c2 + $a0 * $b2 + $a1 * $b1 + $a2 * $b0;
-        $s3 = $c3 + $a0 * $b3 + $a1 * $b2 + $a2 * $b1 + $a3 * $b0;
-        $s4 = $c4 + $a0 * $b4 + $a1 * $b3 + $a2 * $b2 + $a3 * $b1 + $a4 * $b0;
-        $s5 = $c5 + $a0 * $b5 + $a1 * $b4 + $a2 * $b3 + $a3 * $b2 + $a4 * $b1 + $a5 * $b0;
-        $s6 = $c6 + $a0 * $b6 + $a1 * $b5 + $a2 * $b4 + $a3 * $b3 + $a4 * $b2 + $a5 * $b1 + $a6 * $b0;
-        $s7 = $c7 + $a0 * $b7 + $a1 * $b6 + $a2 * $b5 + $a3 * $b4 + $a4 * $b3 + $a5 * $b2 + $a6 * $b1 + $a7 * $b0;
-        $s8 = $c8 + $a0 * $b8 + $a1 * $b7 + $a2 * $b6 + $a3 * $b5 + $a4 * $b4 + $a5 * $b3 + $a6 * $b2 + $a7 * $b1 + $a8 * $b0;
-        $s9 = $c9 + $a0 * $b9 + $a1 * $b8 + $a2 * $b7 + $a3 * $b6 + $a4 * $b5 + $a5 * $b4 + $a6 * $b3 + $a7 * $b2 + $a8 * $b1 + $a9 * $b0;
-        $s10 = $c10 + $a0 * $b10 + $a1 * $b9 + $a2 * $b8 + $a3 * $b7 + $a4 * $b6 + $a5 * $b5 + $a6 * $b4 + $a7 * $b3 + $a8 * $b2 + $a9 * $b1 + $a10 * $b0;
-        $s11 = $c11 + $a0 * $b11 + $a1 * $b10 + $a2 * $b9 + $a3 * $b8 + $a4 * $b7 + $a5 * $b6 + $a6 * $b5 + $a7 * $b4 + $a8 * $b3 + $a9 * $b2 + $a10 * $b1 + $a11 * $b0;
-        $s12 = $a1 * $b11 + $a2 * $b10 + $a3 * $b9 + $a4 * $b8 + $a5 * $b7 + $a6 * $b6 + $a7 * $b5 + $a8 * $b4 + $a9 * $b3 + $a10 * $b2 + $a11 * $b1;
-        $s13 = $a2 * $b11 + $a3 * $b10 + $a4 * $b9 + $a5 * $b8 + $a6 * $b7 + $a7 * $b6 + $a8 * $b5 + $a9 * $b4 + $a10 * $b3 + $a11 * $b2;
-        $s14 = $a3 * $b11 + $a4 * $b10 + $a5 * $b9 + $a6 * $b8 + $a7 * $b7 + $a8 * $b6 + $a9 * $b5 + $a10 * $b4 + $a11 * $b3;
-        $s15 = $a4 * $b11 + $a5 * $b10 + $a6 * $b9 + $a7 * $b8 + $a8 * $b7 + $a9 * $b6 + $a10 * $b5 + $a11 * $b4;
-        $s16 = $a5 * $b11 + $a6 * $b10 + $a7 * $b9 + $a8 * $b8 + $a9 * $b7 + $a10 * $b6 + $a11 * $b5;
-        $s17 = $a6 * $b11 + $a7 * $b10 + $a8 * $b9 + $a9 * $b8 + $a10 * $b7 + $a11 * $b6;
-        $s18 = $a7 * $b11 + $a8 * $b10 + $a9 * $b9 + $a10 * $b8 + $a11 * $b7;
-        $s19 = $a8 * $b11 + $a9 * $b10 + $a10 * $b9 + $a11 * $b8;
-        $s20 = $a9 * $b11 + $a10 * $b10 + $a11 * $b9;
-        $s21 = $a10 * $b11 + $a11 * $b10;
-        $s22 = $a11 * $b11;
+        $s0 = $c0 + self::mul($a0, $b0);
+        $s1 = $c1 + self::mul($a0, $b1) + self::mul($a1, $b0);
+        $s2 = $c2 + self::mul($a0, $b2) + self::mul($a1, $b1) + self::mul($a2, $b0);
+        $s3 = $c3 + self::mul($a0, $b3) + self::mul($a1, $b2) + self::mul($a2, $b1) + self::mul($a3, $b0);
+        $s4 = $c4 + self::mul($a0, $b4) + self::mul($a1, $b3) + self::mul($a2, $b2) + self::mul($a3, $b1) + self::mul($a4, $b0);
+        $s5 = $c5 + self::mul($a0, $b5) + self::mul($a1, $b4) + self::mul($a2, $b3) + self::mul($a3, $b2) + self::mul($a4, $b1) + self::mul($a5, $b0);
+        $s6 = $c6 + self::mul($a0, $b6) + self::mul($a1, $b5) + self::mul($a2, $b4) + self::mul($a3, $b3) + self::mul($a4, $b2) + self::mul($a5, $b1) + self::mul($a6, $b0);
+        $s7 = $c7 + self::mul($a0, $b7) + self::mul($a1, $b6) + self::mul($a2, $b5) + self::mul($a3, $b4) + self::mul($a4, $b3) + self::mul($a5, $b2) + self::mul($a6, $b1) + self::mul($a7, $b0);
+        $s8 = $c8 + self::mul($a0, $b8) + self::mul($a1, $b7) + self::mul($a2, $b6) + self::mul($a3, $b5) + self::mul($a4, $b4) + self::mul($a5, $b3) + self::mul($a6, $b2) + self::mul($a7, $b1) + self::mul($a8, $b0);
+        $s9 = $c9 + self::mul($a0, $b9) + self::mul($a1, $b8) + self::mul($a2, $b7) + self::mul($a3, $b6) + self::mul($a4, $b5) + self::mul($a5, $b4) + self::mul($a6, $b3) + self::mul($a7, $b2) + self::mul($a8, $b1) + self::mul($a9, $b0);
+        $s10 = $c10 + self::mul($a0, $b10) + self::mul($a1, $b9) + self::mul($a2, $b8) + self::mul($a3, $b7) + self::mul($a4, $b6) + self::mul($a5, $b5) + self::mul($a6, $b4) + self::mul($a7, $b3) + self::mul($a8, $b2) + self::mul($a9, $b1) + self::mul($a10, $b0);
+        $s11 = $c11 + self::mul($a0, $b11) + self::mul($a1, $b10) + self::mul($a2, $b9) + self::mul($a3, $b8) + self::mul($a4, $b7) + self::mul($a5, $b6) + self::mul($a6, $b5) + self::mul($a7, $b4) + self::mul($a8, $b3) + self::mul($a9, $b2) + self::mul($a10, $b1) + self::mul($a11, $b0);
+        $s12 = self::mul($a1, $b11) + self::mul($a2, $b10) + self::mul($a3, $b9) + self::mul($a4, $b8) + self::mul($a5, $b7) + self::mul($a6, $b6) + self::mul($a7, $b5) + self::mul($a8, $b4) + self::mul($a9, $b3) + self::mul($a10, $b2) + self::mul($a11, $b1);
+        $s13 = self::mul($a2, $b11) + self::mul($a3, $b10) + self::mul($a4, $b9) + self::mul($a5, $b8) + self::mul($a6, $b7) + self::mul($a7, $b6) + self::mul($a8, $b5) + self::mul($a9, $b4) + self::mul($a10, $b3) + self::mul($a11, $b2);
+        $s14 = self::mul($a3, $b11) + self::mul($a4, $b10) + self::mul($a5, $b9) + self::mul($a6, $b8) + self::mul($a7, $b7) + self::mul($a8, $b6) + self::mul($a9, $b5) + self::mul($a10, $b4) + self::mul($a11, $b3);
+        $s15 = self::mul($a4, $b11) + self::mul($a5, $b10) + self::mul($a6, $b9) + self::mul($a7, $b8) + self::mul($a8, $b7) + self::mul($a9, $b6) + self::mul($a10, $b5) + self::mul($a11, $b4);
+        $s16 = self::mul($a5, $b11) + self::mul($a6, $b10) + self::mul($a7, $b9) + self::mul($a8, $b8) + self::mul($a9, $b7) + self::mul($a10, $b6) + self::mul($a11, $b5);
+        $s17 = self::mul($a6, $b11) + self::mul($a7, $b10) + self::mul($a8, $b9) + self::mul($a9, $b8) + self::mul($a10, $b7) + self::mul($a11, $b6);
+        $s18 = self::mul($a7, $b11) + self::mul($a8, $b10) + self::mul($a9, $b9) + self::mul($a10, $b8) + self::mul($a11, $b7);
+        $s19 = self::mul($a8, $b11) + self::mul($a9, $b10) + self::mul($a10, $b9) + self::mul($a11, $b8);
+        $s20 = self::mul($a9, $b11) + self::mul($a10, $b10) + self::mul($a11, $b9);
+        $s21 = self::mul($a10, $b11) + self::mul($a11, $b10);
+        $s22 = self::mul($a11, $b11);
         $s23 = 0;
 
 
@@ -2574,7 +2574,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
                 (int) (($s10 >> 14) | ($s11 * (1 << 7))),
                 (int) ($s11 >> 1),
                 (int) ($s11 >> 9),
-                $s11 >> 17
+                (int) $s11 >> 17
             )
         );
     }

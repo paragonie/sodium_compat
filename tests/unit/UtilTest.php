@@ -136,4 +136,23 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
     }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::mul()
+     */
+    public function testMul()
+    {
+        $arguments = array(
+            array(1, 1),
+            array(65534, 65534),
+            array(65535, 65534)
+        );
+        foreach ($arguments as $arg) {
+            $this->assertSame(
+                (int) ($arg[0] * $arg[1]),
+                ParagonIE_Sodium_Core_Util::mul($arg[0], $arg[1]),
+                'Multiplying ' . $arg[0] . ' by ' . $arg[1] . ' failed.'
+            );
+        }
+    }
 }
