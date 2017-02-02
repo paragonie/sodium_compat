@@ -521,6 +521,9 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function mul($a, $b)
     {
+        if (ParagonIE_Sodium_Compat::$fastMult) {
+            return (int) ($a * $b);
+        }
         $c = 0;
         for ($i = (PHP_INT_SIZE * 8) - 1; $i >= 0; --$i) {
             $c += ((1 << $i) & $a) * $b;

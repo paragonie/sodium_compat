@@ -27,6 +27,11 @@ class ParagonIE_Sodium_Compat
      */
     public static $disableFallbackForUnitTests = false;
 
+    /**
+     * @var bool
+     */
+    public static $fastMult = false;
+
     const LIBRARY_VERSION_MAJOR = 9;
     const LIBRARY_VERSION_MINOR = 1;
     const VERSION_STRING = 'polyfill-1.0.8';
