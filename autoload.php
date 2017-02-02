@@ -27,7 +27,7 @@ if (!is_callable('sodiumCompatAutoloader')) {
         $file = __DIR__ . '/src/' . str_replace('_', '/', $relative_class) . '.php';
         // if the file exists, require it
         if (file_exists($file)) {
-            require $file;
+            require_once $file;
             return true;
         }
         return false;
