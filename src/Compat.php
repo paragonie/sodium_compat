@@ -146,8 +146,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             $assocData = '',
             $nonce = '',
             $key = ''
-        )
-        {
+        ) {
             if (!is_string($ciphertext)) {
                 throw new TypeError('Argument 1 must be a string');
             }
@@ -210,8 +209,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             $assocData = '',
             $nonce = '',
             $key = ''
-        )
-        {
+        ) {
             if (!is_string($plaintext)) {
                 throw new TypeError('Argument 1 must be a string');
             }
@@ -270,8 +268,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             $assocData = '',
             $nonce = '',
             $key = ''
-        )
-        {
+        ) {
             if (!is_string($ciphertext)) {
                 throw new TypeError('Argument 1 must be a string');
             }
@@ -334,8 +331,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             $assocData = '',
             $nonce = '',
             $key = ''
-        )
-        {
+        ) {
             if (!is_string($plaintext)) {
                 throw new TypeError('Argument 1 must be a string');
             }
