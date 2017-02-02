@@ -50,11 +50,11 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
         $int = ParagonIE_Sodium_Compat::randombytes_uniform(1000);
         $this->assertLessThan(1000, $int, 'Out of bounds (> 1000)');
-        $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+        $this->assertGreaterThan(-1, $int, 'Out of bounds (< 0)');
 
         $int = ParagonIE_Sodium_Compat::randombytes_random16();
         $this->assertLessThan(65536, $int, 'Out of bounds (> 65535)');
-        $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+        $this->assertGreaterThan(-1, $int, 'Out of bounds (< 0)');
     }
 
     /**
