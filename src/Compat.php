@@ -25,11 +25,18 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
     class ParagonIE_Sodium_Compat
     {
         /**
+         * This parameter prevents the use of the PECL extension.
+         * It should only be used for unit testing.
+         *
          * @var bool
          */
         public static $disableFallbackForUnitTests = false;
 
         /**
+         * Use fast multiplication rather than our constant-time multiplication
+         * implementation. Can be enabled at runtime. Only enable this if you
+         * are absolutely certain that there is no timing leak on your platform.
+         *
          * @var bool
          */
         public static $fastMult = false;

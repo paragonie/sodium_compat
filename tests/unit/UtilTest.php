@@ -165,6 +165,31 @@ class UtilTest extends PHPUnit_Framework_TestCase
             $arguments []= array((1 << 39) - 1, (1 << 39) - 1);
             $arguments []= array((1 << 63) - 1, (1 << 63) - 1);
         }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                random_int(0, 0x7fffffff),
+                random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                -random_int(0, 0x7fffffff),
+                -random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                -random_int(0, 0x7fffffff),
+                random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                random_int(0, 0x7fffffff),
+                -random_int(0, 0x7fffffff)
+            );
+        }
+
         foreach ($arguments as $arg) {
             $this->assertSame(
                 (int) ($arg[0] * $arg[1]),
