@@ -119,12 +119,15 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Exception('Invalid signature');
         }
 
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+        ParagonIE_Sodium_Compat::$fastMult = true;
         $A = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($publicKey);
         $d = 0;
         for ($i = 0; $i < 32; ++$i) {
             $d |= self::chrToInt($publicKey[$i]);
         }
         if ($d === 0) {
+            ParagonIE_Sodium_Compat::$fastMult = $orig;
             throw new Exception('All zero public key');
         }
 
@@ -142,6 +145,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         );
         $rcheck = ParagonIE_Sodium_Core_Ed25519::ge_tobytes($R);
         fclose($fp);
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
         return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
 
