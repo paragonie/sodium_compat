@@ -513,7 +513,7 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Multiply two 32-bit integers
+     * Multiply two integers in constant-time
      *
      * @param int $a
      * @param int $b
