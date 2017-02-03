@@ -369,6 +369,38 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Multiply two integers in constant-time
+     *
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public static function mul($a, $b)
+    {
+        if (ParagonIE_Sodium_Compat::$fastMult) {
+            return (int) ($a * $b);
+        }
+
+        static $size = null;
+        if (!$size) {
+            $size = (PHP_INT_SIZE * 8) - 1;
+        }
+
+        $A = (int) $a;
+        $B = (int) $b;
+        $c = 0;
+        $mask = -(($B >> $size) & 1);
+        $B = ($B & ~$mask) | ($mask & -$B);
+        for ($i = $size; $i >= 0; --$i) {
+            $c += (int) ($A & -($B & 1));
+            $A <<= 1;
+            $B >>= 1;
+        }
+        $c = ($c & ~$mask) | ($mask & -$c);
+        return (int) $c;
+    }
+
+    /**
      * Convert any arbitrary numbers into two 32-bit integers that represent
      * a 64-bit integer.
      *
@@ -510,38 +542,6 @@ abstract class ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 2 must be a string');
         }
         return $a ^ $b;
-    }
-
-    /**
-     * Multiply two integers in constant-time
-     *
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    public static function mul($a, $b)
-    {
-        if (ParagonIE_Sodium_Compat::$fastMult) {
-            return (int) ($a * $b);
-        }
-
-        static $size = null;
-        if (!$size) {
-            $size = (PHP_INT_SIZE * 8) - 1;
-        }
-
-        $A = (int) $a;
-        $B = (int) $b;
-        $c = 0;
-        $mask = -(($B >> $size) & 1);
-        $B = ($B & ~$mask) | ($mask & -$B);
-        for ($i = $size; $i >= 0; --$i) {
-            $c += (int) ($A & -($B & 1));
-            $A <<= 1;
-            $B >>= 1;
-        }
-        $c = ($c & ~$mask) | ($mask & -$c);
-        return (int) $c;
     }
 
     /**
