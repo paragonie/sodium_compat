@@ -6,133 +6,6 @@
 abstract class ParagonIE_Sodium_Core_Util
 {
     /**
-     * Load a 3 character substring into an integer
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param string $string
-     * @return int
-     * @throws RangeException
-     */
-    public static function load_3($string)
-    {
-        if (self::strlen($string) < 3) {
-            throw new RangeException(
-                'String must be 3 bytes or more; ' . self::strlen($string) . ' given.'
-            );
-        }
-        $result = self::chrToInt($string[0]);
-        $result |= self::chrToInt($string[1]) << 8;
-        $result |= self::chrToInt($string[2]) << 16;
-        return $result & 0xffffff;
-    }
-
-    /**
-     * Load a 4 character substring into an integer
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param string $string
-     * @return int
-     * @throws RangeException
-     */
-    public static function load_4($string)
-    {
-        if (self::strlen($string) < 4) {
-            throw new RangeException(
-                'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
-            );
-        }
-        $result  = (self::chrToInt($string[0]) & 0xff);
-        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
-        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
-        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
-        return $result & 0xffffffff;
-    }
-
-    /**
-     * Store a 24-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     */
-    public static function store_3($int)
-    {
-        return self::intToChr(($int >> 16)    & 0xff) .
-            self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int           & 0xff);
-    }
-
-    /**
-     * Store a 32-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     */
-    public static function store_4($int)
-    {
-        return self::intToChr(($int >> 24) & 0xff) .
-            self::intToChr(($int >> 16)    & 0xff) .
-            self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int           & 0xff);
-    }
-
-    /**
-     * Store a 32-bit integer into a string, treating it as little-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     */
-    public static function store32_le($int)
-    {
-        return self::intToChr($int      & 0xff) .
-               self::intToChr(($int >> 8)  & 0xff) .
-               self::intToChr(($int >> 16) & 0xff) .
-               self::intToChr(($int >> 24) & 0xff);
-    }
-
-    /**
-     * Stores a 64-bit integer as an string, treating it as little-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     */
-    public static function store64_le($int)
-    {
-        if (PHP_INT_SIZE === 8) {
-            return self::intToChr($int & 0xff) .
-               self::intToChr(($int >>  8) & 0xff) .
-               self::intToChr(($int >> 16) & 0xff) .
-               self::intToChr(($int >> 24) & 0xff) .
-               self::intToChr(($int >> 32) & 0xff) .
-               self::intToChr(($int >> 40) & 0xff) .
-               self::intToChr(($int >> 48) & 0xff) .
-               self::intToChr(($int >> 52) & 0xff);
-        }
-        if ($int > PHP_INT_MAX) {
-            list($hiB, $int) = self::numericTo64BitInteger($int);
-        } else {
-            $hiB = 0;
-        }
-        return self::intToChr($hiB & 0xff) .
-           self::intToChr(($hiB >>  8) & 0xff) .
-           self::intToChr(($hiB >> 16) & 0xff) .
-           self::intToChr(($hiB >> 24) & 0xff) .
-           self::intToChr(($int) & 0xff) .
-           self::intToChr(($int >>  8) & 0xff) .
-           self::intToChr(($int >> 16) & 0xff) .
-           self::intToChr(($int >> 24) & 0xff);
-    }
-
-    /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
@@ -185,6 +58,20 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Cache-timing-safe variant of ord()
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param string $chr
+     * @return int
+     */
+    public static function chrToInt($chr)
+    {
+        $chunk = unpack('C', self::substr($chr, 0, 1));
+        return $chunk[1];
+    }
+
+    /**
      * Compares two strings.
      *
      * @internal You should not use this directly from another application
@@ -234,21 +121,6 @@ abstract class ParagonIE_Sodium_Core_Util
             $d |= self::chrToInt($left) ^ self::chrToInt($right);
         }
         return $d === 0;
-    }
-
-    /**
-     * @internal You should not use this directly from another application
-     *
-     * @param string $left
-     * @param string $right
-     * @return int
-     */
-    public static function memcmp($left, $right)
-    {
-        if (self::hashEquals($left, $right)) {
-            return 0;
-        }
-        return -1;
     }
 
     /**
@@ -305,17 +177,21 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Cache-timing-safe variant of ord()
+     * Turn an array of integers into a string
      *
      * @internal You should not use this directly from another application
      *
-     * @param string $chr
-     * @return int
+     * @param array<int, int> $ints
+     * @return string
      */
-    public static function chrToInt($chr)
+    public static function intArrayToString(array $ints)
     {
-        $chunk = unpack('C', self::substr($chr, 0, 1));
-        return $chunk[1];
+        $args = $ints;
+        foreach ($args as $i => $v) {
+            $args[$i] = $v & 0xff;
+        }
+        array_unshift($args, str_repeat('C', count($ints)));
+        return call_user_func_array('pack', $args);
     }
 
     /**
@@ -332,40 +208,93 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Turn a string into an array of integers
+     * Load a 3 character substring into an integer
      *
      * @internal You should not use this directly from another application
      *
      * @param string $string
-     * @return array<int, int>
+     * @return int
+     * @throws RangeException
      */
-    public static function stringToIntArray($string)
+    public static function load_3($string)
     {
-        /**
-         * @var array<int, int>
-         */
-        $values = array_values(
-            unpack('C*', $string)
-        );
-        return $values;
+        if (self::strlen($string) < 3) {
+            throw new RangeException(
+                'String must be 3 bytes or more; ' . self::strlen($string) . ' given.'
+            );
+        }
+        $result = self::chrToInt($string[0]);
+        $result |= self::chrToInt($string[1]) << 8;
+        $result |= self::chrToInt($string[2]) << 16;
+        return $result & 0xffffff;
     }
 
     /**
-     * Turn an array of integers into a string
+     * Load a 4 character substring into an integer
      *
      * @internal You should not use this directly from another application
      *
-     * @param array<int, int> $ints
-     * @return string
+     * @param string $string
+     * @return int
+     * @throws RangeException
      */
-    public static function intArrayToString(array $ints)
+    public static function load_4($string)
     {
-        $args = $ints;
-        foreach ($args as $i => $v) {
-            $args[$i] = $v & 0xff;
+        if (self::strlen($string) < 4) {
+            throw new RangeException(
+                'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
+            );
         }
-        array_unshift($args, str_repeat('C', count($ints)));
-        return call_user_func_array('pack', $args);
+        $result  = (self::chrToInt($string[0]) & 0xff);
+        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
+        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
+        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
+        return $result & 0xffffffff;
+    }
+
+    /**
+     * @internal You should not use this directly from another application
+     *
+     * @param string $left
+     * @param string $right
+     * @return int
+     */
+    public static function memcmp($left, $right)
+    {
+        if (self::hashEquals($left, $right)) {
+            return 0;
+        }
+        return -1;
+    }
+
+    /**
+     * Multiply two integers in constant-time
+     *
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public static function mul($a, $b)
+    {
+        if (ParagonIE_Sodium_Compat::$fastMult) {
+            return (int) ($a * $b);
+        }
+
+        static $size = null;
+        if (!$size) {
+            $size = (PHP_INT_SIZE * 8) - 1;
+        }
+
+        $c = 0;
+        $mask = -(($b >> $size) & 1);
+        $b = ($b & ~$mask) | ($mask & -$b);
+        for ($i = $size; $i >= 0; --$i) {
+            $c += (int) ($a & -($b & 1));
+            $a <<= 1;
+            $b >>= 1;
+        }
+        $c = ($c & ~$mask) | ($mask & -$c);
+        return (int) $c;
     }
 
     /**
@@ -393,6 +322,88 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Store a 24-bit integer into a string, treating it as big-endian.
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function store_3($int)
+    {
+        return self::intToChr(($int >> 16)    & 0xff) .
+            self::intToChr(($int >> 8)     & 0xff) .
+            self::intToChr($int           & 0xff);
+    }
+
+    /**
+     * Store a 32-bit integer into a string, treating it as little-endian.
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function store32_le($int)
+    {
+        return self::intToChr($int      & 0xff) .
+            self::intToChr(($int >> 8)  & 0xff) .
+            self::intToChr(($int >> 16) & 0xff) .
+            self::intToChr(($int >> 24) & 0xff);
+    }
+
+    /**
+     * Store a 32-bit integer into a string, treating it as big-endian.
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function store_4($int)
+    {
+        return self::intToChr(($int >> 24) & 0xff) .
+            self::intToChr(($int >> 16)    & 0xff) .
+            self::intToChr(($int >> 8)     & 0xff) .
+            self::intToChr($int           & 0xff);
+    }
+
+    /**
+     * Stores a 64-bit integer as an string, treating it as little-endian.
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param int $int
+     * @return string
+     */
+    public static function store64_le($int)
+    {
+        if (PHP_INT_SIZE === 8) {
+            return self::intToChr($int & 0xff) .
+                self::intToChr(($int >>  8) & 0xff) .
+                self::intToChr(($int >> 16) & 0xff) .
+                self::intToChr(($int >> 24) & 0xff) .
+                self::intToChr(($int >> 32) & 0xff) .
+                self::intToChr(($int >> 40) & 0xff) .
+                self::intToChr(($int >> 48) & 0xff) .
+                self::intToChr(($int >> 52) & 0xff);
+        }
+        if ($int > PHP_INT_MAX) {
+            list($hiB, $int) = self::numericTo64BitInteger($int);
+        } else {
+            $hiB = 0;
+        }
+        return self::intToChr($hiB & 0xff) .
+            self::intToChr(($hiB >>  8) & 0xff) .
+            self::intToChr(($hiB >> 16) & 0xff) .
+            self::intToChr(($hiB >> 24) & 0xff) .
+            self::intToChr(($int) & 0xff) .
+            self::intToChr(($int >>  8) & 0xff) .
+            self::intToChr(($int >> 16) & 0xff) .
+            self::intToChr(($int >> 24) & 0xff);
+    }
+
+    /**
      * Safe string length
      *
      * @internal You should not use this directly from another application
@@ -414,6 +425,25 @@ abstract class ParagonIE_Sodium_Core_Util
                 ? mb_strlen($str, '8bit')
                 : strlen($str)
         );
+    }
+
+    /**
+     * Turn a string into an array of integers
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param string $string
+     * @return array<int, int>
+     */
+    public static function stringToIntArray($string)
+    {
+        /**
+         * @var array<int, int>
+         */
+        $values = array_values(
+            unpack('C*', $string)
+        );
+        return $values;
     }
 
     /**

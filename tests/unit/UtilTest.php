@@ -50,11 +50,11 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
         $int = ParagonIE_Sodium_Compat::randombytes_uniform(1000);
         $this->assertLessThan(1000, $int, 'Out of bounds (> 1000)');
-        $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+        $this->assertGreaterThan(-1, $int, 'Out of bounds (< 0)');
 
         $int = ParagonIE_Sodium_Compat::randombytes_random16();
         $this->assertLessThan(65536, $int, 'Out of bounds (> 65535)');
-        $this->assertGreaterThan(0, $int, 'Out of bounds (< 0)');
+        $this->assertGreaterThan(-1, $int, 'Out of bounds (< 0)');
     }
 
     /**
@@ -135,5 +135,58 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 3, 1), "\xB3");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::mul()
+     */
+    public function testMul()
+    {
+        $arguments = array(
+            array(1, 1),
+            array(65534, 65534),
+            array(65535, 65534),
+            array(-65535, 65534),
+            array(19, -13120145),
+            array(0x7ffffffe, 1),
+            array(0x1fffffff, 0x1fffffff),
+            array(0x01, 0x7fffffff),
+            array(0x7fffffff, 0x01),
+            array(0xffffffff, 0x01),
+            array(0xffffffff, 0x02),
+            array(0xffffffff, 0xffffffff)
+        );
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                random_int(0, 0x7fffffff),
+                random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                -random_int(0, 0x7fffffff),
+                -random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                -random_int(0, 0x7fffffff),
+                random_int(0, 0x7fffffff)
+            );
+        }
+        for ($i = 0; $i < 100; ++$i) {
+            $arguments[] = array(
+                random_int(0, 0x7fffffff),
+                -random_int(0, 0x7fffffff)
+            );
+        }
+
+        foreach ($arguments as $arg) {
+            $this->assertSame(
+                (int) ($arg[0] * $arg[1]),
+                ParagonIE_Sodium_Core_Util::mul($arg[0], $arg[1]),
+                'Multiplying ' . $arg[0] . ' by ' . $arg[1] . ' failed.'
+            );
+        }
     }
 }
