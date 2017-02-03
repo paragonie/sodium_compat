@@ -44,7 +44,7 @@
     "paragonie/random_compat": "^1|^2"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "^3|^4|^5"
   },
   "suggest": {
     "ext-libsodium": "Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
