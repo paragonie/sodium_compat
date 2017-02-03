@@ -285,15 +285,13 @@ abstract class ParagonIE_Sodium_Core_Util
             $size = (PHP_INT_SIZE * 8) - 1;
         }
 
-        $A = (int) $a;
-        $B = (int) $b;
         $c = 0;
-        $mask = -(($B >> $size) & 1);
-        $B = ($B & ~$mask) | ($mask & -$B);
+        $mask = -(($b >> $size) & 1);
+        $b = ($b & ~$mask) | ($mask & -$b);
         for ($i = $size; $i >= 0; --$i) {
-            $c += (int) ($A & -($B & 1));
-            $A <<= 1;
-            $B >>= 1;
+            $c += (int) ($a & -($b & 1));
+            $a <<= 1;
+            $b >>= 1;
         }
         $c = ($c & ~$mask) | ($mask & -$c);
         return (int) $c;
