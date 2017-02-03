@@ -156,15 +156,6 @@ class UtilTest extends PHPUnit_Framework_TestCase
             array(0xffffffff, 0x02),
             array(0xffffffff, 0xffffffff)
         );
-        if (PHP_INT_SIZE === 8) {
-            $arguments []= array(0x1fffffffffff, 0xffffffff);
-            $arguments []= array(0x7ffffffffffff, 0xffffffffffff);
-            $arguments []= array(1 << 33, 1 << 31);
-            $arguments []= array((1 << 34) - 1, (1 << 32) - 1);
-            $arguments []= array((1 << 35) - 1, (1 << 34) - 1);
-            $arguments []= array((1 << 39) - 1, (1 << 39) - 1);
-            $arguments []= array((1 << 63) - 1, (1 << 63) - 1);
-        }
         for ($i = 0; $i < 100; ++$i) {
             $arguments[] = array(
                 random_int(0, 0x7fffffff),
