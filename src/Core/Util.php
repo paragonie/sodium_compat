@@ -533,14 +533,14 @@ abstract class ParagonIE_Sodium_Core_Util
         $A = (int) $a;
         $B = (int) $b;
         $c = 0;
-        $neg = -(($B >> $size) & 1) | 1;
-        $B *= $neg;
+        $mask = -(($B >> $size) & 1);
+        $B = ($B & ~$mask) | ($mask & -$B);
         for ($i = $size; $i >= 0; --$i) {
             $c += (int) ($A & -($B & 1));
             $A <<= 1;
             $B >>= 1;
         }
-        $c *= $neg;
+        $c = ($c & ~$mask) | ($mask & -$c);
         return (int) $c;
     }
 
