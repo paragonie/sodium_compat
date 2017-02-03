@@ -535,7 +535,7 @@ abstract class ParagonIE_Sodium_Core_Util
         $c = 0;
         $neg = -(($B >> $size) & 1) | 1;
         $B *= $neg;
-        while ($B > 0) {
+        for ($i = $size; $i >= 0; --$i) {
             $c += (int) ($A & -($B & 1));
             $A <<= 1;
             $B >>= 1;
