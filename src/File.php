@@ -30,36 +30,57 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (self::strlen($secretKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES) {
             throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
         }
+
+        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
+
+        /** @var int $size */
         $size = filesize($filePath);
-        if ($size === false || !is_resource($fp)) {
+        if (!is_int($size) || !is_resource($fp)) {
             throw new Error('Could not open file for reading');
         }
+
+        /** @var string $az */
         $az = hash('sha512', self::substr($secretKey, 0, 32), true);
 
         $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
         $az[31] = self::intToChr((self::chrToInt($az[31]) & 63) | 64);
 
+        /** @var resource $hs */
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($az, 32, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
+
+        /** @var string $nonceHash */
         $nonceHash = hash_final($hs, true);
 
+        /** @var string $pk */
         $pk = self::substr($secretKey, 32, 32);
 
+        /** @var string $nonce */
         $nonce = ParagonIE_Sodium_Core_Ed25519::sc_reduce($nonceHash) . self::substr($nonceHash, 32);
+
+        /** @var string $sig */
         $sig = ParagonIE_Sodium_Core_Ed25519::ge_p3_tobytes(
             ParagonIE_Sodium_Core_Ed25519::ge_scalarmult_base($nonce)
         );
 
+        /** @var resource $hs */
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
         hash_update($hs, self::substr($pk, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
+
+        /** @var string $hramHash */
         $hramHash = hash_final($hs, true);
 
+        /** @var string $hram */
         $hram = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hramHash);
+
+        /** @var string $sigAfter */
         $sigAfter = ParagonIE_Sodium_Core_Ed25519::sc_muladd($hram, $az, $nonce);
+
+        /** @var string $sig */
         $sig = self::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);
 
         try {
@@ -101,9 +122,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (self::strlen($publicKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_SIGN_PUBLICKEYBYTES bytes');
         }
+
+        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
+
+        /** @var int $size */
         $size = filesize($filePath);
-        if ($size === false || !is_resource($fp)) {
+        if (!is_int($size) || !is_resource($fp)) {
             throw new Error('Could not open file for reading');
         }
         if (self::strlen($sig) < 64) {
@@ -118,38 +143,56 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if ((self::chrToInt($sig[63]) & 224) !== 0) {
             throw new Exception('Invalid signature');
         }
-
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        ParagonIE_Sodium_Compat::$fastMult = true;
-        $A = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($publicKey);
         $d = 0;
         for ($i = 0; $i < 32; ++$i) {
             $d |= self::chrToInt($publicKey[$i]);
         }
         if ($d === 0) {
-            ParagonIE_Sodium_Compat::$fastMult = $orig;
             throw new Exception('All zero public key');
         }
 
+        /** @var bool The original value of ParagonIE_Sodium_Compat::$fastMult */
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+
+        // Set ParagonIE_Sodium_Compat::$fastMult to true to speed up verification.
+        ParagonIE_Sodium_Compat::$fastMult = true;
+
+        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A */
+        $A = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($publicKey);
+
+        /** @var resource $hs */
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
         hash_update($hs, self::substr($publicKey, 0, 32));
         $hs = self::updateHashWithFile($hs, $fp, $size);
+        /** @var string $hDigest */
         $hDigest = hash_final($hs, true);
 
+        /** @var string $h */
         $h = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
+
+        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P2 $R */
         $R = ParagonIE_Sodium_Core_Ed25519::ge_double_scalarmult_vartime(
             $h,
             $A,
             self::substr($sig, 32)
         );
+
+        /** @var string $rcheck */
         $rcheck = ParagonIE_Sodium_Core_Ed25519::ge_tobytes($R);
+
+        // Close the file handle
         fclose($fp);
+
+        // Reset ParagonIE_Sodium_Compat::$fastMult to what it was before.
         ParagonIE_Sodium_Compat::$fastMult = $orig;
         return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
 
     /**
+     * Update a hash context with the contents of a file, without
+     * loading the entire file into memory.
+     *
      * @param resource $hash
      * @param resource $fp
      * @param int $size

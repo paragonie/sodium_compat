@@ -35,6 +35,8 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if (self::strlen($seed) !== self::SEED_BYTES) {
             throw new RangeException('crypto_sign keypair seed must be 32 bytes long');
         }
+
+        /** @var string $pk */
         $pk = self::publickey_from_secretkey($seed);
         $sk = self::substr($seed, 0, self::SEED_BYTES) . $pk;
         return $sk;
@@ -76,6 +78,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function publickey_from_secretkey($sk)
     {
+        /** @var string $sk */
         $sk = hash('sha512', self::substr($sk, 0, 32), true);
         $sk[0] = self::intToChr(
             self::chrToInt($sk[0]) & 248
@@ -108,6 +111,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign($message, $sk)
     {
+        /** @var string $signature */
         $signature = self::sign_detached($message, $sk);
         return $signature . $message;
     }
@@ -115,15 +119,19 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     /**
      * @internal You should not use this directly from another application
      *
-     * @param string $message
-     * @param string $pk
-     * @return string
+     * @param string $message A signed message
+     * @param string $pk      Public key
+     * @return string         Message (without signature)
      * @throws Exception
      */
     public static function sign_open($message, $pk)
     {
+        /** @var string $signature */
         $signature = self::substr($message, 0, 64);
+
+        /** @var string $message */
         $message = self::substr($message, 64);
+
         if (self::verify_detached($signature, $message, $pk)) {
             return $message;
         }
@@ -215,8 +223,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if ((self::chrToInt($sig[63]) & 224) !== 0) {
             throw new Exception('Invalid signature');
         }
-
-        $A = self::ge_frombytes_negate_vartime($pk);
         $d = 0;
         for ($i = 0; $i < 32; ++$i) {
             $d |= self::chrToInt($pk[$i]);
@@ -225,6 +231,10 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             throw new Exception('All zero public key');
         }
 
+        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A */
+        $A = self::ge_frombytes_negate_vartime($pk);
+
+        /** @var string $hDigest */
         $hDigest = hash(
             'sha512',
             self::substr($sig, 0, 32) .
@@ -232,12 +242,18 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
                 $message,
             true
         );
+
+        /** @var string $h */
         $h = self::sc_reduce($hDigest) . self::substr($hDigest, 32);
+
+        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P2 $R */
         $R = self::ge_double_scalarmult_vartime(
             $h,
             $A,
             self::substr($sig, 32)
         );
+
+        /** @var string $rcheck */
         $rcheck = self::ge_tobytes($R);
         return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
