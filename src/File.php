@@ -197,20 +197,40 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param resource $fp
      * @param int $size
      * @return resource
+     * @throws Error
+     * @throws TypeError
      */
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
+        if (!is_resource($hash)) {
+            throw new TypeError('Argument 1 must be a resource');
+        }
+        if (!is_resource($fp)) {
+            throw new TypeError('Argument 2 must be a resource');
+        }
+        if (!is_int($size)) {
+            throw new TypeError('Argument 3 must be an integer');
+        }
+        /** @var int $originalPosition */
+        $originalPosition = ftell($fp);
+
+        // Move file pointer to beginning of file
         fseek($fp, 0, SEEK_SET);
         for ($i = 0; $i < $size; $i += self::BUFFER_SIZE) {
+            /** @var string $message */
             $message = fread(
                 $fp,
                 ($size - $i) > self::BUFFER_SIZE
                     ? $size - $i
                     : self::BUFFER_SIZE
             );
+            if (!is_string($message)) {
+                throw new Error('Unexpected error reading from file.');
+            }
             hash_update($hash, $message);
         }
-        fseek($fp, 0, SEEK_SET);
+        // Reset file pointer's position
+        fseek($fp, $originalPosition, SEEK_SET);
         return $hash;
     }
 }
