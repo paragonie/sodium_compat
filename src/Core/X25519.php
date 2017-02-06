@@ -82,20 +82,20 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     public static function fe_mul121666(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
         $h = array(
-            $f[0] * 121666,
-            $f[1] * 121666,
-            $f[2] * 121666,
-            $f[3] * 121666,
-            $f[4] * 121666,
-            $f[5] * 121666,
-            $f[6] * 121666,
-            $f[7] * 121666,
-            $f[8] * 121666,
-            $f[9] * 121666
+            self::mul($f[0], 121666),
+            self::mul($f[1], 121666),
+            self::mul($f[2], 121666),
+            self::mul($f[3], 121666),
+            self::mul($f[4], 121666),
+            self::mul($f[5], 121666),
+            self::mul($f[6], 121666),
+            self::mul($f[7], 121666),
+            self::mul($f[8], 121666),
+            self::mul($f[9], 121666)
         );
 
         $carry9 = ($h[9] + (1 << 24)) >> 25;
-        $h[0] += $carry9 * 19;
+        $h[0] += self::mul($carry9, 19);
         $h[9] -= $carry9 << 25;
         $carry1 = ($h[1] + (1 << 24)) >> 25;
         $h[2] += $carry1;
