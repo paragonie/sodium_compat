@@ -274,7 +274,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $v = new SplFixedArray(16);
 
         for ($i = 16; $i--;) {
-            $m[$i] = self::load64($buf, $i*8);
+            $m[$i] = self::load64($buf, $i << 3);
         }
 
         for ($i = 8; $i--;) {
@@ -324,11 +324,11 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     public static function G($r, $i, $a, $b, $c, $d, SplFixedArray $v, SplFixedArray $m)
     {
-        $v[$a] = self::add364($v[$a], $v[$b], $m[self::$sigma[$r][2*$i]]);
+        $v[$a] = self::add364($v[$a], $v[$b], $m[self::$sigma[$r][$i << 1]]);
         $v[$d] = self::rotr64(self::xor64($v[$d], $v[$a]), 32);
         $v[$c] = self::add64($v[$c], $v[$d]);
         $v[$b] = self::rotr64(self::xor64($v[$b], $v[$c]), 24);
-        $v[$a] = self::add364($v[$a], $v[$b], $m[self::$sigma[$r][2*$i+1]]);
+        $v[$a] = self::add364($v[$a], $v[$b], $m[self::$sigma[$r][($i << 1) + 1]]);
         $v[$d] = self::rotr64(self::xor64($v[$d], $v[$a]), 16);
         $v[$c] = self::add64($v[$c], $v[$d]);
         $v[$b] = self::rotr64(self::xor64($v[$b], $v[$c]), 63);
@@ -423,7 +423,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
 
         $i = (int) (($out->getSize() - 1) / 8);
         for (; $i >= 0; --$i) {
-            self::store64($out, $i * 8, $ctx[0][$i]);
+            self::store64($out, $i << 3, $ctx[0][$i]);
         }
         return $out;
     }
@@ -566,10 +566,10 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             $ctx[0][$i] = SplFixedArray::fromArray(
                 array(
                     self::load_4(
-                        self::substr($string, (8 * $i + 4), 4)
+                        self::substr($string, (($i << 3) + 4), 4)
                     ),
                     self::load_4(
-                        self::substr($string, (8 * $i + 0), 4)
+                        self::substr($string, (($i << 3) + 0), 4)
                     )
                 )
             );
@@ -577,15 +577,15 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         for ($i = 1; $i <= 2; ++$i) {
             $ctx[$i][0] = SplFixedArray::fromArray(
                 array(
-                    self::load_4(self::substr($string, 64 + (8 * $i), 4)),
-                    self::load_4(self::substr($string, 60 + (8 * $i), 4))
+                    self::load_4(self::substr($string, 64 + ($i << 3), 4)),
+                    self::load_4(self::substr($string, 60 + ($i << 3), 4))
                 )
             );
         }
         $ctx[3] = self::stringToSplFixedArray(self::substr($string, 96, 256));
         $int = 0;
         for ($i = 0; $i < 8; ++$i) {
-            $int |= self::chrToInt($string[352 + $i]) << (8 * $i);
+            $int |= self::chrToInt($string[352 + $i]) << ($i << 3);
         }
         $ctx[4] = $int;
         return $ctx;

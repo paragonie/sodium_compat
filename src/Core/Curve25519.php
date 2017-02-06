@@ -210,7 +210,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h[8] = (int) $h[8];
         $h[9] = (int) $h[9];
 
-        $q = (19 * $h[9] + (1 << 24)) >> 25;
+        $q = (self::mul(19, $h[9]) + (1 << 24)) >> 25;
         $q = ($h[0] + $q) >> 26;
         $q = ($h[1] + $q) >> 25;
         $q = ($h[2] + $q) >> 26;
@@ -222,7 +222,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $q = ($h[8] + $q) >> 26;
         $q = ($h[9] + $q) >> 25;
 
-        $h[0] += 19 * $q;
+        $h[0] += self::mul(19, $q);
 
         $carry0 = $h[0] >> 26;
         $h[1] += $carry0;
@@ -1788,8 +1788,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
 
         for ($i = 0; $i < 32; ++$i) {
-            $e[2 * $i] = self::chrToInt($a[$i]) & 15;
-            $e[2 * $i + 1] = (self::chrToInt($a[$i]) >> 4) & 15;
+            $e[$i << 1] = self::chrToInt($a[$i]) & 15;
+            $e[($i << 1) + 1] = (self::chrToInt($a[$i]) >> 4) & 15;
         }
 
         $carry = 0;
@@ -1821,7 +1821,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h = self::ge_p1p1_to_p3($r);
 
         for ($i = 0; $i < 64; $i += 2) {
-            $t = self::ge_select((int) floor($i / 2), $e[$i]);
+            $t = self::ge_select($i >> 1, $e[$i]);
             $r = self::ge_madd($r, $h, $t);
             $h = self::ge_p1p1_to_p3($r);
         }
@@ -2227,33 +2227,33 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             array(
                 (int) (0xff & ($s0 >> 0)),
                 (int) (0xff & ($s0 >> 8)),
-                (int) (0xff & (($s0 >> 16) | ($s1 * (1 << 5)))),
+                (int) (0xff & (($s0 >> 16) | self::mul($s1, 1 << 5))),
                 (int) (0xff & ($s1 >> 3)),
                 (int) (0xff & ($s1 >> 11)),
-                (int) (0xff & (($s1 >> 19) | ($s2 * (1 << 2)))),
+                (int) (0xff & (($s1 >> 19) | self::mul($s2, 1 << 2))),
                 (int) (0xff & ($s2 >> 6)),
-                (int) (0xff & (($s2 >> 14) | ($s3 * (1 << 7)))),
+                (int) (0xff & (($s2 >> 14) | self::mul($s3, 1 << 7))),
                 (int) (0xff & ($s3 >> 1)),
                 (int) (0xff & ($s3 >> 9)),
-                (int) (0xff & (($s3 >> 17) | ($s4 * (1 << 4)))),
+                (int) (0xff & (($s3 >> 17) | self::mul($s4, 1 << 4))),
                 (int) (0xff & ($s4 >> 4)),
                 (int) (0xff & ($s4 >> 12)),
-                (int) (0xff & (($s4 >> 20) | ($s5 * (1 << 1)))),
+                (int) (0xff & (($s4 >> 20) | self::mul($s5, 1 << 1))),
                 (int) (0xff & ($s5 >> 7)),
-                (int) (0xff & (($s5 >> 15) | ($s6 * (1 << 6)))),
+                (int) (0xff & (($s5 >> 15) | self::mul($s6, 1 << 6))),
                 (int) (0xff & ($s6 >> 2)),
                 (int) (0xff & ($s6 >> 10)),
-                (int) (0xff & (($s6 >> 18) | ($s7 * (1 << 3)))),
+                (int) (0xff & (($s6 >> 18) | self::mul($s7, 1 << 3))),
                 (int) (0xff & ($s7 >> 5)),
                 (int) (0xff & ($s7 >> 13)),
                 (int) (0xff & ($s8 >> 0)),
                 (int) (0xff & ($s8 >> 8)),
-                (int) (0xff & (($s8 >> 16) | ($s9 * (1 << 5)))),
+                (int) (0xff & (($s8 >> 16) | self::mul($s9, 1 << 5))),
                 (int) (0xff & ($s9 >> 3)),
                 (int) (0xff & ($s9 >> 11)),
-                (int) (0xff & (($s9 >> 19) | ($s10 * (1 << 2)))),
+                (int) (0xff & (($s9 >> 19) | self::mul($s10, 1 << 2))),
                 (int) (0xff & ($s10 >> 6)),
-                (int) (0xff & (($s10 >> 14) | ($s11 * (1 << 7)))),
+                (int) (0xff & (($s10 >> 14) | self::mul($s11, 1 << 7))),
                 (int) (0xff & ($s11 >> 1)),
                 (int) (0xff & ($s11 >> 9)),
                 0xff & ($s11 >> 17)
@@ -2545,33 +2545,33 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             array(
                 (int) ($s0 >> 0),
                 (int) ($s0 >> 8),
-                (int) (($s0 >> 16) | ($s1 * (1 << 5))),
+                (int) (($s0 >> 16) | self::mul($s1, 1 << 5)),
                 (int) ($s1 >> 3),
                 (int) ($s1 >> 11),
-                (int) (($s1 >> 19) | ($s2 * (1 << 2))),
+                (int) (($s1 >> 19) | self::mul($s2, 1 << 2)),
                 (int) ($s2 >> 6),
-                (int) (($s2 >> 14) | ($s3 * (1 << 7))),
+                (int) (($s2 >> 14) | self::mul($s3, 1 << 7)),
                 (int) ($s3 >> 1),
                 (int) ($s3 >> 9),
-                (int) (($s3 >> 17) | ($s4 * (1 << 4))),
+                (int) (($s3 >> 17) | self::mul($s4, 1 << 4)),
                 (int) ($s4 >> 4),
                 (int) ($s4 >> 12),
-                (int) (($s4 >> 20) | ($s5 * (1 << 1))),
+                (int) (($s4 >> 20) | self::mul($s5, 1 << 1)),
                 (int) ($s5 >> 7),
-                (int) (($s5 >> 15) | ($s6 * (1 << 6))),
+                (int) (($s5 >> 15) | self::mul($s6, 1 << 6)),
                 (int) ($s6 >> 2),
                 (int) ($s6 >> 10),
-                (int) (($s6 >> 18) | ($s7 * (1 << 3))),
+                (int) (($s6 >> 18) | self::mul($s7, 1 << 3)),
                 (int) ($s7 >> 5),
                 (int) ($s7 >> 13),
                 (int) ($s8 >> 0),
                 (int) ($s8 >> 8),
-                (int) (($s8 >> 16) | ($s9 * (1 << 5))),
+                (int) (($s8 >> 16) | self::mul($s9, 1 << 5)),
                 (int) ($s9 >> 3),
                 (int) ($s9 >> 11),
-                (int) (($s9 >> 19) | ($s10 * (1 << 2))),
+                (int) (($s9 >> 19) | self::mul($s10, 1 << 2)),
                 (int) ($s10 >> 6),
-                (int) (($s10 >> 14) | ($s11 * (1 << 7))),
+                (int) (($s10 >> 14) | self::mul($s11, 1 << 7)),
                 (int) ($s11 >> 1),
                 (int) ($s11 >> 9),
                 (int) $s11 >> 17
