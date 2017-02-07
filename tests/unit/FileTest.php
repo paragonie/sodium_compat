@@ -17,6 +17,8 @@ class FileTest extends PHPUnit_Framework_TestCase
         );
         file_put_contents('random.data', $pseudoRandom);
 
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+        ParagonIE_Sodium_Compat::$fastMult = true;
         $ed25519 = ParagonIE_Sodium_Compat::crypto_sign_keypair();
         $sign_sk = ParagonIE_Sodium_Compat::crypto_sign_secretkey($ed25519);
         $sign_pk = ParagonIE_Sodium_Compat::crypto_sign_publickey($ed25519);
@@ -25,6 +27,7 @@ class FileTest extends PHPUnit_Framework_TestCase
         $stored = ParagonIE_Sodium_File::sign_file('random.data', $sign_sk);
 
         $this->assertSame(bin2hex($signed), bin2hex($stored));
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
 
         $this->assertTrue(ParagonIE_Sodium_File::verify_file($signed, 'random.data', $sign_pk));
         unlink('random.data');
