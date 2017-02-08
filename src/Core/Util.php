@@ -167,7 +167,7 @@ abstract class ParagonIE_Sodium_Core_Util
             }
             $c_val = ($c_num0 & $c_num) | ($c_alpha & $c_alpha0);
             if ($state === 0) {
-                $c_acc = $c_val * 16;
+                $c_acc = $c_val << 4;
             } else {
                 $bin .= pack('C', $c_acc | $c_val);
             }
@@ -282,7 +282,7 @@ abstract class ParagonIE_Sodium_Core_Util
 
         static $size = null;
         if (!$size) {
-            $size = (PHP_INT_SIZE * 8) - 1;
+            $size = (PHP_INT_SIZE << 3) - 1;
         }
 
         $c = 0;
@@ -331,9 +331,9 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function store_3($int)
     {
-        return self::intToChr(($int >> 16)    & 0xff) .
+        return self::intToChr(($int >> 16) & 0xff) .
             self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int           & 0xff);
+            self::intToChr($int            & 0xff);
     }
 
     /**
@@ -365,7 +365,7 @@ abstract class ParagonIE_Sodium_Core_Util
         return self::intToChr(($int >> 24) & 0xff) .
             self::intToChr(($int >> 16)    & 0xff) .
             self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int           & 0xff);
+            self::intToChr($int            & 0xff);
     }
 
     /**
