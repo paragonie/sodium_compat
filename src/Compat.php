@@ -1697,19 +1697,22 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
         }
 
         /**
+         * Libsodium as implemented in PHP 7.2
+         *
+         * @ref https://wiki.php.net/rfc/libsodium
          * @return bool
          */
         protected static function isPhp72OrGreater()
         {
-            static $foo = null;
-            if ($foo === null) {
-                $foo = PHP_VERSION_ID >= 70200 && extension_loaded('libsodium');
+            static $res = null;
+            if ($res === null) {
+                $res = PHP_VERSION_ID >= 70200 && extension_loaded('libsodium');
             }
             if (self::$disableFallbackForUnitTests) {
                 // Don't fallback. Use the PHP implementation.
                 return false;
             }
-            return $foo;
+            return $res;
         }
     }
 }
