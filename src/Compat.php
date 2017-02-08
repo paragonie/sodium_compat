@@ -777,7 +777,11 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
                 throw new TypeError('Argument 1 must be a string');
             }
             if (!is_string($key)) {
-                throw new TypeError('Argument 2 must be a string');
+                if ($key === null) {
+                    $key = '';
+                } else {
+                    throw new TypeError('Argument 2 must be a string');
+                }
             }
             if (!is_int($length)) {
                 if (is_numeric($length)) {
@@ -853,7 +857,11 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
         public static function crypto_generichash_init($key = '', $length = self::CRYPTO_GENERICHASH_BYTES)
         {
             if (!is_string($key)) {
-                throw new TypeError('Argument 1 must be a string');
+                if ($key === null) {
+                    $key = '';
+                } else {
+                    throw new TypeError('Argument 1 must be a string');
+                }
             }
             if (!is_int($length)) {
                 if (is_numeric($length)) {

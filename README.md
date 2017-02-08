@@ -72,6 +72,30 @@ if (\Sodium\crypto_sign_verify_detached($signature, $message, $alice_pk)) {
 The polyfill does not expose this API on PHP < 5.3, or if you have the PHP
 extension installed already.
 
+## PHP 7.2 Polyfill
+
+As per the [second vote on the libsodium RFC](https://wiki.php.net/rfc/libsodium#proposed_voting_choices),
+PHP 7.2 uses `sodium_*` instead of `\Sodium\*`.
+
+```php
+<?php
+require_once "/path/to/sodium_compat/autoload.php";
+
+$alice_kp = sodium_crypto_sign_keypair();
+$alice_sk = sodium_crypto_sign_secretkey($alice_kp);
+$alice_pk = sodium_crypto_sign_publickey($alice_kp);
+
+$message = 'This is a test message.';
+$signature = sodium_crypto_sign_detached($message, $alice_sk);
+if (sodium_crypto_sign_verify_detached($signature, $message, $alice_pk)) {
+    echo 'OK', PHP_EOL;
+} else {
+    throw new Exception('Invalid signature');
+}
+```
+
+Since this doesn't require a namespace, this API *is* exposed on PHP 5.2.
+
 ## General-Use Polyfill
 
 If your users are on PHP < 5.3, or you want to write code that will work
