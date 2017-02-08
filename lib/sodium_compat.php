@@ -276,6 +276,16 @@ if (!is_callable('\\Sodium\\crypto_scalarmult')) {
         return ParagonIE_Sodium_Compat::crypto_scalarmult($n, $p);
     }
 }
+if (!is_callable('\\Sodium\\crypto_scalarmult_base')) {
+    /**
+     * @param string $n
+     * @return string
+     */
+    function crypto_scalarmult_base($n)
+    {
+        return ParagonIE_Sodium_Compat::crypto_scalarmult_base($n);
+    }
+}
 if (!is_callable('\\Sodium\\crypto_secretbox')) {
     /**
      * @param string $message
@@ -450,6 +460,16 @@ if (!is_callable('\\Sodium\\memcmp')) {
         return ParagonIE_Sodium_Compat::memcmp($a, $b);
     }
 }
+if (!is_callable('\\Sodium\\memzero')) {
+    /**
+     * @param string $str
+     * @return void
+     */
+    function memzero(&$str)
+    {
+        ParagonIE_Sodium_Compat::memzero($str);
+    }
+}
 if (!is_callable('\\Sodium\\randombytes_buf')) {
     /**
      * @param int $amount
@@ -484,4 +504,5 @@ if (!is_callable('\\Sodium\\randombytes_random16')) {
 
 if (!defined('\\Sodium\\CRYPTO_AUTH_BYTES')) {
     require_once __DIR__ . '/constants.php';
+    require_once __DIR__ . '/php72compat.php';
 }
