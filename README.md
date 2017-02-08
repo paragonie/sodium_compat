@@ -127,6 +127,19 @@ polyfill without additional code changes.
 
 To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://paragonie.com/book/pecl-libsodium).
 
+## Help, Sodium_Compat is Slow! How can I make it fast?
+
+There are three ways to make it fast:
+
+1. Use PHP 7.2 when it comes out, and take advantage of libsodium in the core.
+2. Install the libsodium PHP extension from PECL.
+3. Only if the previous two options are not available for you:
+   1. Verify that [the processor you're using actually implements constant-time multiplication](https://bearssl.org/ctmul.html).
+      Sodium_compat does, but it trades some speed for cross-platform security.
+   2. Only if you are 100% certain that your processor is safe, you can set `ParagonIE_Sodium_Compat::$fastMul = true;`
+      without harming the security of your cryptography keys. If your processor *isn't* safe, then decide whether you
+      want speed or security because you can't have both.
+
 ## API Coverage
 
 * Mainline NaCl Features
