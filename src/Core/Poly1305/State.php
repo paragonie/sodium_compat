@@ -41,6 +41,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @internal You should not use this directly from another application
      *
      * @param string $key
+     * @throws InvalidArgumentException
      */
     public function __construct($key = '')
     {
@@ -61,7 +62,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         /* h = 0 */
         $this->h = array(0, 0, 0, 0, 0);
 
-        /* save fpad for later */
+        /* save pad for later */
         $this->pad = array(
             self::load_4(self::substr($key, 16, 4)),
             self::load_4(self::substr($key, 20, 4)),

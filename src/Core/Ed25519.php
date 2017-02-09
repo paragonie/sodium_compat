@@ -231,6 +231,12 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             throw new Exception('All zero public key');
         }
 
+        /** @var bool The original value of ParagonIE_Sodium_Compat::$fastMult */
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+
+        // Set ParagonIE_Sodium_Compat::$fastMult to true to speed up verification.
+        ParagonIE_Sodium_Compat::$fastMult = true;
+
         /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A */
         $A = self::ge_frombytes_negate_vartime($pk);
 
@@ -255,6 +261,10 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
 
         /** @var string $rcheck */
         $rcheck = self::ge_tobytes($R);
+
+        // Reset ParagonIE_Sodium_Compat::$fastMult to what it was before.
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
+
         return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
 

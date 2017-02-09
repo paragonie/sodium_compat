@@ -46,8 +46,25 @@ abstract class ParagonIE_Sodium_Core_Util
         $len = self::strlen($bin_string);
         for ($i = 0; $i < $len; ++$i) {
             $chunk = unpack('C', self::substr($bin_string, $i, 2));
+            /**
+             * Lower 16 bits
+             *
+             * @var int
+             */
             $c = $chunk[1] & 0xf;
+
+            /**
+             * Upper 16 bits
+             * @var int
+             */
             $b = $chunk[1] >> 4;
+
+            /**
+             * Use pack() and binary operators to turn the two integers
+             * into hexadecimal characters. We don't use chr() here, because
+             * it uses a lookup table internally and we want to avoid
+             * cache-timing side-channels.
+             */
             $hex .= pack(
                 'CC',
                 (55 + $b + ((($b - 10) >> 8) & ~6)),
@@ -103,6 +120,8 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Evaluate whether or not two strings are equal (in constant-time)
+     *
      * @param string $left
      * @param string $right
      * @return bool
@@ -167,7 +186,7 @@ abstract class ParagonIE_Sodium_Core_Util
             }
             $c_val = ($c_num0 & $c_num) | ($c_alpha & $c_alpha0);
             if ($state === 0) {
-                $c_acc = $c_val << 4;
+                $c_acc = $c_val * 16;
             } else {
                 $bin .= pack('C', $c_acc | $c_val);
             }
@@ -201,9 +220,13 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param int $int
      * @return string
+     * @throws TypeError
      */
     public static function intToChr($int)
     {
+        if (!is_int($int)) {
+            throw new TypeError('intToChr() expects an integer');
+        }
         return pack('C', $int);
     }
 
@@ -270,6 +293,14 @@ abstract class ParagonIE_Sodium_Core_Util
     /**
      * Multiply two integers in constant-time
      *
+     * Micro-architecture timing side-channels caused by how your CPU
+     * implements multiplication are best prevented by never using the
+     * multiplication operators and ensuring that our code always takes
+     * the same number of operations to complete, regardless of the values
+     * of $a and $b.
+     *
+     * @internal You should not use this directly from another application
+     *
      * @param int $a
      * @param int $b
      * @return int
@@ -286,15 +317,43 @@ abstract class ParagonIE_Sodium_Core_Util
         }
 
         $c = 0;
+
+        /**
+         * Mask is either -1 or 0.
+         *
+         * -1 in binary looks like 0x1111 ... 1111
+         *  0 in binary looks like 0x0000 ... 0000
+         *
+         * @var int
+         */
         $mask = -(($b >> $size) & 1);
+
+        /**
+         * Ensure $b is a positive integer, without creating
+         * a branching side-channel
+         */
         $b = ($b & ~$mask) | ($mask & -$b);
+
+        /**
+         * This loop always runs 32 times when PHP_INT_SIZE is 4.
+         * This loop always runs 64 times when PHP_INT_SIZE is 8.
+         */
         for ($i = $size; $i >= 0; --$i) {
             $c += (int) ($a & -($b & 1));
             $a <<= 1;
             $b >>= 1;
         }
-        $c = ($c & ~$mask) | ($mask & -$c);
-        return (int) $c;
+
+        /**
+         * If $b was negative, we then apply the same value to $c here.
+         * It doesn't matter much if $a was negative; the $c += above would
+         * have produced a negative integer to begin with. But a negative $b
+         * makes $b >>= 1 never return 0, so we would end up with incorrect
+         * results.
+         *
+         * The end result is what we'd expect from integer multiplication.
+         */
+        return (int) (($c & ~$mask) | ($mask & -$c));
     }
 
     /**
@@ -397,7 +456,7 @@ abstract class ParagonIE_Sodium_Core_Util
             self::intToChr(($hiB >>  8) & 0xff) .
             self::intToChr(($hiB >> 16) & 0xff) .
             self::intToChr(($hiB >> 24) & 0xff) .
-            self::intToChr(($int) & 0xff) .
+            self::intToChr(($int      ) & 0xff) .
             self::intToChr(($int >>  8) & 0xff) .
             self::intToChr(($int >> 16) & 0xff) .
             self::intToChr(($int >> 24) & 0xff);
@@ -421,9 +480,9 @@ abstract class ParagonIE_Sodium_Core_Util
         }
 
         return (int) (
-            self::isMbStringOverride()
-                ? mb_strlen($str, '8bit')
-                : strlen($str)
+        self::isMbStringOverride()
+            ? mb_strlen($str, '8bit')
+            : strlen($str)
         );
     }
 
@@ -434,9 +493,13 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $string
      * @return array<int, int>
+     * @throws TypeError
      */
     public static function stringToIntArray($string)
     {
+        if (!is_string($string)) {
+            throw new TypeError('String expected');
+        }
         /**
          * @var array<int, int>
          */
@@ -493,9 +556,16 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
+     * @throws TypeError
      */
     public static function verify_16($a, $b)
     {
+        if (!is_string($a)) {
+            throw new TypeError('String expected');
+        }
+        if (!is_string($b)) {
+            throw new TypeError('String expected');
+        }
         $diff = self::strlen($a) ^ self::strlen($b);
         for ($i = 0; $i < 16; ++$i) {
             $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
@@ -511,9 +581,16 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
+     * @throws TypeError
      */
     public static function verify_32($a, $b)
     {
+        if (!is_string($a)) {
+            throw new TypeError('String expected');
+        }
+        if (!is_string($b)) {
+            throw new TypeError('String expected');
+        }
         $diff = self::strlen($a) ^ self::strlen($b);
         for ($i = 0; $i < 32; ++$i) {
             $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
