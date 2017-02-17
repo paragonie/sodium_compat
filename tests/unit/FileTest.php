@@ -90,8 +90,8 @@ class FileTest extends PHPUnit_Framework_TestCase
             'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
         );
 
-        ParagonIE_Sodium_File::seal_file('plaintext-seal.data', 'plaintext-seal.cipher', $alice_box_publickey);
-        $file = file_get_contents('plaintext-seal.cipher');
+        ParagonIE_Sodium_File::seal_file('plaintext-seal.data', 'ciphertext-seal.data', $alice_box_publickey);
+        $file = file_get_contents('ciphertext-seal.data');
 
         $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
             '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
@@ -102,6 +102,7 @@ class FileTest extends PHPUnit_Framework_TestCase
 
         ParagonIE_Sodium_Compat::$fastMult = $orig;
         unlink('plaintext-seal.data');
+        unlink('ciphertext-seal.data');
     }
 
     /**
