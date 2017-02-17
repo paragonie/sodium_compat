@@ -137,7 +137,7 @@ abstract class ParagonIE_Sodium_Core_Util
             return false;
         }
         for ($i = 0; $i < $len; ++$i) {
-            $d |= self::chrToInt($left) ^ self::chrToInt($right);
+            $d |= self::chrToInt($left[$i]) ^ self::chrToInt($right[$i]);
         }
         return $d === 0;
     }
