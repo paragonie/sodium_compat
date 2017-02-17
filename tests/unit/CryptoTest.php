@@ -21,9 +21,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(
             ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key)
         );
-        $message .= 'wrong';
         $this->assertFalse(
-            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, $key)
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message . 'wrong', $key),
+            bin2hex($message) .' == ' . bin2hex($message . 'wrong')
         );
     }
 
