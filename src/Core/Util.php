@@ -143,7 +143,7 @@ abstract class ParagonIE_Sodium_Core_Util
         for ($i = 0; $i < $len; ++$i) {
             $d |= self::chrToInt($left[$i]) ^ self::chrToInt($right[$i]);
         }
-        return $d === 0;
+        return $d === 0 && $left === $right;
     }
 
     /**
