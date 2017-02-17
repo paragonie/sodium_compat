@@ -85,8 +85,8 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function chrToInt($chr)
     {
-        if (self::strlen($chr) > 1) {
-            throw new Error('chrToInt() doesn\'t expect strings of length > 1');
+        if (self::strlen($chr) !== 1) {
+            throw new Error('chrToInt() expects a string that is exactly 1 character long');
         }
         $chunk = unpack('C', $chr);
         return $chunk[1];
