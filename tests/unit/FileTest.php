@@ -59,6 +59,14 @@ class FileTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(bin2hex($raw), bin2hex($file));
 
+        // Also verify decryption works.
+        $plain = ParagonIE_Sodium_Compat::crypto_box_open(
+            $file,
+            $randomNonce,
+            $kp
+        );
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($plain));
+
         ParagonIE_Sodium_Compat::$fastMult = $orig;
         unlink('ciphertext-box.data');
         unlink('plaintext-box.data');
