@@ -2220,45 +2220,45 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s11 += $carry10;
         $s10 -= self::mul($carry10,  1 << 21);
 
-        return self::intArrayToString(
-            /**
-             * @var array<int, int>
-             */
-            array(
-                (int) (0xff & ($s0 >> 0)),
-                (int) (0xff & ($s0 >> 8)),
-                (int) (0xff & (($s0 >> 16) | self::mul($s1, 1 << 5))),
-                (int) (0xff & ($s1 >> 3)),
-                (int) (0xff & ($s1 >> 11)),
-                (int) (0xff & (($s1 >> 19) | self::mul($s2, 1 << 2))),
-                (int) (0xff & ($s2 >> 6)),
-                (int) (0xff & (($s2 >> 14) | self::mul($s3, 1 << 7))),
-                (int) (0xff & ($s3 >> 1)),
-                (int) (0xff & ($s3 >> 9)),
-                (int) (0xff & (($s3 >> 17) | self::mul($s4, 1 << 4))),
-                (int) (0xff & ($s4 >> 4)),
-                (int) (0xff & ($s4 >> 12)),
-                (int) (0xff & (($s4 >> 20) | self::mul($s5, 1 << 1))),
-                (int) (0xff & ($s5 >> 7)),
-                (int) (0xff & (($s5 >> 15) | self::mul($s6, 1 << 6))),
-                (int) (0xff & ($s6 >> 2)),
-                (int) (0xff & ($s6 >> 10)),
-                (int) (0xff & (($s6 >> 18) | self::mul($s7, 1 << 3))),
-                (int) (0xff & ($s7 >> 5)),
-                (int) (0xff & ($s7 >> 13)),
-                (int) (0xff & ($s8 >> 0)),
-                (int) (0xff & ($s8 >> 8)),
-                (int) (0xff & (($s8 >> 16) | self::mul($s9, 1 << 5))),
-                (int) (0xff & ($s9 >> 3)),
-                (int) (0xff & ($s9 >> 11)),
-                (int) (0xff & (($s9 >> 19) | self::mul($s10, 1 << 2))),
-                (int) (0xff & ($s10 >> 6)),
-                (int) (0xff & (($s10 >> 14) | self::mul($s11, 1 << 7))),
-                (int) (0xff & ($s11 >> 1)),
-                (int) (0xff & ($s11 >> 9)),
-                0xff & ($s11 >> 17)
-            )
+
+        /**
+         * @var array<int, int>
+         */
+        $arr = array(
+            (int) (0xff & ($s0 >> 0)),
+            (int) (0xff & ($s0 >> 8)),
+            (int) (0xff & (($s0 >> 16) | self::mul($s1, 1 << 5))),
+            (int) (0xff & ($s1 >> 3)),
+            (int) (0xff & ($s1 >> 11)),
+            (int) (0xff & (($s1 >> 19) | self::mul($s2, 1 << 2))),
+            (int) (0xff & ($s2 >> 6)),
+            (int) (0xff & (($s2 >> 14) | self::mul($s3, 1 << 7))),
+            (int) (0xff & ($s3 >> 1)),
+            (int) (0xff & ($s3 >> 9)),
+            (int) (0xff & (($s3 >> 17) | self::mul($s4, 1 << 4))),
+            (int) (0xff & ($s4 >> 4)),
+            (int) (0xff & ($s4 >> 12)),
+            (int) (0xff & (($s4 >> 20) | self::mul($s5, 1 << 1))),
+            (int) (0xff & ($s5 >> 7)),
+            (int) (0xff & (($s5 >> 15) | self::mul($s6, 1 << 6))),
+            (int) (0xff & ($s6 >> 2)),
+            (int) (0xff & ($s6 >> 10)),
+            (int) (0xff & (($s6 >> 18) | self::mul($s7, 1 << 3))),
+            (int) (0xff & ($s7 >> 5)),
+            (int) (0xff & ($s7 >> 13)),
+            (int) (0xff & ($s8 >> 0)),
+            (int) (0xff & ($s8 >> 8)),
+            (int) (0xff & (($s8 >> 16) | self::mul($s9, 1 << 5))),
+            (int) (0xff & ($s9 >> 3)),
+            (int) (0xff & ($s9 >> 11)),
+            (int) (0xff & (($s9 >> 19) | self::mul($s10, 1 << 2))),
+            (int) (0xff & ($s10 >> 6)),
+            (int) (0xff & (($s10 >> 14) | self::mul($s11, 1 << 7))),
+            (int) (0xff & ($s11 >> 1)),
+            (int) (0xff & ($s11 >> 9)),
+            0xff & ($s11 >> 17)
         );
+        return self::intArrayToString($arr);
     }
 
     /**
@@ -2538,44 +2538,43 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s11 += $carry10;
         $s10 -= self::mul($carry10,  1 << 21);
 
-        return self::intArrayToString(
-            /**
-             * @var array<int, int>
-             */
-            array(
-                (int) ($s0 >> 0),
-                (int) ($s0 >> 8),
-                (int) (($s0 >> 16) | self::mul($s1, 1 << 5)),
-                (int) ($s1 >> 3),
-                (int) ($s1 >> 11),
-                (int) (($s1 >> 19) | self::mul($s2, 1 << 2)),
-                (int) ($s2 >> 6),
-                (int) (($s2 >> 14) | self::mul($s3, 1 << 7)),
-                (int) ($s3 >> 1),
-                (int) ($s3 >> 9),
-                (int) (($s3 >> 17) | self::mul($s4, 1 << 4)),
-                (int) ($s4 >> 4),
-                (int) ($s4 >> 12),
-                (int) (($s4 >> 20) | self::mul($s5, 1 << 1)),
-                (int) ($s5 >> 7),
-                (int) (($s5 >> 15) | self::mul($s6, 1 << 6)),
-                (int) ($s6 >> 2),
-                (int) ($s6 >> 10),
-                (int) (($s6 >> 18) | self::mul($s7, 1 << 3)),
-                (int) ($s7 >> 5),
-                (int) ($s7 >> 13),
-                (int) ($s8 >> 0),
-                (int) ($s8 >> 8),
-                (int) (($s8 >> 16) | self::mul($s9, 1 << 5)),
-                (int) ($s9 >> 3),
-                (int) ($s9 >> 11),
-                (int) (($s9 >> 19) | self::mul($s10, 1 << 2)),
-                (int) ($s10 >> 6),
-                (int) (($s10 >> 14) | self::mul($s11, 1 << 7)),
-                (int) ($s11 >> 1),
-                (int) ($s11 >> 9),
-                (int) $s11 >> 17
-            )
+        /**
+         * @var array<int, int>
+         */
+        $arr = array(
+            (int) ($s0 >> 0),
+            (int) ($s0 >> 8),
+            (int) (($s0 >> 16) | self::mul($s1, 1 << 5)),
+            (int) ($s1 >> 3),
+            (int) ($s1 >> 11),
+            (int) (($s1 >> 19) | self::mul($s2, 1 << 2)),
+            (int) ($s2 >> 6),
+            (int) (($s2 >> 14) | self::mul($s3, 1 << 7)),
+            (int) ($s3 >> 1),
+            (int) ($s3 >> 9),
+            (int) (($s3 >> 17) | self::mul($s4, 1 << 4)),
+            (int) ($s4 >> 4),
+            (int) ($s4 >> 12),
+            (int) (($s4 >> 20) | self::mul($s5, 1 << 1)),
+            (int) ($s5 >> 7),
+            (int) (($s5 >> 15) | self::mul($s6, 1 << 6)),
+            (int) ($s6 >> 2),
+            (int) ($s6 >> 10),
+            (int) (($s6 >> 18) | self::mul($s7, 1 << 3)),
+            (int) ($s7 >> 5),
+            (int) ($s7 >> 13),
+            (int) ($s8 >> 0),
+            (int) ($s8 >> 8),
+            (int) (($s8 >> 16) | self::mul($s9, 1 << 5)),
+            (int) ($s9 >> 3),
+            (int) ($s9 >> 11),
+            (int) (($s9 >> 19) | self::mul($s10, 1 << 2)),
+            (int) ($s10 >> 6),
+            (int) (($s10 >> 14) | self::mul($s11, 1 << 7)),
+            (int) ($s11 >> 1),
+            (int) ($s11 >> 9),
+            (int) $s11 >> 17
         );
+        return self::intArrayToString($arr);
     }
 }

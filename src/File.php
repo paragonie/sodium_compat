@@ -35,7 +35,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 3 must be CRYPTO_BOX_PUBLICKEYBYTES bytes');
         }
 
-        /** @var resource $fp */
+        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
 
         /** @var int $size */
@@ -44,6 +44,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not open input file for reading');
         }
 
+        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             throw new Error('Could not open output file for writing');
@@ -52,7 +53,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         /** @var string $ephKeypair */
         $ephKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
 
-        /** @var sting $msgKeypair */
+        /** @var string $msgKeypair */
         $msgKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
             ParagonIE_Sodium_Compat::crypto_box_secretkey($ephKeypair),
             $publicKey
@@ -130,7 +131,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_KEYBYTES bytes');
         }
 
-        /** @var resource $fp */
+        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
 
         /** @var int $size */
@@ -139,6 +140,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not open input file for reading');
         }
 
+        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             throw new Error('Could not open output file for writing');
@@ -179,7 +181,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        /** @var resource $fp */
+        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
 
         /** @var int $size */
@@ -188,6 +190,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not open input file for reading');
         }
 
+        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             throw new Error('Could not open output file for writing');
@@ -389,7 +392,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param string   $boxKeypair
      * @return bool
      */
-    protected function box_encrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
+    protected static function box_encrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
     {
         return self::secretbox_encrypt(
             $ifp,
@@ -413,7 +416,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param string $key
      * @return bool
      */
-    protected function secretbox_encrypt($ifp, $ofp, $mlen, $nonce, $key)
+    protected static function secretbox_encrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
         $plaintext = fread($ifp, 32);
 
