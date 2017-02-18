@@ -848,7 +848,7 @@ abstract class ParagonIE_Sodium_Crypto
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
             $subkey
         );
-        if (!ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, $block0)) {
+        if (!ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, ParagonIE_Sodium_Core_Util::substr($block0, 0, 32))) {
             try {
                 ParagonIE_Sodium_Compat::memzero($subkey);
             } catch (Error $ex) {

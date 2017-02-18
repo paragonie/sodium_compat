@@ -8,29 +8,8 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::secretbox_file()
-     */
-    public function testSecretbox()
-    {
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $pseudoRandom = random_bytes(random_int(1 << 9, 1 << 17));
-        file_put_contents('secretbox.plain', $pseudoRandom);
-        $key = random_bytes(32);
-
-        $raw = ParagonIE_Sodium_Compat::crypto_secretbox($pseudoRandom, $randomNonce, $key);
-        ParagonIE_Sodium_File::secretbox_file('secretbox.plain', 'secretbox.cipher', $randomNonce, $key);
-        $file = file_get_contents('secretbox.cipher');
-
-        $this->assertSame(bin2hex($raw), bin2hex($file));
-
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        unlink('secretbox.plain');
-        unlink('secretbox.cipher');
-    }
-
-    /**
-     * @covers ParagonIE_Sodium_File::box_file()
+     * @covers ParagonIE_Sodium_File::box()
+     * @covers ParagonIE_Sodium_File::box_open()
      */
     public function testBox()
     {
@@ -54,7 +33,7 @@ class FileTest extends PHPUnit_Framework_TestCase
             $randomNonce,
             $kp
         );
-        ParagonIE_Sodium_File::box_file('plaintext-box.data', 'ciphertext-box.data', $randomNonce, $kp);
+        ParagonIE_Sodium_File::box('plaintext-box.data', 'ciphertext-box.data', $randomNonce, $kp);
         $file = file_get_contents('ciphertext-box.data');
 
         $this->assertSame(bin2hex($raw), bin2hex($file));
@@ -67,13 +46,19 @@ class FileTest extends PHPUnit_Framework_TestCase
         );
         $this->assertSame(bin2hex($pseudoRandom), bin2hex($plain));
 
+        ParagonIE_Sodium_File::box_open('ciphertext-box.data', 'plaintext-box2.data', $randomNonce, $kp);
+        $opened = file_get_contents('plaintext-box2.data');
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($opened));
+
         ParagonIE_Sodium_Compat::$fastMult = $orig;
         unlink('ciphertext-box.data');
-        unlink('plaintext-box.data');
+        unlink('plaintext-box.data');;
+        unlink('plaintext-box2.data');
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::seal_file()
+     * @covers ParagonIE_Sodium_File::box_seal()
+     * @covers ParagonIE_Sodium_File::box_seal_open()
      */
     public function testSeal()
     {
@@ -81,7 +66,7 @@ class FileTest extends PHPUnit_Framework_TestCase
         $randomNonce = random_bytes(24);
         $orig = ParagonIE_Sodium_Compat::$fastMult;
         $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
-            32, // random_int(1 << 9, 1 << 17),
+            random_int(1 << 9, 1 << 17),
             $randomNonce,
             $randomSeed
         );
@@ -90,7 +75,7 @@ class FileTest extends PHPUnit_Framework_TestCase
             'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
         );
 
-        ParagonIE_Sodium_File::seal_file('plaintext-seal.data', 'ciphertext-seal.data', $alice_box_publickey);
+        ParagonIE_Sodium_File::box_seal('plaintext-seal.data', 'ciphertext-seal.data', $alice_box_publickey);
         $file = file_get_contents('ciphertext-seal.data');
 
         $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
@@ -100,14 +85,48 @@ class FileTest extends PHPUnit_Framework_TestCase
         $raw = ParagonIE_Sodium_Compat::crypto_box_seal_open($file, $alice_box_kp);
         $this->assertSame(bin2hex($pseudoRandom), bin2hex($raw));
 
+        ParagonIE_Sodium_File::box_seal_open('ciphertext-seal.data', 'plaintext-seal2.data', $alice_box_kp);
+        $opened = file_get_contents('plaintext-seal2.data');
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($opened));
+
         ParagonIE_Sodium_Compat::$fastMult = $orig;
         unlink('plaintext-seal.data');
+        unlink('plaintext-seal2.data');
         unlink('ciphertext-seal.data');
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::sign_file()
-     * @covers ParagonIE_Sodium_File::verify_file()
+     * @covers ParagonIE_Sodium_File::secretbox()
+     * @covers ParagonIE_Sodium_File::secretbox_open()
+     */
+    public function testSecretbox()
+    {
+        $randomNonce = random_bytes(24);
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+        $pseudoRandom = random_bytes(random_int(1 << 9, 1 << 17));
+        file_put_contents('secretbox.plain', $pseudoRandom);
+        $key = random_bytes(32);
+
+        $raw = ParagonIE_Sodium_Compat::crypto_secretbox($pseudoRandom, $randomNonce, $key);
+        ParagonIE_Sodium_File::secretbox('secretbox.plain', 'secretbox.cipher', $randomNonce, $key);
+        $file = file_get_contents('secretbox.cipher');
+
+        $this->assertSame(bin2hex($raw), bin2hex($file));
+
+        ParagonIE_Sodium_File::secretbox_open('secretbox.cipher', 'secretbox.plain2', $randomNonce, $key);
+        $read = file_get_contents('secretbox.plain2');
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($read));
+
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
+        unlink('secretbox.plain');
+        unlink('secretbox.plain2');
+        unlink('secretbox.cipher');
+    }
+
+
+    /**
+     * @covers ParagonIE_Sodium_File::sign()
+     * @covers ParagonIE_Sodium_File::verify()
      */
     public function testSignVerify()
     {
@@ -127,12 +146,12 @@ class FileTest extends PHPUnit_Framework_TestCase
         $sign_pk = ParagonIE_Sodium_Compat::crypto_sign_publickey($ed25519);
 
         $signed = ParagonIE_Sodium_Compat::crypto_sign_detached($pseudoRandom, $sign_sk);
-        $stored = ParagonIE_Sodium_File::sign_file('random.data', $sign_sk);
+        $stored = ParagonIE_Sodium_File::sign('random.data', $sign_sk);
 
         $this->assertSame(bin2hex($signed), bin2hex($stored));
         ParagonIE_Sodium_Compat::$fastMult = $orig;
 
-        $this->assertTrue(ParagonIE_Sodium_File::verify_file($signed, 'random.data', $sign_pk));
+        $this->assertTrue(ParagonIE_Sodium_File::verify($signed, 'random.data', $sign_pk));
         unlink('random.data');
     }
 }

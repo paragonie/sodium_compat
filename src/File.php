@@ -8,6 +8,127 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     const BUFFER_SIZE = 8192;
 
     /**
+     * Box a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_box(), but produces
+     * the same result.
+     *
+     * @param string $inputFile  Absolute path to a file on the filesystem
+     * @param string $outputFile Absolute path to a file on the filesystem
+     * @param string $nonce      Number to be used only once
+     * @param string $keyPair    ECDH secret key and ECDH public key concatenated
+     *
+     * @return bool
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function box($inputFile, $outputFile, $nonce, $keyPair)
+    {
+        if (!is_string($inputFile)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if (!is_string($outputFile)) {
+            throw new TypeError('Argument 2 must be a string.');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($keyPair)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES) {
+            throw new TypeError('Argument 3 must be CRYPTO_BOX_NONCEBYTES bytes');
+        }
+        if (self::strlen($keyPair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
+            throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+
+        /** @var int $size */
+        $size = filesize($inputFile);
+        if (!is_int($size) || !is_resource($ifp)) {
+            throw new Error('Could not open input file for reading');
+        }
+
+        /** @var resource $ofp */
+        $ofp = fopen($outputFile, 'wb');
+        if (!is_resource($ofp)) {
+            throw new Error('Could not open output file for writing');
+        }
+
+        $res = self::box_encrypt($ifp, $ofp, $size, $nonce, $keyPair);
+        fclose($ifp);
+        fclose($ofp);
+        return $res;
+    }
+
+    /**
+     * Seal a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_box_open(), but produces
+     * the same result.
+     *
+     * Warning: Does not protect against TOCTOU attacks. You should
+     * just load the file into memory and use crypto_box_open() if
+     * you are worried about those.
+     *
+     * @param string $inputFile
+     * @param string $outputFile
+     * @param string $nonce
+     * @param string $ecdhKeypair
+     * @return bool
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function box_open($inputFile, $outputFile, $nonce, $ecdhKeypair)
+    {
+        if (!is_string($inputFile)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if (!is_string($outputFile)) {
+            throw new TypeError('Argument 2 must be a string.');
+        }
+        if (!is_string($nonce)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (!is_string($ecdhKeypair)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES) {
+            throw new TypeError('Argument 4 must be CRYPTO_BOX_NONCEBYTES bytes');
+        }
+        if (self::strlen($ecdhKeypair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
+            throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+
+        /** @var int $size */
+        $size = filesize($inputFile);
+        if (!is_int($size) || !is_resource($ifp)) {
+            throw new Error('Could not open input file for reading');
+        }
+
+        /** @var resource $ofp */
+        $ofp = fopen($outputFile, 'wb');
+        if (!is_resource($ofp)) {
+            throw new Error('Could not open output file for writing');
+        }
+
+        $res = self::box_decrypt($ifp, $ofp, $size, $nonce, $ecdhKeypair);
+        fclose($ifp);
+        fclose($ofp);
+        try {
+            ParagonIE_Sodium_Compat::memzero($nonce);
+            ParagonIE_Sodium_Compat::memzero($ephKeypair);
+        } catch (Error $ex) {
+            unset($ephKeypair);
+        }
+        return $res;
+    }
+
+    /**
      * Seal a file (rather than a string). Uses less memory than
      * ParagonIE_Sodium_Compat::crypto_box_seal(), but produces
      * the same result.
@@ -20,7 +141,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws Error
      * @throws TypeError
      */
-    public static function seal_file($inputFile, $outputFile, $publicKey)
+    public static function box_seal($inputFile, $outputFile, $publicKey)
     {
         if (!is_string($inputFile)) {
             throw new TypeError('Argument 1 must be a string.');
@@ -97,6 +218,81 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Seal a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_box_seal_open(), but produces
+     * the same result.
+     *
+     * Warning: Does not protect against TOCTOU attacks. You should
+     * just load the file into memory and use crypto_box_seal_open() if
+     * you are worried about those.
+     *
+     * @param string $inputFile
+     * @param string $outputFile
+     * @param string $ecdhKeypair
+     * @return bool
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function box_seal_open($inputFile, $outputFile, $ecdhKeypair)
+    {
+        if (!is_string($inputFile)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if (!is_string($outputFile)) {
+            throw new TypeError('Argument 2 must be a string.');
+        }
+        if (!is_string($ecdhKeypair)) {
+            throw new TypeError('Argument 3 must be a string');
+        }
+        if (self::strlen($ecdhKeypair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
+            throw new TypeError('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
+        }
+
+        $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($ecdhKeypair);
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+
+        /** @var int $size */
+        $size = filesize($inputFile);
+        if (!is_int($size) || !is_resource($ifp)) {
+            throw new Error('Could not open input file for reading');
+        }
+
+        /** @var resource $ofp */
+        $ofp = fopen($outputFile, 'wb');
+        if (!is_resource($ofp)) {
+            throw new Error('Could not open output file for writing');
+        }
+
+        $ephemeralPK = fread($ifp, ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES);
+        if (self::strlen($ephemeralPK) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES) {
+            throw new Error('Could not read public key from sealed file');
+        }
+
+        $nonce = ParagonIE_Sodium_Compat::crypto_generichash(
+            $ephemeralPK . $publicKey,
+            '',
+            24
+        );
+        $msgKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
+            ParagonIE_Sodium_Compat::crypto_box_secretkey($ecdhKeypair),
+            $ephemeralPK
+        );
+
+        $res = self::box_decrypt($ifp, $ofp, $size, $nonce, $msgKeypair);
+        fclose($ifp);
+        fclose($ofp);
+        try {
+            ParagonIE_Sodium_Compat::memzero($nonce);
+            ParagonIE_Sodium_Compat::memzero($ephKeypair);
+        } catch (Error $ex) {
+            unset($ephKeypair);
+        }
+        return $res;
+    }
+
+    /**
      * Encrypt a file (rather than a string). Uses less memory than
      * ParagonIE_Sodium_Compat::crypto_secretbox(), but produces
      * the same result.
@@ -110,7 +306,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws Error
      * @throws TypeError
      */
-    public static function secretbox_file($inputFile, $outputFile, $nonce, $key)
+    public static function secretbox($inputFile, $outputFile, $nonce, $key)
     {
         if (!is_string($inputFile)) {
             throw new TypeError('Argument 1 must be a string.');
@@ -151,22 +347,24 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         fclose($ofp);
         return $res;
     }
-
     /**
-     * Box a file (rather than a string). Uses less memory than
-     * ParagonIE_Sodium_Compat::crypto_box(), but produces
+     * Seal a file (rather than a string). Uses less memory than
+     * ParagonIE_Sodium_Compat::crypto_secretbox_open(), but produces
      * the same result.
      *
-     * @param string $inputFile  Absolute path to a file on the filesystem
-     * @param string $outputFile Absolute path to a file on the filesystem
-     * @param string $nonce      Number to be used only once
-     * @param string $keyPair    ECDH secret key and ECDH public key concatenated
+     * Warning: Does not protect against TOCTOU attacks. You should
+     * just load the file into memory and use crypto_secretbox_open() if
+     * you are worried about those.
      *
+     * @param string $inputFile
+     * @param string $outputFile
+     * @param string $nonce
+     * @param string $key
      * @return bool
      * @throws Error
      * @throws TypeError
      */
-    public static function box_file($inputFile, $outputFile, $nonce, $keyPair)
+    public static function secretbox_open($inputFile, $outputFile, $nonce, $key)
     {
         if (!is_string($inputFile)) {
             throw new TypeError('Argument 1 must be a string.');
@@ -174,11 +372,17 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (!is_string($outputFile)) {
             throw new TypeError('Argument 2 must be a string.');
         }
-        if (!is_string($keyPair)) {
+        if (!is_string($nonce)) {
             throw new TypeError('Argument 3 must be a string');
         }
-        if (self::strlen($keyPair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
-            throw new TypeError('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
+        if (!is_string($key)) {
+            throw new TypeError('Argument 4 must be a string');
+        }
+        if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES) {
+            throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_NONCEBYTES bytes');
+        }
+        if (self::strlen($key) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES) {
+            throw new TypeError('Argument 4 must be CRYPTO_SECRETBOXBOX_KEYBYTES bytes');
         }
 
         /** @var resource $ifp */
@@ -186,6 +390,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         /** @var int $size */
         $size = filesize($inputFile);
+
         if (!is_int($size) || !is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
@@ -196,9 +401,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not open output file for writing');
         }
 
-        $res = self::box_encrypt($ifp, $ofp, $size, $nonce, $keyPair);
+        $res = self::secretbox_decrypt($ifp, $ofp, $size, $nonce, $key);
         fclose($ifp);
         fclose($ofp);
+        try {
+            ParagonIE_Sodium_Compat::memzero($key);
+        } catch (Error $ex) {
+            unset($key);
+        }
         return $res;
     }
 
@@ -214,7 +424,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws Error
      * @throws TypeError
      */
-    public static function sign_file($filePath, $secretKey)
+    public static function sign($filePath, $secretKey)
     {
         if (!is_string($filePath)) {
             throw new TypeError('Argument 1 must be a string.');
@@ -300,7 +510,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws Error
      * @throws Exception
      */
-    public static function verify_file($sig, $filePath, $publicKey)
+    public static function verify($sig, $filePath, $publicKey)
     {
         if (!is_string($sig)) {
             throw new TypeError('Argument 1 must be a string.');
@@ -406,6 +616,29 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         );
     }
 
+
+    /**
+     * @param resource $ifp
+     * @param resource $ofp
+     * @param int      $mlen
+     * @param string   $nonce
+     * @param string   $boxKeypair
+     * @return bool
+     */
+    protected static function box_decrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
+    {
+        return self::secretbox_decrypt(
+            $ifp,
+            $ofp,
+            $mlen,
+            $nonce,
+            ParagonIE_Sodium_Crypto::box_beforenm(
+                ParagonIE_Sodium_Crypto::box_secretkey($boxKeypair),
+                ParagonIE_Sodium_Crypto::box_publickey($boxKeypair)
+            )
+        );
+    }
+
     /**
      * Encrypt a file
      *
@@ -419,6 +652,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     protected static function secretbox_encrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
         $plaintext = fread($ifp, 32);
+        $first32 = ftell($ifp);
 
         /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
@@ -470,7 +704,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         /** @var int $incr */
         $incr = self::BUFFER_SIZE >> 6;
 
-        fseek($ifp, 32, SEEK_SET);
+        fseek($ifp, $first32, SEEK_SET);
         while ($mlen > 0) {
             $blockSize = $mlen > self::BUFFER_SIZE
                 ? self::BUFFER_SIZE
@@ -502,6 +736,98 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         unset($state);
 
         return true;
+    }
+
+    /**
+     * Encrypt a file
+     *
+     * @param resource $ifp
+     * @param resource $ofp
+     * @param int $mlen
+     * @param string $nonce
+     * @param string $key
+     * @return bool
+     * @throws Exception
+     */
+    protected static function secretbox_decrypt($ifp, $ofp, $mlen, $nonce, $key)
+    {
+        $tag = fread($ifp, 16);
+
+        /** @var string $subkey */
+        $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
+
+        /** @var string $realNonce */
+        $realNonce = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
+
+        /** @var string $block0 */
+        $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20(
+            64,
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
+            $subkey
+        );
+        $state = new ParagonIE_Sodium_Core_Poly1305_State(self::substr($block0, 0, 32));
+        if (!self::onetimeauth_verify($state, $ifp, $tag, $mlen)) {
+            throw new Exception('Invalid MAC');
+        }
+        $first32 = fread($ifp, 32);
+        fwrite($ofp, self::xorStrings(self::substr($block0, 32), $first32));
+        $mlen -= 32;
+
+        /** @var int $iter */
+        $iter = 1;
+
+        /** @var int $incr */
+        $incr = self::BUFFER_SIZE >> 6;
+
+        while ($mlen > 0) {
+            $blockSize = $mlen > self::BUFFER_SIZE
+                ? self::BUFFER_SIZE
+                : $mlen;
+            $ciphertext = fread($ifp, $blockSize);
+            $pBlock = ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
+                $ciphertext,
+                $realNonce,
+                $iter,
+                $subkey
+            );
+            fwrite($ofp, $pBlock, $blockSize);
+            $mlen -= $blockSize;
+            $iter += $incr;
+        }
+        return true;
+    }
+
+    /**
+     * @param ParagonIE_Sodium_Core_Poly1305_State $state
+     * @param resource $ifp
+     * @param string $tag
+     * @param int $mlen
+     * @return bool
+     */
+    protected static function onetimeauth_verify(ParagonIE_Sodium_Core_Poly1305_State $state, $ifp, $tag = '', $mlen = 0)
+    {
+        /** @var int $pos */
+        $pos = ftell($ifp);
+
+        /** @var int $iter */
+        $iter = 1;
+
+        /** @var int $incr */
+        $incr = self::BUFFER_SIZE >> 6;
+
+        while ($mlen > 0) {
+            $blockSize = $mlen > self::BUFFER_SIZE
+                ? self::BUFFER_SIZE
+                : $mlen;
+            $ciphertext = fread($ifp, $blockSize);
+            $state->update($ciphertext);
+            $mlen -= $blockSize;
+            $iter += $incr;
+        }
+        $res = ParagonIE_Sodium_Core_Util::verify_16($tag, $state->finish());
+
+        fseek($ifp, $pos, SEEK_SET);
+        return $res;
     }
 
     /**
