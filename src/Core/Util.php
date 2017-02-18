@@ -573,11 +573,10 @@ abstract class ParagonIE_Sodium_Core_Util
         if (!is_string($b)) {
             throw new TypeError('String expected');
         }
-        $diff = self::strlen($a) ^ self::strlen($b);
-        for ($i = 0; $i < 16; ++$i) {
-            $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
-        }
-        return $diff === 0;
+        return self::hashEquals(
+            self::substr($a, 0, 16),
+            self::substr($b, 0, 16)
+        );
     }
 
     /**
@@ -598,11 +597,10 @@ abstract class ParagonIE_Sodium_Core_Util
         if (!is_string($b)) {
             throw new TypeError('String expected');
         }
-        $diff = self::strlen($a) ^ self::strlen($b);
-        for ($i = 0; $i < 32; ++$i) {
-            $diff |= self::chrToInt($a[$i]) ^ self::chrToInt($b[$i]);
-        }
-        return $diff === 0;
+        return self::hashEquals(
+            self::substr($a, 0, 32),
+            self::substr($b, 0, 32)
+        );
     }
 
     /**
