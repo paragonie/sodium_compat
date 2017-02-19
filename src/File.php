@@ -309,6 +309,68 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Calculate the BLAKE2b hash of a file.
+     *
+     * @param string      $filePath  Absolute path to a file on the filesystem
+     * @param string|null $secretKey Secret signing key
+     *
+     * @return string           BLAKE2b hash
+     * @throws Error
+     * @throws TypeError
+     */
+    public static function generichash($filePath, $key = null, $outputLength = 32)
+    {
+        if (!is_string($filePath)) {
+            throw new TypeError('Argument 1 must be a string.');
+        }
+        if ($key !== null) {
+            if (!is_string($key)) {
+                throw new TypeError('Argument 2 must be a string');
+            }
+            if (self::strlen($key) < ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
+                throw new TypeError('Argument 2 must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes');
+            }
+            if (self::strlen($key) > ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MAX) {
+                throw new TypeError('Argument 2 must be at most CRYPTO_GENERICHASH_KEYBYTES_MAX bytes');
+            }
+        }
+        if (!is_int($outputLength)) {
+            if (!is_numeric($outputLength)) {
+                throw new TypeError('Argument 3 must be an integer');
+            }
+            $outputLength = (int) $outputLength;
+        }
+        if ($outputLength < ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MIN) {
+            throw new Error('Argument 3 must be at least CRYPTO_GENERICHASH_BYTES_MIN');
+        }
+        if ($outputLength > ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MAX) {
+            throw new Error('Argument 3 must be at least CRYPTO_GENERICHASH_BYTES_MAX');
+        }
+
+        /** @var int $size */
+        $size = filesize($filePath);
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $fp = fopen($filePath, 'rb');
+        if (!is_resource($fp)) {
+        }
+        $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init($key, $outputLength);
+        while ($size > 0) {
+            $blockSize = $size > 64
+                ? 64
+                : $size;
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, fread($fp, $blockSize));
+            $size -= $blockSize;
+        }
+
+        fclose($fp);
+        return ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, $outputLength);
+    }
+
+    /**
      * Encrypt a file (rather than a string). Uses less memory than
      * ParagonIE_Sodium_Compat::crypto_secretbox(), but produces
      * the same result.
