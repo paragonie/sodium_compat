@@ -42,18 +42,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
-        if (!is_int($size) || !is_resource($ifp)) {
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -101,18 +105,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
-        if (!is_int($size) || !is_resource($ifp)) {
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -156,18 +164,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 3 must be CRYPTO_BOX_PUBLICKEYBYTES bytes');
         }
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
-        if (!is_int($size) || !is_resource($ifp)) {
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -250,18 +262,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($ecdhKeypair);
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
-        if (!is_int($size) || !is_resource($ifp)) {
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -327,18 +343,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_KEYBYTES bytes');
         }
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
-        if (!is_int($size) || !is_resource($ifp)) {
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -385,19 +405,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOXBOX_KEYBYTES bytes');
         }
 
-        /** @var resource $ifp */
-        $ifp = fopen($inputFile, 'rb');
-
         /** @var int $size */
         $size = filesize($inputFile);
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
 
-        if (!is_int($size) || !is_resource($ifp)) {
+        /** @var resource $ifp */
+        $ifp = fopen($inputFile, 'rb');
+        if (!is_resource($ifp)) {
             throw new Error('Could not open input file for reading');
         }
 
         /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
+            fclose($ifp);
             throw new Error('Could not open output file for writing');
         }
 
@@ -436,13 +459,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
         }
 
-        /** @var resource $fp */
-        $fp = fopen($filePath, 'rb');
-
         /** @var int $size */
         $size = filesize($filePath);
-        if (!is_int($size) || !is_resource($fp)) {
-            throw new Error('Could not open file for reading');
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $fp = fopen($filePath, 'rb');
+        if (!is_resource($fp)) {
+            throw new Error('Could not open input file for reading');
         }
 
         /** @var string $az */
@@ -527,18 +553,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (self::strlen($publicKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_SIGN_PUBLICKEYBYTES bytes');
         }
-
-        /** @var resource $fp */
-        $fp = fopen($filePath, 'rb');
-
-        /** @var int $size */
-        $size = filesize($filePath);
-        if (!is_int($size) || !is_resource($fp)) {
-            throw new Error('Could not open file for reading');
-        }
         if (self::strlen($sig) < 64) {
             throw new Exception('Signature is too short');
         }
+
         if (ParagonIE_Sodium_Core_Ed25519::check_S_lt_L(self::substr($sig, 32, 32))) {
             throw new Exception('S < L - Invalid signature');
         }
@@ -554,6 +572,19 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         }
         if ($d === 0) {
             throw new Exception('All zero public key');
+        }
+
+
+        /** @var int $size */
+        $size = filesize($filePath);
+        if (!is_int($size)) {
+            throw new Error('Could not obtain the file size');
+        }
+
+        /** @var resource $ifp */
+        $fp = fopen($filePath, 'rb');
+        if (!is_resource($fp)) {
+            throw new Error('Could not open input file for reading');
         }
 
         /** @var bool The original value of ParagonIE_Sodium_Compat::$fastMult */
