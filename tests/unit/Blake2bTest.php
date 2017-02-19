@@ -34,5 +34,18 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
             bin2hex(ParagonIE_Sodium_Compat::crypto_generichash_final($ctx)),
             'Chosen input.'
         );
+
+        for ($i = 1; $i < 16; ++$i) {
+            $data = random_bytes(1 << $i);
+            $data2 = random_bytes(1 << $i);
+            $hash = ParagonIE_Sodium_Compat::crypto_generichash($data . $data2);
+
+            $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init();
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $data);
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $data2);
+            $hash2 = ParagonIE_Sodium_Compat::crypto_generichash_final($ctx);
+
+            $this->assertSame(bin2hex($hash), bin2hex($hash2), 'Generichash streaming is failing (' . $i . ')');
+        }
     }
 }
