@@ -341,11 +341,12 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $ctx
      * @param int $inc
      * @return void
+     * @throws Error
      */
     public static function increment_counter($ctx, $inc)
     {
         if ($inc < 0) {
-            $inc *= -1;
+            throw new Error('Increasing by a negative number makes no sense.');
         }
         $t = self::to64($inc);
         # S->t is $ctx[1] in our implementation
