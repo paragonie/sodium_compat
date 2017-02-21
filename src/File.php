@@ -311,22 +311,27 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     /**
      * Calculate the BLAKE2b hash of a file.
      *
-     * @param string      $filePath  Absolute path to a file on the filesystem
-     * @param string|null $secretKey Secret signing key
+     * @param string      $filePath     Absolute path to a file on the filesystem
+     * @param string|null $key          BLAKE2b key
+     * @param int         $outputLength Length of hash output
      *
-     * @return string           BLAKE2b hash
+     * @return string                   BLAKE2b hash
      * @throws Error
      * @throws TypeError
      */
-    public static function generichash($filePath, $key = null, $outputLength = 32)
+    public static function generichash($filePath, $key = '', $outputLength = 32)
     {
         if (!is_string($filePath)) {
             throw new TypeError('Argument 1 must be a string.');
         }
-        if ($key !== null) {
-            if (!is_string($key)) {
+        if (!is_string($key)) {
+            if ($key === null) {
+                $key = '';
+            } else {
                 throw new TypeError('Argument 2 must be a string');
             }
+        }
+        if (!empty($key)) {
             if (self::strlen($key) < ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
                 throw new TypeError('Argument 2 must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes');
             }
@@ -353,9 +358,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
+        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
+            throw new Error('Could not open input file for reading');
         }
         $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init($key, $outputLength);
         while ($size > 0) {
@@ -527,7 +533,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
+        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new Error('Could not open input file for reading');
@@ -643,7 +649,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new Error('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
+        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new Error('Could not open input file for reading');
