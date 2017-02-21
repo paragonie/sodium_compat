@@ -785,7 +785,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             }
             if (!is_int($length)) {
                 if (is_numeric($length)) {
-                    $length = (int)$length;
+                    $length = (int) $length;
                 } else {
                     throw new TypeError('Argument 3 must be an integer');
                 }
