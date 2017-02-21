@@ -412,7 +412,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
                 $offset += $plen;
                 $plen -= $plen;
             }
-            $offset &= 0xff;
         }
     }
 
@@ -576,13 +575,13 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         # size_t buflen;
         $str .= implode('', array(
             self::intToChr($ctx[4] & 0xff),
-            self::intToChr(($ctx[4] << 8) & 0xff),
-            self::intToChr(($ctx[4] << 16) & 0xff),
-            self::intToChr(($ctx[4] << 24) & 0xff),
-            self::intToChr(($ctx[4] << 32) & 0xff),
-            self::intToChr(($ctx[4] << 40) & 0xff),
-            self::intToChr(($ctx[4] << 48) & 0xff),
-            self::intToChr(($ctx[4] << 56) & 0xff)
+            self::intToChr(($ctx[4] >> 8) & 0xff),
+            self::intToChr(($ctx[4] >> 16) & 0xff),
+            self::intToChr(($ctx[4] >> 24) & 0xff),
+            self::intToChr(($ctx[4] >> 32) & 0xff),
+            self::intToChr(($ctx[4] >> 40) & 0xff),
+            self::intToChr(($ctx[4] >> 48) & 0xff),
+            self::intToChr(($ctx[4] >> 56) & 0xff)
         ));
         # uint8_t last_node;
         return $str . "\x00";

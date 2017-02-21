@@ -98,6 +98,9 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
             'Enterprises, LLC',
             str_repeat("\x7e", 128),
             str_repeat("\x4d", 256),
+            str_repeat("\x2f", 128),
+            str_repeat("\x2e", 128),
+            str_repeat("0", 128),
             str_repeat("\x4e", 64),
             str_repeat("\x4f", 257),
             str_repeat("\x0a", 511)
@@ -158,29 +161,32 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
             'Chosen input.'
         );
 
-        for ($i = 1; $i < 16; ++$i) {
-            /*
+        for ($i = 1; $i < 9; ++$i) {
             $data = random_bytes(1 << $i);
             $data2 = random_bytes(1 << $i);
-            */
-            $data = str_repeat("\x40", 1 << $i);
-            $data2 = str_repeat("\xcf", 1 << $i);
+
+            // Hash 1
             $hash = ParagonIE_Sodium_Compat::crypto_generichash($data . $data2);
 
-            $out = new SplFixedArray(32);
-            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data), 1 << $i);
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2), 1 << $i);
-            ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
-            $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
-
+            // Hash 2
             $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init(null, 32);
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $data);
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $data2);
             $hash2 = ParagonIE_Sodium_Compat::crypto_generichash_final($ctx);
 
+            // Hash 3
+            $out = new SplFixedArray(32);
+            $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
+            $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
+            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
+            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
+            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
+            ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+            $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
+
             $this->assertSame(bin2hex($hash), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') a');
-            $this->assertSame(bin2hex($hash), bin2hex($hash2), 'Generichash streaming is failing (' . $i . ') b');
+            $this->assertSame(bin2hex($hash2), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') b');
+            $this->assertSame(bin2hex($hash2), bin2hex($hash), 'Generichash streaming is failing (' . $i . ') c');
         }
     }
 }
