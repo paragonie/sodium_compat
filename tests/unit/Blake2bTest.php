@@ -111,9 +111,6 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
                 $chunk,
                 $chunk->count()
             );
-            if ($i > 2 && $i < 6) {
-                ParagonIE_Sodium_Core_BLAKE2b::$debug = false;
-            }
             $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
             $this->assertEquals(
                 ParagonIE_Sodium_Core_Util::bin2hex(
