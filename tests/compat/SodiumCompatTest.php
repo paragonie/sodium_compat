@@ -448,6 +448,28 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             'generichash_update() 2'
         );
 
+        $randoms = array(
+            random_bytes(127),
+            random_bytes(1),
+            random_bytes(128),
+            random_bytes(random_int(1, 127)),
+            random_bytes(random_int(1, 127)),
+            random_bytes(random_int(1 << 9, 1 << 15)),
+            random_bytes(random_int(1 << 9, 1 << 15)),
+            random_bytes(random_int(1, 127)),
+            random_bytes(random_int(1 << 9, 1 << 15))
+        );
+        $n = 2;
+        foreach ($randoms as $random) {
+            \Sodium\crypto_generichash_update($nativeCtx, $random);
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $random);
+            $this->assertSame(
+                bin2hex($nativeCtx),
+                bin2hex($ctx),
+                'generichash_update() ' . (++$n)
+            );
+        }
+
         $this->assertSame(
             bin2hex(\Sodium\crypto_generichash_final($nativeCtx, 32)),
             bin2hex(ParagonIE_Sodium_Compat::crypto_generichash_final($ctx, 32)),
