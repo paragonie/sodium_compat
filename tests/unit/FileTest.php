@@ -57,6 +57,29 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_File::generichash()
+     */
+    public function testGenerichash()
+    {
+        $randomSeed = random_bytes(32);
+        $randomNonce = random_bytes(24);
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
+            random_int(1 << 9, 1 << 17),
+            $randomNonce,
+            $randomSeed
+        );
+        file_put_contents('plaintext-hash.data', $pseudoRandom);
+        $file = ParagonIE_Sodium_File::generichash('plaintext-hash.data');
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::crypto_generichash($pseudoRandom),
+            $file
+        );
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
+        unlink('plaintext-hash.data');
+    }
+
+    /**
      * @covers ParagonIE_Sodium_File::box_seal()
      * @covers ParagonIE_Sodium_File::box_seal_open()
      */
