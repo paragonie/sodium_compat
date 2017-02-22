@@ -61,13 +61,6 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     {
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
 
-        ParagonIE_Sodium_Core_BLAKE2b::increment_counter($ctx, -1);
-        ParagonIE_Sodium_Core_BLAKE2b::increment_counter($ctx, 1);
-        $this->assertEquals(2, $ctx[1][0][1]);
-        $this->assertEquals(0, $ctx[1][0][0]);
-
-        $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
-
         ParagonIE_Sodium_Core_BLAKE2b::increment_counter($ctx, 1);
         $this->assertEquals(1, $ctx[1][0][1]);
         $this->assertEquals(0, $ctx[1][0][0]);
