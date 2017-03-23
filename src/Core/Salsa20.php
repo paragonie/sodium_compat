@@ -183,10 +183,7 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         $kcopy = self::substr($k, 0, 32);
         $in = self::substr($n, 0, 8);
         // Initialize the counter
-        for ($i = 8; $i < 16; ++$i) {
-            $in .= self::intToChr($ic & 0xff);
-            $ic >>= 8;
-        }
+        $in .= ParagonIE_Sodium_Core_Util::store64_le($ic);
 
         $c = '';
         while ($mlen >= 64) {

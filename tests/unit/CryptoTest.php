@@ -261,6 +261,24 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305()
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open()
+     */
+    public function testSecretboxXChaCha20Poly1205()
+    {
+        $secret = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $message = random_bytes(random_int(1, 1024));
+        $cipher = ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305($message, $nonce, $secret);
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open($cipher, $nonce, $secret)
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Crypto::sign_verify_detached()
      */
     public function testVerifyDetached()

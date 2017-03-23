@@ -1106,8 +1106,8 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
          * Decrypts a message previously encrypted with crypto_secretbox().
          *
          * @param string $ciphertext Ciphertext with Poly1305 MAC
-         * @param string $nonce A Number to be used Once; must be 24 bytes
-         * @param string $key Symmetric encryption key
+         * @param string $nonce      A Number to be used Once; must be 24 bytes
+         * @param string $key        Symmetric encryption key
          * @return string            Original plaintext message
          * @throws Error
          * @throws TypeError
@@ -1136,6 +1136,67 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
                 return call_user_func('\\Sodium\\crypto_secretbox_open', $ciphertext, $nonce, $key);
             }
             return ParagonIE_Sodium_Crypto::secretbox_open($ciphertext, $nonce, $key);
+        }
+
+        /**
+         * Authenticated symmetric-key encryption.
+         *
+         * Algorithm: XChaCha20-Poly1305
+         *
+         * @param string $plaintext The message you're encrypting
+         * @param string $nonce     A Number to be used Once; must be 24 bytes
+         * @param string $key       Symmetric encryption key
+         * @return string           Ciphertext with Poly1305 MAC
+         * @throws Error
+         * @throws TypeError
+         */
+        public static function crypto_secretbox_xchacha20poly1305($plaintext, $nonce, $key)
+        {
+            if (!is_string($plaintext)) {
+                throw new TypeError('Argument 1 must be a string');
+            }
+            if (!is_string($nonce)) {
+                throw new TypeError('Argument 2 must be a string');
+            }
+            if (!is_string($key)) {
+                throw new TypeError('Argument 3 must be a string');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_SECRETBOX_NONCEBYTES) {
+                throw new Error('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_SECRETBOX_KEYBYTES) {
+                throw new Error('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
+            }
+            return ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305($plaintext, $nonce, $key);
+        }
+        /**
+         * Decrypts a message previously encrypted with crypto_secretbox_xchacha20poly1305().
+         *
+         * @param string $ciphertext Ciphertext with Poly1305 MAC
+         * @param string $nonce      A Number to be used Once; must be 24 bytes
+         * @param string $key        Symmetric encryption key
+         * @return string            Original plaintext message
+         * @throws Error
+         * @throws TypeError
+         */
+        public static function crypto_secretbox_xchacha20poly1305_open($ciphertext, $nonce, $key)
+        {
+            if (!is_string($ciphertext)) {
+                throw new TypeError('Argument 1 must be a string');
+            }
+            if (!is_string($nonce)) {
+                throw new TypeError('Argument 2 must be a string');
+            }
+            if (!is_string($key)) {
+                throw new TypeError('Argument 3 must be a string');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_SECRETBOX_NONCEBYTES) {
+                throw new Error('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_SECRETBOX_KEYBYTES) {
+                throw new Error('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
+            }
+            return ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305_open($ciphertext, $nonce, $key);
         }
 
         /**

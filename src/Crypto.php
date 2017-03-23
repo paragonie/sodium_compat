@@ -38,6 +38,12 @@ abstract class ParagonIE_Sodium_Crypto
     const secretbox_xsalsa20poly1305_BOXZEROBYTES = 16;
     const secretbox_xsalsa20poly1305_ZEROBYTES = 32;
 
+    const secretbox_xchacha20poly1305_KEYBYTES = 32;
+    const secretbox_xchacha20poly1305_NONCEBYTES = 24;
+    const secretbox_xchacha20poly1305_MACBYTES = 16;
+    const secretbox_xchacha20poly1305_BOXZEROBYTES = 16;
+    const secretbox_xchacha20poly1305_ZEROBYTES = 32;
+
     const stream_salsa20_KEYBYTES = 32;
 
     /**
@@ -827,13 +833,13 @@ abstract class ParagonIE_Sodium_Crypto
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
             0,
-            self::box_curve25519xsalsa20poly1305_MACBYTES
+            self::secretbox_xsalsa20poly1305_MACBYTES
         );
 
         /** @var string $c */
         $c = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
-            self::box_curve25519xsalsa20poly1305_MACBYTES
+            self::secretbox_xsalsa20poly1305_MACBYTES
         );
 
         /** @var int $clen */
@@ -848,7 +854,8 @@ abstract class ParagonIE_Sodium_Crypto
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
             $subkey
         );
-        if (!ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, ParagonIE_Sodium_Core_Util::substr($block0, 0, 32))) {
+        $verified = ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, ParagonIE_Sodium_Core_Util::substr($block0, 0, 32));
+        if (!$verified) {
             try {
                 ParagonIE_Sodium_Compat::memzero($subkey);
             } catch (Error $ex) {
@@ -872,6 +879,153 @@ abstract class ParagonIE_Sodium_Crypto
                 ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
                 1,
                 $subkey
+            );
+        }
+        return $m;
+    }
+
+    /**
+     * XChaCha20-Poly1305 authenticated symmetric-key encryption.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
+     * @param string $plaintext
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function secretbox_xchacha20poly1305($plaintext, $nonce, $key)
+    {
+        /** @var string $subkey */
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16), $key);
+        $nonceLast = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
+
+        /** @var string $block0 */
+        $block0 = str_repeat("\x00", 32);
+
+        /** @var int $mlen - Length of the plaintext message */
+        $mlen = ParagonIE_Sodium_Core_Util::strlen($plaintext);
+        $mlen0 = $mlen;
+        if ($mlen0 > 64 - self::secretbox_xchacha20poly1305_ZEROBYTES) {
+            $mlen0 = 64 - self::secretbox_xchacha20poly1305_ZEROBYTES;
+        }
+        $block0 .= ParagonIE_Sodium_Core_Util::substr($plaintext, 0, $mlen0);
+
+        /** @var string $block0 */
+        $block0 = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $block0,
+            $nonceLast,
+            $subkey
+        );
+
+        /** @var string $c */
+        $c = ParagonIE_Sodium_Core_Util::substr(
+            $block0,
+            self::secretbox_xchacha20poly1305_ZEROBYTES
+        );
+        if ($mlen > $mlen0) {
+            $c .= ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+                ParagonIE_Sodium_Core_Util::substr(
+                    $plaintext,
+                    self::secretbox_xchacha20poly1305_ZEROBYTES
+                ),
+                $nonceLast,
+                $subkey,
+                ParagonIE_Sodium_Core_Util::store64_le(1)
+            );
+        }
+        $state = new ParagonIE_Sodium_Core_Poly1305_State(
+            ParagonIE_Sodium_Core_Util::substr(
+                $block0,
+                0,
+                self::onetimeauth_poly1305_KEYBYTES
+            )
+        );
+        try {
+            ParagonIE_Sodium_Compat::memzero($block0);
+            ParagonIE_Sodium_Compat::memzero($subkey);
+        } catch (Error $ex) {
+            $block0 = null;
+            $subkey = null;
+        }
+
+        $state->update($c);
+
+        /** @var string $c - MAC || ciphertext */
+        $c = $state->finish() . $c;
+        unset($state);
+
+        return $c;
+    }
+
+    /**
+     * Decrypt a ciphertext generated via secretbox_xchacha20poly1305().
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
+     * @param string $ciphertext
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws Error
+     */
+    public static function secretbox_xchacha20poly1305_open($ciphertext, $nonce, $key)
+    {
+        /** @var string $mac */
+        $mac = ParagonIE_Sodium_Core_Util::substr(
+            $ciphertext,
+            0,
+            self::secretbox_xchacha20poly1305_MACBYTES
+        );
+
+        /** @var string $c */
+        $c = ParagonIE_Sodium_Core_Util::substr(
+            $ciphertext,
+            self::secretbox_xchacha20poly1305_MACBYTES
+        );
+
+        /** @var int $clen */
+        $clen = ParagonIE_Sodium_Core_Util::strlen($c);
+
+        /** @var string $subkey */
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hchacha20($nonce, $key);
+
+        /** @var string $block0 */
+        $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
+            64,
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
+            $subkey
+        );
+        $verified = ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify(
+            $mac,
+            $c,
+            ParagonIE_Sodium_Core_Util::substr($block0, 0, 32)
+        );
+        if (!$verified) {
+            try {
+                ParagonIE_Sodium_Compat::memzero($subkey);
+            } catch (Error $ex) {
+                $subkey = null;
+            }
+            throw new Error('Invalid MAC');
+        }
+
+        /** @var string $m - Decrypted message */
+        $m = ParagonIE_Sodium_Core_Util::xorStrings(
+            ParagonIE_Sodium_Core_Util::substr($block0, self::secretbox_xchacha20poly1305_ZEROBYTES),
+            ParagonIE_Sodium_Core_Util::substr($c, 0, self::secretbox_xchacha20poly1305_ZEROBYTES)
+        );
+
+        if ($clen > self::secretbox_xchacha20poly1305_ZEROBYTES) {
+            // We had more than 1 block, so let's continue to decrypt the rest.
+            $m .= ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+                ParagonIE_Sodium_Core_Util::substr(
+                    $c,
+                    self::secretbox_xchacha20poly1305_ZEROBYTES
+                ),
+                ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
+                $subkey,
+                ParagonIE_Sodium_Core_Util::store64_le(1)
             );
         }
         return $m;
