@@ -20,6 +20,11 @@ abstract class ParagonIE_Sodium_Crypto
     const aead_chacha20poly1305_IETF_NPUBBYTES = 12;
     const aead_chacha20poly1305_IETF_ABYTES = 16;
 
+    const aead_xchacha20poly1305_IETF_KEYBYTES = 32;
+    const aead_xchacha20poly1305_IETF_NSECBYTES = 0;
+    const aead_xchacha20poly1305_IETF_NPUBBYTES = 24;
+    const aead_xchacha20poly1305_IETF_ABYTES = 16;
+
     const box_curve25519xsalsa20poly1305_SEEDBYTES = 32;
     const box_curve25519xsalsa20poly1305_PUBLICKEYBYTES = 32;
     const box_curve25519xsalsa20poly1305_SECRETKEYBYTES = 32;
@@ -292,6 +297,61 @@ abstract class ParagonIE_Sodium_Crypto
         $state->update(ParagonIE_Sodium_Core_Util::store64_le($adlen));
         $state->update(ParagonIE_Sodium_Core_Util::store64_le($len));
         return $ciphertext . $state->finish();
+    }
+
+    /**
+     * AEAD Decryption with ChaCha20-Poly1305, IETF mode (96-bit nonce)
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
+     * @param string $message
+     * @param string $ad
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws Error
+     */
+    public static function aead_xchacha20poly1305_ietf_decrypt(
+        $message = '',
+        $ad = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
+            $key
+        );
+        $nonceLast = "\x00\x00\x00\x00" .
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
+
+        return self::aead_chacha20poly1305_ietf_decrypt($message, $ad, $nonceLast, $subkey);
+    }
+
+    /**
+     * AEAD Encryption with ChaCha20-Poly1305, IETF mode (96-bit nonce)
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
+     * @param string $message
+     * @param string $ad
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    public static function aead_xchacha20poly1305_ietf_encrypt(
+        $message = '',
+        $ad = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
+            $key
+        );
+        $nonceLast = "\x00\x00\x00\x00" .
+            ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
+
+        return self::aead_chacha20poly1305_ietf_encrypt($message, $ad, $nonceLast, $subkey);
     }
 
     /**
@@ -897,7 +957,10 @@ abstract class ParagonIE_Sodium_Crypto
     public static function secretbox_xchacha20poly1305($plaintext, $nonce, $key)
     {
         /** @var string $subkey */
-        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16), $key);
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
+            $key
+        );
         $nonceLast = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
 
         /** @var string $block0 */

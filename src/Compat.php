@@ -54,6 +54,10 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
         const CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES = 0;
         const CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES = 12;
         const CRYPTO_AEAD_CHACHA20POLY1305_IETF_ABYTES = 16;
+        const CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES = 32;
+        const CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NSECBYTES = 0;
+        const CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES = 24;
+        const CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES = 16;
         const CRYPTO_AUTH_BYTES = 32;
         const CRYPTO_AUTH_KEYBYTES = 32;
         const CRYPTO_BOX_SEALBYTES = 16;
@@ -412,6 +416,109 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             );
         }
 
+        /**
+         * Authenticated Encryption with Associated Data: Decryption
+         *
+         * Algorithm:
+         *     XChaCha20-Poly1305
+         *
+         * This mode uses a 64-bit random nonce with a 64-bit counter.
+         * IETF mode uses a 96-bit random nonce with a 32-bit counter.
+         *
+         * @param string $ciphertext Encrypted message (with Poly1305 MAC appended)
+         * @param string $assocData Authenticated Associated Data (unencrypted)
+         * @param string $nonce Number to be used only Once; must be 8 bytes
+         * @param string $key Encryption key
+         *
+         * @return string            The original plaintext message
+         * @throws Error
+         * @throws TypeError
+         */
+        public static function crypto_aead_xchacha20poly1305_ietf_decrypt(
+            $ciphertext = '',
+            $assocData = '',
+            $nonce = '',
+            $key = ''
+        ) {
+            if (!is_string($ciphertext)) {
+                throw new TypeError('Argument 1 must be a string');
+            }
+            if (!is_string($assocData)) {
+                throw new TypeError('Argument 2 must be a string');
+            }
+            if (!is_string($nonce)) {
+                throw new TypeError('Argument 3 must be a string');
+            }
+            if (!is_string($key)) {
+                throw new TypeError('Argument 4 must be a string');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
+                throw new Error('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES long');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES) {
+                throw new Error('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES long');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES) {
+                throw new Error('Message must be at least CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES long');
+            }
+            return ParagonIE_Sodium_Crypto::aead_xchacha20poly1305_ietf_decrypt(
+                $ciphertext,
+                $assocData,
+                $nonce,
+                $key
+            );
+        }
+
+        /**
+         * Authenticated Encryption with Associated Data
+         *
+         * Algorithm:
+         *     XChaCha20-Poly1305
+         *
+         * This mode uses a 64-bit random nonce with a 64-bit counter.
+         * IETF mode uses a 96-bit random nonce with a 32-bit counter.
+         *
+         * @param string $plaintext Message to be encrypted
+         * @param string $assocData Authenticated Associated Data (unencrypted)
+         * @param string $nonce Number to be used only Once; must be 8 bytes
+         * @param string $key Encryption key
+         *
+         * @return string           Ciphertext with a 16-byte Poly1305 message
+         *                          authentication code appended
+         * @throws Error
+         * @throws TypeError
+         */
+        public static function crypto_aead_xchacha20poly1305_ietf_encrypt(
+            $plaintext = '',
+            $assocData = '',
+            $nonce = '',
+            $key = ''
+        ) {
+            if (!is_string($plaintext)) {
+                throw new TypeError('Argument 1 must be a string');
+            }
+            if (!is_string($assocData)) {
+                throw new TypeError('Argument 2 must be a string');
+            }
+            if (!is_string($nonce)) {
+                throw new TypeError('Argument 3 must be a string');
+            }
+            if (!is_string($key)) {
+                throw new TypeError('Argument 4 must be a string');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
+                throw new Error('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_NPUBBYTES long');
+            }
+            if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES) {
+                throw new Error('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_KEYBYTES long');
+            }
+            return ParagonIE_Sodium_Crypto::aead_xchacha20poly1305_ietf_encrypt(
+                $plaintext,
+                $assocData,
+                $nonce,
+                $key
+            );
+        }
 
         /**
          * Authenticate a message. Uses symmetric-key cryptography.
