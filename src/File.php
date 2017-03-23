@@ -318,6 +318,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @return string                   BLAKE2b hash
      * @throws Error
      * @throws TypeError
+     * @psalm-suppress FailedTypeResolution
      */
     public static function generichash($filePath, $key = '', $outputLength = 32)
     {
