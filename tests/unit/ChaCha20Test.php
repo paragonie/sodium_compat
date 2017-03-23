@@ -4,9 +4,6 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        if (!extension_loaded('libsodium')) {
-            $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
-        }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
