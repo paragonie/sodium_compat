@@ -325,7 +325,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 1 must be a string.');
         }
         if (!is_string($key)) {
-            if ($key === null) {
+            if (is_null($key)) {
                 $key = '';
             } else {
                 throw new TypeError('Argument 2 must be a string');

@@ -839,7 +839,7 @@ if (!class_exists('ParagonIE_Sodium_Compat', false)) {
             try {
                 self::memzero($ctx);
             } catch (Error $ex) {
-                $ctx = null;
+                unset($ctx);
             }
             return $result;
         }
