@@ -56,6 +56,49 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_decrypt()
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_encrypt()
+     */
+    public function testXChapoly()
+    {
+        $message = str_repeat("\x00", 128);
+        $key = str_repeat("\x00", 32);
+        $nonce = str_repeat("\x00", 24);
+        $ad = '';
+
+        $this->assertSame(
+            bin2hex($message),
+            bin2hex(
+                ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt(
+                    ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt(
+                        $message,
+                        $ad,
+                        $nonce,
+                        $key
+                    ),
+                    $ad,
+                    $nonce,
+                    $key
+                )
+            ),
+            'Blank Message decryption'
+        );
+
+        $message = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.";
+        $key = "\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f" .
+            "\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f";
+        $nonce = "\x07\x00\x00\x00\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x00\x00\x00\x00\x00\x00\x00\x00";
+        $ad = "\x50\x51\x52\x53\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7";
+        $expected = "\x45\x3c\x06\x93\xa7\x40\x7f\x04\xff\x4c\x56\xae\xdb\x17\xa3\xc0\xa1\xaf\xff\x01\x17\x49\x30\xfc\x22\x28\x7c\x33\xdb\xcf\x0a\xc8\xb8\x9a\xd9\x29\x53\x0a\x1b\xb3\xab\x5e\x69\xf2\x4c\x7f\x60\x70\xc8\xf8\x40\xc9\xab\xb4\xf6\x9f\xbf\xc8\xa7\xff\x51\x26\xfa\xee\xbb\xb5\x58\x05\xee\x9c\x1c\xf2\xce\x5a\x57\x26\x32\x87\xae\xc5\x78\x0f\x04\xec\x32\x4c\x35\x14\x12\x2c\xfc\x32\x31\xfc\x1a\x8b\x71\x8a\x62\x86\x37\x30\xa2\x70\x2b\xb7\x63\x66\x11\x6b\xed\x09\xe0\xfd\x5c\x6d\x84\xb6\xb0\xc1\xab\xaf\x24\x9d\x5d\xd0\xf7\xf5\xa7\xea";
+
+        $this->assertSame(
+            bin2hex($expected),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, $ad, $nonce, $key)),
+            'Test vectors'
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */
@@ -257,6 +300,24 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $message,
             ParagonIE_Sodium_Compat::crypto_secretbox_open($cipher, $nonce, $secret)
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305()
+     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open()
+     */
+    public function testSecretboxXChaCha20Poly1205()
+    {
+        $secret = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $message = random_bytes(random_int(1, 1024));
+        $cipher = ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305($message, $nonce, $secret);
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open($cipher, $nonce, $secret)
         );
     }
 
