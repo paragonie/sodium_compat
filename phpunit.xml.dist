@@ -16,8 +16,6 @@
         <testsuite name="Unit Tests">
             <directory suffix="Test.php">./tests/unit</directory>
         </testsuite>
-    </testsuites>
-    <testsuites>
         <testsuite name="Libsodium Compatibility Tests">
             <directory suffix="Test.php">./tests/compat</directory>
         </testsuite>
