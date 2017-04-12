@@ -178,6 +178,7 @@ There are three ways to make it fast:
 * **Ed25519** - Edwards curve Digital Signature Algorithm over Curve25519
 * **Xsalsa20** - Extended-nonce Salsa20 stream cipher
 * **ChaCha20** - Stream cipher
+* **Xchacha20** - Extended-nonce ChaCha20 stream cipher
 * **Poly1305** - Polynomial Evaluation Message Authentication Code modulo 2^130 - 5
 * **BLAKE2b** - Cryptographic Hash Function
 * **SipHash-2-4** - Fast hash, but not collision-resistant; ideal for hash tables.
