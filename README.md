@@ -125,6 +125,11 @@ Generally: If you replace `\Sodium\ ` with `ParagonIE_Sodium_Compat::`, any
 code already written for the libsodium PHP extension should work with our
 polyfill without additional code changes.
 
+Since version 0.7.0, we have our own namespaced API (`ParagonIE\Sodium\*`) to allow brevity
+in software that uses PHP 5.3+. This is useful if you want to use our file cryptography 
+features without writing `ParagonIE_Sodium_File` every time. This is not exposed on PHP < 5.3,
+so if your project supports PHP < 5.3, use the underscore method instead.
+
 To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://paragonie.com/book/pecl-libsodium).
 
 ## Help, Sodium_Compat is Slow! How can I make it fast?
