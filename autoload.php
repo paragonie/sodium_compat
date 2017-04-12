@@ -40,6 +40,7 @@ if (!is_callable('sodiumCompatAutoloader')) {
 if (PHP_VERSION_ID >= 50300) {
     // Namespaces didn't exist before 5.3.0, so don't even try to use this
     // unless PHP >= 5.3.0
+    require_once dirname(__FILE__) . '/lib/namespaced.php';
     require_once dirname(__FILE__) . '/lib/sodium_compat.php';
 }
 if (PHP_VERSION_ID < 70200) {
