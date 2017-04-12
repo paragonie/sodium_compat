@@ -157,6 +157,10 @@ There are three ways to make it fast:
     * `crypto_aead_chacha20poly1305_decrypt()`
     * `crypto_aead_chacha20poly1305_ietf_encrypt()`
     * `crypto_aead_chacha20poly1305_ietf_decrypt()`
+    * `crypto_aead_xchacha20poly1305_ietf_encrypt()`
+    * `crypto_aead_xchacha20poly1305_ietf_decrypt()`
+    * `crypto_box_xchacha20poly1305()`
+    * `crypto_box_xchacha20poly1305_open()`
     * `crypto_box_seal()`
     * `crypto_box_seal_open()`
     * `crypto_generichash()`
@@ -164,6 +168,8 @@ There are three ways to make it fast:
     * `crypto_generichash_update()`
     * `crypto_generichash_final()`
     * `crypto_kx()`
+    * `crypto_secretbox_xchacha20poly1305()`
+    * `crypto_secretbox_xchacha20poly1305_open()`
     * `crypto_shorthash()`
     * `crypto_sign_detached()`
     * `crypto_sign_verify_detached()`
