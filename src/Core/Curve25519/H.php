@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_Curve25519_H', false)) {
+    return;
+}
+
 /**
  * Class ParagonIE_Sodium_Core_Curve25519_H
  *

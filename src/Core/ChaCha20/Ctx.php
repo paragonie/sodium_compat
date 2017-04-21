@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_ChaCha20_Ctx', false)) {
+    return;
+}
+
 /**
  * Class ParagonIE_Sodium_Core_ChaCha20_Ctx
  */

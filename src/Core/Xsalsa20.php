@@ -1,5 +1,10 @@
 <?php
 
+
+if (class_exists('ParagonIE_Sodium_Core_Xsalsa20', false)) {
+    return;
+}
+
 /**
  * Class ParagonIE_Sodium_Core_Xsalsa20
  */

@@ -1,5 +1,9 @@
 <?php
 
+
+if (class_exists('ParagonIE_Sodium_File', false)) {
+    return;
+}
 /**
  * Class ParagonIE_Sodium_File
  */

@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_SipHash', false)) {
+    return;
+}
+
 /**
  * Class ParagonIE_SodiumCompat_Core_SipHash
  *
