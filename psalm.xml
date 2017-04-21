@@ -13,5 +13,10 @@
             as a function name for PHP 5.2 compatibility. When testing, be sure
             to change this to "info".
          -->
+        <DuplicateClass errorLevel="info" />
+        <!--
+            Psalm isn't correctly identifying the guard conditions that return
+            early if a class already exists.
+        -->
     </issueHandlers>
 </psalm>
