@@ -21,8 +21,6 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-        $boxfunc = '\\ParagonIE\\Sodium\\Compat::crypto_secretbox';
-        $openfunc = '\\ParagonIE\\Sodium\\Compat::crypto_secretbox_open';
 
         $this->assertSame(
             ParagonIE_Sodium_Core_Util::substr(
@@ -43,7 +41,10 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $message,
             ParagonIE_Sodium_Crypto::secretbox_open(
-                $boxfunc($message, $nonce, $key),
+                call_user_func_array(
+                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
+                    array($message, $nonce, $key)
+                ),
                 $nonce,
                 $key
             )
