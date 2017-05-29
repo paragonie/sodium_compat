@@ -116,7 +116,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::load_3()
+     * @covers ParagonIE_Sodium_Core_Util::load_4()
      */
     public function testLoad4()
     {
@@ -129,6 +129,26 @@ class UtilTest extends PHPUnit_Framework_TestCase
             2163527424,
             ParagonIE_Sodium_Core_Curve25519::load_4("\x00\xcf\xf4\x80"),
             'Unexpected result from load_4'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::load64_le()
+     */
+    public function testLoad64()
+    {
+        if (PHP_INT_SIZE < 8) {
+            $this->markTestSkipped('Public utility test for load64_le()');
+        }
+        $this->assertSame(
+            8451279,
+            ParagonIE_Sodium_Core_Util::load64_le("\xcf\xf4\x80\x00\x00\x00\x00\x00"),
+            'Unexpected result from load64_le'
+        );
+        $this->assertSame(
+            9223372036854775807,
+            ParagonIE_Sodium_Core_Util::load64_le("\xff\xff\xff\xff\xff\xff\xff\x7f"),
+            'Unexpected result from load64_le'
         );
     }
 
@@ -153,6 +173,26 @@ class UtilTest extends PHPUnit_Framework_TestCase
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
     }
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::store64_le()
+     */
+    public function testStore64()
+    {
+        if (PHP_INT_SIZE < 8) {
+            $this->markTestSkipped('Public utility test for load64_le()');
+        }
+        $this->assertSame(
+            bin2hex("\xcf\xf4\x80\x00\x00\x00\x00\x00"),
+            bin2hex(ParagonIE_Sodium_Core_Util::store64_le(8451279)),
+            'Unexpected result from store64_le'
+        );
+        $this->assertSame(
+            bin2hex("\xff\xff\xff\xff\xff\xff\xff\x7f"),
+            bin2hex(ParagonIE_Sodium_Core_Util::store64_le(9223372036854775807)),
+            'Unexpected result from store64_le'
+        );
+    }
+
 
     /**
      * @covers ParagonIE_Sodium_Core_Util::mul()

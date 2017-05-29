@@ -287,6 +287,33 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Load a 8 character substring into an integer
+     *
+     * @internal You should not use this directly from another application
+     *
+     * @param string $string
+     * @return int
+     * @throws RangeException
+     */
+    public static function load64_le($string)
+    {
+        if (self::strlen($string) < 4) {
+            throw new RangeException(
+                'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
+            );
+        }
+        $result  = (self::chrToInt($string[0]) & 0xff);
+        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
+        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
+        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
+        $result |= (self::chrToInt($string[4]) & 0xff) << 32;
+        $result |= (self::chrToInt($string[5]) & 0xff) << 40;
+        $result |= (self::chrToInt($string[6]) & 0xff) << 48;
+        $result |= (self::chrToInt($string[7]) & 0xff) << 56;
+        return (int) $result;
+    }
+
+    /**
      * @internal You should not use this directly from another application
      *
      * @param string $left
@@ -456,7 +483,7 @@ abstract class ParagonIE_Sodium_Core_Util
                 self::intToChr(($int >> 32) & 0xff) .
                 self::intToChr(($int >> 40) & 0xff) .
                 self::intToChr(($int >> 48) & 0xff) .
-                self::intToChr(($int >> 52) & 0xff);
+                self::intToChr(($int >> 56) & 0xff);
         }
         if ($int > PHP_INT_MAX) {
             list($hiB, $int) = self::numericTo64BitInteger($int);
