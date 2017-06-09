@@ -167,8 +167,7 @@ abstract class ParagonIE_Sodium_Core_Util
             $d |= self::chrToInt($left[$i]) ^ self::chrToInt($right[$i]);
         }
 
-        /* branch-free variant of === 0 */
-        if (-(1 & (($d - 1) >> 8))) {
+        if ($d !== 0) {
             return false;
         }
         return $left === $right;
