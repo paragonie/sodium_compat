@@ -6,7 +6,7 @@
 [![License](https://poser.pugx.org/paragonie/sodium_compat/license)](https://packagist.org/packages/paragonie/sodium_compat)
 
 Sodium Compat is a pure PHP polyfill for the Sodium cryptography library 
-(libsodium), otherwise [available in PECL](https://pecl.php.net/package/libsodium).
+(libsodium), a core extension in PHP 7.2.0+ and otherwise [available in PECL](https://pecl.php.net/package/libsodium).
 
 This library tentativeley supports PHP 5.2.4 - 7.x (latest), but officially
 only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php).
@@ -16,14 +16,15 @@ and transparently use the PHP extension instead of our implementation.
 
 ## IMPORTANT!
 
-### ![Danger: Experimental](https://camo.githubusercontent.com/275bc882f21b154b5537b9c123a171a30de9e6aa/68747470733a2f2f7261772e6769746875622e636f6d2f63727970746f7370686572652f63727970746f7370686572652f6d61737465722f696d616765732f6578706572696d656e74616c2e706e67)
+This cryptography library has not been formally audited by an independent third 
+party that specializes in cryptography or cryptanalysis.
 
-This is an **experimental** cryptography library. It has not been formally
-audited by an independent third party that specializes in cryptography or
-cryptanalysis.
+If you require such an audit before you can use sodium_compat in your projects
+and have the funds for such an audit, please open an issue or contact 
+`security at paragonie dot com` so we can help get the ball rolling.
 
-Until it has received a clean bill of health from independent computer security
-experts, **use this library at your own risk.** 
+If you'd like to learn more about the defensive security measures we've taken,
+please read [*Cryptographically Secure PHP Development*](https://paragonie.com/blog/2017/02/cryptographically-secure-php-development).
 
 # Installing Sodium Compat
 
@@ -41,6 +42,15 @@ its contents, then include our `autoload.php` script in your project.
 <?php
 require_once "/path/to/sodium_compat/autoload.php";
 ```
+
+# Support
+
+[Commercial support for libsodium](https://download.libsodium.org/doc/commercial_support/) is available
+from multiple vendors. If you need help using sodium_compat in one of your projects, [contact Paragon Initiative Enterprises](https://paragonie.com/contact). 
+
+Non-commercial report will be facilitated through [Github issues](https://github.com/paragonie/sodium_compat/issues).
+We offer no guarantees of our availability to resolve questions about integrating sodium_compat into third-party
+software for free, but will strive to fix any bugs (security-related or otherwise) in our library.
 
 # Using Sodium Compat
 
@@ -69,28 +79,6 @@ if (\Sodium\crypto_sign_verify_detached($signature, $message, $alice_pk)) {
 
 The polyfill does not expose this API on PHP < 5.3, or if you have the PHP
 extension installed already.
-
-## PHP 7.2 Polyfill
-
-As per the [second vote on the libsodium RFC](https://wiki.php.net/rfc/libsodium#proposed_voting_choices),
-PHP 7.2 uses `sodium_*` instead of `\Sodium\*`.
-
-```php
-<?php
-require_once "/path/to/sodium_compat/autoload.php";
-
-$alice_kp = sodium_crypto_sign_keypair();
-$alice_sk = sodium_crypto_sign_secretkey($alice_kp);
-$alice_pk = sodium_crypto_sign_publickey($alice_kp);
-
-$message = 'This is a test message.';
-$signature = sodium_crypto_sign_detached($message, $alice_sk);
-if (sodium_crypto_sign_verify_detached($signature, $message, $alice_pk)) {
-    echo 'OK', PHP_EOL;
-} else {
-    throw new Exception('Invalid signature');
-}
-```
 
 Since this doesn't require a namespace, this API *is* exposed on PHP 5.2.
 
@@ -130,15 +118,37 @@ so if your project supports PHP < 5.3, use the underscore method instead.
 
 To learn how to use Libsodium, read [*Using Libsodium in PHP Projects*](https://paragonie.com/book/pecl-libsodium).
 
+## PHP 7.2 Polyfill
+
+As per the [second vote on the libsodium RFC](https://wiki.php.net/rfc/libsodium#proposed_voting_choices),
+PHP 7.2 uses `sodium_*` instead of `\Sodium\*`.
+
+```php
+<?php
+require_once "/path/to/sodium_compat/autoload.php";
+
+$alice_kp = sodium_crypto_sign_keypair();
+$alice_sk = sodium_crypto_sign_secretkey($alice_kp);
+$alice_pk = sodium_crypto_sign_publickey($alice_kp);
+
+$message = 'This is a test message.';
+$signature = sodium_crypto_sign_detached($message, $alice_sk);
+if (sodium_crypto_sign_verify_detached($signature, $message, $alice_pk)) {
+    echo 'OK', PHP_EOL;
+} else {
+    throw new Exception('Invalid signature');
+}
+```
+
 ## Help, Sodium_Compat is Slow! How can I make it fast?
 
 There are three ways to make it fast:
 
 1. Use PHP 7.2 when it comes out, and take advantage of libsodium in the core.
-2. Install the libsodium PHP extension from PECL.
+2. [Install the libsodium PHP extension from PECL](https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium).
 3. Only if the previous two options are not available for you:
    1. Verify that [the processor you're using actually implements constant-time multiplication](https://bearssl.org/ctmul.html).
-      Sodium_compat does, but it trades some speed for cross-platform security.
+      Sodium_compat does, but it must trade some speed in order to attainr cross-platform security.
    2. Only if you are 100% certain that your processor is safe, you can set `ParagonIE_Sodium_Compat::$fastMul = true;`
       without harming the security of your cryptography keys. If your processor *isn't* safe, then decide whether you
       want speed or security because you can't have both.
