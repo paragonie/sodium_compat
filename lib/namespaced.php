@@ -19,6 +19,9 @@ if (PHP_VERSION_ID < 50300) {
  * $x = Compat::crypto_aead_xchacha20poly1305_encrypt(...$args);
  */
 spl_autoload_register(function ($class) {
+    if ($class[0] === '\\') {
+        $class = substr($class, 1);
+    }
     $namespace = 'ParagonIE\\Sodium\\';
     // Does the class use the namespace prefix?
     $len = strlen($namespace);
