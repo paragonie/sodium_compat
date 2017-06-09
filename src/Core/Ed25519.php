@@ -102,7 +102,9 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     public static function sk_to_pk($sk)
     {
         return self::ge_p3_tobytes(
-            self::ge_scalarmult_base(self::substr($sk, 0, 32))
+            self::ge_scalarmult_base(
+                self::substr($sk, 0, 32)
+            )
         );
     }
 

@@ -24,18 +24,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_0()
     {
-        return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ));
+        return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        );
     }
 
     /**
@@ -47,18 +38,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_1()
     {
-        return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ));
+        return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        );
     }
 
     /**
@@ -493,46 +475,46 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = $f0g8 + $f1g7_2  + $f2g6    + $f3g5_2  + $f4g4    + $f5g3_2  + $f6g2    + $f7g1_2  + $f8g0    + $f9g9_38;
         $h9 = $f0g9 + $f1g8    + $f2g7    + $f3g6    + $f4g5    + $f5g4    + $f6g3    + $f7g2    + $f8g1    + $f9g0   ;
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25;
+        $carry1 = ($h1 + (1 << 24)) >> 25;
         $h2 += $carry1;
         $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25;
+        $carry5 = ($h5 + (1 << 24)) >> 25;
         $h6 += $carry5;
         $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26;
+        $carry2 = ($h2 + (1 << 25)) >> 26;
         $h3 += $carry2;
         $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26;
+        $carry6 = ($h6 + (1 << 25)) >> 26;
         $h7 += $carry6;
         $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25;
+        $carry3 = ($h3 + (1 << 24)) >> 25;
         $h4 += $carry3;
         $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25;
+        $carry7 = ($h7 + (1 << 24)) >> 25;
         $h8 += $carry7;
         $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26;
+        $carry8 = ($h8 + (1 << 25)) >> 26;
         $h9 += $carry8;
         $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25;
+        $carry9 = ($h9 + (1 << 24)) >> 25;
         $h0 += self::mul($carry9, 19);
         $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
@@ -673,46 +655,46 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = $f0f8_2 + $f1f7_4  + $f2f6_2  + $f3f5_4  + $f4f4    + $f9f9_38;
         $h9 = $f0f9_2 + $f1f8_2  + $f2f7_2  + $f3f6_2  + $f4f5_2;
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25;
+        $carry1 = ($h1 + (1 << 24)) >> 25;
         $h2 += $carry1;
         $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25;
+        $carry5 = ($h5 + (1 << 24)) >> 25;
         $h6 += $carry5;
         $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26;
+        $carry2 = ($h2 + (1 << 25)) >> 26;
         $h3 += $carry2;
         $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26;
+        $carry6 = ($h6 + (1 << 25)) >> 26;
         $h7 += $carry6;
         $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25;
+        $carry3 = ($h3 + (1 << 24)) >> 25;
         $h4 += $carry3;
         $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25;
+        $carry7 = ($h7 + (1 << 24)) >> 25;
         $h8 += $carry7;
         $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26;
+        $carry8 = ($h8 + (1 << 25)) >> 26;
         $h9 += $carry8;
         $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25;
+        $carry9 = ($h9 + (1 << 24)) >> 25;
         $h0 += self::mul($carry9, 19);
         $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
@@ -847,46 +829,46 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h8 = (int) ($h8 + $h8);
         $h9 = (int) ($h9 + $h9);
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
 
-        $carry1 = ($h1 + (1<<24)) >> 25;
+        $carry1 = ($h1 + (1 << 24)) >> 25;
         $h2 += $carry1;
         $h1 -= $carry1 << 25;
-        $carry5 = ($h5 + (1<<24)) >> 25;
+        $carry5 = ($h5 + (1 << 24)) >> 25;
         $h6 += $carry5;
         $h5 -= $carry5 << 25;
 
-        $carry2 = ($h2 + (1<<25)) >> 26;
+        $carry2 = ($h2 + (1 << 25)) >> 26;
         $h3 += $carry2;
         $h2 -= $carry2 << 26;
-        $carry6 = ($h6 + (1<<25)) >> 26;
+        $carry6 = ($h6 + (1 << 25)) >> 26;
         $h7 += $carry6;
         $h6 -= $carry6 << 26;
 
-        $carry3 = ($h3 + (1<<24)) >> 25;
+        $carry3 = ($h3 + (1 << 24)) >> 25;
         $h4 += $carry3;
         $h3 -= $carry3 << 25;
-        $carry7 = ($h7 + (1<<24)) >> 25;
+        $carry7 = ($h7 + (1 << 24)) >> 25;
         $h8 += $carry7;
         $h7 -= $carry7 << 25;
 
-        $carry4 = ($h4 + (1<<25)) >> 26;
+        $carry4 = ($h4 + (1 << 25)) >> 26;
         $h5 += $carry4;
         $h4 -= $carry4 << 26;
-        $carry8 = ($h8 + (1<<25)) >> 26;
+        $carry8 = ($h8 + (1 << 25)) >> 26;
         $h9 += $carry8;
         $h8 -= $carry8 << 26;
 
-        $carry9 = ($h9 + (1<<24)) >> 25;
+        $carry9 = ($h9 + (1 << 24)) >> 25;
         $h0 += self::mul($carry9, 19);
         $h9 -= $carry9 << 25;
 
-        $carry0 = ($h0 + (1<<25)) >> 26;
+        $carry0 = ($h0 + (1 << 25)) >> 26;
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
@@ -1138,7 +1120,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $r->Y = self::fe_mul($r->Y, $q->YminusX);
         $r->T = self::fe_mul($q->T2d, $p->T);
         $r->X = self::fe_mul($p->Z, $q->Z);
-        $t0 = self::fe_add($r->X, $r->X);
+        $t0   = self::fe_add($r->X, $r->X);
         $r->X = self::fe_sub($r->Z, $r->Y);
         $r->Y = self::fe_add($r->Z, $r->Y);
         $r->Z = self::fe_add($t0, $r->T);
@@ -1397,7 +1379,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $r->Z = self::fe_sq($p->Y);
         $r->T = self::fe_sq2($p->Z);
         $r->Y = self::fe_add($p->X, $p->Y);
-        $t0 = self::fe_sq($r->Y);
+        $t0   = self::fe_sq($r->Y);
         $r->Y = self::fe_add($r->Z, $r->X);
         $r->Z = self::fe_sub($r->Z, $r->X);
         $r->X = self::fe_sub($t0, $r->Y);
@@ -1882,6 +1864,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $c10 = 2097151 & (self::load_3(self::substr($c, 26, 3)) >> 2);
         $c11 = (self::load_4(self::substr($c, 28, 4)) >> 7);
 
+        /* Can't really avoid the pyramid here: */
         $s0 = $c0 + self::mul($a0, $b0);
         $s1 = $c1 + self::mul($a0, $b1) + self::mul($a1, $b0);
         $s2 = $c2 + self::mul($a0, $b2) + self::mul($a1, $b1) + self::mul($a2, $b0);

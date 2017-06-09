@@ -25,7 +25,10 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
         }
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_Ctx(
-                self::hChaCha20(self::substr($nonce, 0, 16), $key),
+                self::hChaCha20(
+                    self::substr($nonce, 0, 16),
+                    $key
+                ),
                 self::substr($nonce, 16, 8)
             ),
             str_repeat("\x00", $len)

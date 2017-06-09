@@ -83,7 +83,12 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     protected static function add64($x, $y)
     {
         $l = ($x[1] + $y[1]) & 0xffffffff;
-        return self::new64($x[0] + $y[0] + (($l < $x[1]) ? 1 : 0), $l);
+        return self::new64(
+            $x[0] + $y[0] + (
+                ($l < $x[1]) ? 1 : 0
+            ),
+            $l
+        );
     }
 
     /**
@@ -205,44 +210,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             }
             $u[$uIdx] >>= 8;
         }
-        /*
-        // OLD STYLE:
-        $x[$i]   = ($u[1] & 0xff);
-        if ($maxLength <= $i) {
-            return;
-        }
-        $u[1] >>= 8;
-        $x[$i+1] = ($u[1] & 0xff);
-        if ($maxLength <= $i + 1) {
-            return;
-        }
-        $u[1] >>= 8;
-        $x[$i+2] = ($u[1] & 0xff);
-        if ($maxLength <= $i + 2) {
-            return;
-        }
-        $u[1] >>= 8;
-        $x[$i+3] = ($u[1] & 0xff);
-        if ($maxLength <= $i + 3) {
-            return;
-        }
-        $x[$i+4] = ($u[0] & 0xff);
-        if ($maxLength <= $i + 4) {
-            return;
-        }
-        $u[0] >>= 8;
-        $x[$i+5] = ($u[0] & 0xff);
-        if ($maxLength <= $i + 5) {
-            return;
-        }
-        $u[0] >>= 8;
-        $x[$i+6] = ($u[0] & 0xff);
-        if ($maxLength <= $i + 6) {
-            return;
-        }
-        $u[0] >>= 8;
-        $x[$i+7] = ($u[0] & 0xff);
-        */
     }
 
     /**

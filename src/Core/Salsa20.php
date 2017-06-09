@@ -256,6 +256,10 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
     {
         $u &= 0xffffffff;
         $c %= 32;
-        return 0xffffffff & (($u << $c) | ($u >> (32 - $c)));
+        return 0xffffffff & (
+            ($u << $c)
+                |
+            ($u >> (32 - $c))
+        );
     }
 }

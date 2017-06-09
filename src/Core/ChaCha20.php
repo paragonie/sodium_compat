@@ -23,7 +23,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
         $v &= 0xffffffff;
         $n &= 31;
         return 0xffffffff & (
-            ($v << $n) | ($v >> (32 - $n))
+            ($v << $n)
+                |
+            ($v >> (32 - $n))
         );
     }
 

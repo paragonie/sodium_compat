@@ -139,6 +139,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     /**
      * @internal You should not use this directly from another application
      *
+     * Inline comments preceded by # are from libsodium's ref10 code.
+     *
      * @param string $n
      * @param string $p
      * @return string
@@ -283,10 +285,12 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     {
         # for (i = 0;i < 32;++i) e[i] = n[i];
         $e = '' . $n;
+
         # e[0] &= 248;
         $e[0] = self::intToChr(
             self::chrToInt($e[0]) & 248
         );
+
         # e[31] &= 127;
         # e[31] |= 64;
         $e[31] = self::intToChr(
