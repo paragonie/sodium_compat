@@ -191,20 +191,58 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     protected static function store64(SplFixedArray $x, $i, SplFixedArray $u)
     {
+        $maxLength = $x->getSize() - 1;
+        for ($j = 0; $j < 8; ++$j) {
+            /*
+               [0, 1, 2, 3, 4, 5, 6, 7]
+                    ... becomes ...
+               [0, 0, 0, 0, 1, 1, 1, 1]
+            */
+            $uIdx = ((7 - $j) & 4) >> 2;
+            $x[$i]   = ($u[$uIdx] & 0xff);
+            if (++$i > $maxLength) {
+                return;
+            }
+            $u[$uIdx] >>= 8;
+        }
+        /*
+        // OLD STYLE:
         $x[$i]   = ($u[1] & 0xff);
+        if ($maxLength <= $i) {
+            return;
+        }
         $u[1] >>= 8;
         $x[$i+1] = ($u[1] & 0xff);
+        if ($maxLength <= $i + 1) {
+            return;
+        }
         $u[1] >>= 8;
         $x[$i+2] = ($u[1] & 0xff);
+        if ($maxLength <= $i + 2) {
+            return;
+        }
         $u[1] >>= 8;
         $x[$i+3] = ($u[1] & 0xff);
+        if ($maxLength <= $i + 3) {
+            return;
+        }
         $x[$i+4] = ($u[0] & 0xff);
+        if ($maxLength <= $i + 4) {
+            return;
+        }
         $u[0] >>= 8;
         $x[$i+5] = ($u[0] & 0xff);
+        if ($maxLength <= $i + 5) {
+            return;
+        }
         $u[0] >>= 8;
         $x[$i+6] = ($u[0] & 0xff);
+        if ($maxLength <= $i + 6) {
+            return;
+        }
         $u[0] >>= 8;
         $x[$i+7] = ($u[0] & 0xff);
+        */
     }
 
     /**
