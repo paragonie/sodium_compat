@@ -99,6 +99,7 @@ abstract class ParagonIE_Sodium_Crypto
             $key
         );
 
+        /* Recalculate the Poly1305 authentication tag (MAC): */
         $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
         try {
             ParagonIE_Sodium_Compat::memzero($block0);
@@ -111,6 +112,7 @@ abstract class ParagonIE_Sodium_Crypto
         $state->update(ParagonIE_Sodium_Core_Util::store64_le($clen));
         $computed_mac = $state->finish();
 
+        /* Compare the given MAC with the recalculated MAC: */
         if (!ParagonIE_Sodium_Core_Util::verify_16($computed_mac, $mac)) {
             throw new Error('Invalid MAC');
         }
@@ -223,6 +225,7 @@ abstract class ParagonIE_Sodium_Crypto
             $len - self::aead_chacha20poly1305_IETF_ABYTES
         );
 
+        /* Recalculate the Poly1305 authentication tag (MAC): */
         $state = new ParagonIE_Sodium_Core_Poly1305_State($block0);
         try {
             ParagonIE_Sodium_Compat::memzero($block0);
@@ -237,6 +240,7 @@ abstract class ParagonIE_Sodium_Crypto
         $state->update(ParagonIE_Sodium_Core_Util::store64_le($clen));
         $computed_mac = $state->finish();
 
+        /* Compare the given MAC with the recalculated MAC: */
         if (!ParagonIE_Sodium_Core_Util::verify_16($computed_mac, $mac)) {
             throw new Error('Invalid MAC');
         }
@@ -775,13 +779,7 @@ abstract class ParagonIE_Sodium_Crypto
     public static function scalarmult($sKey, $pKey)
     {
         $q = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($sKey, $pKey);
-        $d = 0;
-        for ($i = 0; $i < self::box_curve25519xsalsa20poly1305_SECRETKEYBYTES; ++$i) {
-            $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
-        }
-        if (-(1 & (($d - 1) >> 8))) {
-            throw new Error('Zero public key is not allowed');
-        }
+        self::scalarmult_throw_if_zero($q);
         return $q;
     }
 
@@ -797,14 +795,28 @@ abstract class ParagonIE_Sodium_Crypto
     public static function scalarmult_base($secret)
     {
         $q = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secret);
+        self::scalarmult_throw_if_zero($q);
+        return $q;
+    }
+
+    /**
+     * This throws an Error if a zero public key was passed to the function.
+     *
+     * @param string $q
+     * @return void
+     * @throws Error
+     */
+    protected static function scalarmult_throw_if_zero($q)
+    {
         $d = 0;
         for ($i = 0; $i < self::box_curve25519xsalsa20poly1305_SECRETKEYBYTES; ++$i) {
             $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
         }
+
+        /* branch-free variant of === 0 */
         if (-(1 & (($d - 1) >> 8))) {
             throw new Error('Zero public key is not allowed');
         }
-        return $q;
     }
 
     /**
@@ -918,7 +930,11 @@ abstract class ParagonIE_Sodium_Crypto
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
             $subkey
         );
-        $verified = ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $c, ParagonIE_Sodium_Core_Util::substr($block0, 0, 32));
+        $verified = ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify(
+            $mac,
+            $c,
+            ParagonIE_Sodium_Core_Util::substr($block0, 0, 32)
+        );
         if (!$verified) {
             try {
                 ParagonIE_Sodium_Compat::memzero($subkey);
@@ -1068,6 +1084,7 @@ abstract class ParagonIE_Sodium_Crypto
             $c,
             ParagonIE_Sodium_Core_Util::substr($block0, 0, 32)
         );
+
         if (!$verified) {
             try {
                 ParagonIE_Sodium_Compat::memzero($subkey);
