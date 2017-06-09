@@ -137,6 +137,39 @@ class PedanticTest extends PHPUnit_Framework_TestCase
         return $strings;
     }
 
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt()
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt()
+     */
+    public function testCryptoAeadChapoly()
+    {
+        $keys = $this->getInteresting32ByteStrings();
+        $plaintexts = $this->getInterestingStringsVaryingLength();
+        $aads = $plaintexts;
+        $aads []= '';
+        $nonce = random_bytes(12);
+
+        foreach ($plaintexts as $plaintext) {
+            foreach ($aads as $aad) {
+                foreach ($keys as $key) {
+                    $canonical = \Sodium\crypto_aead_chacha20poly1305_ietf_encrypt($plaintext, $aad, $nonce, $key);
+                    $this->assertSame(
+                        bin2hex($canonical),
+                        bin2hex(ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($plaintext, $aad, $nonce, $key)),
+                        'crypto_aead_chacha20poly1305_ietf_encrypt(): pedantic test case'
+                    );
+                    $this->assertSame(
+                        bin2hex($plaintext),
+                        bin2hex(ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($canonical, $aad, $nonce, $key)),
+                        'crypto_aead_chacha20poly1305_ietf_decrypt(): pedantic test case'
+                    );
+                }
+            }
+        }
+        exit;
+    }
+
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      */

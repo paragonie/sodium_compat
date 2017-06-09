@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Curve25519Test
+ */
 class Curve25519Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -406,7 +409,9 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
         );
     }
 
-    
+    /**
+     * @covers ParagonIE_Sodium_Core_Curve25519::ge_scalarmult_base()
+     */
     public function testGeScalarmultBase()
     {
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin(

@@ -7,6 +7,10 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_ChaCha20::stream()
+     * @covers ParagonIE_Sodium_Core_ChaCha20::streamXorIc()
+     */
     public function testVectors()
     {
         $key = str_repeat("\x00", 32);

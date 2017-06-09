@@ -7,6 +7,9 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @oovers ParagonIE_Sodium_Core_XChaCha20::stream()
+     */
     public function testVectors()
     {
         $tv = array(
@@ -38,6 +41,9 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305()
+     */
     public function testSecretbox()
     {
         $testVectors = array(

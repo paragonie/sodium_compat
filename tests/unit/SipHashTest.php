@@ -110,7 +110,7 @@ class SipHashTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @covers ParagonIE_Sodium_Core_SipHash::sipHash24()
      */
     public function testCryptoShorthash()
     {
@@ -119,7 +119,7 @@ class SipHashTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             '3f188259b01151a7',
-            bin2hex(ParagonIE_Sodium_Compat::crypto_shorthash($message, $key))
+            bin2hex(ParagonIE_Sodium_Core_SipHash::sipHash24($message, $key))
         );
     }
 }

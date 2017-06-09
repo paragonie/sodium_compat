@@ -57,6 +57,9 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::increment_counter()
+     */
     public function testCounter()
     {
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
@@ -79,7 +82,12 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Make sure our 'context' string is consistent.
      *
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::init()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::contextToString()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray()
      */
     public function testContext()
     {
@@ -98,7 +106,6 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
             str_repeat("\x4f", 257),
             str_repeat("\x0a", 511)
         );
-        $ctxStrB = '';
         foreach ($chunks as $i => $chk) {
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctxA, $chk);
             $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);
@@ -107,6 +114,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
                 $chunk,
                 $chunk->count()
             );
+            /** @var string $ctxStrB */
             $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
             $this->assertEquals(
                 ParagonIE_Sodium_Core_Util::bin2hex(
@@ -142,6 +150,9 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_generichash_init()
      * @covers ParagonIE_Sodium_Compat::crypto_generichash_update()
      * @covers ParagonIE_Sodium_Compat::crypto_generichash_final()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::init()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
+     * @covers ParagonIE_Sodium_Core_BLAKE2b::finish()
      */
     public function testGenericHashStream()
     {
