@@ -25,8 +25,6 @@ cryptanalysis.
 Until it has received a clean bill of health from independent computer security
 experts, **use this library at your own risk.** 
 
-> The code is currently frozen, pending the results of the [cryptography audit](https://github.com/paragonie/sodium_compat/issues/8).
-
 # Installing Sodium Compat
 
 If you're using Composer:
