@@ -1193,6 +1193,160 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param int $outlen
+     * @param string $passwd
+     * @param string $salt
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return string
+     * @throws Error
+     */
+    public static function crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($outlen, 'int', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($salt,  'string', 3);
+        ParagonIE_Sodium_Core_Util::declareScalarType($opslimit, 'int', 4);
+        ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 5);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit);
+        }
+        if (self::use_fallback('crypto_pwhash')) {
+            return call_user_func('\\Sodium\\crypto_pwhash', $outlen, $passwd, $salt, $opslimit, $memlimit);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
+     * @param string $passwd
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return string
+     * @throws Error
+     */
+    public static function crypto_pwhash_str($passwd, $opslimit, $memlimit)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($opslimit, 'int', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 3);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash_str($passwd, $opslimit, $memlimit);
+        }
+        if (self::use_fallback('crypto_pwhash_str')) {
+            return call_user_func('\\Sodium\\crypto_pwhash_str', $passwd, $opslimit, $memlimit);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
+     * @param string $passwd
+     * @param string $hash
+     * @return bool
+     * @throws Error
+     */
+    public static function crypto_pwhash_str_verify($passwd, $hash)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($hash, 'string', 2);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash_str_verify($passwd, $hash);
+        }
+        if (self::use_fallback('crypto_pwhash_str_verify')) {
+            return call_user_func('\\Sodium\\crypto_pwhash_str_verify', $passwd, $hash);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
+     * @param int $outlen
+     * @param string $passwd
+     * @param string $salt
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return string
+     * @throws Error
+     */
+    public static function crypto_pwhash_scryptsalsa208sha256($outlen, $passwd, $salt, $opslimit, $memlimit)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($outlen, 'int', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($salt,  'string', 3);
+        ParagonIE_Sodium_Core_Util::declareScalarType($opslimit, 'int', 4);
+        ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 5);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash_scryptsalsa208sha256($outlen, $passwd, $salt, $opslimit, $memlimit);
+        }
+        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256')) {
+            return call_user_func('\\Sodium\\crypto_pwhash_scryptsalsa208sha256', $outlen, $passwd, $salt, $opslimit, $memlimit);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
+     * @param string $passwd
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return string
+     * @throws Error
+     */
+    public static function crypto_pwhash_scryptsalsa208sha256_str($passwd, $opslimit, $memlimit)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($opslimit, 'int', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 3);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash_scryptsalsa208sha256_str($passwd, $opslimit, $memlimit);
+        }
+        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256_str')) {
+            return call_user_func('\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str', $passwd, $opslimit, $memlimit);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
+     * @param string $passwd
+     * @param string $hash
+     * @return bool
+     * @throws Error
+     */
+    public static function crypto_pwhash_scryptsalsa208sha256_str_verify($passwd, $hash)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($hash, 'string', 2);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_pwhash_scryptsalsa208sha256_str_verify($passwd, $hash);
+        }
+        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256_str_verify')) {
+            return call_user_func('\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str_verify', $passwd, $hash);
+        }
+        // This is the best we can do.
+        throw new Error(
+            'This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP'
+        );
+    }
+
+    /**
      * Calculate the shared secret between your secret key and your
      * recipient's public key.
      *
@@ -1207,12 +1361,8 @@ class ParagonIE_Sodium_Compat
     public static function crypto_scalarmult($secretKey, $publicKey)
     {
         /* Type checks: */
-        if (!is_string($secretKey)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($secretKey) . ' given.');
-        }
-        if (!is_string($publicKey)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($publicKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($secretKey, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($publicKey, 'string', 2);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($secretKey) !== self::CRYPTO_BOX_SECRETKEYBYTES) {
@@ -1565,12 +1715,8 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign($message, $secretKey)
     {
         /* Type checks: */
-        if (!is_string($message)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($message) . ' given.');
-        }
-        if (!is_string($secretKey)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($secretKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($secretKey, 'string', 1);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($secretKey) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
@@ -1599,12 +1745,8 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_open($signedMessage, $publicKey)
     {
         /* Type checks: */
-        if (!is_string($signedMessage)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($signedMessage) . ' given.');
-        }
-        if (!is_string($publicKey)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($publicKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($signedMessage, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($publicKey, 'string', 2);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($signedMessage) < self::CRYPTO_SIGN_BYTES) {
@@ -1649,6 +1791,8 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_sign_seed_keypair($seed)
     {
+        ParagonIE_Sodium_Core_Util::declareScalarType($seed, 'string', 1);
+
         if (self::isPhp72OrGreater()) {
             return sodium_crypto_sign_seed_keypair($seed);
         }
@@ -1672,9 +1816,7 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_publickey($keypair)
     {
         /* Type checks: */
-        if (!is_string($keypair)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($keypair) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($keypair, 'string', 1);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
@@ -1701,9 +1843,7 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_publickey_from_secretkey($secretKey)
     {
         /* Type checks: */
-        if (!is_string($secretKey)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($secretKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($secretKey, 'string', 1);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($secretKey) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
@@ -1730,9 +1870,7 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_secretkey($keypair)
     {
         /* Type checks: */
-        if (!is_string($keypair)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($keypair) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($keypair, 'string', 1);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_SIGN_KEYPAIRBYTES) {
@@ -1762,12 +1900,8 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_detached($message, $secretKey)
     {
         /* Type checks: */
-        if (!is_string($message)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($message) . ' given.');
-        }
-        if (!is_string($secretKey)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($secretKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($secretKey, 'string', 2);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($secretKey) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
@@ -1797,15 +1931,9 @@ class ParagonIE_Sodium_Compat
     public static function crypto_sign_verify_detached($signature, $message, $publicKey)
     {
         /* Type checks: */
-        if (!is_string($signature)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($signature) . ' given.');
-        }
-        if (!is_string($message)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($message) . ' given.');
-        }
-        if (!is_string($publicKey)) {
-            throw new TypeError('Argument 3 must be a string, ' . gettype($publicKey) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($signature, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($publicKey, 'string', 3);
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($signature) !== self::CRYPTO_SIGN_BYTES) {
@@ -1834,9 +1962,7 @@ class ParagonIE_Sodium_Compat
     public static function hex2bin($string)
     {
         /* Type checks: */
-        if (!is_string($string)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($string) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($string, 'string', 1);
 
         if (self::isPhp72OrGreater()) {
             return self::hex2bin($string);
@@ -1886,12 +2012,8 @@ class ParagonIE_Sodium_Compat
     public static function memcmp($left, $right)
     {
         /* Type checks: */
-        if (!is_string($left)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($left) . ' given.');
-        }
-        if (!is_string($right)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($right) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($left, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($right, 'string', 2);
 
         if (self::use_fallback('memcmp')) {
             return call_user_func('\\Sodium\\memcmp', $left, $right);
@@ -1911,9 +2033,7 @@ class ParagonIE_Sodium_Compat
     public static function memzero(&$var)
     {
         /* Type checks: */
-        if (!is_string($var)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($var) . ' given.');
-        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($var, 'string', 1);
 
         if (self::isPhp72OrGreater()) {
             sodium_memzero($var);
