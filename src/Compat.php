@@ -2021,6 +2021,17 @@ class ParagonIE_Sodium_Compat
         if ($res === null) {
             $res = extension_loaded('libsodium') && PHP_VERSION_ID >= 50300;
         }
+        if (PHP_INT_SIZE === 4) {
+            if (DIRECTORY_SEPARATOR === '\\' && PHP_VERSION_ID < 70000) {
+                throw new RuntimeException(
+                    'Sodium_compat produces incorrect results on systems that do not support 64-bit integers. ' .
+                    'Please upgrade to PHP 7 or newer for Windows x64 support.'
+                );
+            }
+            throw new RuntimeException(
+                'Sodium_compat produces incorrect results on systems that do not support 64-bit integers.'
+            );
+        }
         if ($res === false) {
             // No libsodium installed
             return false;
