@@ -8,18 +8,20 @@ if (class_exists('ParagonIE_Sodium_Core_BLAKE2b', false)) {
  * Class ParagonIE_Sodium_Core_BLAKE2b
  *
  * Based on the work of Devi Mandiri in devi/salt.
+ *
+ * Rewritten for 32-bit OSes.
  */
-abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
+abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Util
 {
     /**
      * @var SplFixedArray
      */
-    protected static $iv;
+    public static $iv;
 
     /**
      * @var int[][]
      */
-    protected static $sigma = array(
+    public static $sigma = array(
         array(  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15),
         array( 14, 10,  4,  8,  9, 15, 13,  6,  1, 12,  0,  2, 11,  7,  5,  3),
         array( 11,  8, 12,  0,  5,  2, 15, 13, 10, 14,  3,  6,  7,  1,  9,  4),
@@ -64,7 +66,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param int $num
      * @return SplFixedArray
      */
-    protected static function to64($num)
+    public static function to64($num)
     {
         list($hi, $lo) = self::numericTo64BitInteger($num);
         return self::new64($hi, $lo);
@@ -80,7 +82,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $y
      * @return SplFixedArray
      */
-    protected static function add64($x, $y)
+    public static function add64($x, $y)
     {
         $l = ($x[1] + $y[1]) & 0xffffffff;
         return self::new64(
@@ -99,7 +101,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $z
      * @return SplFixedArray
      */
-    protected static function add364($x, $y, $z)
+    public static function add364($x, $y, $z)
     {
         return self::add64($x, self::add64($y, $z));
     }
@@ -112,7 +114,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @return SplFixedArray
      * @throws Exception
      */
-    protected static function xor64(SplFixedArray $x, SplFixedArray $y)
+    public static function xor64(SplFixedArray $x, SplFixedArray $y)
     {
         if (!is_numeric($x[0])) {
             throw new Exception('x[0] is not an integer');
@@ -136,7 +138,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param int $c
      * @return SplFixedArray
      */
-    public static function rotr64($x, $c)
+    public static function rotr64(SplFixedArray $x, $c)
     {
         if ($c >= 64) {
             $c %= 64;
@@ -186,7 +188,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $x
      * @return int
      */
-    protected static function flatten64($x)
+    public static function flatten64($x)
     {
         return ($x[0] * 4294967296 + $x[1]);
     }
@@ -198,7 +200,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param int $i
      * @return SplFixedArray
      */
-    protected static function load64(SplFixedArray $x, $i)
+    public static function load64(SplFixedArray $x, $i)
     {
         $l = $x[$i]   | ($x[$i+1]<<8) | ($x[$i+2]<<16) | ($x[$i+3]<<24);
         $h = $x[$i+4] | ($x[$i+5]<<8) | ($x[$i+6]<<16) | ($x[$i+7]<<24);
@@ -213,7 +215,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $u
      * @return void
      */
-    protected static function store64(SplFixedArray $x, $i, SplFixedArray $u)
+    public static function store64(SplFixedArray $x, $i, SplFixedArray $u)
     {
         $maxLength = $x->getSize() - 1;
         for ($j = 0; $j < 8; ++$j) {
@@ -264,7 +266,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      *
      * @return SplFixedArray
      */
-    protected static function context()
+    public static function context()
     {
         $ctx    = new SplFixedArray(5);
         $ctx[0] = new SplFixedArray(8);   // h
@@ -296,7 +298,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $buf
      * @return void
      */
-    protected static function compress(SplFixedArray $ctx, SplFixedArray $buf)
+    public static function compress(SplFixedArray $ctx, SplFixedArray $buf)
     {
         $m = new SplFixedArray(16);
         $v = new SplFixedArray(16);
