@@ -23,7 +23,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         );
         $this->assertFalse(
             ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message . 'wrong', $key),
-            bin2hex($message) .' == ' . bin2hex($message . 'wrong')
+            bin2hex($message) . ' == ' . bin2hex($message . 'wrong')
         );
     }
 
@@ -53,6 +53,69 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             ),
             'Blank Message decryption'
         );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt()
+     * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_decrypt()
+     */
+    public function testChapolyIetf()
+    {
+        //SessioKey
+        $sessionKey = hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1");
+
+        //Encrypted
+        $encrypted = hex2bin("0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6c");
+
+        // Decrypted
+        $decrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encrypted, "", "\0\0\0\0PS-Msg05", $sessionKey);
+
+        // Encrypt and verify with test data
+        $reEncrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($decrypted, "", "\0\0\0\0PS-Msg05", $sessionKey);
+
+        $this->assertSame(
+            bin2hex($encrypted),
+            bin2hex($reEncrypted)
+        );
+
+        $invalid = hex2bin("0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6d");
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($invalid, "", "\0\0\0\0PS-Msg05", $sessionKey);
+            $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
+        } catch (Error $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
+
+        // Random test:
+        $key = random_bytes(32);
+        $nonce = random_bytes(12);
+        $message = 'Test case.';
+        $aad = 'Optional';
+
+        $encA = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, '', $nonce, $key);
+        $encB = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($message, $aad, $nonce, $key);
+
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encA, '', $nonce, $key)
+        );
+        $this->assertSame(
+            $message,
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encB, $aad, $nonce, $key)
+        );
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encA, $aad, $nonce, $key);
+            $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
+        } catch (Error $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encB, '', $nonce, $key);
+            $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
+        } catch (Error $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
     }
 
     /**
