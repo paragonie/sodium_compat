@@ -116,6 +116,34 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         } catch (Error $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
+
+        // Flip bigs in the MAC:
+
+        $end = ParagonIE_Sodium_Core_Util::strlen($encA);
+        $badA = $encA;
+        $badA[$end - 1] = ParagonIE_Sodium_Core_Util::intToChr(
+            ParagonIE_Sodium_Core_Util::chrToInt($badA[$end - 1]) ^ 0xff
+        );
+
+        $end = ParagonIE_Sodium_Core_Util::strlen($encB);
+        $badB = $encA;
+        $badB[$end - 1] = ParagonIE_Sodium_Core_Util::intToChr(
+            ParagonIE_Sodium_Core_Util::chrToInt($badB[$end - 1]) ^ 0xff
+        );
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($badA, '', $nonce, $key);
+            $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
+        } catch (Error $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($badB, $aad, $nonce, $key);
+            $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
+        } catch (Error $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
     }
 
     /**
