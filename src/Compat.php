@@ -1908,7 +1908,7 @@ class ParagonIE_Sodium_Compat
             }
         }
         if (self::use_fallback('randombytes_uniform')) {
-            return (int)call_user_func('\\Sodium\\randombytes_uniform', $range);
+            return (int) call_user_func('\\Sodium\\randombytes_uniform', $range);
         }
         return random_int(0, $range - 1);
     }
@@ -1959,6 +1959,10 @@ class ParagonIE_Sodium_Compat
             $res = extension_loaded('libsodium') && PHP_VERSION_ID >= 50300;
         }
         if (PHP_INT_SIZE === 4) {
+            if ($res && is_callable('\\Sodium\\' . $sodium_func_name)) {
+                // We can safely just offload to the PECL extension
+                return true;
+            }
             if (DIRECTORY_SEPARATOR === '\\' && PHP_VERSION_ID < 70000) {
                 throw new RuntimeException(
                     'Sodium_compat produces incorrect results on systems that do not support 64-bit integers. ' .
