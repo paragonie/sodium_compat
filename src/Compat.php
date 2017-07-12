@@ -1997,7 +1997,7 @@ class ParagonIE_Sodium_Compat
     {
         static $res = null;
         if ($res === null) {
-            $res = PHP_VERSION_ID >= 70200 && extension_loaded('libsodium');
+            $res = PHP_VERSION_ID >= 70200 && extension_loaded('sodium');
         }
         if (self::$disableFallbackForUnitTests) {
             // Don't fallback. Use the PHP implementation.
