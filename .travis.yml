@@ -18,10 +18,13 @@ matrix:
       env: USE_PSALM=1
     - php: "nightly"
       env: USE_PSALM=1
+    - php: "master"
+      env: USE_PSALM=1
     - php: "hhvm"
       env: USE_PSALM=1
   allow_failures:
     - php: "nightly"
+    - php: "master"
     - php: "hhvm"
 
 install:
