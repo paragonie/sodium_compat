@@ -1006,8 +1006,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
         /* Type checks: */
-        if (!is_resource($hash)) {
-            throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
+        if (PHP_VERSION_ID < 70200) {
+            if (!is_resource($hash)) {
+                throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
+            }
+        } else {
+            if (!is_object($hash)) {
+                throw new TypeError('Argument 1 must be an object (PHP 7.2+), ' . gettype($hash) . ' given.');
+            }
         }
         if (!is_resource($fp)) {
             throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');

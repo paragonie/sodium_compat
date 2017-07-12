@@ -862,6 +862,9 @@ class ParagonIE_Sodium_Compat
     {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
+        if (is_null($key)) {
+            $key = '';
+        }
         ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 2);
         ParagonIE_Sodium_Core_Util::declareScalarType($length, 'int', 3);
 
