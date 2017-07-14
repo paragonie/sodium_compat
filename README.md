@@ -9,7 +9,8 @@ Sodium Compat is a pure PHP polyfill for the Sodium cryptography library
 (libsodium), a core extension in PHP 7.2.0+ and otherwise [available in PECL](https://pecl.php.net/package/libsodium).
 
 This library tentativeley supports PHP 5.2.4 - 7.x (latest), but officially
-only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php).
+only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php)
+that offer 64-bit integers (Windows only supports 64-bit integers on PHP 7 and newer).
 
 If you have the PHP extension installed, Sodium Compat will opportunistically
 and transparently use the PHP extension instead of our implementation.
