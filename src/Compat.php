@@ -940,6 +940,9 @@ class ParagonIE_Sodium_Compat
     {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
+        if (is_null($key)) {
+            $key = '';
+        }
         ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 2);
         ParagonIE_Sodium_Core_Util::declareScalarType($length, 'int', 3);
 
@@ -2152,7 +2155,7 @@ class ParagonIE_Sodium_Compat
     {
         static $res = null;
         if ($res === null) {
-            $res = PHP_VERSION_ID >= 70200 && extension_loaded('libsodium');
+            $res = PHP_VERSION_ID >= 70200 && extension_loaded('sodium');
         }
         if (self::$disableFallbackForUnitTests) {
             // Don't fallback. Use the PHP implementation.
