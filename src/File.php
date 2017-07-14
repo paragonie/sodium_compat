@@ -996,18 +996,28 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * Update a hash context with the contents of a file, without
      * loading the entire file into memory.
      *
-     * @param resource $hash
+     * @param resource|object $hash
      * @param resource $fp
      * @param int $size
-     * @return resource
+     * @return mixed (resource on PHP < 7.2, object on PHP >= 7.2)
      * @throws Error
      * @throws TypeError
+     * @psalm-suppress PossiblyInvalidArgument
+     *                 PHP 7.2 changes from a resource to an object,
+     *                 which causes Psalm to complain about an error.
      */
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
         /* Type checks: */
-        if (!is_resource($hash)) {
-            throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
+        if (PHP_VERSION_ID < 70200) {
+            if (!is_resource($hash)) {
+                throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
+            }
+
+        } else {
+            if (!is_object($hash)) {
+                throw new TypeError('Argument 1 must be an object (PHP 7.2+), ' . gettype($hash) . ' given.');
+            }
         }
         if (!is_resource($fp)) {
             throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');
@@ -1032,6 +1042,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             if (!is_string($message)) {
                 throw new Error('Unexpected error reading from file.');
             }
+            /** @psalm-suppress InvalidArgument */
             hash_update($hash, $message);
         }
         // Reset file pointer's position
