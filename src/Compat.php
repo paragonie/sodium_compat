@@ -1808,6 +1808,39 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Increase a string (little endian)
+     *
+     * @param &string $var
+     *
+     * @return void
+     * @throws Error (Unless libsodium is installed)
+     */
+    public static function increment(&$var)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($var, 'string', 1);
+
+        if (self::isPhp72OrGreater()) {
+            sodium_increment($var);
+            return;
+        }
+        if (self::use_fallback('increment')) {
+            @call_user_func('\\Sodium\\increment', $var);
+            return;
+        }
+
+        $len = ParagonIE_Sodium_Core_Util::strlen($var);
+        $c = 1;
+        $copy = '';
+        for ($i = 0; $i < $len; ++$i) {
+            $c += ParagonIE_Sodium_Core_Util::chrToInt($var[$i]);
+            $copy .= ParagonIE_Sodium_Core_Util::intToChr($c);
+            $c >>= 8;
+        }
+        $var = $copy;
+    }
+
+    /**
      * The equivalent to the libsodium minor version we aim to be compatible
      * with (sans pwhash and memzero).
      *

@@ -569,6 +569,16 @@ if (!is_callable('sodium_hex2bin')) {
         return ParagonIE_Sodium_Compat::hex2bin($string);
     }
 }
+if (!is_callable('sodium_increment')) {
+    /**
+     * @param &string $string
+     * @return void
+     */
+    function sodium_increment(&$string)
+    {
+        ParagonIE_Sodium_Compat::increment($string);
+    }
+}
 if (!is_callable('sodium_memcmp')) {
     /**
      * @param string $a
