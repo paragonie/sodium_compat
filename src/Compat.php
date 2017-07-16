@@ -1853,7 +1853,9 @@ class ParagonIE_Sodium_Compat
         $c = 1;
         $copy = '';
         for ($i = 0; $i < $len; ++$i) {
-            $c += ParagonIE_Sodium_Core_Util::chrToInt($var[$i]);
+            $c += ParagonIE_Sodium_Core_Util::chrToInt(
+                ParagonIE_Sodium_Core_Util::substr($var, $i, 1)
+            );
             $copy .= ParagonIE_Sodium_Core_Util::intToChr($c);
             $c >>= 8;
         }
