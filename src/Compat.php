@@ -703,7 +703,7 @@ class ParagonIE_Sodium_Compat
         if (self::isPhp72OrGreater()) {
             return sodium_crypto_box_keypair();
         }
-        if (self::use_fallback('crypto_sign_keypair')) {
+        if (self::use_fallback('crypto_box_keypair')) {
             return call_user_func('\\Sodium\\crypto_box_keypair');
         }
         return ParagonIE_Sodium_Crypto::box_keypair();
@@ -858,6 +858,26 @@ class ParagonIE_Sodium_Compat
             return call_user_func('\\Sodium\\crypto_box_secretkey', $keypair);
         }
         return ParagonIE_Sodium_Crypto::box_secretkey($keypair);
+    }
+
+    /**
+     * Generate an X25519 keypair from a seed.
+     *
+     * @param string $seed
+     * @return string
+     */
+    public static function crypto_box_seed_keypair($seed)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($seed, 'string', 1);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_box_seed_keypair($seed);
+        }
+        if (self::use_fallback('crypto_box_seed_keypair')) {
+            return call_user_func('\\Sodium\\crypto_box_seed_keypair', $seed);
+        }
+        return ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
     }
 
     /**

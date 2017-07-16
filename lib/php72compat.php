@@ -248,6 +248,16 @@ if (!is_callable('sodium_crypto_box_secretkey')) {
         return ParagonIE_Sodium_Compat::crypto_box_secretkey($keypair);
     }
 }
+if (!is_callable('sodium_crypto_box_seed_keypair')) {
+    /**
+     * @param string $seed
+     * @return string
+     */
+    function sodium_crypto_box_seed_keypair($seed)
+    {
+        return ParagonIE_Sodium_Compat::crypto_box_seed_keypair($seed);
+    }
+}
 if (!is_callable('sodium_crypto_generichash')) {
     /**
      * @param string $message

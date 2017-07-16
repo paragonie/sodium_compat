@@ -248,6 +248,22 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_box_seed_keypair()
+     */
+    public function testBoxSeed()
+    {
+        $seed = "\x77\x07\x6d\x0a\x73\x18\xa5\x7d\x3c\x16\xc1\x72\x51\xb2\x66\x45" .
+                "\xdf\x4c\x2f\x87\xeb\xc0\x99\x2a\xb1\x77\xfb\xa5\x1d\xb9\x2c\x2a";
+
+        $keypair = ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
+        $this->assertSame(
+            "accd44eb8e93319c0570bc11005c0e0189d34ff02f6c17773411ad191293c98f" .
+            "ed7749b4d989f6957f3bfde6c56767e988e21c9f8784d91d610011cd553f9b06",
+            ParagonIE_Sodium_Compat::bin2hex($keypair)
+        );
+    }
+
+    /**
      *
      */
     public function testKeypairs()
