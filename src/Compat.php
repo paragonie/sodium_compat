@@ -1819,7 +1819,7 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($string, 'string', 1);
 
         if (self::isPhp72OrGreater()) {
-            return self::hex2bin($string);
+            return sodium_hex2bin($string);
         }
         if (self::use_fallback('hex2bin')) {
             return call_user_func('\\Sodium\\hex2bin', $string);
@@ -1868,8 +1868,11 @@ class ParagonIE_Sodium_Compat
      */
     public static function library_version_major()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_library_version_major();
+        }
         if (self::use_fallback('library_version_major')) {
-            return (int)call_user_func('\\Sodium\\library_version_major');
+            return (int) call_user_func('\\Sodium\\library_version_major');
         }
         return self::LIBRARY_VERSION_MAJOR;
     }
@@ -1882,6 +1885,9 @@ class ParagonIE_Sodium_Compat
      */
     public static function library_version_minor()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_library_version_minor();
+        }
         if (self::use_fallback('library_version_minor')) {
             return (int) call_user_func('\\Sodium\\library_version_minor');
         }
@@ -2004,6 +2010,9 @@ class ParagonIE_Sodium_Compat
      */
     public static function version_string()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_version_string();
+        }
         if (self::use_fallback('version_string')) {
             return (string) call_user_func('\\Sodium\\version_string');
         }

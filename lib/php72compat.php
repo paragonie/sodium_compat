@@ -589,6 +589,33 @@ if (!is_callable('sodium_increment')) {
         ParagonIE_Sodium_Compat::increment($string);
     }
 }
+if (!is_callable('sodium_library_version_major')) {
+    /**
+     * @return int
+     */
+    function sodium_library_version_major()
+    {
+        return ParagonIE_Sodium_Compat::library_version_major();
+    }
+}
+if (!is_callable('sodium_library_version_minor')) {
+    /**
+     * @return int
+     */
+    function sodium_library_version_minor()
+    {
+        return ParagonIE_Sodium_Compat::library_version_minor();
+    }
+}
+if (!is_callable('sodium_version_string')) {
+    /**
+     * @return string
+     */
+    function sodium_version_string()
+    {
+        return ParagonIE_Sodium_Compat::version_string();
+    }
+}
 if (!is_callable('sodium_memcmp')) {
     /**
      * @param string $a
