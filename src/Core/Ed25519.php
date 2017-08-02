@@ -42,7 +42,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
 
         /** @var string $pk */
         $pk = self::publickey_from_secretkey($seed);
-        $sk = self::substr($seed, 0, self::SEED_BYTES) . $pk;
+        $sk = $seed . $pk;
         return $sk;
     }
 
