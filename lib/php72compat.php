@@ -7,7 +7,7 @@
  * Thus, the functions or constants just proxy to the appropriate
  * ParagonIE_Sodium_Compat method or class constant, respectively.
  */
-foreach ([
+foreach (array(
     'CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
@@ -56,10 +56,9 @@ foreach ([
     'CRYPTO_SIGN_KEYPAIRBYTES',
     'CRYPTO_STREAM_KEYBYTES',
     'CRYPTO_STREAM_NONCEBYTES',
-] as $constant
+    ) as $constant
 ) {
-    if ( ! defined("SODIUM_$constant"))
-    {
+    if (!defined("SODIUM_$constant")) {
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));
     }
 }
