@@ -1,11 +1,13 @@
 language: php
 sudo: false
+dist: trusty
 
 matrix:
   fast_finish: true
   include:
     - php: "5.3"
       env: USE_PSALM=0
+      dist: precise
     - php: "5.4"
       env: USE_PSALM=0
     - php: "5.5"
