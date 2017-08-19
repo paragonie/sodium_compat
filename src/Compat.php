@@ -79,6 +79,20 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_GENERICHASH_KEYBYTES = 32;
     const CRYPTO_GENERICHASH_KEYBYTES_MIN = 16;
     const CRYPTO_GENERICHASH_KEYBYTES_MAX = 64;
+    const CRYPTO_PWHASH_SALTBYTES = 16;
+    const CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
+    const CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
+    const CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE = 4;
+    const CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
+    const CRYPTO_PWHASH_OPSLIMIT_MODERATE = 6;
+    const CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
+    const CRYPTO_PWHASH_OPSLIMIT_SENSITIVE = 8;
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_SALTBYTES = 32;
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_STRPREFIX = '$7$';
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_OPSLIMIT_INTERACTIVE = 534288;
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_MEMLIMIT_INTERACTIVE = 16777216;
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_OPSLIMIT_SENSITIVE = 33554432;
+    const CRYPTO_PWHASH_SCRYPTSALSA208SHA256_MEMLIMIT_SENSITIVE = 1073741824;
     const CRYPTO_SCALARMULT_BYTES = 32;
     const CRYPTO_SCALARMULT_SCALARBYTES = 32;
     const CRYPTO_SHORTHASH_BYTES = 8;
@@ -752,7 +766,7 @@ class ParagonIE_Sodium_Compat
         if (self::isPhp72OrGreater()) {
             return sodium_crypto_box_keypair();
         }
-        if (self::use_fallback('crypto_sign_keypair')) {
+        if (self::use_fallback('crypto_box_keypair')) {
             return call_user_func('\\Sodium\\crypto_box_keypair');
         }
         return ParagonIE_Sodium_Crypto::box_keypair();
@@ -922,6 +936,26 @@ class ParagonIE_Sodium_Compat
             return ParagonIE_Sodium_Crypto32::box_secretkey($keypair);
         }
         return ParagonIE_Sodium_Crypto::box_secretkey($keypair);
+    }
+
+    /**
+     * Generate an X25519 keypair from a seed.
+     *
+     * @param string $seed
+     * @return string
+     */
+    public static function crypto_box_seed_keypair($seed)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($seed, 'string', 1);
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_box_seed_keypair($seed);
+        }
+        if (self::use_fallback('crypto_box_seed_keypair')) {
+            return call_user_func('\\Sodium\\crypto_box_seed_keypair', $seed);
+        }
+        return ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
     }
 
     /**
@@ -1940,12 +1974,47 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($string, 'string', 1);
 
         if (self::isPhp72OrGreater()) {
-            return self::hex2bin($string);
+            return sodium_hex2bin($string);
         }
         if (self::use_fallback('hex2bin')) {
             return call_user_func('\\Sodium\\hex2bin', $string);
         }
         return ParagonIE_Sodium_Core_Util::hex2bin($string);
+    }
+
+    /**
+     * Increase a string (little endian)
+     *
+     * @param &string $var
+     *
+     * @return void
+     * @throws Error (Unless libsodium is installed)
+     */
+    public static function increment(&$var)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($var, 'string', 1);
+
+        if (self::isPhp72OrGreater()) {
+            sodium_increment($var);
+            return;
+        }
+        if (self::use_fallback('increment')) {
+            @call_user_func('\\Sodium\\increment', $var);
+            return;
+        }
+
+        $len = ParagonIE_Sodium_Core_Util::strlen($var);
+        $c = 1;
+        $copy = '';
+        for ($i = 0; $i < $len; ++$i) {
+            $c += ParagonIE_Sodium_Core_Util::chrToInt(
+                ParagonIE_Sodium_Core_Util::substr($var, $i, 1)
+            );
+            $copy .= ParagonIE_Sodium_Core_Util::intToChr($c);
+            $c >>= 8;
+        }
+        $var = $copy;
     }
 
     /**
@@ -1956,8 +2025,11 @@ class ParagonIE_Sodium_Compat
      */
     public static function library_version_major()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_library_version_major();
+        }
         if (self::use_fallback('library_version_major')) {
-            return (int)call_user_func('\\Sodium\\library_version_major');
+            return (int) call_user_func('\\Sodium\\library_version_major');
         }
         return self::LIBRARY_VERSION_MAJOR;
     }
@@ -1970,6 +2042,9 @@ class ParagonIE_Sodium_Compat
      */
     public static function library_version_minor()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_library_version_minor();
+        }
         if (self::use_fallback('library_version_minor')) {
             return (int) call_user_func('\\Sodium\\library_version_minor');
         }
@@ -2092,6 +2167,9 @@ class ParagonIE_Sodium_Compat
      */
     public static function version_string()
     {
+        if (self::isPhp72OrGreater()) {
+            return sodium_version_string();
+        }
         if (self::use_fallback('version_string')) {
             return (string) call_user_func('\\Sodium\\version_string');
         }
