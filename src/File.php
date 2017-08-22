@@ -302,6 +302,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         }
 
         $ephemeralPK = fread($ifp, ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES);
+        if (!is_string($ephemeralPK)) {
+            throw new Error('Could not read input file');
+        }
         if (self::strlen($ephemeralPK) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES) {
             fclose($ifp);
             fclose($ofp);
@@ -394,7 +397,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             $blockSize = $size > 64
                 ? 64
                 : $size;
-            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, fread($fp, $blockSize));
+            $read = fread($fp, $blockSize);
+            if (!is_string($read)) {
+                throw new Error('Could not read input file');
+            }
+            ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $read);
             $size -= $blockSize;
         }
 
@@ -785,10 +792,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param string $nonce
      * @param string $key
      * @return bool
+     * @throws Error
      */
     protected static function secretbox_encrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
         $plaintext = fread($ifp, 32);
+        if (!is_string($plaintext)) {
+            throw new Error('Could not read input file');
+        }
         $first32 = ftell($ifp);
 
         /** @var string $subkey */
@@ -852,6 +863,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
                 ? self::BUFFER_SIZE
                 : $mlen;
             $plaintext = fread($ifp, $blockSize);
+            if (!is_string($plaintext)) {
+                throw new Error('Could not read input file');
+            }
             $cBlock = ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
                 $plaintext,
                 $realNonce,
@@ -894,11 +908,15 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param string $nonce
      * @param string $key
      * @return bool
+     * @throws Error
      * @throws Exception
      */
     protected static function secretbox_decrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
         $tag = fread($ifp, 16);
+        if (!is_string($tag)) {
+            throw new Error('Could not read input file');
+        }
 
         /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
@@ -924,6 +942,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
          * generated from salsa20_xor_ic, starting from 1 (second block).
          */
         $first32 = fread($ifp, 32);
+        if (!is_string($first32)) {
+            throw new Error('Could not read input file');
+        }
         $first32len = self::strlen($first32);
         fwrite(
             $ofp,
@@ -946,6 +967,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
                 ? self::BUFFER_SIZE
                 : $mlen;
             $ciphertext = fread($ifp, $blockSize);
+            if (!is_string($ciphertext)) {
+                throw new Error('Could not read input file');
+            }
             $pBlock = ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic(
                 $ciphertext,
                 $realNonce,
@@ -965,6 +989,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param string $tag
      * @param int $mlen
      * @return bool
+     * @throws Error
      */
     protected static function onetimeauth_verify(ParagonIE_Sodium_Core_Poly1305_State $state, $ifp, $tag = '', $mlen = 0)
     {
@@ -982,6 +1007,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
                 ? self::BUFFER_SIZE
                 : $mlen;
             $ciphertext = fread($ifp, $blockSize);
+            if (!is_string($ciphertext)) {
+                throw new Error('Could not read input file');
+            }
             $state->update($ciphertext);
             $mlen -= $blockSize;
             $iter += $incr;
