@@ -96,7 +96,12 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     public function testContext()
     {
         $ctxA = ParagonIE_Sodium_Compat::crypto_generichash_init();
-        $ctxB = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
+
+        if (PHP_INT_SIZE === 4) {
+            $ctxB = ParagonIE_Sodium_Core32_BLAKE2b::init(null, 32);
+        } else {
+            $ctxB = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
+        }
 
         $chunks = array(
             'Paragon Initiative ',
@@ -112,14 +117,28 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         );
         foreach ($chunks as $i => $chk) {
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctxA, $chk);
-            $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);
-            ParagonIE_Sodium_Core_BLAKE2b::update(
-                $ctxB,
-                $chunk,
-                $chunk->count()
-            );
+            if (PHP_INT_SIZE === 4) {
+                $chunk = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($chk);
+                ParagonIE_Sodium_Core32_BLAKE2b::update(
+                    $ctxB,
+                    $chunk,
+                    $chunk->count()
+                );
+            } else {
+                $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);
+                ParagonIE_Sodium_Core_BLAKE2b::update(
+                    $ctxB,
+                    $chunk,
+                    $chunk->count()
+                );
+            }
             /** @var string $ctxStrB */
-            $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
+            if (PHP_INT_SIZE === 4) {
+                $ctxStrB = ParagonIE_Sodium_Core32_BLAKE2b::contextToString($ctxB);
+            } else {
+                $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
+            }
+
             $this->assertEquals(
                 ParagonIE_Sodium_Core_Util::bin2hex(
                     ParagonIE_Sodium_Core_Util::substr($ctxA, 0, 64)
@@ -184,13 +203,23 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
             // Hash 3
             $out = new SplFixedArray(32);
-            $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
-            $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
-            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
-            ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
-            $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
+            if (PHP_INT_SIZE === 4) {
+                $d1s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data);
+                $d2s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data2);
+                $ctx = ParagonIE_Sodium_Core32_BLAKE2b::init(null, 32);
+                ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d1s, $d1s->count());
+                ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d2s, $d2s->count());
+                ParagonIE_Sodium_Core32_BLAKE2b::finish($ctx, $out);
+                $hash3 = ParagonIE_Sodium_Core32_BLAKE2b::SplFixedArrayToString($out);
+            } else {
+                $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
+                $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
+                $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
+                ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
+                ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
+                ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+                $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
+            }
 
             $this->assertSame(bin2hex($hash), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') a');
             $this->assertSame(bin2hex($hash2), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') b');

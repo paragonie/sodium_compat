@@ -2199,6 +2199,7 @@ class ParagonIE_Sodium_Compat
                 // We can safely just offload to the PECL extension
                 return true;
             }
+            /*
             if (DIRECTORY_SEPARATOR === '\\' && PHP_VERSION_ID < 70000) {
                 throw new RuntimeException(
                     'Sodium_compat produces incorrect results on systems that do not support 64-bit integers. ' .
@@ -2208,6 +2209,7 @@ class ParagonIE_Sodium_Compat
             throw new RuntimeException(
                 'Sodium_compat produces incorrect results on systems that do not support 64-bit integers.'
             );
+            */
         }
         if ($res === false) {
             // No libsodium installed
