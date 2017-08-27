@@ -75,7 +75,7 @@ class Int32Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core32_Int32::addInt32()
+     * @covers ParagonIE_Sodium_Core32_Int32::addInt()
      */
     public function testAddInt()
     {
@@ -108,6 +108,8 @@ class Int32Test extends PHPUnit_Framework_TestCase
             array(0x0000, 0x0001),
             $vbig->addInt(2)->limbs
         );
+
+        $this->assertSame(1, $vbig->addInt(1)->overflow);
     }
 
     /**
@@ -136,4 +138,131 @@ class Int32Test extends PHPUnit_Framework_TestCase
             $begin->rotateLeft(32)->limbs
         );
     }
+
+    public function testMask()
+    {
+        $begin = new ParagonIE_Sodium_Core32_Int32(
+            array(0x1234, 0x5678)
+        );
+        $this->assertSame(
+            array(0x0000, 0x5678),
+            $begin->mask(0xffff)->limbs
+        );
+        $this->assertSame(
+            array(0x1234, 0x0000),
+            $begin->mask(0xffff0000)->limbs
+        );
+
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Int32::mulInt()
+     * @covers ParagonIE_Sodium_Core32_Int32::mulInt32()
+     */
+    public function testMult()
+    {
+        $begin = new ParagonIE_Sodium_Core32_Int32(
+            array(0x1234, 0x5678)
+        );
+
+        $this->assertSame(
+            array(0x2468, 0xacf0),
+            $begin->mulInt(2)->limbs
+        );
+        $this->assertSame(
+            array(0x48d1, 0x59e0),
+            $begin->mulInt(4)->limbs
+        );
+        $this->assertSame(
+            array(0x5b05, 0xb058),
+            $begin->mulInt(5)->limbs
+        );
+
+        $this->assertSame(
+            array(0x48d1, 0x59e0),
+            $begin->mulInt32(new ParagonIE_Sodium_Core32_Int32(array(0, 4)))->limbs
+        );
+
+        $one = new ParagonIE_Sodium_Core32_Int32(array(0, 1));
+        $this->assertSame(
+            array(0, 5),
+            $one->mulInt(5)->limbs
+        );
+        $two = new ParagonIE_Sodium_Core32_Int32(array(0, 2));
+        $this->assertSame(
+            array(0, 10),
+            $two->mulInt(5)->limbs
+        );
+
+        $baseSmall = random_int(1, 65536);
+        $base = new ParagonIE_Sodium_Core32_Int32(array(0, $baseSmall));
+        for ($i = 0; $i < 1024; ++$i) {
+            $value = random_int(1, 65536);
+            $result = ($baseSmall * $value);
+            $expected = array(
+                ($result >> 16) & 0xffff,
+                $result & 0xffff
+            );
+
+            $this->assertSame(
+                $expected,
+                $base->mulInt($value)->limbs,
+                $baseSmall . ' x ' . $value . ' = ' . $result
+            );
+        }
+    }
+
+    public function testShift()
+    {
+        $begin = new ParagonIE_Sodium_Core32_Int32(
+            array(0x1234, 0x5678)
+        );
+
+        $this->assertSame(
+            array(0x2468, 0xacf0),
+            $begin->shiftLeft(1)->limbs
+        );
+
+        $this->assertSame(
+            array(0x0000, 0x1234),
+            $begin->shiftRight(16)->limbs
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Int32::addInt()
+     */
+    public function testSubInt()
+    {
+        $four = new ParagonIE_Sodium_Core32_Int32(
+            array(0x0000, 0x0004)
+        );
+
+        $this->assertSame(
+            array(0x0000, 0x0001),
+            $four->subInt(3)->limbs,
+            '4 - 3 = 1'
+        );
+
+        $med = new ParagonIE_Sodium_Core32_Int32(
+            array(0x0001, 0x0000)
+        );
+        $this->assertSame(
+            array(0x0000, 0x0002),
+            $med->subInt(0xfffe)->limbs
+        );
+
+        $big = new ParagonIE_Sodium_Core32_Int32(
+            array(0x7fff, 0xffff)
+        );
+        $this->assertSame(
+            array(0x7fff, 0x0001),
+            $big->subInt(0xfffe)->limbs
+        );
+        $this->assertSame(
+            array(0x7ffe, 0xffff),
+            $big->subInt(0x10000)->limbs
+        );
+    }
+
 }

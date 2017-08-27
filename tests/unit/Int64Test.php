@@ -94,6 +94,68 @@ class Int64Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Core32_Int64::mulInt()
+     * @covers ParagonIE_Sodium_Core32_Int64::mulInt64()
+     */
+    public function testMult()
+    {
+        $begin = new ParagonIE_Sodium_Core32_Int64(
+            array(0x1234, 0x5678, 0x9abc, 0xdef0)
+        );
+
+        $this->assertSame(
+            array(0x2468, 0xacf1, 0x3579, 0xbde0),
+            $begin->mulInt(2)->limbs
+        );
+        $this->assertSame(
+            array(0x48d1, 0x59e2, 0x6af3, 0x7bc0),
+            $begin->mulInt(4)->limbs
+        );
+        $this->assertSame(
+            array(0x5b05, 0xb05b, 0x05b0, 0x5ab0),
+            $begin->mulInt(5)->limbs
+        );
+
+        $this->assertSame(
+            array(0x48d1, 0x59e2, 0x6af3, 0x7bc0),
+            $begin->mulInt64(new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 4)))->limbs
+        );
+
+        $one = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 1));
+        $this->assertSame(
+            array(0, 0, 0, 5),
+            $one->mulInt(5)->limbs
+        );
+        $two = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 2));
+        $this->assertSame(
+            array(0, 0, 0, 10),
+            $two->mulInt(5)->limbs
+        );
+
+        for ($j = 0; $j < 64; ++$j) {
+            $baseSmall = random_int(1, 65536);
+            $base = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, $baseSmall));
+            for ($i = 0; $i < 64; ++$i) {
+                $value = random_int(1, 65536);
+                $result = ($baseSmall * $value);
+                $expected = array(
+                    0,
+                    0,
+                    ($result >> 16) & 0xffff,
+                    $result & 0xffff
+                );
+
+                $this->assertSame(
+                    $expected,
+                    $base->mulInt($value)->limbs,
+                    $baseSmall . ' x ' . $value . ' = ' . $result
+                );
+            }
+        }
+    }
+
+
+    /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateLeft()
      */
     public function testRotateLeft()
@@ -217,4 +279,42 @@ class Int64Test extends PHPUnit_Framework_TestCase
             'Rotate right by 32'
         );
     }
+
+    public function testShift()
+    {
+        $int64 = new ParagonIE_Sodium_Core32_Int64(
+            array(0x0123, 0x4567, 0x89ab, 0xcdef)
+        );
+
+        $this->assertSame(
+            array(0x0246, 0x8acf, 0x1357, 0x9bde),
+            $int64->shiftLeft(1)->limbs
+        );
+
+        $this->assertSame(
+            array(0x0000, 0x0123, 0x4567, 0x89ab),
+            $int64->shiftRight(16)->limbs
+        );
+
+        $second = new ParagonIE_Sodium_Core32_Int64(
+            array(0x0001, 0x0000, 0x0000, 0x0000)
+        );
+        $this->assertSame(
+            array(0x1000, 0x0000, 0x0000, 0x0000),
+            $second->shiftLeft(12)->limbs
+        );
+        $this->assertSame(
+            array(0x0000, 0x0000, 0x0001, 0x0000),
+            $second->shiftRight(32)->limbs
+        );
+
+        $real = new ParagonIE_Sodium_Core32_Int64(
+            array(0, 3, 26984, 29696)
+        );
+        $this->assertSame(
+            array(0, 0, 0, 218),
+            $real->shiftRight(26)->limbs
+        );
+    }
+
 }

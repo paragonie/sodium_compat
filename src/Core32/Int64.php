@@ -47,15 +47,14 @@ class ParagonIE_Sodium_Core32_Int64
 
         $return = new ParagonIE_Sodium_Core32_Int64();
         $carry = 0;
-        for ($i = 3; $i > 1; --$i) {
-            $tmp = $this->limbs[$i] + (($int >> ((3 - $i) << 4)) & 0xffff) + $carry;
-            $carry = $tmp >> 16;
-            $return->limbs[$i] = (int) ($tmp & 0xffff);
-        }
-
-        // Realistically, we shouldn't have to worry
-        for ($i = 1; $i >= 0; --$i) {
-            $tmp = $this->limbs[$i] + $carry;
+        for ($i = 3; $i >= 0; --$i) {
+            $step = (3 - $i) << 4; // 0, 16, 32, 48
+            if ($i < 2) {
+                $toAdd = 0;
+            } else {
+                $toAdd = (($int >> $step) & 0xffff);
+            }
+            $tmp = $this->limbs[$i] + $toAdd + $carry;
             $carry = $tmp >> 16;
             $return->limbs[$i] = (int) ($tmp & 0xffff);
         }
@@ -87,9 +86,118 @@ class ParagonIE_Sodium_Core32_Int64
      * @param int $b
      * @return bool
      */
+    public function isGreaterThan($b = 0)
+    {
+        return $this->compareInt($b) > 0;
+    }
+
+    /**
+     * @param int $b
+     * @return bool
+     */
     public function isLessThanInt($b = 0)
     {
         return $this->compareInt($b) < 0;
+    }
+
+
+    /**
+     * @param int $hi
+     * @param int $lo
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function mask64($hi = 0, $lo = 0)
+    {
+        $a = ($hi >> 16) & 0xffff;
+        $b = ($hi) & 0xffff;
+        $c = ($lo >> 16) & 0xffff;
+        $d = ($lo & 0xffff);
+        return new ParagonIE_Sodium_Core32_Int64(
+            array(
+                $this->limbs[0] & $a,
+                $this->limbs[1] & $b,
+                $this->limbs[2] & $c,
+                $this->limbs[3] & $d
+            )
+        );
+    }
+
+    /**
+     * @param int $int
+     * @param int $size
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function mulInt($int = 0, $size = 0)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+        ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
+        if (!$size) {
+            $size = 63;
+        }
+
+        $a = clone $this;
+        $return = new ParagonIE_Sodium_Core32_Int64();
+
+        for ($i = $size; $i >= 0; --$i) {
+            $return = $return->addInt64(
+                $a->mask64(-($int & 1), -($int & 1))
+            );
+            $a = $a->shiftLeft(1);
+            $int >>= 1;
+        }
+        return $return;
+    }
+
+    /**
+     * @param ParagonIE_Sodium_Core32_Int64 $int
+     * @param int $size
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function mulInt64(ParagonIE_Sodium_Core32_Int64 $int, $size = 0)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
+        if (!$size) {
+            $size = 63;
+        }
+
+        $a = clone $this;
+        $b = clone $int;
+        $return = new ParagonIE_Sodium_Core32_Int64();
+
+        for ($i = $size; $i >= 0; --$i) {
+            /*
+            $c += (int) ($a & -($b & 1));
+            $a <<= 1;
+            $b >>= 1;
+             */
+            $return = $return->addInt64(
+                $a->mask64(
+                    -($b->limbs[3] & 1),
+                    -($b->limbs[3] & 1)
+                )
+            );
+            $a = $a->shiftLeft(1);
+            $b = $b->shiftRight(1);
+        }
+        return $return;
+    }
+
+    /**
+     * OR this 64-bit integer with another.
+     *
+     * @param ParagonIE_Sodium_Core32_Int64 $b
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function orInt64(ParagonIE_Sodium_Core32_Int64 $b)
+    {
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $return->limbs = array(
+            (int) ($this->limbs[0] | $b->limbs[0]),
+            (int) ($this->limbs[1] | $b->limbs[1]),
+            (int) ($this->limbs[2] | $b->limbs[2]),
+            (int) ($this->limbs[3] | $b->limbs[3])
+        );
+        return $return;
     }
 
     /**
@@ -154,6 +262,95 @@ class ParagonIE_Sodium_Core32_Int64
                     ) & 0xffff
                 );
             }
+        }
+        return $return;
+    }
+    /**
+     * @param int $c
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function shiftLeft($c = 0)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $c &= 63;
+        if ($c === 0) {
+            $return->limbs = $this->limbs;
+        } elseif ($c < 0) {
+            return $this->shiftRight(-$c);
+        } else {
+            $carry = 0;
+            for ($i = 3; $i >= 0; --$i) {
+                $tmp = ($this->limbs[$i] << $c) | ($carry & 0xffff);
+                $return->limbs[$i] = (int) ($tmp & 0xffff);
+                $carry = $tmp >> 16;
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @param int $c
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function shiftRight($c = 0)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $c &= 63;
+
+        if ($c >= 16) {
+            if ($c >= 48) {
+                $return->limbs = array(
+                    0, 0, 0, $this->limbs[0]
+                );
+            } elseif ($c >= 32) {
+                $return->limbs = array(
+                    0, 0, $this->limbs[0], $this->limbs[1]
+                );
+            } else {
+                $return->limbs = array(
+                    0, $this->limbs[0], $this->limbs[1], $this->limbs[2]
+                );
+            }
+            return $return->shiftRight($c & 15);
+        }
+
+        if ($c === 0) {
+            $return->limbs = $this->limbs;
+        } elseif ($c < 0) {
+            return $this->shiftLeft(-$c);
+        } else {
+            $carryRight = 0;
+            $mask = (int) (((1 << ($c + 1)) - 1) & 0xffff);
+            for ($i = 0; $i < 4; ++$i) {
+                $return->limbs[$i] = (int) (
+                    (($this->limbs[$i] >> $c) | ($carryRight << (16 - $c))) & 0xffff
+                );
+                $carryRight = (int) ($this->limbs[$i] & $mask);
+            }
+        }
+        return $return;
+    }
+
+
+    /**
+     * Subtract a normal integer from an int64 object.
+     *
+     * @param int $int
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function subInt($int)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+
+        $return = new ParagonIE_Sodium_Core32_Int64();
+
+        $carry = 0;
+        for ($i = 3; $i >= 0; --$i) {
+            $tmp = $this->limbs[$i] - (($int >> 16) & 0xffff) + $carry;
+            $carry = $tmp >> 16;
+            $return->limbs[$i] = (int) ($tmp & 0xffff);
         }
         return $return;
     }
@@ -228,9 +425,34 @@ class ParagonIE_Sodium_Core32_Int64
     public function toArray()
     {
         return array(
-            (int) ($this->limbs[0] << 16 | $this->limbs[1]),
-            (int) ($this->limbs[2] << 16 | $this->limbs[3])
+            (int) ((($this->limbs[0] & 0xffff) << 16) | ($this->limbs[1] & 0xffff)),
+            (int) ((($this->limbs[2] & 0xffff) << 16) | ($this->limbs[3] & 0xffff))
         );
+    }
+
+    /**
+     * @return ParagonIE_Sodium_Core32_Int32
+     */
+    public function toInt32()
+    {
+        $return = new ParagonIE_Sodium_Core32_Int32();
+        $return->limbs[0] = (int) ($this->limbs[2]);
+        $return->limbs[1] = (int) ($this->limbs[3]);
+        $return->overflow = (int) ($this->limbs[1] | ($this->limbs[0] << 16));
+        return $return;
+    }
+
+    /**
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function toInt64()
+    {
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $return->limbs[0] = (int) ($this->limbs[0]);
+        $return->limbs[1] = (int) ($this->limbs[1]);
+        $return->limbs[2] = (int) ($this->limbs[2]);
+        $return->limbs[3] = (int) ($this->limbs[3]);
+        return $return;
     }
 
     /**

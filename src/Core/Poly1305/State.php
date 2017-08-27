@@ -123,6 +123,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                     $this->blocks($block, $want);
                     $message = self::substr($message, $want);
                     $bytes = self::strlen($message);
+					$block = self::substr($message, 0, $want);
                 }
             }
         }
@@ -184,6 +185,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 self::mul($h3, $s2) +
                 self::mul($h4, $s1)
             );
+
             $d1 = (
                 self::mul($h0, $r1) +
                 self::mul($h1, $r0) +
@@ -217,7 +219,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
             );
 
             /* (partial) h %= p */
-                                 $c = $d0 >> 26;
+            $c = $d0 >> 26;
             $h0 = $d0 & 0x3ffffff;
             $d1 += $c;
             $c = $d1 >> 26;
@@ -302,7 +304,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $h1 += $c;
 
         /* compute h + -p */
-        $g0 = $h0 +  5;
+        $g0 = $h0 + 5;
         $c = $g0 >> 26;
         $g0 &= 0x3ffffff;
         $g1 = $h1 + $c;
