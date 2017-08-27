@@ -799,8 +799,8 @@ class ParagonIE_Sodium_Compat
         if (self::isPhp72OrGreater()) {
             return sodium_crypto_box_keypair_from_secretkey_and_publickey($secretKey, $publicKey);
         }
-        if (self::use_fallback('box_keypair_from_secretkey_and_publickey')) {
-            return call_user_func('\\Sodium\\box_keypair_from_secretkey_and_publickey', $secretKey, $publicKey);
+        if (self::use_fallback('crypto_box_keypair_from_secretkey_and_publickey')) {
+            return call_user_func('\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey', $secretKey, $publicKey);
         }
         if (PHP_INT_SIZE === 4) {
             return ParagonIE_Sodium_Crypto32::box_keypair_from_secretkey_and_publickey($secretKey, $publicKey);
@@ -1850,8 +1850,8 @@ class ParagonIE_Sodium_Compat
         if (self::isPhp72OrGreater()) {
             return sodium_crypto_sign_publickey_from_secretkey($secretKey);
         }
-        if (self::use_fallback('crypto_sign_publickey_from_publickey')) {
-            return call_user_func('\\Sodium\\crypto_sign_publickey_from_publickey', $secretKey);
+        if (self::use_fallback('crypto_sign_publickey_from_secretkey')) {
+            return call_user_func('\\Sodium\\crypto_sign_publickey_from_secretkey', $secretKey);
         }
         if (PHP_INT_SIZE === 4) {
             return ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
