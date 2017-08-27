@@ -25,6 +25,7 @@ class ParagonIE_Sodium_Core32_Int32
     public function __construct($array = array(0, 0))
     {
         $this->limbs = $array;
+        $this->overflow = 0;
     }
 
     /**
@@ -124,7 +125,8 @@ class ParagonIE_Sodium_Core32_Int32
         $return = new ParagonIE_Sodium_Core32_Int32();
 
         for ($i = $size; $i >= 0; --$i) {
-            $return = $return->addInt32($a->mask(-($int & 1)));
+            $m = (int) (-($int & 1));
+            $return = $return->addInt32($a->mask($m));
             $a = $a->shiftLeft(1);
             $int >>= 1;
         }
@@ -148,7 +150,8 @@ class ParagonIE_Sodium_Core32_Int32
         $return = new ParagonIE_Sodium_Core32_Int32();
 
         for ($i = $size; $i >= 0; --$i) {
-            $return = $return->addInt32($a->mask(-($b->limbs[1] & 1)));
+            $m = (int) (-($b->limbs[1] & 1));
+            $return = $return->addInt32($a->mask($m));
             $a = $a->shiftLeft(1);
             $b = $b->shiftRight(1);
         }

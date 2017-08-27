@@ -9,12 +9,20 @@
  */
 class ParagonIE_Sodium_Core32_Int64
 {
-    /** @var array<int, int> - four 16-bit integers */
+    /**
+     * @var array<int, int> - four 16-bit integers
+     */
     public $limbs;
+
+    /**
+     * @var int
+     */
+    public $overflow = 0;
 
     public function __construct($array = array(0, 0, 0, 0))
     {
         $this->limbs = $array;
+        $this->overflow = 0;
     }
 
     /**
@@ -32,6 +40,7 @@ class ParagonIE_Sodium_Core32_Int64
             $carry = $tmp >> 16;
             $return->limbs[$i] = (int) ($tmp & 0xffff);
         }
+        $return->overflow = $carry;
         return $return;
     }
 
@@ -58,6 +67,7 @@ class ParagonIE_Sodium_Core32_Int64
             $carry = $tmp >> 16;
             $return->limbs[$i] = (int) ($tmp & 0xffff);
         }
+        $return->overflow = $carry;
         return $return;
     }
 
@@ -140,7 +150,10 @@ class ParagonIE_Sodium_Core32_Int64
 
         for ($i = $size; $i >= 0; --$i) {
             $return = $return->addInt64(
-                $a->mask64(-($int & 1), -($int & 1))
+                $a->mask64(
+                    (int) (-($int & 1)),
+                    (int) (-($int & 1))
+                )
             );
             $a = $a->shiftLeft(1);
             $int >>= 1;
@@ -172,8 +185,8 @@ class ParagonIE_Sodium_Core32_Int64
              */
             $return = $return->addInt64(
                 $a->mask64(
-                    -($b->limbs[3] & 1),
-                    -($b->limbs[3] & 1)
+                    (int) (-($b->limbs[3] & 1)),
+                    (int) (-($b->limbs[3] & 1))
                 )
             );
             $a = $a->shiftLeft(1);
@@ -420,6 +433,32 @@ class ParagonIE_Sodium_Core32_Int64
     }
 
     /**
+     * @param string $string
+     * @return self
+     */
+    public static function fromReverseString($string)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($string, 'string', 1);
+        $string = (string) $string;
+        if (ParagonIE_Sodium_Core32_Util::strlen($string) !== 8) {
+            throw new RangeException(
+                'String must be 8 bytes; ' . ParagonIE_Sodium_Core32_Util::strlen($string) . ' given.'
+            );
+        }
+        $return = new ParagonIE_Sodium_Core32_Int64();
+
+        $return->limbs[0]  = (int) ((ParagonIE_Sodium_Core32_Util::chrToInt($string[7]) & 0xff) << 8);
+        $return->limbs[0] |= (ParagonIE_Sodium_Core32_Util::chrToInt($string[6]) & 0xff);
+        $return->limbs[1]  = (int) ((ParagonIE_Sodium_Core32_Util::chrToInt($string[5]) & 0xff) << 8);
+        $return->limbs[1] |= (ParagonIE_Sodium_Core32_Util::chrToInt($string[4]) & 0xff);
+        $return->limbs[2]  = (int) ((ParagonIE_Sodium_Core32_Util::chrToInt($string[3]) & 0xff) << 8);
+        $return->limbs[2] |= (ParagonIE_Sodium_Core32_Util::chrToInt($string[2]) & 0xff);
+        $return->limbs[3]  = (int) ((ParagonIE_Sodium_Core32_Util::chrToInt($string[1]) & 0xff) << 8);
+        $return->limbs[3] |= (ParagonIE_Sodium_Core32_Util::chrToInt($string[0]) & 0xff);
+        return $return;
+    }
+
+    /**
      * @return array<int, int>
      */
     public function toArray()
@@ -468,6 +507,21 @@ class ParagonIE_Sodium_Core32_Int64
             ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[2] & 0xff) .
             ParagonIE_Sodium_Core32_Util::intToChr(($this->limbs[3] >> 8) & 0xff) .
             ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[3] & 0xff);
+    }
+
+    /**
+     * @return string
+     */
+    public function toReverseString()
+    {
+        return ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[3] & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr(($this->limbs[3] >> 8) & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[2] & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr(($this->limbs[2] >> 8) & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[1] & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr(($this->limbs[1] >> 8) & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr($this->limbs[0] & 0xff) .
+            ParagonIE_Sodium_Core32_Util::intToChr(($this->limbs[0] >> 8) & 0xff);
     }
 
     /**
