@@ -399,7 +399,7 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * X25519 key exchange followed by Xsalsa20Poly1305 symmetric encryption
+     * X25519 key exchange followed by XSalsa20Poly1305 symmetric encryption
      *
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
@@ -422,7 +422,7 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * X25519-Xsalsa20-Poly1305 with one ephemeral X25519 keypair.
+     * X25519-XSalsa20-Poly1305 with one ephemeral X25519 keypair.
      *
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
@@ -835,7 +835,7 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
-     * Xsalsa20-Poly1305 authenticated symmetric-key encryption.
+     * XSalsa20-Poly1305 authenticated symmetric-key encryption.
      *
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *

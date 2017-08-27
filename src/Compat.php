@@ -640,9 +640,9 @@ class ParagonIE_Sodium_Compat
      * Authenticated asymmetric-key encryption. Both the sender and recipient
      * may decrypt messages.
      *
-     * Algorithm: X25519-Xsalsa20-Poly1305.
+     * Algorithm: X25519-XSalsa20-Poly1305.
      *     X25519: Elliptic-Curve Diffie Hellman over Curve25519.
-     *     Xsalsa20: Extended-nonce variant of salsa20.
+     *     XSalsa20: Extended-nonce variant of salsa20.
      *     Poyl1305: Polynomial MAC for one-time message authentication.
      *
      * @param string $plaintext The message to be encrypted
@@ -682,7 +682,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Anonymous public-key encryption. Only the recipient may decrypt messages.
      *
-     * Algorithm: X25519-Xsalsa20-Poly1305, as with crypto_box.
+     * Algorithm: X25519-XSalsa20-Poly1305, as with crypto_box.
      *     The sender's X25519 keypair is ephemeral.
      *     Nonce is generated from the BLAKE2b hash of both public keys.
      *
@@ -1428,7 +1428,7 @@ class ParagonIE_Sodium_Compat
     /**
      * Authenticated symmetric-key encryption.
      *
-     * Algorithm: Xsalsa20-Poly1305
+     * Algorithm: XSalsa20-Poly1305
      *
      * @param string $plaintext The message you're encrypting
      * @param string $nonce A Number to be used Once; must be 24 bytes
@@ -1600,7 +1600,7 @@ class ParagonIE_Sodium_Compat
      *
      * @param int $len Number of bytes desired
      * @param string $nonce Number to be used Once; must be 24 bytes
-     * @param string $key Xsalsa20 key
+     * @param string $key XSalsa20 key
      * @return string       Pseudorandom stream that can be XORed with messages
      *                      to provide encryption (but not authentication; see
      *                      Poly1305 or crypto_auth() for that, which is not
@@ -1630,9 +1630,9 @@ class ParagonIE_Sodium_Compat
             return call_user_func('\\Sodium\\crypto_stream', $len, $nonce, $key);
         }
         if (PHP_INT_SIZE === 4) {
-            return ParagonIE_Sodium_Core32_Xsalsa20::xsalsa20($len, $nonce, $key);
+            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20($len, $nonce, $key);
         }
-        return ParagonIE_Sodium_Core_Xsalsa20::xsalsa20($len, $nonce, $key);
+        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
     }
 
     /**
@@ -1640,7 +1640,7 @@ class ParagonIE_Sodium_Compat
      *
      * Unless you are following expert advice, do not used this feature.
      *
-     * Algorithm: Xsalsa20
+     * Algorithm: XSalsa20
      *
      * This DOES NOT provide ciphertext integrity.
      *
@@ -1676,9 +1676,9 @@ class ParagonIE_Sodium_Compat
             return call_user_func('\\Sodium\\crypto_stream_xor', $message, $nonce, $key);
         }
         if (PHP_INT_SIZE === 4) {
-            return ParagonIE_Sodium_Core32_Xsalsa20::xsalsa20_xor($message, $nonce, $key);
+            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20_xor($message, $nonce, $key);
         }
-        return ParagonIE_Sodium_Core_Xsalsa20::xsalsa20_xor($message, $nonce, $key);
+        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20_xor($message, $nonce, $key);
     }
 
     /**
