@@ -333,15 +333,24 @@ class ParagonIE_Sodium_Core32_Int64
         if ($c >= 16) {
             if ($c >= 48) {
                 $return->limbs = array(
-                    ($negative & 0xffff), ($negative & 0xffff), ($negative & 0xffff), $this->limbs[0]
+                    (int) ($negative & 0xffff),
+                    (int) ($negative & 0xffff),
+                    (int) ($negative & 0xffff),
+                    (int) $this->limbs[0]
                 );
             } elseif ($c >= 32) {
                 $return->limbs = array(
-                    ($negative & 0xffff), ($negative & 0xffff), $this->limbs[0], $this->limbs[1]
+                    (int) ($negative & 0xffff),
+                    (int) ($negative & 0xffff),
+                    (int) $this->limbs[0],
+                    (int) $this->limbs[1]
                 );
             } else {
                 $return->limbs = array(
-                    ($negative & 0xffff), $this->limbs[0], $this->limbs[1], $this->limbs[2]
+                    (int) ($negative & 0xffff),
+                    (int) $this->limbs[0],
+                    (int) $this->limbs[1],
+                    (int) $this->limbs[2]
                 );
             }
             return $return->shiftRight($c & 15);

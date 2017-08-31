@@ -107,15 +107,14 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        /*
         if (!($value instanceof ParagonIE_Sodium_Core32_Int32)) {
             throw new InvalidArgumentException('Expected an instance of ParagonIE_Sodium_Core32_Int32');
         }
-        */
         if (is_null($offset)) {
             $this->container[] = $value;
         } else {
-            $this->container[$offset] = $value;
+            ParagonIE_Sodium_Core32_Util::declareScalarType($offset, 'int', 1);
+            $this->container[(int) $offset] = $value;
         }
     }
 
@@ -150,7 +149,7 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe implements ArrayAccess
     public function offsetGet($offset)
     {
         if (!isset($this->container[$offset])) {
-            $this->container[$offset] = new ParagonIE_Sodium_Core32_Int32();
+            $this->container[(int) $offset] = new ParagonIE_Sodium_Core32_Int32();
         }
         return $this->container[$offset];
     }
