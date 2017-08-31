@@ -11,6 +11,27 @@ class X25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
+     */
+    public function testScalarmultBase()
+    {
+        $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
+        $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
+
+        if (PHP_INT_SIZE === 4) {
+            $this->assertSame(
+                bin2hex($alice_public),
+                bin2hex(ParagonIE_Sodium_Crypto32::scalarmult_base($alice_secret))
+            );
+        } else {
+            $this->assertSame(
+                bin2hex($alice_public),
+                bin2hex(ParagonIE_Sodium_Crypto::scalarmult_base($alice_secret))
+            );
+        }
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base()
      */
     public function testRef10()

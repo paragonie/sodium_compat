@@ -312,9 +312,8 @@ class ParagonIE_Sodium_Core32_Int32
         return $return;
     }
 
-
     /**
-     * Adds a normal integer to an int32 object
+     * Subtract a normal integer from an int32 object.
      *
      * @param int $int
      * @return ParagonIE_Sodium_Core32_Int32
@@ -330,6 +329,25 @@ class ParagonIE_Sodium_Core32_Int32
         $return->limbs[1] = (int) ($tmp & 0xffff);
 
         $tmp = $this->limbs[0] - (($int >> 16) & 0xffff) + $carry;
+        $return->limbs[0] = (int) ($tmp & 0xffff);
+        return $return;
+    }
+
+    /**
+     * Subtract two int32 objects from each other
+     *
+     * @param ParagonIE_Sodium_Core32_Int32 $b
+     * @return ParagonIE_Sodium_Core32_Int32
+     */
+    public function subInt32(ParagonIE_Sodium_Core32_Int32 $b)
+    {
+        $return = new ParagonIE_Sodium_Core32_Int32();
+
+        $tmp = $this->limbs[1] - ($b->limbs[1] & 0xffff);
+        $carry = $tmp >> 16;
+        $return->limbs[1] = (int) ($tmp & 0xffff);
+
+        $tmp = $this->limbs[0] - ($b->limbs[0] & 0xffff) + $carry;
         $return->limbs[0] = (int) ($tmp & 0xffff);
         return $return;
     }
@@ -448,8 +466,8 @@ class ParagonIE_Sodium_Core32_Int32
     public function toInt32()
     {
         $return = new ParagonIE_Sodium_Core32_Int32();
-        $return->limbs[0] = (int) ($this->limbs[0]);
-        $return->limbs[1] = (int) ($this->limbs[1]);
+        $return->limbs[0] = (int) ($this->limbs[0] & 0xffff);
+        $return->limbs[1] = (int) ($this->limbs[1] & 0xffff);
         return $return;
     }
 
@@ -459,10 +477,11 @@ class ParagonIE_Sodium_Core32_Int32
     public function toInt64()
     {
         $return = new ParagonIE_Sodium_Core32_Int64();
-        $return->limbs[0] = (int) (($this->overflow >> 16) & 0xffff);
-        $return->limbs[1] = (int) ($this->overflow & 0xffff);
-        $return->limbs[2] = (int) ($this->limbs[0]);
-        $return->limbs[3] = (int) ($this->limbs[1]);
+        $neg = -(($this->limbs[0] >> 15) & 1);
+        $return->limbs[0] = (int) ($neg & 0xffff);
+        $return->limbs[1] = (int) ($neg & 0xffff);
+        $return->limbs[2] = (int) ($this->limbs[0] & 0xffff);
+        $return->limbs[3] = (int) ($this->limbs[1] & 0xffff);
         return $return;
     }
 

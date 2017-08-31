@@ -55,6 +55,19 @@ class Int64Test extends PHPUnit_Framework_TestCase
             )->limbs,
             'Adding 1 to 0xfffffffffffffffff should yield 0, when conforming to uint64'
         );
+        $tests = array(
+            array('1660a70000000000', '0000c002ec140000', 21)
+        );
+        foreach ($tests as $sample => $test) {
+            list ($A, $B, $C) = $test;
+            $a = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin($A));
+            $b = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin($B));
+            $this->assertEquals(
+                $b->limbs,
+                $a->shiftLeft($C)->limbs,
+                'Sample ' .$sample
+            );
+        }
     }
 
     /**
@@ -115,10 +128,24 @@ class Int64Test extends PHPUnit_Framework_TestCase
             array(0x5b05, 0xb05b, 0x05b0, 0x5ab0),
             $begin->mulInt(5)->limbs
         );
+        $this->assertSame(
+            array(0, 0, 0, 0),
+            $begin->mulInt(0)->limbs
+        );
 
         $this->assertSame(
             array(0x48d1, 0x59e2, 0x6af3, 0x7bc0),
             $begin->mulInt64(new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 4)))->limbs
+        );
+
+        $negOne = new ParagonIE_Sodium_Core32_Int64(array(0xffff, 0xffff, 0xffff, -1 & 0xffff));
+        $this->assertSame(
+            array(0xffff, 0xffff, 0xffff, -5 & 0xffff),
+            $negOne->mulInt(5)->limbs
+        );
+        $this->assertSame(
+            array(0, 0, 0, 5),
+            $negOne->mulInt(-5)->limbs
         );
 
         $one = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 1));
@@ -152,6 +179,41 @@ class Int64Test extends PHPUnit_Framework_TestCase
                 );
             }
         }
+
+        $negTwo = new ParagonIE_Sodium_Core32_Int64(array(0xffff, 0xffff, 0xffff, -2 & 0xffff));
+        $this->assertSame(
+            array(0, 0, 0, 0),
+            $negTwo->mulInt64(new ParagonIE_Sodium_Core32_Int64())->limbs
+        );
+        $this->assertSame(
+            array(0, 0, 0, 2),
+            $negTwo->mulInt64($negOne)->limbs
+        );
+        $this->assertSame(
+            $negTwo->limbs,
+            $negTwo->mulInt64($one)->limbs
+        );
+        $three = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 0, 3));
+        $this->assertSame(
+            array(0xffff, 0xffff, 0xffff, -6 & 0xffff),
+            $negTwo->mulInt64($three)->limbs
+        );
+        $negThree = new ParagonIE_Sodium_Core32_Int64(array(0xffff, 0xffff, 0xffff, -3 & 0xffff));
+        $this->assertSame(
+            array(0, 0, 0, 6),
+            $negTwo->mulInt64($negThree)->limbs
+        );
+
+        $f1 = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin('0000000000000000'));
+        $g0 = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin('6a5882feffffffff'));
+        $this->assertSame(
+            array(0, 0, 0, 0),
+            $g0->mulInt64($f1)->limbs
+        );
+        $this->assertSame(
+            array(0, 0, 0, 0),
+            $f1->mulInt64($g0)->limbs
+        );
     }
 
 
@@ -315,6 +377,56 @@ class Int64Test extends PHPUnit_Framework_TestCase
             array(0, 0, 0, 218),
             $real->shiftRight(26)->limbs
         );
+
+        $neg = new ParagonIE_Sodium_Core32_Int64(
+            array(0xfedc, 0xba98, 0x7654, 0x3210)
+        );
+        $this->assertSame(
+            array(0xfffe, 0xdcba, 0x9876, 0x5432),
+            $neg->shiftRight(8)->limbs
+        );
+        $this->assertSame(
+            array(0xffff, 0xfedc, 0xba98, 0x7654),
+            $neg->shiftRight(16)->limbs
+        );
+        $this->assertSame(
+            array(0xffff, 0xfffe, 0xdcba, 0x9876),
+            $neg->shiftRight(24)->limbs
+        );
+        $this->assertSame(
+            array(0xffff, 0xffff, 0xfedc, 0xba98),
+            $neg->shiftRight(32)->limbs
+        );
+        $neg = new ParagonIE_Sodium_Core32_Int64(
+            array(0xffff, 0xfedc, 0xba98, 0x7654)
+        );
+        $this->assertSame(
+            array(0xffff, 0xfffe, 0xdcba, 0x9876),
+            $neg->shiftRight(8)->limbs
+        );
+    }
+
+    public function testSubInt64()
+    {
+        $tests = array(
+            array('07daac0d00000000', 'b1a1a51f00000000', 'aac7f81100000000'),
+            array('98be457800000000', '70f3e84900000000', 'd834a3d1ffffffff'),
+            array('c368b597ab6ee13c', 'ffd325e6adf3d40f', '3c6b704e0285f3d2'),
+            array('c85d2b21ba98ff00', '938a6e5a72b9c400', 'cb2c4339b820c5ff'),
+            array('0000c002ec140000', '3669be02ec140000', '3669feffffffffff'),
+            array('0000c002e0140000', '3669be02ec140000', '3669feff0b000000')
+        );
+        foreach ($tests as $sample => $test) {
+            list ($A, $B, $C) = $test;
+            $a = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin($A));
+            $b = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin($B));
+            $c = ParagonIE_Sodium_Core32_Int64::fromReverseString(ParagonIE_Sodium_Core_Util::hex2bin($C));
+            $this->assertEquals(
+                $c->limbs,
+                $b->subInt64($a)->limbs,
+                'Sample ' .$sample
+            );
+        }
     }
 
 }
