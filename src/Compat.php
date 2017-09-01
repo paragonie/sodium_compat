@@ -1962,6 +1962,39 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Convert an Ed25519 secret key to a Curve25519 secret key
+     *
+     * @param string $sk
+     * @return string
+     * @throws Error
+     */
+    public static function crypto_sign_ed25519_sk_to_curve25519($sk)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($sk, 'string', 1);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($sk) < self::CRYPTO_SIGN_SECRETKEYBYTES) {
+            throw new Error('Argument 1 must be at least CRYPTO_SIGN_SEEDBYTES long.');
+        }
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_sign_ed25519_sk_to_curve25519($sk);
+        }
+        if (self::use_fallback('crypto_sign_ed25519_sk_to_curve25519')) {
+            return call_user_func('\\Sodium\\crypto_sign_ed25519_sk_to_curve25519', $sk);
+        }
+
+        $h = hash('sha512', ParagonIE_Sodium_Core_Util::substr($sk, 0, 32), true);
+        $h[0] = ParagonIE_Sodium_Core_Util::intToChr(
+            ParagonIE_Sodium_Core_Util::chrToInt($h[0]) & 248
+        );
+        $h[31] = ParagonIE_Sodium_Core_Util::intToChr(
+            (ParagonIE_Sodium_Core_Util::chrToInt($h[31]) & 127) | 64
+        );
+        return ParagonIE_Sodium_Core_Util::substr($h, 0, 32);
+    }
+
+    /**
      * Cache-timing-safe implementation of hex2bin().
      *
      * @param string $string Hexadecimal string

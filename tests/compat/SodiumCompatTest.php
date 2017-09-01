@@ -524,6 +524,12 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             ),
             'Conversion from existing secret key is failing. This is a very bad thing!'
         );
+
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_sign_ed25519_sk_to_curve25519($secret)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_ed25519_sk_to_curve25519($secret)),
+            'crypto_sign_ed25519_sk_to_curve25519'
+        );
     }
 
     public function testSignKeypair2()
