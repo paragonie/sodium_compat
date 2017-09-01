@@ -139,7 +139,7 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      *
      * @param SplFixedArray $x
      * @param int $i
-     * @param SplFixedArray $u
+     * @param ParagonIE_Sodium_Core32_Int64 $u
      * @return void
      */
     public static function store64(SplFixedArray $x, $i, ParagonIE_Sodium_Core32_Int64 $u)

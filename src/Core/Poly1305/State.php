@@ -123,7 +123,6 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                     $this->blocks($block, $want);
                     $message = self::substr($message, $want);
                     $bytes = self::strlen($message);
-					$block = self::substr($message, 0, $want);
                 }
             }
         }
