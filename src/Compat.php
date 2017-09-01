@@ -1974,7 +1974,7 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($sk, 'string', 1);
 
         /* Input validation: */
-        if (ParagonIE_Sodium_Core_Util::strlen($sk) < self::CRYPTO_SIGN_SECRETKEYBYTES) {
+        if (ParagonIE_Sodium_Core_Util::strlen($sk) < self::CRYPTO_SIGN_SEEDBYTES) {
             throw new Error('Argument 1 must be at least CRYPTO_SIGN_SEEDBYTES long.');
         }
         if (self::isPhp72OrGreater()) {
