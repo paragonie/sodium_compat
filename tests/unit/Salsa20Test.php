@@ -12,6 +12,9 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
      */
     public function testRotate()
     {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
         $this->assertEquals(
             0x00001000,
             ParagonIE_Sodium_Core_Salsa20::rotate(0x00000001, 12),
@@ -78,7 +81,11 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
         $key = "\x80" . str_repeat("\x00", 31);
         $iv = str_repeat("\x00", 8);
 
-        $output = ParagonIE_Sodium_Core_Salsa20::salsa20(512, $iv, $key);
+        if (PHP_INT_SIZE === 4) {
+            $output = ParagonIE_Sodium_Core32_Salsa20::salsa20(512, $iv, $key);
+        } else {
+            $output = ParagonIE_Sodium_Core_Salsa20::salsa20(512, $iv, $key);
+        }
 
         $this->assertSame(
             'E3BE8FDD8BECA2E3EA8EF9475B29A6E7' .
@@ -114,10 +121,19 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
     {
         $key = random_bytes(32);
         $iv = random_bytes(8);
-        $outA = ParagonIE_Sodium_Core_Salsa20::salsa20(192, $iv, $key);
+        if (PHP_INT_SIZE === 4) {
+            $outA = ParagonIE_Sodium_Core32_Salsa20::salsa20(192, $iv, $key);
+            $outB = ParagonIE_Sodium_Core32_Salsa20::core_salsa20($iv . str_repeat("\x00", 8), $key);
+            $outC = ParagonIE_Sodium_Core32_Salsa20::core_salsa20($iv . "\x01" . str_repeat("\x00", 7), $key);
+            $outD = ParagonIE_Sodium_Core32_Salsa20::core_salsa20($iv . "\x02" . str_repeat("\x00", 7), $key);
+        } else {
+            $outA = ParagonIE_Sodium_Core_Salsa20::salsa20(192, $iv, $key);
+            $outB = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . str_repeat("\x00", 8), $key);
+            $outC = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x01" . str_repeat("\x00", 7), $key);
+            $outD = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x02" . str_repeat("\x00", 7), $key);
+        }
 
         // First block
-        $outB = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . str_repeat("\x00", 8), $key);
         $this->assertSame(
             bin2hex(
                 ParagonIE_Sodium_Core_Util::substr($outA, 0, 64)
@@ -126,7 +142,6 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
         );
 
         // Second block
-        $outC = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x01" . str_repeat("\x00", 7), $key);
         $this->assertSame(
             bin2hex(
                 ParagonIE_Sodium_Core_Util::substr($outA, 64, 64)
@@ -135,7 +150,6 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
         );
 
         // Third block
-        $outD = ParagonIE_Sodium_Core_Salsa20::core_salsa20($iv . "\x02" . str_repeat("\x00", 7), $key);
         $this->assertSame(
             bin2hex(
                 ParagonIE_Sodium_Core_Util::substr($outA, 128, 64)

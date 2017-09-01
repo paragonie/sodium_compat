@@ -7,23 +7,35 @@ matrix:
   include:
     - php: "5.3"
       env: USE_PSALM=0
+           CHECK_MBSTRING=1
       dist: precise
     - php: "5.4"
       env: USE_PSALM=0
+           CHECK_MBSTRING=1
     - php: "5.5"
       env: USE_PSALM=0
+           CHECK_MBSTRING=1
     - php: "5.6"
       env: USE_PSALM=1
+           CHECK_MBSTRING=1
     - php: "7.0"
       env: USE_PSALM=1
+           CHECK_MBSTRING=1
     - php: "7.1"
       env: USE_PSALM=1
+           CHECK_MBSTRING=1
+    - php: "7.2"
+      env: USE_PSALM=1
+           CHECK_MBSTRING=0
     - php: "nightly"
       env: USE_PSALM=1
+           CHECK_MBSTRING=0
     - php: "master"
       env: USE_PSALM=1
+           CHECK_MBSTRING=0
     - php: "hhvm"
       env: USE_PSALM=1
+           CHECK_MBSTRING=1
   allow_failures:
     - php: "master"
     - php: "hhvm"
@@ -37,5 +49,5 @@ script:
     - vendor/bin/phpunit
     - php -dmbstring.func_overload=7 vendor/bin/phpunit
     - vendor/bin/phpunit --bootstrap autoload-fast.php
-    - php -dmbstring.func_overload=7 vendor/bin/phpunit --bootstrap autoload-fast.php
+    - if [[ $CHECK_MBSTRING -eq 1 ]]; php -dmbstring.func_overload=7 vendor/bin/phpunit --bootstrap autoload-fast.php; fi
     - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi

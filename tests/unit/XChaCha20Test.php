@@ -8,7 +8,7 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @oovers ParagonIE_Sodium_Core_XChaCha20::stream()
+     * @covers ParagonIE_Sodium_Core_XChaCha20::stream()
      */
     public function testVectors()
     {
@@ -32,7 +32,11 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             $expect = ParagonIE_Sodium_Core_Util::hex2bin($t[2]);
             $out_len = ParagonIE_Sodium_Core_Util::strlen($expect);
 
-            $out = ParagonIE_Sodium_Core_XChaCha20::stream($out_len, $nonce, $key);
+            if (PHP_INT_SIZE === 4) {
+                $out = ParagonIE_Sodium_Core32_XChaCha20::stream($out_len, $nonce, $key);
+            } else {
+                $out = ParagonIE_Sodium_Core_XChaCha20::stream($out_len, $nonce, $key);
+            }
             $this->assertSame(
                 bin2hex($expect),
                 bin2hex($out),

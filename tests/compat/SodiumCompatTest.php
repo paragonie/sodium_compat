@@ -692,6 +692,13 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
             'secretbox - medium messages'
         );
+
+        $message = str_repeat(random_bytes(8), (1 << 15) - 64) . random_bytes(64);
+        $this->assertSame(
+            bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            'secretbox - medium messages'
+        );
     }
 
     /**

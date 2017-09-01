@@ -9,8 +9,7 @@ Sodium Compat is a pure PHP polyfill for the Sodium cryptography library
 (libsodium), a core extension in PHP 7.2.0+ and otherwise [available in PECL](https://pecl.php.net/package/libsodium).
 
 This library tentativeley supports PHP 5.2.4 - 7.x (latest), but officially
-only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php)
-that offer 64-bit integers (Windows only supports 64-bit integers on PHP 7 and newer).
+only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php).
 
 If you have the PHP extension installed, Sodium Compat will opportunistically
 and transparently use the PHP extension instead of our implementation.
@@ -153,6 +152,20 @@ There are three ways to make it fast:
    2. Only if you are 100% certain that your processor is safe, you can set `ParagonIE_Sodium_Compat::$fastMul = true;`
       without harming the security of your cryptography keys. If your processor *isn't* safe, then decide whether you
       want speed or security because you can't have both.
+
+### Help, my PHP only has 32-Bit Integers! It's super slow!
+
+Some features of sodium_compat are ***incredibly slow* with PHP 5 on Windows**
+(in particular: Public key cryptography (encryption and signatures) is
+affected), and there is nothing we can do about that, due to platform
+restrictions on integers.
+
+For acceptable performance, we highly recommend Windows users to version 1.0.6
+of the libsodium extension from PECL or. Alternatively, simply upgrade to PHP 7
+and the slowdown will be greatly reduced.
+
+This is also true of non-Windows 32-bit operating systems, or if somehow PHP
+was compiled where `PHP_INT_SIZE` equals `4` instead of `8`.
 
 ## API Coverage
 
