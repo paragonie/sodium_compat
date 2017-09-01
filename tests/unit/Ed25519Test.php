@@ -2,12 +2,19 @@
 
 class Ed25519Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
     /**
      * From RFC 8032 section 7.1
      *
      * @ref https://www.rfc-editor.org/rfc/rfc8032.txt
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
+     * @covers ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey()
+     * @covers ParagonIE_Sodium_Core32_Ed25519::sign_detached()
      */
     public function testVectorsRFC8032()
     {
@@ -16,14 +23,22 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60' .
             'd75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a'
         );
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        }
 
         $this->assertSame(
             'd75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a',
             bin2hex($publicKey),
             'RFC 8032 - Test #1 - Public Key'
         );
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached('', $secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached('', $secretKey);
+        } else {
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached('', $secretKey);
+        }
 
         $this->assertSame(
             'e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490155' .
@@ -37,14 +52,22 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             '4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb' .
             '3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c'
         );
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        }
 
         $this->assertSame(
             '3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c',
             bin2hex($publicKey),
             'RFC 8032 - Test #2 - Public Key'
         );
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached('r', $secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached('r', $secretKey);
+        } else {
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached('r', $secretKey);
+        }
 
         $this->assertSame(
             '92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da' .
@@ -58,14 +81,22 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             'c5aa8df43f9f837bedb7442f31dcb7b166d38535076f094b85ce3a2e0b4458f7' .
             'fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025'
         );
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        }
 
         $this->assertSame(
             'fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025',
             bin2hex($publicKey),
             'RFC 8032 - Test #3 - Public Key'
         );
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached("\xaf\x82", $secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached("\xaf\x82", $secretKey);
+        } else {
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached("\xaf\x82", $secretKey);
+        }
 
         $this->assertSame(
             '6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac' .
@@ -79,7 +110,11 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             'f5e5767cf153319517630f226876b86c8160cc583bc013744c6bf255f5cc0ee5' .
             '278117fc144c72340f67d0f2316e8386ceffbf2b2428c9c51fef7c597f1d426e'
         );
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        }
         $this->assertSame(
             '278117fc144c72340f67d0f2316e8386ceffbf2b2428c9c51fef7c597f1d426e',
             bin2hex($publicKey),
@@ -157,7 +192,11 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             ParagonIE_Sodium_Core_Util::strlen($message)
         );
 
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached($message, $secretKey);
+        } else {
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
+        }
 
         $this->assertSame(
             '0aab4c900501b3e24d7cdf4663326a3a87df5e4843b2cbdb67cbf6e460fec350' .
@@ -171,6 +210,9 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      * @covers ParagonIE_Sodium_Core_Ed25519::verify_detached()
+     * @covers ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey()
+     * @covers ParagonIE_Sodium_Core32_Ed25519::sign_detached()
+     * @covers ParagonIE_Sodium_Core32_Ed25519::verify_detached()
      */
     public function testVectors()
     {
@@ -178,7 +220,11 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             'c4ffb94f252886b1378589af0d7d2004d9564b971ac73f09da827b80a5e39cd5' .
             'c50725d6a9b7df75a49f92accd3ab2cca4264a41d9c42cbd1e57eb2746e531d5'
         );
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey($secretKey);
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey($secretKey);
+        }
 
         $this->assertSame(
             'c50725d6a9b7df75a49f92accd3ab2cca4264a41d9c42cbd1e57eb2746e531d5',
@@ -186,7 +232,11 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
         );
 
         $message = str_repeat("\x00", 128);
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
+        if (PHP_INT_SIZE === 4) {
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached($message, $secretKey);
+        } else {
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
+        }
 
         $this->assertSame(
             '8af8dee0f4e0396dac9f82078c6fff2587095fd2240543b6a723d603f47dfe72' .
@@ -194,15 +244,27 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             bin2hex($sig),
             'Ed25519 signature'
         );
+        
+        if (PHP_INT_SIZE === 4) {
+            $keypair = ParagonIE_Sodium_Core32_Ed25519::keypair();
+            $secretKey = ParagonIE_Sodium_Core32_Ed25519::secretkey($keypair);
+            $publicKey = ParagonIE_Sodium_Core32_Ed25519::publickey($keypair);
+            $sig = ParagonIE_Sodium_Core32_Ed25519::sign_detached($message, $secretKey);
 
-        $keypair = ParagonIE_Sodium_Core_Ed25519::keypair();
-        $secretKey = ParagonIE_Sodium_Core_Ed25519::secretkey($keypair);
-        $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey($keypair);
-        $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
+            $this->assertTrue(
+                ParagonIE_Sodium_Core32_Ed25519::verify_detached($sig, $message, $publicKey),
+                'Ed25519 signature verification'
+            );
+        } else {
+            $keypair = ParagonIE_Sodium_Core_Ed25519::keypair();
+            $secretKey = ParagonIE_Sodium_Core_Ed25519::secretkey($keypair);
+            $publicKey = ParagonIE_Sodium_Core_Ed25519::publickey($keypair);
+            $sig = ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $secretKey);
 
-        $this->assertTrue(
-            ParagonIE_Sodium_Core_Ed25519::verify_detached($sig, $message, $publicKey),
-            'Ed25519 signature verification'
-        );
+            $this->assertTrue(
+                ParagonIE_Sodium_Core_Ed25519::verify_detached($sig, $message, $publicKey),
+                'Ed25519 signature verification'
+            );
+        }
     }
 }

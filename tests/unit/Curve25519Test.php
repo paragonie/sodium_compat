@@ -356,6 +356,21 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testReduce()
     {
         $input = ParagonIE_Sodium_Core_Util::hex2bin(
+            "2771062b6b536fe7ffbdda0320c3827b035df10d284df3f08222f04dbca7a4c2" .
+            "0ef15bdc988a22c7207411377c33f2ac09b1e86a046234283768ee7ba03c0e9f"
+        );
+        if (PHP_INT_SIZE === 4) {
+            $reduced = ParagonIE_Sodium_Core32_Curve25519::sc_reduce($input);
+        } else {
+            $reduced = ParagonIE_Sodium_Core_Curve25519::sc_reduce($input);
+        }
+        $this->assertSame(
+            '86eabc8e4c96193d290504e7c600df6cf8d8256131ec2c138a3e7e162e525404',
+            ParagonIE_Sodium_Core_Util::bin2hex($reduced),
+            'sd_reduce is not working'
+        );
+
+        $input = ParagonIE_Sodium_Core_Util::hex2bin(
             "dc0e1b48b1f2d9d3a6638a43c986c49ecbfafba209fff7a801f9d8f776c1fc79" .
             "5dd9dd8f4c272b92210c923ba7940955136f7e68c4bee52a6562f8171785ce10"
         );
@@ -368,6 +383,32 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
             'd8e7f39643da186a4a690c8cf6a7987bc4d2fb7bede4e7cec89f8175da27730a',
             ParagonIE_Sodium_Core_Util::bin2hex($reduced),
             'sd_reduce is not working'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Curve25519::sc_muladd()
+     */
+    public function testScMulAdd()
+    {
+        $a = ParagonIE_Sodium_Core_Util::hex2bin(
+            "86eabc8e4c96193d290504e7c600df6cf8d8256131ec2c138a3e7e162e525404"
+        );
+        $b = ParagonIE_Sodium_Core_Util::hex2bin(
+            "307c83864f2833cb427a2ef1c00a013cfdff2768d980c0a3a520f006904de94f9b4f0afe280b746a778684e75442502057b7473a03f08f96f5a38e9287e01f8f"
+        );
+        $c = ParagonIE_Sodium_Core_Util::hex2bin(
+            "f38907308c893deaf244787db4af53682249107418afc2edc58f75ac58a07404044098c2a990039cde5b6a4818df0bfb6e40dc5dee54248032962323e701352d"
+        );
+        if (PHP_INT_SIZE === 4) {
+            $d = ParagonIE_Sodium_Core32_Curve25519::sc_muladd($a, $b, $c);
+        } else {
+            $d = ParagonIE_Sodium_Core_Curve25519::sc_muladd($a, $b, $c);
+        }
+        $this->assertSame(
+            '5fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b',
+            ParagonIE_Sodium_Core_Util::bin2hex($d),
+            'sd_mulcadd is not working'
         );
     }
 

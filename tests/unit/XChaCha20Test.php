@@ -8,7 +8,7 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @oovers ParagonIE_Sodium_Core_XChaCha20::stream()
+     * @covers ParagonIE_Sodium_Core_XChaCha20::stream()
      */
     public function testVectors()
     {

@@ -2,6 +2,13 @@
 
 class Int64Test extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+        }
+    }
+
     public function testConversion()
     {
         $binary = ParagonIE_Sodium_Compat::hex2bin("0123456789abcdef");

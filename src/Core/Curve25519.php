@@ -1890,7 +1890,6 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s22 = self::mul($a11, $b11);
         $s23 = 0;
 
-
         $carry0 = ($s0 + (1 << 20)) >> 21;
         $s1 += $carry0;
         $s0 -= self::mul($carry0, 1 << 21);

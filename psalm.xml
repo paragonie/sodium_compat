@@ -14,11 +14,6 @@
             to change this to "info".
          -->
 
-        <!-- BEGIN WINDOWS DEVELOPMENT -->
-        <UndefinedClass errorLevel="info" />
-        <UndefinedFunction errorLevel="info" />
-        <!-- END WINDOWS DEVELOPMENT -->
-
         <DuplicateClass errorLevel="info" />
         <!--
             Psalm isn't correctly identifying the guard conditions that return
