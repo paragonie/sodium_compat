@@ -24,5 +24,7 @@
             Psalm isn't correctly identifying the guard conditions that return
             early if a class already exists.
         -->
+
+        <TooFewArguments errorLevel="info" />
     </issueHandlers>
 </psalm>

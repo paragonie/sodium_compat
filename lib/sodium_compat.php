@@ -185,11 +185,17 @@ if (!is_callable('\\Sodium\\crypto_box_seal_open')) {
     /**
      * @param string $message
      * @param string $kp
-     * @return string
+     * @return string|bool
      */
     function crypto_box_seal_open($message, $kp)
     {
-        return ParagonIE_Sodium_Compat::crypto_box_seal_open($message, $kp);
+        try {
+            return ParagonIE_Sodium_Compat::crypto_box_seal_open($message, $kp);
+        } catch (\Error $ex) {
+            return false;
+        } catch (\Exception $ex) {
+            return false;
+        }
     }
 }
 if (!is_callable('\\Sodium\\crypto_box_secretkey')) {
