@@ -1,5 +1,7 @@
 /.idea/
-/composer.lock
-/vendor/
 /.php_cs.cache
 /box/
+/dist/sodium-compat.phar
+/dist/sodium-compat.phar.sig
+/composer.lock
+/vendor/

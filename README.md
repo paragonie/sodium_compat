@@ -34,6 +34,8 @@ If you're using Composer:
 composer require paragonie/sodium_compat
 ```
 
+### Install From Source
+
 If you're not using Composer, download a [release tarball](https://github.com/paragonie/sodium_compat/releases)
 (which should be signed with [our GnuPG public key](https://paragonie.com/static/gpg-public-key.txt)), extract
 its contents, then include our `autoload.php` script in your project.
@@ -41,6 +43,37 @@ its contents, then include our `autoload.php` script in your project.
 ```php
 <?php
 require_once "/path/to/sodium_compat/autoload.php";
+```
+
+### PHP Archives (Phar) Releases
+
+Since version 1.3.0, [sodium_compat releases](https://github.com/paragonie/sodium_compat/releases) include a
+PHP Archive (.phar file) and associated GPG signature. First, download both files and verify them with our
+GPG public key, like so:
+
+```bash
+# Getting our public key from the keyserver:
+gpg --fingerprint 7F52D5C61D1255C731362E826B97A1C2826404DA
+if [ $? -ne 0 ]; then
+    echo -e "\033[33mDownloading PGP Public Key...\033[0m"
+    gpg  --keyserver pgp.mit.edu --recv-keys 7F52D5C61D1255C731362E826B97A1C2826404DA
+    # Security <security@paragonie.com>
+    gpg --fingerprint 7F52D5C61D1255C731362E826B97A1C2826404DA
+    if [ $? -ne 0 ]; then
+        echo -e "\033[31mCould not download PGP public key for verification\033[0m"
+        exit 1
+    fi
+fi
+
+# Verifying the PHP Archive
+gpg --verify sodium-compat.phar.sig sodium-compat.phar
+```
+
+Now, simply include this .phar file in your application.
+
+```php
+<?php
+require_once "/path/to/sodium-compat.phar";
 ```
 
 # Support
