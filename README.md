@@ -149,7 +149,7 @@ There are three ways to make it fast:
 3. Only if the previous two options are not available for you:
    1. Verify that [the processor you're using actually implements constant-time multiplication](https://bearssl.org/ctmul.html).
       Sodium_compat does, but it must trade some speed in order to attain cross-platform security.
-   2. Only if you are 100% certain that your processor is safe, you can set `ParagonIE_Sodium_Compat::$fastMul = true;`
+   2. Only if you are 100% certain that your processor is safe, you can set `ParagonIE_Sodium_Compat::$fastMult = true;`
       without harming the security of your cryptography keys. If your processor *isn't* safe, then decide whether you
       want speed or security because you can't have both.
 
