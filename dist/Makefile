@@ -3,7 +3,7 @@
 
 box := $(shell which box)
 composer := "composer"
-gitcommit := $(git rev-parse HEAD)
+gitcommit := $(shell git rev-parse HEAD)
 
 .PHONY: all
 all: build-phar
@@ -34,6 +34,6 @@ sodium-compat.phar: dist/box.json composer.lock
 	php -d phar.readonly=0 $(box) build -c box.json -v
 
 composer.lock:
-	$(composer) config autoloader-suffix "$gitcommit";
+	$(composer) config autoloader-suffix $(gitcommit)
 	$(composer) install --no-dev
 
