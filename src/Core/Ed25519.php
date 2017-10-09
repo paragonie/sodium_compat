@@ -57,7 +57,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if (self::strlen($keypair) !== self::KEYPAIR_BYTES) {
             throw new RangeException('crypto_sign keypair must be 96 bytes long');
         }
-        return self::substr($keypair, 0, 64);
+        return self::substr($keypair, 0, 32);
     }
 
     /**
