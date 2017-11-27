@@ -82,7 +82,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($invalid, "", "\0\0\0\0PS-Msg05", $sessionKey);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
-        } catch (Error $ex) {
+        } catch (SodiumException $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
 
@@ -107,13 +107,13 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encA, $aad, $nonce, $key);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
-        } catch (Error $ex) {
+        } catch (SodiumException $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encB, '', $nonce, $key);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
-        } catch (Error $ex) {
+        } catch (SodiumException $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
 
@@ -134,14 +134,14 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($badA, '', $nonce, $key);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
-        } catch (Error $ex) {
+        } catch (SodiumException $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
 
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($badB, $aad, $nonce, $key);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
-        } catch (Error $ex) {
+        } catch (SodiumException $ex) {
             $this->assertSame('Invalid MAC', $ex->getMessage());
         }
     }
