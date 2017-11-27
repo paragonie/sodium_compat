@@ -140,7 +140,7 @@ class ParagonIE_Sodium_Compat
      * @param string $left The left operand; must be a string
      * @param string $right The right operand; must be a string
      * @return int          < 0 if the left operand is less than the right
-     *                      0 if both strings are equal
+     *                      = 0 if both strings are equal
      *                      > 0 if the right operand is less than the left
      * @throws TypeError
      */
@@ -192,10 +192,10 @@ class ParagonIE_Sodium_Compat
      *
      * @param string $plaintext Message to be encrypted
      * @param string $assocData Authenticated Associated Data (unencrypted)
-     * @param string $nonce Number to be used only Once; must be 8 bytes
-     * @param string $key Encryption key
+     * @param string $nonce     Number to be used only Once; must be 8 bytes
+     * @param string $key       Encryption key
      *
-     * @return string           Ciphertext with a 16-byte Poly1305 message
+     * @return string           Ciphertext with a 16-byte GCM message
      *                          authentication code appended
      * @throws SodiumException
      * @throws TypeError
@@ -208,6 +208,18 @@ class ParagonIE_Sodium_Compat
     ) {
         if (!self::crypto_aead_aes256gcm_is_available()) {
             throw new SodiumException('AES-256-GCM is not available');
+        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($ciphertext, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
+        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AES256GCM_NPUBBYTES) {
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AES256GCM_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AES256GCM_KEYBYTES) {
+            throw new SodiumException('Key must be CRYPTO_AEAD_AES256GCM_KEYBYTES long');
         }
         $authTag = '';
         $ciphertext = openssl_encrypt(
