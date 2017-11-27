@@ -12,6 +12,10 @@ foreach (array(
     'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_ABYTES',
+    'CRYPTO_AEAD_AES256GCM_KEYBYTES',
+    'CRYPTO_AEAD_AES256GCM_NSECBYTES',
+    'CRYPTO_AEAD_AES256GCM_NPUBBYTES',
+    'CRYPTO_AEAD_AES256GCM_ABYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES',
@@ -82,6 +86,47 @@ if (!is_callable('sodium_compare')) {
     function sodium_compare($a, $b)
     {
         return ParagonIE_Sodium_Compat::compare($a, $b);
+    }
+}
+if (!is_callable('sodium_crypto_aead_aes256gcm_decrypt')) {
+    /**
+     * @param string $message
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    function sodium_crypto_aead_aes256gcm_decrypt($message, $assocData, $nonce, $key)
+    {
+        try {
+            return ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt($message, $assocData, $nonce, $key);
+        } catch (Error $ex) {
+            return false;
+        } catch (Exception $ex) {
+            return false;
+        }
+    }
+}
+if (!is_callable('sodium_crypto_aead_aes256gcm_encrypt')) {
+    /**
+     * @param string $message
+     * @param string $assocData
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     */
+    function sodium_crypto_aead_aes256gcm_encrypt($message, $assocData, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt($message, $assocData, $nonce, $key);
+    }
+}
+if (!is_callable('sodium_crypto_aead_aes256gcm_is_available')) {
+    /**
+     * @return bool
+     */
+    function sodium_crypto_aead_aes256gcm_is_available()
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available();
     }
 }
 if (!is_callable('sodium_crypto_aead_chacha20poly1305_decrypt')) {
