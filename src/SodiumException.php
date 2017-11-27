@@ -1,6 +1,6 @@
 <?php
 
-if (!class_exists('SodiumException')) {
+if (!class_exists('SodiumException', false)) {
     /**
      * Class SodiumException
      */
