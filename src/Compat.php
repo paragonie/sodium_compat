@@ -376,6 +376,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @return string
+     */
+    public static function crypto_aead_chacha20poly1305_keygen()
+    {
+        return random_bytes(self::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES);
+    }
+
+    /**
      * Authenticated Encryption with Associated Data
      *
      * Algorithm:
@@ -505,6 +513,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @return string
+     */
+    public static function crypto_aead_chacha20poly1305_ietf_keygen()
+    {
+        return random_bytes(self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES);
+    }
+
+    /**
      * Authenticated Encryption with Associated Data
      *
      * Algorithm:
@@ -558,6 +574,13 @@ class ParagonIE_Sodium_Compat
             $key
         );
     }
+    /**
+     * @return string
+     */
+    public static function crypto_aead_xchacha20poly1305_ietf_keygen()
+    {
+        return random_bytes(self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES);
+    }
 
     /**
      * Authenticate a message. Uses symmetric-key cryptography.
@@ -596,6 +619,14 @@ class ParagonIE_Sodium_Compat
             return ParagonIE_Sodium_Crypto32::auth($message, $key);
         }
         return ParagonIE_Sodium_Crypto::auth($message, $key);
+    }
+
+    /**
+     * @return string
+     */
+    public static function crypto_auth_keygen()
+    {
+        return random_bytes(self::CRYPTO_AUTH_KEYBYTES);
     }
 
     /**
@@ -943,6 +974,7 @@ class ParagonIE_Sodium_Compat
      *
      * @param string $seed
      * @return string
+     * @psalm-suppress UndefinedFunction
      */
     public static function crypto_box_seed_keypair($seed)
     {
@@ -1107,6 +1139,14 @@ class ParagonIE_Sodium_Compat
         } else {
             $ctx = ParagonIE_Sodium_Crypto::generichash_update($ctx, $message);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public static function crypto_generichash_keygen()
+    {
+        return random_bytes(self::CRYPTO_GENERICHASH_KEYBYTES);
     }
 
     /**
@@ -1401,6 +1441,7 @@ class ParagonIE_Sodium_Compat
      * @return string
      * @throws Error
      * @throws TypeError
+     * @psalm-suppress TooFewArguments
      */
     public static function crypto_scalarmult_base($secretKey)
     {
@@ -1504,6 +1545,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @return string
+     */
+    public static function crypto_secretbox_keygen()
+    {
+        return random_bytes(self::CRYPTO_SECRETBOX_KEYBYTES);
+    }
+
+    /**
      * Authenticated symmetric-key encryption.
      *
      * Algorithm: XChaCha20-Poly1305
@@ -1598,6 +1647,14 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @return string
+     */
+    public static function crypto_shorthash_keygen()
+    {
+        return random_bytes(self::CRYPTO_SHORTHASH_KEYBYTES);
+    }
+
+    /**
      * Expand a key and nonce into a keystream of pseudorandom bytes.
      *
      * @param int $len Number of bytes desired
@@ -1681,6 +1738,14 @@ class ParagonIE_Sodium_Compat
             return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20_xor($message, $nonce, $key);
         }
         return ParagonIE_Sodium_Core_XSalsa20::xsalsa20_xor($message, $nonce, $key);
+    }
+
+    /**
+     * @return string
+     */
+    public static function crypto_stream_keygen()
+    {
+        return random_bytes(self::CRYPTO_STREAM_KEYBYTES);
     }
 
     /**
@@ -2004,6 +2069,7 @@ class ParagonIE_Sodium_Compat
      * @param string $string Hexadecimal string
      * @return string        Raw binary string
      * @throws TypeError
+     * @psalm-suppress TooFewArguments
      */
     public static function hex2bin($string)
     {
@@ -2011,7 +2077,9 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($string, 'string', 1);
 
         if (self::isPhp72OrGreater()) {
-            return sodium_hex2bin($string);
+            if (is_callable('sodium_hex2bin')) {
+                return sodium_hex2bin($string);
+            }
         }
         if (self::use_fallback('hex2bin')) {
             return call_user_func('\\Sodium\\hex2bin', $string);
@@ -2059,6 +2127,7 @@ class ParagonIE_Sodium_Compat
      * with (sans pwhash and memzero).
      *
      * @return int
+     * @psalm-suppress UndefinedFunction
      */
     public static function library_version_major()
     {
@@ -2076,6 +2145,7 @@ class ParagonIE_Sodium_Compat
      * with (sans pwhash and memzero).
      *
      * @return int
+     * @psalm-suppress UndefinedFunction
      */
     public static function library_version_minor()
     {
@@ -2116,6 +2186,7 @@ class ParagonIE_Sodium_Compat
      *
      * @return void
      * @throws Error (Unless libsodium is installed)
+     * @psalm-suppress TooFewArguments
      */
     public static function memzero(&$var)
     {
@@ -2201,6 +2272,7 @@ class ParagonIE_Sodium_Compat
      * prefixed with 'polyfill-'.
      *
      * @return string
+     * @psalm-suppress UndefinedFunction
      */
     public static function version_string()
     {
