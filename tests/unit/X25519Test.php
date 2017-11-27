@@ -58,7 +58,7 @@ class X25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Error
+     * @expectedException SodiumException
      */
     public function testScalarmultZero()
     {
