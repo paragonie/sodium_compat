@@ -185,55 +185,6 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * Authenticated Encryption with Associated Data: Encryption
-     *
-     * Algorithm:
-     *     AES-256-GCM
-     *
-     * @param string $plaintext Message to be encrypted
-     * @param string $assocData Authenticated Associated Data (unencrypted)
-     * @param string $nonce     Number to be used only Once; must be 8 bytes
-     * @param string $key       Encryption key
-     *
-     * @return string           Ciphertext with a 16-byte GCM message
-     *                          authentication code appended
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public static function crypto_aead_aes256gcm_encrypt(
-        $plaintext = '',
-        $assocData = '',
-        $nonce = '',
-        $key = ''
-    ) {
-        if (!self::crypto_aead_aes256gcm_is_available()) {
-            throw new SodiumException('AES-256-GCM is not available');
-        }
-        ParagonIE_Sodium_Core_Util::declareScalarType($plaintext, 'string', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
-        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
-        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
-
-        /* Input validation: */
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AES256GCM_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AES256GCM_NPUBBYTES long');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AES256GCM_KEYBYTES) {
-            throw new SodiumException('Key must be CRYPTO_AEAD_AES256GCM_KEYBYTES long');
-        }
-        $authTag = '';
-        $ciphertext = openssl_encrypt(
-            $plaintext,
-            'aes-256-gcm',
-            $key,
-            OPENSSL_RAW_DATA,
-            $nonce,
-            $authTag,
-            $assocData
-        );
-        return $ciphertext . $authTag;
-    }
-    /**
      * Authenticated Encryption with Associated Data: Decryption
      *
      * Algorithm:
@@ -289,6 +240,56 @@ class ParagonIE_Sodium_Compat
             $authTag,
             $assocData
         );
+    }
+
+    /**
+     * Authenticated Encryption with Associated Data: Encryption
+     *
+     * Algorithm:
+     *     AES-256-GCM
+     *
+     * @param string $plaintext Message to be encrypted
+     * @param string $assocData Authenticated Associated Data (unencrypted)
+     * @param string $nonce     Number to be used only Once; must be 8 bytes
+     * @param string $key       Encryption key
+     *
+     * @return string           Ciphertext with a 16-byte GCM message
+     *                          authentication code appended
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function crypto_aead_aes256gcm_encrypt(
+        $plaintext = '',
+        $assocData = '',
+        $nonce = '',
+        $key = ''
+    ) {
+        if (!self::crypto_aead_aes256gcm_is_available()) {
+            throw new SodiumException('AES-256-GCM is not available');
+        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($plaintext, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
+        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AES256GCM_NPUBBYTES) {
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AES256GCM_NPUBBYTES long');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AES256GCM_KEYBYTES) {
+            throw new SodiumException('Key must be CRYPTO_AEAD_AES256GCM_KEYBYTES long');
+        }
+        $authTag = '';
+        $ciphertext = openssl_encrypt(
+            $plaintext,
+            'aes-256-gcm',
+            $key,
+            OPENSSL_RAW_DATA,
+            $nonce,
+            $authTag,
+            $assocData
+        );
+        return $ciphertext . $authTag;
     }
 
     /**
