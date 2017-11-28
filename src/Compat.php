@@ -1371,6 +1371,44 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * !Exclusive to sodium_compat!
+     *
+     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
+     * This returns FALSE if only sodium_compat is available.
+     *
+     * @return bool
+     */
+    public static function crypto_pwhash_is_available()
+    {
+        if (self::isPhp72OrGreater()) {
+            return true;
+        }
+        if (self::use_fallback('crypto_pwhash')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * !Exclusive to sodium_compat!
+     *
+     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
+     * This returns FALSE if only sodium_compat is available.
+     *
+     * @return bool
+     */
+    public static function crypto_pwhash_scryptsalsa208sha256_is_available()
+    {
+        if (self::isPhp72OrGreater()) {
+            return true;
+        }
+        if (self::use_fallback('crypto_scryptsalsa208sha256_pwhash')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param int $outlen
      * @param string $passwd
      * @param string $salt
