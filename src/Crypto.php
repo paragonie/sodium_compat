@@ -973,7 +973,7 @@ abstract class ParagonIE_Sodium_Crypto
                 ),
                 ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
                 1,
-                $subkey
+                (string) $subkey
             );
         }
         return $m;
@@ -1123,7 +1123,7 @@ abstract class ParagonIE_Sodium_Crypto
                     self::secretbox_xchacha20poly1305_ZEROBYTES
                 ),
                 ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
-                $subkey,
+                (string) $subkey,
                 ParagonIE_Sodium_Core_Util::store64_le(1)
             );
         }
