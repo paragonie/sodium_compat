@@ -209,7 +209,7 @@ class ParagonIE_Sodium_Compat
         if (!self::crypto_aead_aes256gcm_is_available()) {
             throw new SodiumException('AES-256-GCM is not available');
         }
-        ParagonIE_Sodium_Core_Util::declareScalarType($ciphertext, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($plaintext, 'string', 1);
         ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
         ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
         ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
