@@ -1402,7 +1402,7 @@ class ParagonIE_Sodium_Compat
         if (self::isPhp72OrGreater()) {
             return true;
         }
-        if (self::use_fallback('crypto_scryptsalsa208sha256_pwhash')) {
+        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256')) {
             return true;
         }
         return false;
