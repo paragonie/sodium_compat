@@ -293,6 +293,17 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Return a secure random key for use with the AES-256-GCM
+     * symmetric AEAD interface.
+     *
+     * @return string
+     */
+    public static function crypto_aead_aes256gcm_keygen()
+    {
+        return random_bytes(self::CRYPTO_AEAD_AES256GCM_KEYBYTES);
+    }
+
+    /**
      * Authenticated Encryption with Associated Data: Decryption
      *
      * Algorithm:
@@ -513,6 +524,9 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Return a secure random key for use with the ChaCha20-Poly1305
+     * symmetric AEAD interface.
+     *
      * @return string
      */
     public static function crypto_aead_chacha20poly1305_keygen()
@@ -593,6 +607,17 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Return a secure random key for use with the ChaCha20-Poly1305
+     * symmetric AEAD interface. (IETF version)
+     *
+     * @return string
+     */
+    public static function crypto_aead_chacha20poly1305_ietf_keygen()
+    {
+        return random_bytes(self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES);
+    }
+
+    /**
      * Authenticated Encryption with Associated Data: Decryption
      *
      * Algorithm:
@@ -650,14 +675,6 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @return string
-     */
-    public static function crypto_aead_chacha20poly1305_ietf_keygen()
-    {
-        return random_bytes(self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES);
-    }
-
-    /**
      * Authenticated Encryption with Associated Data
      *
      * Algorithm:
@@ -711,7 +728,11 @@ class ParagonIE_Sodium_Compat
             $key
         );
     }
+
     /**
+     * Return a secure random key for use with the XChaCha20-Poly1305
+     * symmetric AEAD interface.
+     *
      * @return string
      */
     public static function crypto_aead_xchacha20poly1305_ietf_keygen()
@@ -1372,44 +1393,6 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * !Exclusive to sodium_compat!
-     *
-     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
-     * This returns FALSE if only sodium_compat is available.
-     *
-     * @return bool
-     */
-    public static function crypto_pwhash_is_available()
-    {
-        if (self::isPhp72OrGreater()) {
-            return true;
-        }
-        if (self::use_fallback('crypto_pwhash')) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * !Exclusive to sodium_compat!
-     *
-     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
-     * This returns FALSE if only sodium_compat is available.
-     *
-     * @return bool
-     */
-    public static function crypto_pwhash_scryptsalsa208sha256_is_available()
-    {
-        if (self::isPhp72OrGreater()) {
-            return true;
-        }
-        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256')) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * @param int $outlen
      * @param string $passwd
      * @param string $salt
@@ -1436,6 +1419,25 @@ class ParagonIE_Sodium_Compat
         throw new SodiumException(
             'This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP'
         );
+    }
+
+    /**
+     * !Exclusive to sodium_compat!
+     *
+     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
+     * This returns FALSE if only sodium_compat is available.
+     *
+     * @return bool
+     */
+    public static function crypto_pwhash_is_available()
+    {
+        if (self::isPhp72OrGreater()) {
+            return true;
+        }
+        if (self::use_fallback('crypto_pwhash')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1513,6 +1515,25 @@ class ParagonIE_Sodium_Compat
         throw new SodiumException(
             'This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP'
         );
+    }
+
+    /**
+     * !Exclusive to sodium_compat!
+     *
+     * This returns TRUE if the native crypto_pwhash API is available by libsodium.
+     * This returns FALSE if only sodium_compat is available.
+     *
+     * @return bool
+     */
+    public static function crypto_pwhash_scryptsalsa208sha256_is_available()
+    {
+        if (self::isPhp72OrGreater()) {
+            return true;
+        }
+        if (self::use_fallback('crypto_pwhash_scryptsalsa208sha256')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1720,6 +1741,8 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Return a secure random key for use with crypto_secretbox
+     *
      * @return string
      */
     public static function crypto_secretbox_keygen()
@@ -1822,105 +1845,13 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Return a secure random key for use with crypto_shorthash
+     *
      * @return string
      */
     public static function crypto_shorthash_keygen()
     {
         return random_bytes(self::CRYPTO_SHORTHASH_KEYBYTES);
-    }
-
-    /**
-     * Expand a key and nonce into a keystream of pseudorandom bytes.
-     *
-     * @param int $len Number of bytes desired
-     * @param string $nonce Number to be used Once; must be 24 bytes
-     * @param string $key XSalsa20 key
-     * @return string       Pseudorandom stream that can be XORed with messages
-     *                      to provide encryption (but not authentication; see
-     *                      Poly1305 or crypto_auth() for that, which is not
-     *                      optional for security)
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public static function crypto_stream($len, $nonce, $key)
-    {
-        /* Type checks: */
-        ParagonIE_Sodium_Core_Util::declareScalarType($len, 'int', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 2);
-        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 3);
-
-        /* Input validation: */
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_STREAM_NONCEBYTES) {
-            throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_STREAM_KEYBYTES) {
-            throw new SodiumException('Argument 3 must be CRYPTO_STREAM_KEYBYTES long.');
-        }
-
-        if (self::isPhp72OrGreater()) {
-            return sodium_crypto_stream($len, $nonce, $key);
-        }
-        if (self::use_fallback('crypto_stream')) {
-            return call_user_func('\\Sodium\\crypto_stream', $len, $nonce, $key);
-        }
-        if (PHP_INT_SIZE === 4) {
-            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20($len, $nonce, $key);
-        }
-        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
-    }
-
-    /**
-     * DANGER! UNAUTHENTICATED ENCRYPTION!
-     *
-     * Unless you are following expert advice, do not used this feature.
-     *
-     * Algorithm: XSalsa20
-     *
-     * This DOES NOT provide ciphertext integrity.
-     *
-     * @param string $message Plaintext message
-     * @param string $nonce Number to be used Once; must be 24 bytes
-     * @param string $key Encryption key
-     * @return string         Encrypted text which is vulnerable to chosen-
-     *                        ciphertext attacks unless you implement some
-     *                        other mitigation to the ciphertext (i.e.
-     *                        Encrypt then MAC)
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public static function crypto_stream_xor($message, $nonce, $key)
-    {
-        /* Type checks: */
-        ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 2);
-        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 3);
-
-        /* Input validation: */
-        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_STREAM_NONCEBYTES) {
-            throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
-        }
-        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_STREAM_KEYBYTES) {
-            throw new SodiumException('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
-        }
-
-        if (self::isPhp72OrGreater()) {
-            return sodium_crypto_stream_xor($message, $nonce, $key);
-        }
-        if (self::use_fallback('crypto_stream_xor')) {
-            return call_user_func('\\Sodium\\crypto_stream_xor', $message, $nonce, $key);
-        }
-        if (PHP_INT_SIZE === 4) {
-            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20_xor($message, $nonce, $key);
-        }
-        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20_xor($message, $nonce, $key);
-    }
-
-    /**
-     * @return string
-     */
-    public static function crypto_stream_keygen()
-    {
-        return random_bytes(self::CRYPTO_STREAM_KEYBYTES);
     }
 
     /**
@@ -2236,6 +2167,102 @@ class ParagonIE_Sodium_Compat
             (ParagonIE_Sodium_Core_Util::chrToInt($h[31]) & 127) | 64
         );
         return ParagonIE_Sodium_Core_Util::substr($h, 0, 32);
+    }
+
+    /**
+     * Expand a key and nonce into a keystream of pseudorandom bytes.
+     *
+     * @param int $len Number of bytes desired
+     * @param string $nonce Number to be used Once; must be 24 bytes
+     * @param string $key XSalsa20 key
+     * @return string       Pseudorandom stream that can be XORed with messages
+     *                      to provide encryption (but not authentication; see
+     *                      Poly1305 or crypto_auth() for that, which is not
+     *                      optional for security)
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function crypto_stream($len, $nonce, $key)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($len, 'int', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 3);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_STREAM_NONCEBYTES) {
+            throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_STREAM_KEYBYTES) {
+            throw new SodiumException('Argument 3 must be CRYPTO_STREAM_KEYBYTES long.');
+        }
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_stream($len, $nonce, $key);
+        }
+        if (self::use_fallback('crypto_stream')) {
+            return call_user_func('\\Sodium\\crypto_stream', $len, $nonce, $key);
+        }
+        if (PHP_INT_SIZE === 4) {
+            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20($len, $nonce, $key);
+        }
+        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
+    }
+
+    /**
+     * DANGER! UNAUTHENTICATED ENCRYPTION!
+     *
+     * Unless you are following expert advice, do not used this feature.
+     *
+     * Algorithm: XSalsa20
+     *
+     * This DOES NOT provide ciphertext integrity.
+     *
+     * @param string $message Plaintext message
+     * @param string $nonce Number to be used Once; must be 24 bytes
+     * @param string $key Encryption key
+     * @return string         Encrypted text which is vulnerable to chosen-
+     *                        ciphertext attacks unless you implement some
+     *                        other mitigation to the ciphertext (i.e.
+     *                        Encrypt then MAC)
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function crypto_stream_xor($message, $nonce, $key)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($message, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 3);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_STREAM_NONCEBYTES) {
+            throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_STREAM_KEYBYTES) {
+            throw new SodiumException('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
+        }
+
+        if (self::isPhp72OrGreater()) {
+            return sodium_crypto_stream_xor($message, $nonce, $key);
+        }
+        if (self::use_fallback('crypto_stream_xor')) {
+            return call_user_func('\\Sodium\\crypto_stream_xor', $message, $nonce, $key);
+        }
+        if (PHP_INT_SIZE === 4) {
+            return ParagonIE_Sodium_Core32_XSalsa20::xsalsa20_xor($message, $nonce, $key);
+        }
+        return ParagonIE_Sodium_Core_XSalsa20::xsalsa20_xor($message, $nonce, $key);
+    }
+
+    /**
+     * Return a secure random key for use with crypto_stream
+     *
+     * @return string
+     */
+    public static function crypto_stream_keygen()
+    {
+        return random_bytes(self::CRYPTO_STREAM_KEYBYTES);
     }
 
     /**
