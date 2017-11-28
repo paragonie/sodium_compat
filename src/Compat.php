@@ -2394,7 +2394,7 @@ class ParagonIE_Sodium_Compat
         /* Type checks: */
         if (!is_int($numBytes)) {
             if (is_numeric($numBytes)) {
-                $numBytes = (int)$numBytes;
+                $numBytes = (int) $numBytes;
             } else {
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($numBytes) . ' given.');
             }

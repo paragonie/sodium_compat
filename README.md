@@ -214,6 +214,8 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8`.
     * `crypto_sign()`
     * `crypto_sign_open()`
 * PECL Libsodium Features
+    * `crypto_aead_aes256gcm_encrypt()`
+    * `crypto_aead_aes256gcm_decrypt()`
     * `crypto_aead_chacha20poly1305_encrypt()`
     * `crypto_aead_chacha20poly1305_decrypt()`
     * `crypto_aead_chacha20poly1305_ietf_encrypt()`
@@ -257,9 +259,17 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8`.
   
   If you have the PHP extension installed, sodium_compat
   will use the native implementation to zero out the string provided. Otherwise
-  it will throw an `Error` (provided as part of the random_compat polyfill).
+  it will throw a `SodiumException`.
 * `\Sodium\crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2
   into PHP and get reasonable performance. Users would feel motivated to select
   parameters that downgrade security to avoid denial of service (DoS) attacks.
   
   The only winning move is not to play.
+  
+  If ext/sodium or ext/libsodium is installed, these API methods will fallthrough
+  to the extension. Otherwise, our polyfill library will throw a `SodiumException`.
+  
+  To detect support for Argon2i at runtime, use
+  `ParagonIE_Sodium_Compat::crypto_pwhash_is_available()`, which returns a
+   boolean value (`TRUE` or `FALSE`).
+
