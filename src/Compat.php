@@ -2477,11 +2477,9 @@ class ParagonIE_Sodium_Compat
         if ($res === null) {
             $res = extension_loaded('libsodium') && PHP_VERSION_ID >= 50300;
         }
-        if (PHP_INT_SIZE === 4) {
-            if ($res && is_callable('\\Sodium\\' . $sodium_func_name)) {
-                // We can safely just offload to the PECL extension
-                return true;
-            }
+        if ($res && is_callable('\\Sodium\\' . $sodium_func_name)) {
+            // We can safely just offload to the PECL extension
+            return true;
         }
         if ($res === false) {
             // No libsodium installed
