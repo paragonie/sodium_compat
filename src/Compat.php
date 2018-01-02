@@ -345,6 +345,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_aead_chacha20poly1305_decrypt(
                 $ciphertext,
                 $assocData,
@@ -491,6 +492,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
                 $ciphertext,
                 $assocData,
@@ -931,6 +933,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_box_seal_open($ciphertext, $keypair);
         }
         if (self::use_fallback('crypto_box_seal_open')) {
@@ -1026,6 +1029,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_box_open($ciphertext, $nonce, $keypair);
         }
         if (self::use_fallback('crypto_box_open')) {
@@ -1729,6 +1733,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_secretbox_open($ciphertext, $nonce, $key);
         }
         if (self::use_fallback('crypto_secretbox_open')) {
@@ -1914,6 +1919,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
+            /** @psalm-suppress InvalidReturnStatement */
             return sodium_crypto_sign_open($signedMessage, $publicKey);
         }
         if (self::use_fallback('crypto_sign_open')) {
@@ -2132,6 +2138,37 @@ class ParagonIE_Sodium_Compat
             return ParagonIE_Sodium_Crypto32::sign_verify_detached($signature, $message, $publicKey);
         }
         return ParagonIE_Sodium_Crypto::sign_verify_detached($signature, $message, $publicKey);
+    }
+
+    /**
+     * Convert an Ed25519 public key to a Curve25519 public key
+     *
+     * @param string $pk
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function crypto_sign_ed25519_pk_to_curve25519($pk)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($pk, 'string', 1);
+
+        /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($pk) < self::CRYPTO_SIGN_PUBLICKEYBYTES) {
+            throw new SodiumException('Argument 1 must be at least CRYPTO_SIGN_PUBLICKEYBYTES long.');
+        }
+        if (self::isPhp72OrGreater()) {
+            if (is_callable('crypto_sign_ed25519_pk_to_curve25519')) {
+                return sodium_crypto_sign_ed25519_pk_to_curve25519($pk);
+            }
+        }
+        if (self::use_fallback('crypto_sign_ed25519_pk_to_curve25519')) {
+            return call_user_func('\\Sodium\\crypto_sign_ed25519_pk_to_curve25519', $pk);
+        }
+        if (PHP_INT_SIZE === 4) {
+            return ParagonIE_Sodium_Core32_Ed25519::pk_to_curve25519($pk);
+        }
+        return ParagonIE_Sodium_Core_Ed25519::pk_to_curve25519($pk);
     }
 
     /**
