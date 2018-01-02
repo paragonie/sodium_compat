@@ -103,7 +103,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if (self::small_order($pk)) {
             throw new SodiumException('Public key is on a small order');
         }
-        $A = self::ge_frombytes_negate_vartime($pk);
+        $A = self::ge_frombytes_negate_vartime(self::substr($pk, 0, 32));
         $p1 = self::ge_mul_l($A);
         if (!self::fe_isnonzero($p1->X)) {
             throw new SodiumException('Unexpected zero result');
