@@ -11,7 +11,6 @@ class KeyConversionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testPublicKeyConversion()
@@ -28,5 +27,18 @@ class KeyConversionTest extends PHPUnit_Framework_TestCase
             ParagonIE_Sodium_Core_Util::bin2hex($pk_convert),
             'Different strings from different approaches of converting Ed25519 -> X25519'
         );
+        $messages = array(
+            'test',
+            str_repeat('A', 100),
+            random_bytes(100)
+        );
+
+        foreach($messages as $message) {
+            $sealed = ParagonIE_Sodium_Compat::crypto_box_seal($message, $pk_convert);
+            $opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed, $sk_convert . $pk_convert);
+            $this->assertSame($message, $opened);
+            $opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed, $sk_convert . $pk_expect);
+            $this->assertSame($message, $opened);
+        }
     }
 }
