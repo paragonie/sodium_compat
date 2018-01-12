@@ -503,6 +503,8 @@ abstract class ParagonIE_Sodium_Core_Util
         $b = ($b & ~$mask) | ($mask & -$b);
 
         /**
+         * Unless $size is provided:
+         *
          * This loop always runs 32 times when PHP_INT_SIZE is 4.
          * This loop always runs 64 times when PHP_INT_SIZE is 8.
          */
