@@ -345,7 +345,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_aead_chacha20poly1305_decrypt(
                 $ciphertext,
                 $assocData,
@@ -492,7 +495,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
                 $ciphertext,
                 $assocData,
@@ -933,7 +939,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_box_seal_open($ciphertext, $keypair);
         }
         if (self::use_fallback('crypto_box_seal_open')) {
@@ -1029,7 +1038,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_box_open($ciphertext, $nonce, $keypair);
         }
         if (self::use_fallback('crypto_box_open')) {
@@ -1733,7 +1745,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_secretbox_open($ciphertext, $nonce, $key);
         }
         if (self::use_fallback('crypto_secretbox_open')) {
@@ -1919,7 +1934,10 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::isPhp72OrGreater()) {
-            /** @psalm-suppress InvalidReturnStatement */
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             * @psalm-suppress FalsableReturnStatement
+             */
             return sodium_crypto_sign_open($signedMessage, $publicKey);
         }
         if (self::use_fallback('crypto_sign_open')) {
