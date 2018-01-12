@@ -365,10 +365,10 @@ abstract class ParagonIE_Sodium_Core_Util
                 'String must be 3 bytes or more; ' . self::strlen($string) . ' given.'
             );
         }
-        $result = self::chrToInt($string[0]);
-        $result |= self::chrToInt($string[1]) << 8;
-        $result |= self::chrToInt($string[2]) << 16;
-        return $result & 0xffffff;
+
+        /** @var array<int, int> $unpacked */
+        $unpacked = unpack('V', $string . "\0");
+        return (int) ($unpacked[1] & 0xffffff);
     }
 
     /**
@@ -394,11 +394,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
             );
         }
-        $result  = (self::chrToInt($string[0]) & 0xff);
-        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
-        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
-        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
-        return $result & 0xffffffff;
+        /** @var array<int, int> $unpacked */
+        $unpacked = unpack('V', $string);
+        return (int) ($unpacked[1] & 0xffffffff);
     }
 
     /**
@@ -424,15 +422,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
             );
         }
-        $result  = (self::chrToInt($string[0]) & 0xff);
-        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
-        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
-        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
-        $result |= (self::chrToInt($string[4]) & 0xff) << 32;
-        $result |= (self::chrToInt($string[5]) & 0xff) << 40;
-        $result |= (self::chrToInt($string[6]) & 0xff) << 48;
-        $result |= (self::chrToInt($string[7]) & 0xff) << 56;
-        return (int) $result;
+        /** @var array<int, int> $unpacked */
+        $unpacked = unpack('P', $string);
+        return (int) $unpacked[1];
     }
 
     /**
@@ -564,10 +556,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
             }
         }
-
-        return self::intToChr(($int >> 16) & 0xff) .
-            self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int            & 0xff);
+        /** @var string $packed */
+        $packed = pack('N', $int);
+        return self::substr($packed, 1, 3);
     }
 
     /**
@@ -589,11 +580,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
             }
         }
-
-        return self::intToChr($int      & 0xff) .
-            self::intToChr(($int >> 8)  & 0xff) .
-            self::intToChr(($int >> 16) & 0xff) .
-            self::intToChr(($int >> 24) & 0xff);
+        /** @var string $packed */
+        $packed = pack('V', $int);
+        return $packed;
     }
 
     /**
@@ -615,11 +604,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
             }
         }
-
-        return self::intToChr(($int >> 24) & 0xff) .
-            self::intToChr(($int >> 16)    & 0xff) .
-            self::intToChr(($int >> 8)     & 0xff) .
-            self::intToChr($int            & 0xff);
+        /** @var string $packed */
+        $packed = pack('N', $int);
+        return $packed;
     }
 
     /**
@@ -641,31 +628,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
             }
         }
-
-        if (PHP_INT_SIZE === 8) {
-            return self::intToChr($int & 0xff) .
-                self::intToChr(($int >>  8) & 0xff) .
-                self::intToChr(($int >> 16) & 0xff) .
-                self::intToChr(($int >> 24) & 0xff) .
-                self::intToChr(($int >> 32) & 0xff) .
-                self::intToChr(($int >> 40) & 0xff) .
-                self::intToChr(($int >> 48) & 0xff) .
-                self::intToChr(($int >> 56) & 0xff);
-        }
-        if ($int > PHP_INT_MAX) {
-            list($hiB, $int) = self::numericTo64BitInteger($int);
-        } else {
-            $hiB = 0;
-        }
-        return
-            self::intToChr(($int      ) & 0xff) .
-            self::intToChr(($int >>  8) & 0xff) .
-            self::intToChr(($int >> 16) & 0xff) .
-            self::intToChr(($int >> 24) & 0xff) .
-            self::intToChr($hiB & 0xff) .
-            self::intToChr(($hiB >>  8) & 0xff) .
-            self::intToChr(($hiB >> 16) & 0xff) .
-            self::intToChr(($hiB >> 24) & 0xff);
+        /** @var string $packed */
+        $packed = pack('P', $int);
+        return $packed;
     }
 
     /**
