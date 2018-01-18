@@ -235,6 +235,8 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8`.
     * `crypto_secretbox_xchacha20poly1305_open()`
     * `crypto_shorthash()`
     * `crypto_sign_detached()`
+    * `crypto_sign_ed25519_pk_to_curve25519()`
+    * `crypto_sign_ed25519_sk_to_curve25519()`
     * `crypto_sign_verify_detached()`
     * For advanced users only:
         * `crypto_stream()`
