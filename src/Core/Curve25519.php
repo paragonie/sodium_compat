@@ -110,6 +110,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $s
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      * @throws RangeException
+     * @throws TypeError
      */
     public static function fe_frombytes($s)
     {
@@ -287,6 +288,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return int
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function fe_isnegative(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
@@ -301,6 +304,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return bool
+     * @throws TypeError
      */
     public static function fe_isnonzero(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
@@ -1134,6 +1138,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @ref https://github.com/jedisct1/libsodium/blob/157c4a80c13b117608aeae12178b2d38825f9f8f/src/libsodium/crypto_core/curve25519/ref10/curve25519_ref10.c#L1185-L1215
      * @param string $a
      * @return array<int, mixed>
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function slide($a)
     {
@@ -1182,6 +1188,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param string $s
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ge_frombytes_negate_vartime($s)
     {
@@ -1443,6 +1451,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $h
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ge_p3_tobytes(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $h)
     {
@@ -1497,6 +1507,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param int $char
      * @return int (1 = yes, 0 = no)
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function negative($char)
     {
@@ -1620,6 +1632,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P2 $h
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ge_tobytes(ParagonIE_Sodium_Core_Curve25519_Ge_P2 $h)
     {
@@ -1767,6 +1781,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param string $a
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ge_scalarmult_base($a)
     {
@@ -1825,6 +1841,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $b
      * @param string $c
      * @return string
+     * @throws TypeError
      */
     public static function sc_muladd($a, $b, $c)
     {
@@ -2251,6 +2268,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @param string $s
      * @return string
+     * @throws TypeError
      */
     public static function sc_reduce($s)
     {

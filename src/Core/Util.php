@@ -49,6 +49,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $bin_string (raw binary)
      * @return string
+     * @throws TypeError
      */
     public static function bin2hexUpper($bin_string)
     {
@@ -92,6 +93,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $chr
      * @return int
      * @throws SodiumException
+     * @throws TypeError
      */
     public static function chrToInt($chr)
     {
@@ -115,6 +117,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $right
      * @param int $len
      * @return int
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function compare($left, $right, $len = null)
     {
@@ -221,6 +225,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $left
      * @param string $right
      * @return bool
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function hashEquals($left, $right)
@@ -406,6 +411,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $string
      * @return int
      * @throws RangeException
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function load64_le($string)
@@ -444,6 +450,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $left
      * @param string $right
      * @return int
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function memcmp($left, $right)
     {
@@ -771,6 +779,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function verify_16($a, $b)
@@ -796,6 +805,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function verify_32($a, $b)

@@ -46,6 +46,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      *
      * @param string $key
      * @throws InvalidArgumentException
+     * @throws TypeError
      */
     public function __construct($key = '')
     {
@@ -83,6 +84,8 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      *
      * @param string $message
      * @return self
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function update($message = '')
     {
@@ -144,6 +147,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @param string $message
      * @param int $bytes
      * @return self
+     * @throws TypeError
      */
     public function blocks($message, $bytes)
     {
@@ -259,6 +263,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @internal You should not use this directly from another application
      *
      * @return string
+     * @throws TypeError
      */
     public function finish()
     {
