@@ -427,7 +427,7 @@ abstract class ParagonIE_Sodium_Core_Util
                 'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
             );
         }
-        if (PHP_VERSION_ID >= 50603) {
+        if (PHP_VERSION_ID >= 50603 && PHP_INT_SIZE === 8) {
             /** @var array<int, int> $unpacked */
             $unpacked = unpack('P', $string);
             return (int) $unpacked[1];
@@ -651,13 +651,13 @@ abstract class ParagonIE_Sodium_Core_Util
                 throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
             }
         }
-        if (PHP_VERSION_ID >= 50603) {
-            /** @var string $packed */
-            $packed = pack('P', $int);
-            return $packed;
-        }
 
         if (PHP_INT_SIZE === 8) {
+            if (PHP_VERSION_ID >= 50603) {
+                /** @var string $packed */
+                $packed = pack('P', $int);
+                return $packed;
+            }
             return self::intToChr($int & 0xff) .
                 self::intToChr(($int >>  8) & 0xff) .
                 self::intToChr(($int >> 16) & 0xff) .
