@@ -110,6 +110,7 @@ class ParagonIE_Sodium_Core32_Poly1305_State extends ParagonIE_Sodium_Core32_Uti
 
         /* handle leftover */
         if ($this->leftover) {
+            /** @var int $want */
             $want = ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE - $this->leftover;
             if ($want > $bytes) {
                 $want = $bytes;
@@ -136,8 +137,10 @@ class ParagonIE_Sodium_Core32_Poly1305_State extends ParagonIE_Sodium_Core32_Uti
 
         /* process full blocks */
         if ($bytes >= ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE) {
+            /** @var int $want */
             $want = $bytes & ~(ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE - 1);
             if ($want >= ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE) {
+                /** @var string $block */
                 $block = self::substr($message, 0, $want);
                 if (self::strlen($block) >= ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE) {
                     $this->blocks($block, $want);
@@ -170,7 +173,7 @@ class ParagonIE_Sodium_Core32_Poly1305_State extends ParagonIE_Sodium_Core32_Uti
         if (self::strlen($message) < 16) {
             $message = str_pad($message, 16, "\x00", STR_PAD_RIGHT);
         }
-        $hibit = ParagonIE_Sodium_Core32_Int32::fromInt($this->final ? 0 : 1 << 24); /* 1 << 128 */
+        $hibit = ParagonIE_Sodium_Core32_Int32::fromInt((int) ($this->final ? 0 : 1 << 24)); /* 1 << 128 */
         $zero = new ParagonIE_Sodium_Core32_Int64();
         /**
          * @var ParagonIE_Sodium_Core32_Int64 $d0
@@ -397,6 +400,7 @@ class ParagonIE_Sodium_Core32_Poly1305_State extends ParagonIE_Sodium_Core32_Uti
         $g3 = $g3->mask($mask);
         $g4 = $g4->mask($mask);
 
+        /** @var int $mask */
         $mask = (~$mask) & 0xffffffff;
 
         $h0 = $h0->mask($mask)->orInt32($g0);

@@ -18,6 +18,9 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
      * @param ParagonIE_Sodium_Core32_Curve25519_Fe $g
      * @param int $b
      * @return void
+     * @throws SodiumException
+     * @throws TypeError
+     * @psalm-suppress MixedMethodCall
      */
     public static function fe_cswap(
         ParagonIE_Sodium_Core32_Curve25519_Fe $f,
@@ -45,15 +48,25 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $g8 = (int) $g[8]->toInt();
         $g9 = (int) $g[9]->toInt();
         $b = -$b;
+        /** @var int $x0 */
         $x0 = ($f0 ^ $g0) & $b;
+        /** @var int $x1 */
         $x1 = ($f1 ^ $g1) & $b;
+        /** @var int $x2 */
         $x2 = ($f2 ^ $g2) & $b;
+        /** @var int $x3 */
         $x3 = ($f3 ^ $g3) & $b;
+        /** @var int $x4 */
         $x4 = ($f4 ^ $g4) & $b;
+        /** @var int $x5 */
         $x5 = ($f5 ^ $g5) & $b;
+        /** @var int $x6 */
         $x6 = ($f6 ^ $g6) & $b;
+        /** @var int $x7 */
         $x7 = ($f7 ^ $g7) & $b;
+        /** @var int $x8 */
         $x8 = ($f8 ^ $g8) & $b;
+        /** @var int $x9 */
         $x9 = ($f9 ^ $g9) & $b;
         $f[0] = ParagonIE_Sodium_Core32_Int32::fromInt($f0 ^ $x0);
         $f[1] = ParagonIE_Sodium_Core32_Int32::fromInt($f1 ^ $x1);
@@ -82,21 +95,24 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
      *
      * @param ParagonIE_Sodium_Core32_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core32_Curve25519_Fe
+     * @throws SodiumException
+     * @throws TypeError
+     * @psalm-suppress MixedMethodCall
      */
     public static function fe_mul121666(ParagonIE_Sodium_Core32_Curve25519_Fe $f)
     {
-        /** @var ParagonIE_Sodium_Core32_Int32[] $h */
+        /** @var array<int, ParagonIE_Sodium_Core32_Int32> $h */
         $h = array(
-            $f[0]->mulInt(121666),
-            $f[1]->mulInt(121666),
-            $f[2]->mulInt(121666),
-            $f[3]->mulInt(121666),
-            $f[4]->mulInt(121666),
-            $f[5]->mulInt(121666),
-            $f[6]->mulInt(121666),
-            $f[7]->mulInt(121666),
-            $f[8]->mulInt(121666),
-            $f[9]->mulInt(121666),
+            $f[0]->mulInt(121666, 17),
+            $f[1]->mulInt(121666, 17),
+            $f[2]->mulInt(121666, 17),
+            $f[3]->mulInt(121666, 17),
+            $f[4]->mulInt(121666, 17),
+            $f[5]->mulInt(121666, 17),
+            $f[6]->mulInt(121666, 17),
+            $f[7]->mulInt(121666, 17),
+            $f[8]->mulInt(121666, 17),
+            $f[9]->mulInt(121666, 17),
         );
 
         /** @var ParagonIE_Sodium_Core32_Int32 $carry9 */
@@ -187,6 +203,8 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
      * @param string $n
      * @param string $p
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function crypto_scalarmult_curve25519_ref10($n, $p)
     {
@@ -213,11 +231,13 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $z3 = self::fe_1();
 
         # swap = 0;
+        /** @var int $swap */
         $swap = 0;
 
         # for (pos = 254;pos >= 0;--pos) {
         for ($pos = 254; $pos >= 0; --$pos) {
             # b = e[pos / 8] >> (pos & 7);
+            /** @var int $b */
             $b = self::chrToInt(
                     $e[(int) floor($pos / 8)]
                 ) >> ($pos & 7);
@@ -230,6 +250,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
             # fe_cswap(z2,z3,swap);
             self::fe_cswap($z2, $z3, $swap);
             # swap = b;
+            /** @var int $swap */
             $swap = $b;
             # fe_sub(tmp0,x3,z3);
             $tmp0 = self::fe_sub($x3, $z3);
@@ -297,7 +318,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         # fe_mul(x2,x2,z2);
         $x2 = self::fe_mul($x2, $z2);
         # fe_tobytes(q,x2);
-        return self::fe_tobytes($x2);
+        return (string) self::fe_tobytes($x2);
     }
 
     /**
@@ -322,6 +343,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
      *
      * @param string $n
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function crypto_scalarmult_curve25519_ref10_base($n)

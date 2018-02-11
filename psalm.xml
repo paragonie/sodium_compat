@@ -2,6 +2,7 @@
 <psalm
     stopOnFirstError="false"
     useDocblockTypes="true"
+    totallyTyped="true"
 >
     <projectFiles>
         <directory name="src" />
@@ -24,6 +25,7 @@
             Psalm isn't correctly identifying the guard conditions that return
             early if a class already exists.
         -->
+        <RedundantConditionGivenDocblockType errorLevel="suppress" />
 
         <TooFewArguments errorLevel="info" />
     </issueHandlers>
