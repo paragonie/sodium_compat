@@ -223,6 +223,9 @@ class ParagonIE_Sodium_Core32_Int32
     /**
      * @param int $c
      * @return ParagonIE_Sodium_Core32_Int32
+     * @throws SodiumException
+     * @throws TypeError
+     * @psalm-suppress MixedArrayAccess
      */
     public function rotateLeft($c = 0)
     {
@@ -270,6 +273,9 @@ class ParagonIE_Sodium_Core32_Int32
      *
      * @param int $c
      * @return ParagonIE_Sodium_Core32_Int32
+     * @throws SodiumException
+     * @throws TypeError
+     * @psalm-suppress MixedArrayAccess
      */
     public function rotateRight($c = 0)
     {
@@ -316,6 +322,8 @@ class ParagonIE_Sodium_Core32_Int32
     /**
      * @param int $c
      * @return ParagonIE_Sodium_Core32_Int32
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function shiftLeft($c = 0)
     {
