@@ -178,7 +178,7 @@ if (sodium_crypto_sign_verify_detached($signature, $message, $alice_pk)) {
 
 There are three ways to make it fast:
 
-1. Use PHP 7.2 when it comes out, and take advantage of libsodium in the core.
+1. Use PHP 7.2.
 2. [Install the libsodium PHP extension from PECL](https://paragonie.com/book/pecl-libsodium/read/00-intro.md#installing-libsodium).
 3. Only if the previous two options are not available for you:
    1. Verify that [the processor you're using actually implements constant-time multiplication](https://bearssl.org/ctmul.html).
@@ -190,7 +190,7 @@ There are three ways to make it fast:
 ### Help, my PHP only has 32-Bit Integers! It's super slow!
 
 Some features of sodium_compat are ***incredibly slow* with PHP 5 on Windows**
-(in particular: Public key cryptography (encryption and signatures) is
+(in particular: public-key cryptography (encryption and signatures) is
 affected), and there is nothing we can do about that, due to platform
 restrictions on integers.
 
