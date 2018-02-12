@@ -1856,6 +1856,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
      * @param ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $u
      * @param int $b
      * @return ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function cmov(
@@ -2693,7 +2694,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $S9  =  $s9->toInt32()->toInt();
         $S10 = $s10->toInt32()->toInt();
         $S11 = $s11->toInt32()->toInt();
-        
+
         /**
          * @var array<int, int>
          */

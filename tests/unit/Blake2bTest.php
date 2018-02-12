@@ -9,6 +9,9 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_generichash()
+     *
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGenericHash()
     {
@@ -23,6 +26,8 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGenericHashUpdate()
     {
@@ -229,6 +234,8 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_BLAKE2b
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testRotate()
     {

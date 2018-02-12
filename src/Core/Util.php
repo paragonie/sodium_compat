@@ -10,6 +10,28 @@ if (class_exists('ParagonIE_Sodium_Core_Util', false)) {
 abstract class ParagonIE_Sodium_Core_Util
 {
     /**
+     * @param int $integer
+     * @param int $size (16, 32, 64)
+     * @return int
+     */
+    public static function abs($integer, $size = 0)
+    {
+        $realSize = (PHP_INT_SIZE << 3) - 1;
+        if ($size) {
+            --$size;
+        } else {
+            $size = $realSize;
+        }
+
+        $negative = -(($integer >> $size) & 1);
+        return (int) (
+            ($integer ^ $negative)
+                +
+            (($negative >> $realSize) & 1)
+        );
+    }
+
+    /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *

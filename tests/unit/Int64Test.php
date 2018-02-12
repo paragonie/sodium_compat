@@ -436,4 +436,19 @@ class Int64Test extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testConvert()
+    {
+        $int64 = new ParagonIE_Sodium_Core32_Int32(array(0xffff, 0xffff));
+        $added = $int64->addInt(2)->toInt64();
+
+        $this->assertSame(array(0, 1, 0, 1), $added->limbs);
+
+        $reverse = $added->toInt32();
+        $this->assertSame(array(0, 1), $reverse->limbs);
+        $this->assertSame(1, $reverse->overflow);
+    }
 }

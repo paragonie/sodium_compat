@@ -7,6 +7,20 @@ class UtilTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    public function testAbs()
+    {
+        $this->assertEquals(0, ParagonIE_Sodium_Core_Util::abs(0));
+        $this->assertEquals(1, ParagonIE_Sodium_Core_Util::abs(1));
+        $this->assertEquals(1, ParagonIE_Sodium_Core_Util::abs(-1));
+        $this->assertEquals(PHP_INT_MAX, ParagonIE_Sodium_Core_Util::abs(PHP_INT_MAX));
+        $this->assertEquals(PHP_INT_MAX, ParagonIE_Sodium_Core_Util::abs(-PHP_INT_MAX));
+
+        for ($i = 0; $i < 1000; ++$i) {
+            $int = random_int(-PHP_INT_MAX, PHP_INT_MAX);
+            $this->assertEquals((int) abs($int), ParagonIE_Sodium_Core_Util::abs($int));
+        }
+    }
+
     /**
      * @covers ParagonIE_Sodium_Core_Util::bin2hex()
      * @covers ParagonIE_Sodium_Core_Util::hex2bin()
