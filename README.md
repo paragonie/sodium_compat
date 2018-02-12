@@ -1,6 +1,7 @@
 # Sodium Compat
 
-[![Build Status](https://travis-ci.org/paragonie/sodium_compat.svg?branch=master)](https://travis-ci.org/paragonie/sodium_compat)
+[![Linux Build Status](https://travis-ci.org/paragonie/sodium_compat.svg?branch=master)](https://travis-ci.org/paragonie/sodium_compat)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/itcx1vgmfqiawgbe?svg=true)](https://ci.appveyor.com/project/paragonie-scott/sodium-compat)
 [![Latest Stable Version](https://poser.pugx.org/paragonie/sodium_compat/v/stable)](https://packagist.org/packages/paragonie/sodium_compat)
 [![Latest Unstable Version](https://poser.pugx.org/paragonie/sodium_compat/v/unstable)](https://packagist.org/packages/paragonie/sodium_compat)
 [![License](https://poser.pugx.org/paragonie/sodium_compat/license)](https://packagist.org/packages/paragonie/sodium_compat)
