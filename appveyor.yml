@@ -2,16 +2,13 @@ build: false
 shallow_clone: false
 platform: 'x86'
 clone_folder: C:\projects\sodium_compat
-branches:
-  except:
-    - gh-pages
 
 install:
   - cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - sc config wuauserv start= auto
   - net start wuauserv
-  - cinst -y php
+  - cinst -y php --version 5.6.30
   - cd c:\tools\php56
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
