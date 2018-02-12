@@ -5,43 +5,66 @@ matrix:
   fast_finish: true
   include:
     - php: "5.3"
+      os: linux
       env: USE_PSALM=0
            CHECK_MBSTRING=1
       dist: precise
     - php: "5.4"
+      os: linux
       env: USE_PSALM=0
            CHECK_MBSTRING=1
     - php: "5.5"
+      os: linux
       env: USE_PSALM=0
            CHECK_MBSTRING=1
     - php: "5.6"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.0"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.1"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.2"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "nightly"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "master"
+      os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "hhvm"
+      os: linux
+      env: USE_PSALM=1
+           CHECK_MBSTRING=1
+    - php: "5.3"
+      os: windows
+      env: USE_PSALM=0
+           CHECK_MBSTRING=1
+      dist: precise
+    - php: "5.4"
+      os: windows
+      env: USE_PSALM=0
+           CHECK_MBSTRING=1
+    - php: "5.5"
+      os: windows
+      env: USE_PSALM=0
+           CHECK_MBSTRING=1
+    - php: "5.6"
+      os: windows
       env: USE_PSALM=1
            CHECK_MBSTRING=1
   allow_failures:
     - php: "master"
     - php: "hhvm"
-
-os:
-    - windows
-    - linux
 
 install:
     - composer self-update
