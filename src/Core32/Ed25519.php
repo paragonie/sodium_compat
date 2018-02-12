@@ -16,6 +16,7 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      * @internal You should not use this directly from another application
      *
      * @return string (96 bytes)
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function keypair()
@@ -34,6 +35,7 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      * @param string $sk
      * @param string $seed
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function seed_keypair(&$pk, &$sk, $seed)
@@ -145,6 +147,7 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      *
      * @param string $sk
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function sk_to_pk($sk)

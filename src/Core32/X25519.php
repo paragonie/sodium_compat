@@ -136,24 +136,6 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $h[8] = $h[8]->addInt32($carry7);
         $h[7] = $h[7]->subInt32($carry7->shiftLeft(25));
 
-        /*
-        $carry9 = ($h[9] + (1 << 24)) >> 25;
-        $h[0] += self::mul($carry9, 19);
-        $h[9] -= $carry9 << 25;
-        $carry1 = ($h[1] + (1 << 24)) >> 25;
-        $h[2] += $carry1;
-        $h[1] -= $carry1 << 25;
-        $carry3 = ($h[3] + (1 << 24)) >> 25;
-        $h[4] += $carry3;
-        $h[3] -= $carry3 << 25;
-        $carry5 = ($h[5] + (1 << 24)) >> 25;
-        $h[6] += $carry5;
-        $h[5] -= $carry5 << 25;
-        $carry7 = ($h[7] + (1 << 24)) >> 25;
-        $h[8] += $carry7;
-        $h[7] -= $carry7 << 25;
-        */
-
         $carry0 = $h[0]->addInt(1 << 25)->shiftRight(26);
         $h[1] = $h[1]->addInt32($carry0);
         $h[0] = $h[0]->subInt32($carry0->shiftLeft(26));
@@ -173,24 +155,6 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $carry8 = $h[8]->addInt(1 << 25)->shiftRight(26);
         $h[9] = $h[9]->addInt32($carry8);
         $h[8] = $h[8]->subInt32($carry8->shiftLeft(26));
-
-        /*
-        $carry0 = ($h[0] + (1 << 25)) >> 26;
-        $h[1] += $carry0;
-        $h[0] -= $carry0 << 26;
-        $carry2 = ($h[2] + (1 << 25)) >> 26;
-        $h[3] += $carry2;
-        $h[2] -= $carry2 << 26;
-        $carry4 = ($h[4] + (1 << 25)) >> 26;
-        $h[5] += $carry4;
-        $h[4] -= $carry4 << 26;
-        $carry6 = ($h[6] + (1 << 25)) >> 26;
-        $h[7] += $carry6;
-        $h[6] -= $carry6 << 26;
-        $carry8 = ($h[8] + (1 << 25)) >> 26;
-        $h[9] += $carry8;
-        $h[8] -= $carry8 << 26;
-        */
 
         return ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray($h);
     }
