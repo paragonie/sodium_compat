@@ -70,14 +70,14 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         if (PHP_INT_SIZE === 4) {
             $preTest = ParagonIE_Sodium_Core32_ChaCha20::ietfStream(
                 32,
-                hex2bin("0000000050532d4d73673035"),
-                hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
+                ParagonIE_Sodium_Core_Util::hex2bin("0000000050532d4d73673035"),
+                ParagonIE_Sodium_Core_Util::hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
             );
         } else {
             $preTest = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
                 32,
-                hex2bin("0000000050532d4d73673035"),
-                hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
+                ParagonIE_Sodium_Core_Util::hex2bin("0000000050532d4d73673035"),
+                ParagonIE_Sodium_Core_Util::hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
             );
         }
         $this->assertSame(

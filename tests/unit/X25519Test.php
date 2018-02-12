@@ -48,17 +48,30 @@ class X25519Test extends PHPUnit_Framework_TestCase
         );
 
         $secretKey = random_bytes(32);
-        $publicKey = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secretKey);
 
-        $this->assertSame(
-            ParagonIE_Sodium_Core_Util::bin2hex(
-                ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($staticSk, $publicKey)
-            ),
-            ParagonIE_Sodium_Core_Util::bin2hex(
-                ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($secretKey, $staticPk)
-            ),
-            'Elliptic Curve Diffie-Hellman over Curve25519 is failing'
-        );
+        if (PHP_INT_SIZE === 4) {
+            $publicKey = ParagonIE_Sodium_Core32_X25519::crypto_scalarmult_curve25519_ref10_base($secretKey);
+            $this->assertSame(
+                ParagonIE_Sodium_Core32_Util::bin2hex(
+                    ParagonIE_Sodium_Core32_X25519::crypto_scalarmult_curve25519_ref10($staticSk, $publicKey)
+                ),
+                ParagonIE_Sodium_Core32_Util::bin2hex(
+                    ParagonIE_Sodium_Core32_X25519::crypto_scalarmult_curve25519_ref10($secretKey, $staticPk)
+                ),
+                'Elliptic Curve Diffie-Hellman over Curve25519 is failing'
+            );
+        } else {
+            $publicKey = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secretKey);
+            $this->assertSame(
+                ParagonIE_Sodium_Core_Util::bin2hex(
+                    ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($staticSk, $publicKey)
+                ),
+                ParagonIE_Sodium_Core_Util::bin2hex(
+                    ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($secretKey, $staticPk)
+                ),
+                'Elliptic Curve Diffie-Hellman over Curve25519 is failing'
+            );
+        }
     }
 
     /**
