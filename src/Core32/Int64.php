@@ -335,7 +335,7 @@ class ParagonIE_Sodium_Core32_Int64
                 $k = ($i - $idx_shift - 1) & 3;
                 $limbs[$i] = (int) (
                     (
-                        ($myLimbs >> (int) ($sub_shift))
+                        ($myLimbs[$j] >> (int) ($sub_shift))
                             |
                         ($myLimbs[$k] << (16 - (int) ($sub_shift)))
                     ) & 0xffff
@@ -526,6 +526,8 @@ class ParagonIE_Sodium_Core32_Int64
      * @param int $low
      * @param int $high
      * @return self
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function fromInts($low, $high)
     {
@@ -545,6 +547,8 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param string $string
      * @return self
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function fromString($string)
     {
@@ -571,6 +575,8 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param string $string
      * @return self
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function fromReverseString($string)
     {
@@ -631,6 +637,7 @@ class ParagonIE_Sodium_Core32_Int64
 
     /**
      * @return string
+     * @throws TypeError
      */
     public function toString()
     {
@@ -646,6 +653,7 @@ class ParagonIE_Sodium_Core32_Int64
 
     /**
      * @return string
+     * @throws TypeError
      */
     public function toReverseString()
     {
