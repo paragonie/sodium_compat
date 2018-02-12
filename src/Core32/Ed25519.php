@@ -181,7 +181,8 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      * @param string $message A signed message
      * @param string $pk      Public key
      * @return string         Message (without signature)
-     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function sign_open($message, $pk)
     {
@@ -268,7 +269,8 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      * @param string $message
      * @param string $pk
      * @return bool
-     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function verify_detached($sig, $message, $pk)
     {
@@ -334,7 +336,8 @@ abstract class ParagonIE_Sodium_Core32_Ed25519 extends ParagonIE_Sodium_Core32_C
      *
      * @param string $S
      * @return bool
-     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function check_S_lt_L($S)
     {

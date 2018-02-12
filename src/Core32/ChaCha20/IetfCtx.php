@@ -19,6 +19,8 @@ class ParagonIE_Sodium_Core32_ChaCha20_IetfCtx extends ParagonIE_Sodium_Core32_C
      * @param string $counter The initial counter value.
      *                        Defaults to 4 0x00 bytes.
      * @throws InvalidArgumentException
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function __construct($key = '', $iv = '', $counter = '')
     {
