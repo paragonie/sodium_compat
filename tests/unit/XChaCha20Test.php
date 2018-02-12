@@ -9,6 +9,8 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_XChaCha20::stream()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testVectors()
     {
@@ -47,6 +49,8 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSecretbox()
     {
@@ -68,11 +72,19 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             $message = ParagonIE_Sodium_Core_Util::hex2bin($test[2]);
             $expect = ParagonIE_Sodium_Core_Util::hex2bin($test[3]);
 
-            $out = ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305(
-                $message,
-                $nonce,
-                $key
-            );
+            if (PHP_INT_SIZE === 4) {
+                $out = ParagonIE_Sodium_Crypto32::secretbox_xchacha20poly1305(
+                    $message,
+                    $nonce,
+                    $key
+                );
+            } else {
+                $out = ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305(
+                    $message,
+                    $nonce,
+                    $key
+                );
+            }
             $this->assertSame(
                 bin2hex($expect),
                 bin2hex($out),

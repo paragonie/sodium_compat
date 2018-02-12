@@ -24,6 +24,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::bin2hex()
      * @covers ParagonIE_Sodium_Core_Util::hex2bin()
+     * @throws TypeError
      */
     public function testBin2hex()
     {
@@ -53,6 +54,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::randombytes_buf()
      * @covers ParagonIE_Sodium_Compat::randombytes_random16()
      * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
+     * @throws TypeError
      */
     public function testRandombytes()
     {
@@ -74,6 +76,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::intArrayToString()
      * @covers ParagonIE_Sodium_Core_Util::stringToIntArray()
+     * @throws TypeError
      */
     public function testConversion()
     {
@@ -92,6 +95,8 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Util::hashEquals()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testHashEquals()
     {
@@ -109,6 +114,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Util::load_3()
+     * @throws TypeError
      */
     public function testLoad3()
     {
@@ -131,6 +137,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Util::load_4()
+     * @throws TypeError
      */
     public function testLoad4()
     {
@@ -148,6 +155,8 @@ class UtilTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Util::load64_le()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testLoad64()
     {

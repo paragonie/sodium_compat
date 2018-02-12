@@ -442,7 +442,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $int64 = new ParagonIE_Sodium_Core32_Int32(array(0xffff, 0xffff));
+        $int64 = new ParagonIE_Sodium_Core32_Int32(array(0xffff, 0xffff), true);
         $added = $int64->addInt(2)->toInt64();
 
         $this->assertSame(array(0, 1, 0, 1), $added->limbs);

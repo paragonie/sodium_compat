@@ -10,6 +10,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      * @covers ParagonIE_Sodium_Compat::crypto_auth_verify()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoAuth()
     {
@@ -30,6 +32,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testChapoly()
     {
@@ -58,27 +62,65 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt()
      * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_decrypt()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testChapolyIetf()
     {
-        //SessioKey
-        $sessionKey = ParagonIE_Sodium_Core_Util::hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1");
+        if (PHP_INT_SIZE === 4) {
+            $preTest = ParagonIE_Sodium_Core32_ChaCha20::ietfStream(
+                32,
+                hex2bin("0000000050532d4d73673035"),
+                hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
+            );
+        } else {
+            $preTest = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
+                32,
+                hex2bin("0000000050532d4d73673035"),
+                hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
+            );
+        }
+        $this->assertSame(
+            "b5adc0b6453dc145fe24a66f3ddd0a63760db777370663447eb78c0b1eaef49f",
+            bin2hex($preTest),
+            'ietfStream'
+        );
+
+
+        //SessionKey
+        $sessionKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            "846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1"
+        );
 
         //Encrypted
-        $encrypted = ParagonIE_Sodium_Core_Util::hex2bin("0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6c");
+        $encrypted = ParagonIE_Sodium_Core_Util::hex2bin(
+            "0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6c"
+        );
 
         // Decrypted
-        $decrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($encrypted, "", "\0\0\0\0PS-Msg05", $sessionKey);
+        $decrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt(
+            $encrypted,
+            "",
+            "\0\0\0\0PS-Msg05",
+            $sessionKey
+        );
 
         // Encrypt and verify with test data
-        $reEncrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($decrypted, "", "\0\0\0\0PS-Msg05", $sessionKey);
+        $reEncrypted = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt(
+            $decrypted,
+            "",
+            "\0\0\0\0PS-Msg05",
+            $sessionKey
+        );
 
         $this->assertSame(
             bin2hex($encrypted),
             bin2hex($reEncrypted)
         );
 
-        $invalid = ParagonIE_Sodium_Core_Util::hex2bin("0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6d");
+        $invalid = ParagonIE_Sodium_Core_Util::hex2bin(
+            "0ffb01f94450b6803ab9fa5994d4e6242c04ac312c8aae2c8de0effd54a0db9a867ee101bfc5ebb235d734edba3c27f299d81644c1bc7b6ca4802550c29d7b28f10e5f5721bcbad2330337b2b64072fb1ead0de5d4923568c6bae5d1cd6ac528ab4d9fda97fa612ffcac0ad68f79b1578b4f1ea1d241b49aff3c71ca0a6e1c1ede16903136baa3f1c4e38e6e021a697a5fd5fd4f7df199b54c6d"
+        );
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt($invalid, "", "\0\0\0\0PS-Msg05", $sessionKey);
             $this->fail('Invalid MAC accepted by crypto_aead_chacha20poly1305_ietf_decrypt()');
@@ -149,6 +191,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_decrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_encrypt()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testXChapoly()
     {
@@ -192,6 +236,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     * @throws TypeError
      */
     public function testCryptoBox()
     {
@@ -224,6 +269,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box_seal()
      * @covers ParagonIE_Sodium_Compat::crypto_box_seal_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testBoxSeal()
     {
@@ -249,6 +296,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box_seed_keypair()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testBoxSeed()
     {
@@ -265,6 +314,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      *
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testKeypairs()
     {
@@ -307,6 +358,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testScalarmultBase()
     {
@@ -321,6 +374,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::scalarmult()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testScalarmult()
     {
@@ -337,6 +392,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::sign_detached()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSignDetached()
     {
@@ -362,6 +419,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Crypto::sign()
      * @covers ParagonIE_Sodium_Crypto::sign_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSign()
     {
@@ -395,6 +454,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSecretbox()
     {
@@ -413,6 +474,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305()
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSecretboxXChaCha20Poly1205()
     {
@@ -430,6 +493,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::sign_verify_detached()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testVerifyDetached()
     {

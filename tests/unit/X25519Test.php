@@ -12,6 +12,8 @@ class X25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testScalarmultBase()
     {
@@ -33,6 +35,8 @@ class X25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testRef10()
     {
@@ -59,6 +63,8 @@ class X25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException SodiumException
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testScalarmultZero()
     {

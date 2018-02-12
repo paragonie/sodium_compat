@@ -93,7 +93,7 @@ class ParagonIE_Sodium_Core32_Int32
         $tmp = $this->limbs[0] + (($int >> 16) & 0xffff) + $carry;
         $return->limbs[0] = (int) ($tmp & 0xffff);
         /** @var int overflow */
-        $return->overflow = $this->overflow + $tmp >> 16;
+        $return->overflow = $this->overflow + ($tmp >> 16);
         return $return;
     }
 

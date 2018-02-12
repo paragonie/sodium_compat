@@ -19,6 +19,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param ParagonIE_Sodium_Core32_Int32 $c
      * @param ParagonIE_Sodium_Core32_Int32 $d
      * @return array<int, ParagonIE_Sodium_Core32_Int32>
+     * @throws SodiumException
+     * @throws TypeError
      */
     protected static function quarterRound(
         ParagonIE_Sodium_Core32_Int32 $a,
@@ -57,7 +59,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param string $message
      *
      * @return string
-     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function encryptBytes(
         ParagonIE_Sodium_Core32_ChaCha20_Ctx $ctx,
@@ -328,6 +331,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function stream($len = 64, $nonce = '', $key = '')
     {
@@ -344,6 +349,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ietfStream($len, $nonce = '', $key = '')
     {
@@ -361,6 +368,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param string $key
      * @param string $ic
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function ietfStreamXorIc($message, $nonce = '', $key = '', $ic = '')
     {
@@ -378,6 +387,8 @@ class ParagonIE_Sodium_Core32_ChaCha20 extends ParagonIE_Sodium_Core32_Util
      * @param string $key
      * @param string $ic
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function streamXorIc($message, $nonce = '', $key = '', $ic = '')
     {
