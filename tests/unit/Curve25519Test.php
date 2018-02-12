@@ -12,6 +12,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_0()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testFe0()
     {
@@ -59,6 +61,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_1()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testFe1()
     {
@@ -103,6 +107,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_add()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testFeAdd()
     {
@@ -228,6 +234,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_sub()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testFeSub()
     {
@@ -352,6 +360,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::sc_reduce()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testReduce()
     {
@@ -414,6 +424,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_select()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeSelect()
     {
@@ -487,6 +499,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Curve25519::fe_mul()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testFeMul32()
     {
@@ -635,6 +649,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Curve25519::ge_madd()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeMAdd32()
     {
@@ -1155,6 +1171,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Curve25519::ge_scalarmult_base()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeScalarmultBase32()
     {
@@ -1309,6 +1327,9 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Curve25519::ge_double_scalarmult_vartime()
+     *
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeDoubleScalarMultVartime32()
     {
@@ -1415,7 +1436,124 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testSlide32()
+    {
+        if (PHP_INT_SIZE === 8) {
+            return;
+        }
+        $a = ParagonIE_Sodium_Core32_Util::hex2bin(
+            'fc2ef90e2ddab38c55d0edbf41167048061a03b99d00112dcc92777c1b17300c' .
+            'bd84d56b93d272eb01a2ffb5557bda3922360e402c29d05cda3f0debabaf5ce5'
+        );
+        $this->assertEquals(
+            array(
+                0, 0, -1, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, -1,
+                0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -15, 0, 0,
+                0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -7, 0, 0, 0, 0,
+                -7, 0, 0, 0, 0, 11, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -3, 0, 0, 0,
+                0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0,
+                0, -7, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0,
+                0, 9, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0,
+                0, 3, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0,
+                0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, 9, 0,
+                0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0, -13, 0,
+                0, 0, 0, -3, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
+                0, -9, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+                0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0
+            ),
+            ParagonIE_Sodium_Core_Curve25519::slide($a),
+            'slide()'
+        );
+        $b = ParagonIE_Sodium_Core32_Util::hex2bin(
+            '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
+            '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
+        );
+        $this->assertEquals(
+            array(
+                0, -5, 0, 0, 0, 0, -7, 0, 0, 0, 0, -11, 0, 0, 0, 0, -13, 0, 0,
+                0, 0, 7, 0, 0, 0, 0, -3, 0, 0, 0, 0, -1, 0, 0, 0, 0, 9, 0, 0,
+                0, 0, -11, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
+                0, -1, 0, 0, 0, 0, 13, 0, 0, 0, 0, -13, 0, 0, 0, 0, 5, 0, 0, 0,
+                0, 0, 0, -11, 0, 0, 0, 0, -7, 0, 0, 0, 0, 11, 0, 0, 0, 0, 13,
+                0, 0, 0, 0, 9, 0, 0, 0, 0, -11, 0, 0, 0, 0, 9, 0, 0, 0, 0, 3,
+                0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, -5, 0, 0,
+                0, 0, -7, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0,
+                -13, 0, 0, 0, 0, 3, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, -11, 0,
+                0, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0, 11, 0, 0, 0, 0, -3, 0, 0, 0,
+                0, 0, 15, 0, 0, 0, 0, -15, 0, 0, 0, 0, -1, 0, 0, 0, 0, -3, 0,
+                0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 11, 0, 0, 0, 0, 5, 0, 0, 0,
+                0, 13, 0, 0, 0, 0, -5, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 1, 0
+            ),
+            ParagonIE_Sodium_Core32_Curve25519::slide($b),
+            'slide()'
+        );
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testSlide()
+    {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
+        $a = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fc2ef90e2ddab38c55d0edbf41167048061a03b99d00112dcc92777c1b17300c' .
+            'bd84d56b93d272eb01a2ffb5557bda3922360e402c29d05cda3f0debabaf5ce5'
+        );
+        $this->assertEquals(
+            array(
+                0, 0, -1, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, -1,
+                0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -15, 0, 0,
+                0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -7, 0, 0, 0, 0,
+                -7, 0, 0, 0, 0, 11, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -3, 0, 0, 0,
+                0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0,
+                0, -7, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0,
+                0, 9, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0,
+                0, 3, 0, 0, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0,
+                0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, 9, 0,
+                0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, -13, 0, 0, 0, 0, 0, -13, 0,
+                0, 0, 0, -3, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
+                0, -9, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+                0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0
+            ),
+            ParagonIE_Sodium_Core_Curve25519::slide($a),
+            'slide()'
+        );
+        $b = ParagonIE_Sodium_Core_Util::hex2bin(
+            '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
+            '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
+        );
+        $this->assertEquals(
+            array(
+                0, -5, 0, 0, 0, 0, -7, 0, 0, 0, 0, -11, 0, 0, 0, 0, -13, 0, 0,
+                0, 0, 7, 0, 0, 0, 0, -3, 0, 0, 0, 0, -1, 0, 0, 0, 0, 9, 0, 0,
+                0, 0, -11, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
+                0, -1, 0, 0, 0, 0, 13, 0, 0, 0, 0, -13, 0, 0, 0, 0, 5, 0, 0, 0,
+                0, 0, 0, -11, 0, 0, 0, 0, -7, 0, 0, 0, 0, 11, 0, 0, 0, 0, 13,
+                0, 0, 0, 0, 9, 0, 0, 0, 0, -11, 0, 0, 0, 0, 9, 0, 0, 0, 0, 3,
+                0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0, 0, -5, 0, 0,
+                0, 0, -7, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0,
+                -13, 0, 0, 0, 0, 3, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, -11, 0,
+                0, 0, 0, 0, 0, 0, -9, 0, 0, 0, 0, 11, 0, 0, 0, 0, -3, 0, 0, 0,
+                0, 0, 15, 0, 0, 0, 0, -15, 0, 0, 0, 0, -1, 0, 0, 0, 0, -3, 0,
+                0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 11, 0, 0, 0, 0, 5, 0, 0, 0,
+                0, 13, 0, 0, 0, 0, -5, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 1, 0
+            ),
+            ParagonIE_Sodium_Core_Curve25519::slide($b),
+            'slide()'
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_double_scalarmult_vartime()
+     *
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeDoubleScalarMultVartime()
     {
@@ -1500,6 +1638,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_p3_dbl()
      * @covers ParagonIE_Sodium_Core32_Curve25519::ge_p3_dbl()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeP3Double()
     {
@@ -1575,6 +1715,8 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_p3_tobytes()
      * @covers ParagonIE_Sodium_Core32_Curve25519::ge_p3_tobytes()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGeP3ToBytes32()
     {
