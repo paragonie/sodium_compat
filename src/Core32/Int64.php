@@ -640,7 +640,7 @@ class ParagonIE_Sodium_Core32_Int64
         $return->limbs[0] = (int) ($this->limbs[2]);
         $return->limbs[1] = (int) ($this->limbs[3]);
         $return->unsignedInt = $this->unsignedInt;
-        $return->overflow = ParagonIE_Sodium_Core32_Util::abs($this->limbs[1], 16) & 0xffff;
+        $return->overflow = (int) (ParagonIE_Sodium_Core32_Util::abs($this->limbs[1], 16) & 0xffff);
         return $return;
     }
 

@@ -16,10 +16,12 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function abs($integer, $size = 0)
     {
+        /** @var int $realSize */
         $realSize = (PHP_INT_SIZE << 3) - 1;
         if ($size) {
             --$size;
         } else {
+            /** @var int $size */
             $size = $realSize;
         }
 
