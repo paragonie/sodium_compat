@@ -2055,7 +2055,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         /** @var array<int, ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp> $Bi */
         if (!$Bi) {
             for ($i = 0; $i < 8; ++$i) {
-
                 $Bi[$i] = new ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(
                     ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
                         array(
@@ -2197,7 +2196,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
 
                 /** @var ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $thisB */
                 $thisB = $Bi[$index];
-                $t = self::ge_madd($t, $u, $thisB);
+                $t = self::ge_msub($t, $u, $thisB);
             }
             # ge_p1p1_to_p2(r,&t);
             $r = self::ge_p1p1_to_p2($t);
