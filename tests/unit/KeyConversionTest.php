@@ -11,6 +11,7 @@ class KeyConversionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
      * @throws TypeError
      */
     public function testPublicKeyConversion()

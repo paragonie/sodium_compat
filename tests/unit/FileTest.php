@@ -10,6 +10,8 @@ class FileTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_File::box()
      * @covers ParagonIE_Sodium_File::box_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testBox()
     {
@@ -83,6 +85,8 @@ class FileTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_File::generichash()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testGenerichash()
     {
@@ -113,6 +117,8 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     * @throws TypeError
      * @covers ParagonIE_Sodium_File::box_seal()
      * @covers ParagonIE_Sodium_File::box_seal_open()
      */
@@ -152,6 +158,8 @@ class FileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     * @throws TypeError
      * @covers ParagonIE_Sodium_File::secretbox()
      * @covers ParagonIE_Sodium_File::secretbox_open()
      */
@@ -183,6 +191,9 @@ class FileTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_File::sign()
      * @covers ParagonIE_Sodium_File::verify()
+     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testSignVerify()
     {

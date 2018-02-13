@@ -17,6 +17,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoAeadChapoly()
     {
@@ -236,6 +238,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoAeadXChapolyIetf()
     {
@@ -470,6 +474,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoBox()
     {
@@ -546,6 +552,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoSecretbox()
     {
@@ -661,6 +669,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testCryptoSignVerifyDetached()
     {
