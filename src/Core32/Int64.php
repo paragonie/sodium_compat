@@ -145,7 +145,6 @@ class ParagonIE_Sodium_Core32_Int64
         return $this->compareInt($b) < 0;
     }
 
-
     /**
      * @param int $hi
      * @param int $lo
@@ -219,9 +218,21 @@ class ParagonIE_Sodium_Core32_Int64
         if (!$size) {
             $size = 63;
         }
+        $aNeg = ($this->limbs[0] >> 15) & 1;
+        $bNeg = ($int->limbs[0] >> 15) & 1;
 
-        $a = clone $this;
-        $b = clone $int;
+        /** @todo make this work without branches */
+        if ($bNeg && !$aNeg) {
+            $a = clone $int;
+            $b = clone $this;
+        } elseif($bNeg && $aNeg) {
+            $a = $this->mulInt(-1);
+            $b = $int->mulInt(-1);
+        } else {
+            $a = clone $this;
+            $b = clone $int;
+        }
+
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
 

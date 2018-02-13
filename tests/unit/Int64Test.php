@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Int64Test
+ */
 class Int64Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -9,6 +12,45 @@ class Int64Test extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testAssociative()
+    {
+        // Test negative operands
+        $f = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 409, 49299));
+        $g = new ParagonIE_Sodium_Core32_Int64(array(65535, 65535, 65369, 30902));
+        $this->assertSame(
+            array(65534, 62836, 38318, 53378),
+            $g->mulInt64($f)->limbs,
+            'G x F first run -- step one'
+        );
+        $this->assertSame(
+            array(65534, 62836, 38318, 53378),
+            $f->mulInt64($g)->limbs,
+            'F x G first run -- step two'
+        );
+        for ($i = 64; $i >= 32; --$i) {
+            $this->assertSame(
+                array(65534, 62836, 38318, 53378),
+                $g->mulInt64($f, $i)->limbs,
+                'LOOP: G x F -- Failed at $i = ' . $i
+            );
+        }
+        for ($i = 64; $i >= 32; --$i) {
+            $this->assertSame(
+                array(65534, 62836, 38318, 53378),
+                $f->mulInt64($g, $i)->limbs,
+                'LOOP: F x G -- Failed at $i = ' . $i
+            );
+        }
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
     public function testConversion()
     {
         $binary = ParagonIE_Sodium_Compat::hex2bin("0123456789abcdef");
@@ -27,6 +69,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::addInt64()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testAddInt64()
     {
@@ -79,6 +123,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::addInt64()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testAddInt()
     {
@@ -116,6 +162,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::mulInt()
      * @covers ParagonIE_Sodium_Core32_Int64::mulInt64()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testMult()
     {
@@ -226,6 +274,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateLeft()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testRotateLeft()
     {
@@ -286,6 +336,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateRight()
+     * @throws SodiumException
+     * @throws TypeError
      */
     public function testRotateRight()
     {
@@ -349,6 +401,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
     public function testShift()
     {
         $int64 = new ParagonIE_Sodium_Core32_Int64(

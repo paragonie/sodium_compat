@@ -237,7 +237,7 @@ class Int32Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core32_Int32::addInt()
+     * @covers ParagonIE_Sodium_Core32_Int32::subInt()
      */
     public function testSubInt()
     {
@@ -269,6 +269,46 @@ class Int32Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             array(0x7ffe, 0xffff),
             $big->subInt(0x10000)->limbs
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Int32::subInt32()
+     *
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testSubInt32()
+    {
+        $four = new ParagonIE_Sodium_Core32_Int32(
+            array(0x0000, 0x0004)
+        );
+
+        $this->assertSame(
+            array(0x0000, 0x0001),
+            $four->subInt32(ParagonIE_Sodium_Core32_Int32::fromInt(3))->limbs,
+            '4 - 3 = 1'
+        );
+
+
+        $med = new ParagonIE_Sodium_Core32_Int32(
+            array(0x0001, 0x0000)
+        );
+        $this->assertSame(
+            array(0x0000, 0x0002),
+            $med->subInt32(ParagonIE_Sodium_Core32_Int32::fromInt(0xfffe))->limbs
+        );
+
+        $big = new ParagonIE_Sodium_Core32_Int32(
+            array(0x7fff, 0xffff)
+        );
+        $this->assertSame(
+            array(0x7fff, 0x0001),
+            $big->subInt32(ParagonIE_Sodium_Core32_Int32::fromInt(0xfffe))->limbs
+        );
+        $this->assertSame(
+            array(0x7ffe, 0xffff),
+            $big->subInt32(ParagonIE_Sodium_Core32_Int32::fromInt(0x10000))->limbs
         );
     }
 

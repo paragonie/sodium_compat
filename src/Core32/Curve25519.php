@@ -504,106 +504,106 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $f7_2 = $f7->shiftLeft(1);
         /** @var ParagonIE_Sodium_Core32_Int64 $f9_2 */
         $f9_2 = $f9->shiftLeft(1);
-        $f0g0    = $f0->mulInt64($g0);
-        $f0g1    = $f0->mulInt64($g1);
-        $f0g2    = $f0->mulInt64($g2);
-        $f0g3    = $f0->mulInt64($g3);
-        $f0g4    = $f0->mulInt64($g4);
-        $f0g5    = $f0->mulInt64($g5);
-        $f0g6    = $f0->mulInt64($g6);
-        $f0g7    = $f0->mulInt64($g7);
-        $f0g8    = $f0->mulInt64($g8);
-        $f0g9    = $f0->mulInt64($g9);
-        $f1g0    = $f1->mulInt64($g0);
-        $f1g1_2  = $f1_2->mulInt64($g1);
-        $f1g2    = $f1->mulInt64($g2);
-        $f1g3_2  = $f1_2->mulInt64($g3);
-        $f1g4    = $f1->mulInt64($g4);
-        $f1g5_2  = $f1_2->mulInt64($g5);
-        $f1g6    = $f1->mulInt64($g6);
-        $f1g7_2  = $f1_2->mulInt64($g7);
-        $f1g8    = $f1->mulInt64($g8);
-        $f1g9_38 = $g9_19->mulInt64($f1_2);
-        $f2g0    = $f2->mulInt64($g0);
-        $f2g1    = $f2->mulInt64($g1);
-        $f2g2    = $f2->mulInt64($g2);
-        $f2g3    = $f2->mulInt64($g3);
-        $f2g4    = $f2->mulInt64($g4);
-        $f2g5    = $f2->mulInt64($g5);
-        $f2g6    = $f2->mulInt64($g6);
-        $f2g7    = $f2->mulInt64($g7);
-        $f2g8_19 = $g8_19->mulInt64($f2);
-        $f2g9_19 = $g9_19->mulInt64($f2);
-        $f3g0    = $f3->mulInt64($g0);
-        $f3g1_2  = $f3_2->mulInt64($g1);
-        $f3g2    = $f3->mulInt64($g2);
-        $f3g3_2  = $f3_2->mulInt64($g3);
-        $f3g4    = $f3->mulInt64($g4);
-        $f3g5_2  = $f3_2->mulInt64($g5);
-        $f3g6    = $f3->mulInt64($g6);
-        $f3g7_38 = $g7_19->mulInt64($f3_2);
-        $f3g8_19 = $g8_19->mulInt64($f3);
-        $f3g9_38 = $g9_19->mulInt64($f3_2);
-        $f4g0    = $f4->mulInt64($g0);
-        $f4g1    = $f4->mulInt64($g1);
-        $f4g2    = $f4->mulInt64($g2);
-        $f4g3    = $f4->mulInt64($g3);
-        $f4g4    = $f4->mulInt64($g4);
-        $f4g5    = $f4->mulInt64($g5);
-        $f4g6_19 = $g6_19->mulInt64($f4);
-        $f4g7_19 = $g7_19->mulInt64($f4);
-        $f4g8_19 = $g8_19->mulInt64($f4);
-        $f4g9_19 = $g9_19->mulInt64($f4);
-        $f5g0    = $f5->mulInt64($g0);
-        $f5g1_2  = $f5_2->mulInt64($g1);
-        $f5g2    = $f5->mulInt64($g2);
-        $f5g3_2  = $f5_2->mulInt64($g3);
-        $f5g4    = $f5->mulInt64($g4);
-        $f5g5_38 = $g5_19->mulInt64($f5_2);
-        $f5g6_19 = $g6_19->mulInt64($f5);
-        $f5g7_38 = $g7_19->mulInt64($f5_2);
-        $f5g8_19 = $g8_19->mulInt64($f5);
-        $f5g9_38 = $g9_19->mulInt64($f5_2);
-        $f6g0    = $f6->mulInt64($g0);
-        $f6g1    = $f6->mulInt64($g1);
-        $f6g2    = $f6->mulInt64($g2);
-        $f6g3    = $f6->mulInt64($g3);
-        $f6g4_19 = $g4_19->mulInt64($f6);
-        $f6g5_19 = $g5_19->mulInt64($f6);
-        $f6g6_19 = $g6_19->mulInt64($f6);
-        $f6g7_19 = $g7_19->mulInt64($f6);
-        $f6g8_19 = $g8_19->mulInt64($f6);
-        $f6g9_19 = $g9_19->mulInt64($f6);
-        $f7g0    = $f7->mulInt64($g0);
-        $f7g1_2  = $g1->mulInt64($f7_2);
-        $f7g2    = $f7->mulInt64($g2);
-        $f7g3_38 = $g3_19->mulInt64($f7_2);
-        $f7g4_19 = $g4_19->mulInt64($f7);
-        $f7g5_38 = $g5_19->mulInt64($f7_2);
-        $f7g6_19 = $g6_19->mulInt64($f7);
-        $f7g7_38 = $g7_19->mulInt64($f7_2);
-        $f7g8_19 = $g8_19->mulInt64($f7);
-        $f7g9_38 = $g9_19->mulInt64($f7_2);
-        $f8g0    = $f8->mulInt64($g0);
-        $f8g1    = $f8->mulInt64($g1);
-        $f8g2_19 = $f8->mulInt64($g2_19);
-        $f8g3_19 = $f8->mulInt64($g3_19);
-        $f8g4_19 = $f8->mulInt64($g4_19);
-        $f8g5_19 = $f8->mulInt64($g5_19);
-        $f8g6_19 = $f8->mulInt64($g6_19);
-        $f8g7_19 = $f8->mulInt64($g7_19);
-        $f8g8_19 = $f8->mulInt64($g8_19);
-        $f8g9_19 = $f8->mulInt64($g9_19);
-        $f9g0    = $f9->mulInt64($g0);
-        $f9g1_38 = $f9_2->mulInt64($g1_19);
-        $f9g2_19 = $f9->mulInt64($g2_19);
-        $f9g3_38 = $f9_2->mulInt64($g3_19);
-        $f9g4_19 = $f9->mulInt64($g4_19);
-        $f9g5_38 = $f9_2->mulInt64($g5_19);
-        $f9g6_19 = $f9->mulInt64($g6_19);
-        $f9g7_38 = $f9_2->mulInt64($g7_19);
-        $f9g8_19 = $f9->mulInt64($g8_19);
-        $f9g9_38 = $f9_2->mulInt64($g9_19);
+        $f0g0    = $f0->mulInt64($g0, 31);
+        $f0g1    = $f0->mulInt64($g1, 31);
+        $f0g2    = $f0->mulInt64($g2, 31);
+        $f0g3    = $f0->mulInt64($g3, 31);
+        $f0g4    = $f0->mulInt64($g4, 31);
+        $f0g5    = $f0->mulInt64($g5, 31);
+        $f0g6    = $f0->mulInt64($g6, 31);
+        $f0g7    = $f0->mulInt64($g7, 31);
+        $f0g8    = $f0->mulInt64($g8, 31);
+        $f0g9    = $f0->mulInt64($g9, 31);
+        $f1g0    = $f1->mulInt64($g0, 31);
+        $f1g1_2  = $f1_2->mulInt64($g1, 31);
+        $f1g2    = $f1->mulInt64($g2, 31);
+        $f1g3_2  = $f1_2->mulInt64($g3, 31);
+        $f1g4    = $f1->mulInt64($g4, 31);
+        $f1g5_2  = $f1_2->mulInt64($g5, 31);
+        $f1g6    = $f1->mulInt64($g6, 31);
+        $f1g7_2  = $f1_2->mulInt64($g7, 31);
+        $f1g8    = $f1->mulInt64($g8, 31);
+        $f1g9_38 = $g9_19->mulInt64($f1_2, 31);
+        $f2g0    = $f2->mulInt64($g0, 31);
+        $f2g1    = $f2->mulInt64($g1, 31);
+        $f2g2    = $f2->mulInt64($g2, 31);
+        $f2g3    = $f2->mulInt64($g3, 31);
+        $f2g4    = $f2->mulInt64($g4, 31);
+        $f2g5    = $f2->mulInt64($g5, 31);
+        $f2g6    = $f2->mulInt64($g6, 31);
+        $f2g7    = $f2->mulInt64($g7, 31);
+        $f2g8_19 = $g8_19->mulInt64($f2, 31);
+        $f2g9_19 = $g9_19->mulInt64($f2, 31);
+        $f3g0    = $f3->mulInt64($g0, 31);
+        $f3g1_2  = $f3_2->mulInt64($g1, 31);
+        $f3g2    = $f3->mulInt64($g2, 31);
+        $f3g3_2  = $f3_2->mulInt64($g3, 31);
+        $f3g4    = $f3->mulInt64($g4, 31);
+        $f3g5_2  = $f3_2->mulInt64($g5, 31);
+        $f3g6    = $f3->mulInt64($g6, 31);
+        $f3g7_38 = $g7_19->mulInt64($f3_2, 31);
+        $f3g8_19 = $g8_19->mulInt64($f3, 31);
+        $f3g9_38 = $g9_19->mulInt64($f3_2, 31);
+        $f4g0    = $f4->mulInt64($g0, 31);
+        $f4g1    = $f4->mulInt64($g1, 31);
+        $f4g2    = $f4->mulInt64($g2, 31);
+        $f4g3    = $f4->mulInt64($g3, 31);
+        $f4g4    = $f4->mulInt64($g4, 31);
+        $f4g5    = $f4->mulInt64($g5, 31);
+        $f4g6_19 = $g6_19->mulInt64($f4, 31);
+        $f4g7_19 = $g7_19->mulInt64($f4, 31);
+        $f4g8_19 = $g8_19->mulInt64($f4, 31);
+        $f4g9_19 = $g9_19->mulInt64($f4, 31);
+        $f5g0    = $f5->mulInt64($g0, 31);
+        $f5g1_2  = $f5_2->mulInt64($g1, 31);
+        $f5g2    = $f5->mulInt64($g2, 31);
+        $f5g3_2  = $f5_2->mulInt64($g3, 31);
+        $f5g4    = $f5->mulInt64($g4, 31);
+        $f5g5_38 = $g5_19->mulInt64($f5_2, 31);
+        $f5g6_19 = $g6_19->mulInt64($f5, 31);
+        $f5g7_38 = $g7_19->mulInt64($f5_2, 31);
+        $f5g8_19 = $g8_19->mulInt64($f5, 31);
+        $f5g9_38 = $g9_19->mulInt64($f5_2, 31);
+        $f6g0    = $f6->mulInt64($g0, 31);
+        $f6g1    = $f6->mulInt64($g1, 31);
+        $f6g2    = $f6->mulInt64($g2, 31);
+        $f6g3    = $f6->mulInt64($g3, 31);
+        $f6g4_19 = $g4_19->mulInt64($f6, 31);
+        $f6g5_19 = $g5_19->mulInt64($f6, 31);
+        $f6g6_19 = $g6_19->mulInt64($f6, 31);
+        $f6g7_19 = $g7_19->mulInt64($f6, 31);
+        $f6g8_19 = $g8_19->mulInt64($f6, 31);
+        $f6g9_19 = $g9_19->mulInt64($f6, 31);
+        $f7g0    = $f7->mulInt64($g0, 31);
+        $f7g1_2  = $g1->mulInt64($f7_2, 31);
+        $f7g2    = $f7->mulInt64($g2, 31);
+        $f7g3_38 = $g3_19->mulInt64($f7_2, 31);
+        $f7g4_19 = $g4_19->mulInt64($f7, 31);
+        $f7g5_38 = $g5_19->mulInt64($f7_2, 31);
+        $f7g6_19 = $g6_19->mulInt64($f7, 31);
+        $f7g7_38 = $g7_19->mulInt64($f7_2, 31);
+        $f7g8_19 = $g8_19->mulInt64($f7, 31);
+        $f7g9_38 = $g9_19->mulInt64($f7_2, 31);
+        $f8g0    = $f8->mulInt64($g0, 31);
+        $f8g1    = $f8->mulInt64($g1, 31);
+        $f8g2_19 = $f8->mulInt64($g2_19, 31);
+        $f8g3_19 = $f8->mulInt64($g3_19, 31);
+        $f8g4_19 = $f8->mulInt64($g4_19, 31);
+        $f8g5_19 = $f8->mulInt64($g5_19, 31);
+        $f8g6_19 = $f8->mulInt64($g6_19, 31);
+        $f8g7_19 = $f8->mulInt64($g7_19, 31);
+        $f8g8_19 = $f8->mulInt64($g8_19, 31);
+        $f8g9_19 = $f8->mulInt64($g9_19, 31);
+        $f9g0    = $f9->mulInt64($g0, 31);
+        $f9g1_38 = $f9_2->mulInt64($g1_19, 31);
+        $f9g2_19 = $f9->mulInt64($g2_19, 31);
+        $f9g3_38 = $f9_2->mulInt64($g3_19, 31);
+        $f9g4_19 = $f9->mulInt64($g4_19, 31);
+        $f9g5_38 = $f9_2->mulInt64($g5_19, 31);
+        $f9g6_19 = $f9->mulInt64($g6_19, 31);
+        $f9g7_38 = $f9_2->mulInt64($g7_19, 31);
+        $f9g8_19 = $f9->mulInt64($g8_19, 31);
+        $f9g9_38 = $f9_2->mulInt64($g9_19, 31);
 
         // $h0 = $f0g0 + $f1g9_38 + $f2g8_19 + $f3g7_38 + $f4g6_19 + $f5g5_38 + $f6g4_19 + $f7g3_38 + $f8g2_19 + $f9g1_38;
         $h0 = $f0g0->addInt64($f1g9_38)->addInt64($f2g8_19)->addInt64($f3g7_38)
@@ -808,70 +808,70 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $f8_19 = $f8->mulInt(19, 5);
         $f9_38 = $f9->mulInt(38, 6);
         /** @var ParagonIE_Sodium_Core32_Int64 $f0f0*/
-        $f0f0    = $f0->mulInt64($f0);
-        $f0f1_2  = $f0_2->mulInt64($f1);
-        $f0f2_2 =  $f0_2->mulInt64($f2);
-        $f0f3_2 =  $f0_2->mulInt64($f3);
-        $f0f4_2 =  $f0_2->mulInt64($f4);
-        $f0f5_2 =  $f0_2->mulInt64($f5);
-        $f0f6_2 =  $f0_2->mulInt64($f6);
-        $f0f7_2 =  $f0_2->mulInt64($f7);
-        $f0f8_2 =  $f0_2->mulInt64($f8);
-        $f0f9_2 =  $f0_2->mulInt64($f9);
+        $f0f0    = $f0->mulInt64($f0, 31);
+        $f0f1_2  = $f0_2->mulInt64($f1, 31);
+        $f0f2_2 =  $f0_2->mulInt64($f2, 31);
+        $f0f3_2 =  $f0_2->mulInt64($f3, 31);
+        $f0f4_2 =  $f0_2->mulInt64($f4, 31);
+        $f0f5_2 =  $f0_2->mulInt64($f5, 31);
+        $f0f6_2 =  $f0_2->mulInt64($f6, 31);
+        $f0f7_2 =  $f0_2->mulInt64($f7, 31);
+        $f0f8_2 =  $f0_2->mulInt64($f8, 31);
+        $f0f9_2 =  $f0_2->mulInt64($f9, 31);
 
-        $f1f1_2 = $f1_2->mulInt64($f1);
-        $f1f2_2 = $f1_2->mulInt64($f2);
-        $f1f3_4 = $f1_2->mulInt64($f3_2);
-        $f1f4_2 = $f1_2->mulInt64($f4);
-        $f1f5_4 = $f1_2->mulInt64($f5_2);
-        $f1f6_2 = $f1_2->mulInt64($f6);
-        $f1f7_4 = $f1_2->mulInt64($f7_2);
-        $f1f8_2 = $f1_2->mulInt64($f8);
-        $f1f9_76 = $f1_2->mulInt64($f9_38);
+        $f1f1_2 = $f1_2->mulInt64($f1, 31);
+        $f1f2_2 = $f1_2->mulInt64($f2, 31);
+        $f1f3_4 = $f1_2->mulInt64($f3_2, 31);
+        $f1f4_2 = $f1_2->mulInt64($f4, 31);
+        $f1f5_4 = $f1_2->mulInt64($f5_2, 31);
+        $f1f6_2 = $f1_2->mulInt64($f6, 31);
+        $f1f7_4 = $f1_2->mulInt64($f7_2, 31);
+        $f1f8_2 = $f1_2->mulInt64($f8, 31);
+        $f1f9_76 = $f1_2->mulInt64($f9_38, 31);
 
-        $f2f2 = $f2->mulInt64($f2);
-        $f2f3_2 = $f2_2->mulInt64($f3);
-        $f2f4_2 = $f2_2->mulInt64($f4);
-        $f2f5_2 = $f2_2->mulInt64($f5);
-        $f2f6_2 = $f2_2->mulInt64($f6);
-        $f2f7_2 = $f2_2->mulInt64($f7);
-        $f2f8_38 = $f8_19->mulInt64($f2_2);
-        $f2f9_38 = $f9_38->mulInt64($f2);
+        $f2f2 = $f2->mulInt64($f2, 31);
+        $f2f3_2 = $f2_2->mulInt64($f3, 31);
+        $f2f4_2 = $f2_2->mulInt64($f4, 31);
+        $f2f5_2 = $f2_2->mulInt64($f5, 31);
+        $f2f6_2 = $f2_2->mulInt64($f6, 31);
+        $f2f7_2 = $f2_2->mulInt64($f7, 31);
+        $f2f8_38 = $f8_19->mulInt64($f2_2, 31);
+        $f2f9_38 = $f9_38->mulInt64($f2, 31);
 
-        $f3f3_2 = $f3_2->mulInt64($f3);
-        $f3f4_2 = $f3_2->mulInt64($f4);
-        $f3f5_4 = $f3_2->mulInt64($f5_2);
-        $f3f6_2 = $f3_2->mulInt64($f6);
-        $f3f7_76 = $f7_38->mulInt64($f3_2);
-        $f3f8_38 = $f8_19->mulInt64($f3_2);
-        $f3f9_76 = $f9_38->mulInt64($f3_2);
+        $f3f3_2 = $f3_2->mulInt64($f3, 31);
+        $f3f4_2 = $f3_2->mulInt64($f4, 31);
+        $f3f5_4 = $f3_2->mulInt64($f5_2, 31);
+        $f3f6_2 = $f3_2->mulInt64($f6, 31);
+        $f3f7_76 = $f7_38->mulInt64($f3_2, 31);
+        $f3f8_38 = $f8_19->mulInt64($f3_2, 31);
+        $f3f9_76 = $f9_38->mulInt64($f3_2, 31);
 
-        $f4f4 = $f4->mulInt64($f4);
-        $f4f5_2 = $f4_2->mulInt64($f5);
-        $f4f6_38 = $f4_2->mulInt64($f6_19);
-        $f4f7_38 = $f4->mulInt64($f7_38);
-        $f4f8_38 = $f4_2->mulInt64($f8_19);
-        $f4f9_38 = $f4->mulInt64($f9_38);
+        $f4f4 = $f4->mulInt64($f4, 31);
+        $f4f5_2 = $f4_2->mulInt64($f5, 31);
+        $f4f6_38 = $f4_2->mulInt64($f6_19, 31);
+        $f4f7_38 = $f7_38->mulInt64($f4, 31);
+        $f4f8_38 = $f8_19->mulInt64($f4_2, 31);
+        $f4f9_38 = $f9_38->mulInt64($f4, 31);
 
-        $f5f5_38 = $f5->mulInt64($f5_38);
-        $f5f6_38 = $f6_19->mulInt64($f5_2);
-        $f5f7_76 = $f7_38->mulInt64($f5_2);
-        $f5f8_38 = $f8_19->mulInt64($f5_2);
-        $f5f9_76 = $f9_38->mulInt64($f5_2);
+        $f5f5_38 = $f5_38->mulInt64($f5, 31);
+        $f5f6_38 = $f6_19->mulInt64($f5_2, 31);
+        $f5f7_76 = $f7_38->mulInt64($f5_2, 31);
+        $f5f8_38 = $f8_19->mulInt64($f5_2, 31);
+        $f5f9_76 = $f9_38->mulInt64($f5_2, 31);
 
-        $f6f6_19 = $f6_19->mulInt64($f6);
-        $f6f7_38 = $f7_38->mulInt64($f6);
-        $f6f8_38 = $f8_19->mulInt64($f6_2);
-        $f6f9_38 = $f6->mulInt64($f9_38);
+        $f6f6_19 = $f6_19->mulInt64($f6, 31);
+        $f6f7_38 = $f7_38->mulInt64($f6, 31);
+        $f6f8_38 = $f8_19->mulInt64($f6_2, 31);
+        $f6f9_38 = $f6->mulInt64($f9_38, 31);
 
-        $f7f7_38 = $f7->mulInt64($f7_38);
-        $f7f8_38 = $f7_2->mulInt64($f8_19);
-        $f7f9_76 = $f7_2->mulInt64($f9_38);
+        $f7f7_38 = $f7->mulInt64($f7_38, 31);
+        $f7f8_38 = $f7_2->mulInt64($f8_19, 31);
+        $f7f9_76 = $f7_2->mulInt64($f9_38, 31);
 
-        $f8f8_19 = $f8->mulInt64($f8_19);
-        $f8f9_38 = $f8->mulInt64($f9_38);
+        $f8f8_19 = $f8->mulInt64($f8_19, 31);
+        $f8f9_38 = $f8->mulInt64($f9_38, 31);
 
-        $f9f9_38 = $f9->mulInt64($f9_38);
+        $f9f9_38 = $f9->mulInt64($f9_38, 31);
 
         $h0 = $f0f0->addInt64($f1f9_76)->addInt64($f2f8_38)->addInt64($f3f7_76)->addInt64($f4f6_38)->addInt64($f5f5_38);
         $h1 = $f0f1_2->addInt64($f2f9_38)->addInt64($f3f8_38)->addInt64($f4f7_38)->addInt64($f5f6_38);
@@ -1010,61 +1010,61 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $f7_38 = $f7->mulInt(38, 6); /* 1.959375*2^30 */
         $f8_19 = $f8->mulInt(19, 5); /* 1.959375*2^30 */
         $f9_38 = $f9->mulInt(38, 6); /* 1.959375*2^30 */
-        $f0f0 = $f0->mulInt64($f0);
-        $f0f1_2 = $f0_2->mulInt64($f1);
-        $f0f2_2 = $f0_2->mulInt64($f2);
-        $f0f3_2 = $f0_2->mulInt64($f3);
-        $f0f4_2 = $f0_2->mulInt64($f4);
-        $f0f5_2 = $f0_2->mulInt64($f5);
-        $f0f6_2 = $f0_2->mulInt64($f6);
-        $f0f7_2 = $f0_2->mulInt64($f7);
-        $f0f8_2 = $f0_2->mulInt64($f8);
-        $f0f9_2 = $f0_2->mulInt64($f9);
-        $f1f1_2 = $f1_2->mulInt64($f1);
-        $f1f2_2 = $f1_2->mulInt64($f2);
-        $f1f3_4 = $f1_2->mulInt64($f3_2);
-        $f1f4_2 = $f1_2->mulInt64($f4);
-        $f1f5_4 = $f1_2->mulInt64($f5_2);
-        $f1f6_2 = $f1_2->mulInt64($f6);
-        $f1f7_4 = $f1_2->mulInt64($f7_2);
-        $f1f8_2 = $f1_2->mulInt64($f8);
-        $f1f9_76 = $f1_2->mulInt64($f9_38);
-        $f2f2 = $f2->mulInt64($f2);
-        $f2f3_2 = $f2_2->mulInt64($f3);
-        $f2f4_2 = $f2_2->mulInt64($f4);
-        $f2f5_2 = $f2_2->mulInt64($f5);
-        $f2f6_2 = $f2_2->mulInt64($f6);
-        $f2f7_2 = $f2_2->mulInt64($f7);
-        $f2f8_38 = $f2_2->mulInt64($f8_19);
-        $f2f9_38 = $f2->mulInt64($f9_38);
-        $f3f3_2 = $f3_2->mulInt64($f3);
-        $f3f4_2 = $f3_2->mulInt64($f4);
-        $f3f5_4 = $f3_2->mulInt64($f5_2);
-        $f3f6_2 = $f3_2->mulInt64($f6);
-        $f3f7_76 = $f3_2->mulInt64($f7_38);
-        $f3f8_38 = $f3_2->mulInt64($f8_19);
-        $f3f9_76 = $f3_2->mulInt64($f9_38);
-        $f4f4 = $f4->mulInt64($f4);
-        $f4f5_2 = $f4_2->mulInt64($f5);
-        $f4f6_38 = $f4_2->mulInt64($f6_19);
-        $f4f7_38 = $f4->mulInt64($f7_38);
-        $f4f8_38 = $f4_2->mulInt64($f8_19);
-        $f4f9_38 = $f4->mulInt64($f9_38);
-        $f5f5_38 = $f5->mulInt64($f5_38);
-        $f5f6_38 = $f5_2->mulInt64($f6_19);
-        $f5f7_76 = $f5_2->mulInt64($f7_38);
-        $f5f8_38 = $f5_2->mulInt64($f8_19);
-        $f5f9_76 = $f5_2->mulInt64($f9_38);
-        $f6f6_19 = $f6->mulInt64($f6_19);
-        $f6f7_38 = $f6->mulInt64($f7_38);
-        $f6f8_38 = $f6_2->mulInt64($f8_19);
-        $f6f9_38 = $f6->mulInt64($f9_38);
-        $f7f7_38 = $f7->mulInt64($f7_38);
-        $f7f8_38 = $f7_2->mulInt64($f8_19);
-        $f7f9_76 = $f7_2->mulInt64($f9_38);
-        $f8f8_19 = $f8->mulInt64($f8_19);
-        $f8f9_38 = $f8->mulInt64($f9_38);
-        $f9f9_38 = $f9->mulInt64($f9_38);
+        $f0f0 = $f0->mulInt64($f0, 31);
+        $f0f1_2 = $f0_2->mulInt64($f1, 31);
+        $f0f2_2 = $f0_2->mulInt64($f2, 31);
+        $f0f3_2 = $f0_2->mulInt64($f3, 31);
+        $f0f4_2 = $f0_2->mulInt64($f4, 31);
+        $f0f5_2 = $f0_2->mulInt64($f5, 31);
+        $f0f6_2 = $f0_2->mulInt64($f6, 31);
+        $f0f7_2 = $f0_2->mulInt64($f7, 31);
+        $f0f8_2 = $f0_2->mulInt64($f8, 31);
+        $f0f9_2 = $f0_2->mulInt64($f9, 31);
+        $f1f1_2 = $f1_2->mulInt64($f1, 31);
+        $f1f2_2 = $f1_2->mulInt64($f2, 31);
+        $f1f3_4 = $f1_2->mulInt64($f3_2, 31);
+        $f1f4_2 = $f1_2->mulInt64($f4, 31);
+        $f1f5_4 = $f1_2->mulInt64($f5_2, 31);
+        $f1f6_2 = $f1_2->mulInt64($f6, 31);
+        $f1f7_4 = $f1_2->mulInt64($f7_2, 31);
+        $f1f8_2 = $f1_2->mulInt64($f8, 31);
+        $f1f9_76 = $f1_2->mulInt64($f9_38, 31);
+        $f2f2 = $f2->mulInt64($f2, 31);
+        $f2f3_2 = $f2_2->mulInt64($f3, 31);
+        $f2f4_2 = $f2_2->mulInt64($f4, 31);
+        $f2f5_2 = $f2_2->mulInt64($f5, 31);
+        $f2f6_2 = $f2_2->mulInt64($f6, 31);
+        $f2f7_2 = $f2_2->mulInt64($f7, 31);
+        $f2f8_38 = $f2_2->mulInt64($f8_19, 31);
+        $f2f9_38 = $f2->mulInt64($f9_38, 31);
+        $f3f3_2 = $f3_2->mulInt64($f3, 31);
+        $f3f4_2 = $f3_2->mulInt64($f4, 31);
+        $f3f5_4 = $f3_2->mulInt64($f5_2, 31);
+        $f3f6_2 = $f3_2->mulInt64($f6, 31);
+        $f3f7_76 = $f3_2->mulInt64($f7_38, 31);
+        $f3f8_38 = $f3_2->mulInt64($f8_19, 31);
+        $f3f9_76 = $f3_2->mulInt64($f9_38, 31);
+        $f4f4 = $f4->mulInt64($f4, 31);
+        $f4f5_2 = $f4_2->mulInt64($f5, 31);
+        $f4f6_38 = $f4_2->mulInt64($f6_19, 31);
+        $f4f7_38 = $f4->mulInt64($f7_38, 31);
+        $f4f8_38 = $f4_2->mulInt64($f8_19, 31);
+        $f4f9_38 = $f4->mulInt64($f9_38, 31);
+        $f5f5_38 = $f5->mulInt64($f5_38, 31);
+        $f5f6_38 = $f5_2->mulInt64($f6_19, 31);
+        $f5f7_76 = $f5_2->mulInt64($f7_38, 31);
+        $f5f8_38 = $f5_2->mulInt64($f8_19, 31);
+        $f5f9_76 = $f5_2->mulInt64($f9_38, 31);
+        $f6f6_19 = $f6->mulInt64($f6_19, 31);
+        $f6f7_38 = $f6->mulInt64($f7_38, 31);
+        $f6f8_38 = $f6_2->mulInt64($f8_19, 31);
+        $f6f9_38 = $f6->mulInt64($f9_38, 31);
+        $f7f7_38 = $f7->mulInt64($f7_38, 31);
+        $f7f8_38 = $f7_2->mulInt64($f8_19, 31);
+        $f7f9_76 = $f7_2->mulInt64($f9_38, 31);
+        $f8f8_19 = $f8->mulInt64($f8_19, 31);
+        $f8f9_38 = $f8->mulInt64($f9_38, 31);
+        $f9f9_38 = $f9->mulInt64($f9_38, 31);
 
         $h0 = $f0f0->addInt64($f1f9_76)->addInt64($f2f8_38)->addInt64($f3f7_76)->addInt64($f4f6_38)->addInt64($f5f5_38);
         $h1 = $f0f1_2->addInt64($f2f9_38)->addInt64($f3f8_38)->addInt64($f4f7_38)->addInt64($f5f6_38);
@@ -2218,22 +2218,25 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $e = array();
         $r = new ParagonIE_Sodium_Core32_Curve25519_Ge_P1p1();
 
-        /** @var array<int, int> $e */
         for ($i = 0; $i < 32; ++$i) {
-            $e[$i << 1] = self::chrToInt($a[$i]) & 15;
-            $e[($i << 1) + 1] = (self::chrToInt($a[$i]) >> 4) & 15;
+            /** @var int $dbl */
+            $dbl = (int) $i << 1;
+            $e[$dbl] = (int) self::chrToInt($a[$i]) & 15;
+            $e[$dbl + 1] = (int) (self::chrToInt($a[$i]) >> 4) & 15;
         }
-        /** @var array<int, int> $e */
 
+        /** @var int $carry */
         $carry = 0;
         for ($i = 0; $i < 63; ++$i) {
             $e[$i] += $carry;
             /** @var int $carry */
             $carry = $e[$i] + 8;
+            /** @var int $carry */
             $carry >>= 4;
             $e[$i] -= $carry << 4;
         }
 
+        /** @var array<int, int> $e */
         $e[63] += (int) $carry;
 
         $h = self::ge_p3_0();
@@ -2343,40 +2346,40 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
          * @var ParagonIE_Sodium_Core32_Int64 $s23
          */
 
-        $s0 = $c0->addInt64($a0->mulInt64($b0));
-        $s1 = $c1->addInt64($a0->mulInt64($b1))->addInt64($a1->mulInt64($b0));
-        $s2 = $c2->addInt64($a0->mulInt64($b2))->addInt64($a1->mulInt64($b1))->addInt64($a2->mulInt64($b0));
-        $s3 = $c3->addInt64($a0->mulInt64($b3))->addInt64($a1->mulInt64($b2))->addInt64($a2->mulInt64($b1))->addInt64($a3->mulInt64($b0));
-        $s4 = $c4->addInt64($a0->mulInt64($b4))->addInt64($a1->mulInt64($b3))->addInt64($a2->mulInt64($b2))->addInt64($a3->mulInt64($b1))->addInt64($a4->mulInt64($b0));
-        $s5 = $c5->addInt64($a0->mulInt64($b5))->addInt64($a1->mulInt64($b4))->addInt64($a2->mulInt64($b3))->addInt64($a3->mulInt64($b2))->addInt64($a4->mulInt64($b1))->addInt64($a5->mulInt64($b0));
-        $s6 = $c6->addInt64($a0->mulInt64($b6))->addInt64($a1->mulInt64($b5))->addInt64($a2->mulInt64($b4))->addInt64($a3->mulInt64($b3))->addInt64($a4->mulInt64($b2))->addInt64($a5->mulInt64($b1))
-                 ->addInt64($a6->mulInt64($b0));
-        $s7 = $c7->addInt64($a0->mulInt64($b7))->addInt64($a1->mulInt64($b6))->addInt64($a2->mulInt64($b5))->addInt64($a3->mulInt64($b4))->addInt64($a4->mulInt64($b3))->addInt64($a5->mulInt64($b2))
-                 ->addInt64($a6->mulInt64($b1))->addInt64($a7->mulInt64($b0));
-        $s8 = $c8->addInt64($a0->mulInt64($b8))->addInt64($a1->mulInt64($b7))->addInt64($a2->mulInt64($b6))->addInt64($a3->mulInt64($b5))->addInt64($a4->mulInt64($b4))->addInt64($a5->mulInt64($b3))
-                 ->addInt64($a6->mulInt64($b2))->addInt64($a7->mulInt64($b1))->addInt64($a8->mulInt64($b0));
-        $s9 = $c9->addInt64($a0->mulInt64($b9))->addInt64($a1->mulInt64($b8))->addInt64($a2->mulInt64($b7))->addInt64($a3->mulInt64($b6))->addInt64($a4->mulInt64($b5))->addInt64($a5->mulInt64($b4))
-                 ->addInt64($a6->mulInt64($b3))->addInt64($a7->mulInt64($b2))->addInt64($a8->mulInt64($b1))->addInt64($a9->mulInt64($b0));
-        $s10 = $c10->addInt64($a0->mulInt64($b10))->addInt64($a1->mulInt64($b9))->addInt64($a2->mulInt64($b8))->addInt64($a3->mulInt64($b7))->addInt64($a4->mulInt64($b6))->addInt64($a5->mulInt64($b5))
-                   ->addInt64($a6->mulInt64($b4))->addInt64($a7->mulInt64($b3))->addInt64($a8->mulInt64($b2))->addInt64($a9->mulInt64($b1))->addInt64($a10->mulInt64($b0));
-        $s11 = $c11->addInt64($a0->mulInt64($b11))->addInt64($a1->mulInt64($b10))->addInt64($a2->mulInt64($b9))->addInt64($a3->mulInt64($b8))->addInt64($a4->mulInt64($b7))->addInt64($a5->mulInt64($b6))
-                   ->addInt64($a6->mulInt64($b5))->addInt64($a7->mulInt64($b4))->addInt64($a8->mulInt64($b3))->addInt64($a9->mulInt64($b2))->addInt64($a10->mulInt64($b1))->addInt64($a11->mulInt64($b0));
-        $s12 = $a1->mulInt64($b11)->addInt64($a2->mulInt64($b10))->addInt64($a3->mulInt64($b9))->addInt64($a4->mulInt64($b8))->addInt64($a5->mulInt64($b7))->addInt64($a6->mulInt64($b6))
-                  ->addInt64($a7->mulInt64($b5))->addInt64($a8->mulInt64($b4))->addInt64($a9->mulInt64($b3))->addInt64($a10->mulInt64($b2))->addInt64($a11->mulInt64($b1));
-        $s13 = $a2->mulInt64($b11)->addInt64($a3->mulInt64($b10))->addInt64($a4->mulInt64($b9))->addInt64($a5->mulInt64($b8))->addInt64($a6->mulInt64($b7))->addInt64($a7->mulInt64($b6))
-                  ->addInt64($a8->mulInt64($b5))->addInt64($a9->mulInt64($b4))->addInt64($a10->mulInt64($b3))->addInt64($a11->mulInt64($b2));
-        $s14 = $a3->mulInt64($b11)->addInt64($a4->mulInt64($b10))->addInt64($a5->mulInt64($b9))->addInt64($a6->mulInt64($b8))->addInt64($a7->mulInt64($b7))->addInt64($a8->mulInt64($b6))
-                  ->addInt64($a9->mulInt64($b5))->addInt64($a10->mulInt64($b4))->addInt64($a11->mulInt64($b3));
-        $s15 = $a4->mulInt64($b11)->addInt64($a5->mulInt64($b10))->addInt64($a6->mulInt64($b9))->addInt64($a7->mulInt64($b8))->addInt64($a8->mulInt64($b7))->addInt64($a9->mulInt64($b6))
-                  ->addInt64($a10->mulInt64($b5))->addInt64($a11->mulInt64($b4));
-        $s16 = $a5->mulInt64($b11)->addInt64($a6->mulInt64($b10))->addInt64($a7->mulInt64($b9))->addInt64($a8->mulInt64($b8))->addInt64($a9->mulInt64($b7))->addInt64($a10->mulInt64($b6))
-                   ->addInt64($a11->mulInt64($b5));
-        $s17 = $a6->mulInt64($b11)->addInt64($a7->mulInt64($b10))->addInt64($a8->mulInt64($b9))->addInt64($a9->mulInt64($b8))->addInt64($a10->mulInt64($b7))->addInt64($a11->mulInt64($b6));
-        $s18 = $a7->mulInt64($b11)->addInt64($a8->mulInt64($b10))->addInt64($a9->mulInt64($b9))->addInt64($a10->mulInt64($b8))->addInt64($a11->mulInt64($b7));
-        $s19 = $a8->mulInt64($b11)->addInt64($a9->mulInt64($b10))->addInt64($a10->mulInt64($b9))->addInt64($a11->mulInt64($b8));
-        $s20 = $a9->mulInt64($b11)->addInt64($a10->mulInt64($b10))->addInt64($a11->mulInt64($b9));
-        $s21 = $a10->mulInt64($b11)->addInt64($a11->mulInt64($b10));
-        $s22 = $a11->mulInt64($b11);
+        $s0 = $c0->addInt64($a0->mulInt64($b0, 24));
+        $s1 = $c1->addInt64($a0->mulInt64($b1, 24))->addInt64($a1->mulInt64($b0, 24));
+        $s2 = $c2->addInt64($a0->mulInt64($b2, 24))->addInt64($a1->mulInt64($b1, 24))->addInt64($a2->mulInt64($b0, 24));
+        $s3 = $c3->addInt64($a0->mulInt64($b3, 24))->addInt64($a1->mulInt64($b2, 24))->addInt64($a2->mulInt64($b1, 24))->addInt64($a3->mulInt64($b0, 24));
+        $s4 = $c4->addInt64($a0->mulInt64($b4, 24))->addInt64($a1->mulInt64($b3, 24))->addInt64($a2->mulInt64($b2, 24))->addInt64($a3->mulInt64($b1, 24))->addInt64($a4->mulInt64($b0, 24));
+        $s5 = $c5->addInt64($a0->mulInt64($b5, 24))->addInt64($a1->mulInt64($b4, 24))->addInt64($a2->mulInt64($b3, 24))->addInt64($a3->mulInt64($b2, 24))->addInt64($a4->mulInt64($b1, 24))->addInt64($a5->mulInt64($b0, 24));
+        $s6 = $c6->addInt64($a0->mulInt64($b6, 24))->addInt64($a1->mulInt64($b5, 24))->addInt64($a2->mulInt64($b4, 24))->addInt64($a3->mulInt64($b3, 24))->addInt64($a4->mulInt64($b2, 24))->addInt64($a5->mulInt64($b1, 24))
+                 ->addInt64($a6->mulInt64($b0, 24));
+        $s7 = $c7->addInt64($a0->mulInt64($b7, 24))->addInt64($a1->mulInt64($b6, 24))->addInt64($a2->mulInt64($b5, 24))->addInt64($a3->mulInt64($b4, 24))->addInt64($a4->mulInt64($b3, 24))->addInt64($a5->mulInt64($b2, 24))
+                 ->addInt64($a6->mulInt64($b1, 24))->addInt64($a7->mulInt64($b0, 24));
+        $s8 = $c8->addInt64($a0->mulInt64($b8, 24))->addInt64($a1->mulInt64($b7, 24))->addInt64($a2->mulInt64($b6, 24))->addInt64($a3->mulInt64($b5, 24))->addInt64($a4->mulInt64($b4, 24))->addInt64($a5->mulInt64($b3, 24))
+                 ->addInt64($a6->mulInt64($b2, 24))->addInt64($a7->mulInt64($b1, 24))->addInt64($a8->mulInt64($b0, 24));
+        $s9 = $c9->addInt64($a0->mulInt64($b9, 24))->addInt64($a1->mulInt64($b8, 24))->addInt64($a2->mulInt64($b7, 24))->addInt64($a3->mulInt64($b6, 24))->addInt64($a4->mulInt64($b5, 24))->addInt64($a5->mulInt64($b4, 24))
+                 ->addInt64($a6->mulInt64($b3, 24))->addInt64($a7->mulInt64($b2, 24))->addInt64($a8->mulInt64($b1, 24))->addInt64($a9->mulInt64($b0, 24));
+        $s10 = $c10->addInt64($a0->mulInt64($b10, 24))->addInt64($a1->mulInt64($b9, 24))->addInt64($a2->mulInt64($b8, 24))->addInt64($a3->mulInt64($b7, 24))->addInt64($a4->mulInt64($b6, 24))->addInt64($a5->mulInt64($b5, 24))
+                   ->addInt64($a6->mulInt64($b4, 24))->addInt64($a7->mulInt64($b3, 24))->addInt64($a8->mulInt64($b2, 24))->addInt64($a9->mulInt64($b1, 24))->addInt64($a10->mulInt64($b0, 24));
+        $s11 = $c11->addInt64($a0->mulInt64($b11, 24))->addInt64($a1->mulInt64($b10, 24))->addInt64($a2->mulInt64($b9, 24))->addInt64($a3->mulInt64($b8, 24))->addInt64($a4->mulInt64($b7, 24))->addInt64($a5->mulInt64($b6, 24))
+                   ->addInt64($a6->mulInt64($b5, 24))->addInt64($a7->mulInt64($b4, 24))->addInt64($a8->mulInt64($b3, 24))->addInt64($a9->mulInt64($b2, 24))->addInt64($a10->mulInt64($b1, 24))->addInt64($a11->mulInt64($b0, 24));
+        $s12 = $a1->mulInt64($b11, 24)->addInt64($a2->mulInt64($b10, 24))->addInt64($a3->mulInt64($b9, 24))->addInt64($a4->mulInt64($b8, 24))->addInt64($a5->mulInt64($b7, 24))->addInt64($a6->mulInt64($b6, 24))
+                  ->addInt64($a7->mulInt64($b5, 24))->addInt64($a8->mulInt64($b4, 24))->addInt64($a9->mulInt64($b3, 24))->addInt64($a10->mulInt64($b2, 24))->addInt64($a11->mulInt64($b1, 24));
+        $s13 = $a2->mulInt64($b11, 24)->addInt64($a3->mulInt64($b10, 24))->addInt64($a4->mulInt64($b9, 24))->addInt64($a5->mulInt64($b8, 24))->addInt64($a6->mulInt64($b7, 24))->addInt64($a7->mulInt64($b6, 24))
+                  ->addInt64($a8->mulInt64($b5, 24))->addInt64($a9->mulInt64($b4, 24))->addInt64($a10->mulInt64($b3, 24))->addInt64($a11->mulInt64($b2, 24));
+        $s14 = $a3->mulInt64($b11, 24)->addInt64($a4->mulInt64($b10, 24))->addInt64($a5->mulInt64($b9, 24))->addInt64($a6->mulInt64($b8, 24))->addInt64($a7->mulInt64($b7, 24))->addInt64($a8->mulInt64($b6, 24))
+                  ->addInt64($a9->mulInt64($b5, 24))->addInt64($a10->mulInt64($b4, 24))->addInt64($a11->mulInt64($b3, 24));
+        $s15 = $a4->mulInt64($b11, 24)->addInt64($a5->mulInt64($b10, 24))->addInt64($a6->mulInt64($b9, 24))->addInt64($a7->mulInt64($b8, 24))->addInt64($a8->mulInt64($b7, 24))->addInt64($a9->mulInt64($b6, 24))
+                  ->addInt64($a10->mulInt64($b5, 24))->addInt64($a11->mulInt64($b4, 24));
+        $s16 = $a5->mulInt64($b11, 24)->addInt64($a6->mulInt64($b10, 24))->addInt64($a7->mulInt64($b9, 24))->addInt64($a8->mulInt64($b8, 24))->addInt64($a9->mulInt64($b7, 24))->addInt64($a10->mulInt64($b6, 24))
+                   ->addInt64($a11->mulInt64($b5, 24));
+        $s17 = $a6->mulInt64($b11, 24)->addInt64($a7->mulInt64($b10, 24))->addInt64($a8->mulInt64($b9, 24))->addInt64($a9->mulInt64($b8, 24))->addInt64($a10->mulInt64($b7, 24))->addInt64($a11->mulInt64($b6, 24));
+        $s18 = $a7->mulInt64($b11, 24)->addInt64($a8->mulInt64($b10, 24))->addInt64($a9->mulInt64($b9, 24))->addInt64($a10->mulInt64($b8, 24))->addInt64($a11->mulInt64($b7, 24));
+        $s19 = $a8->mulInt64($b11, 24)->addInt64($a9->mulInt64($b10, 24))->addInt64($a10->mulInt64($b9, 24))->addInt64($a11->mulInt64($b8, 24));
+        $s20 = $a9->mulInt64($b11, 24)->addInt64($a10->mulInt64($b10, 24))->addInt64($a11->mulInt64($b9, 24));
+        $s21 = $a10->mulInt64($b11, 24)->addInt64($a11->mulInt64($b10, 24));
+        $s22 = $a11->mulInt64($b11, 24);
         $s23 = new ParagonIE_Sodium_Core32_Int64();
 
         $carry0 = $s0->addInt(1 << 20)->shiftRight(21);

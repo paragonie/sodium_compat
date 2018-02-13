@@ -233,7 +233,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
             $bob_box_secretkey,
             $alice_box_publickey
         );
-        $bob_to_alice2 = ParagonIE_Sodium_Crypto::box_keypair_from_secretkey_and_publickey(
+        $bob_to_alice2 = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
             $bob_box_secretkey,
             $alice_box_publickey
         );
@@ -368,7 +368,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::generichash()
+     * @covers ParagonIE_Sodium_Compat::crypto_generichash()
      */
     public function testCryptoGenerichash()
     {
@@ -404,9 +404,9 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::generichash_init()
-     * @covers ParagonIE_Sodium_Crypto::generichash_update()
-     * @covers ParagonIE_Sodium_Crypto::generichash_final()
+     * @covers ParagonIE_Sodium_Compat::crypto_generichash_init()
+     * @covers ParagonIE_Sodium_Compat::crypto_generichash_update()
+     * @covers ParagonIE_Sodium_Compat::crypto_generichash_final()
      */
     public function testCryptoGenerichashStream()
     {
@@ -587,13 +587,13 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             bin2hex(\Sodium\crypto_sign_detached($message, $secret)),
-            bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_detached($message, $secret)),
             'Generated different signatures'
         );
 
         $this->assertSame(
             $expected,
-            bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_detached($message, $secret)),
             'Generated different signatures'
         );
 
@@ -607,11 +607,11 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $signature = \Sodium\crypto_sign_detached($message, $secret);
         $this->assertSame(
             bin2hex($signature),
-            bin2hex(ParagonIE_Sodium_Crypto::sign_detached($message, $secret)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_detached($message, $secret)),
             'Generated different signatures'
         );
         $this->assertTrue(
-            ParagonIE_Sodium_Crypto::sign_verify_detached($signature, $message, $public),
+            ParagonIE_Sodium_Compat::crypto_sign_verify_detached($signature, $message, $public),
             'Signature verification failed in compatibility test.'
         );
 
@@ -619,13 +619,13 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $signed = \Sodium\crypto_sign($message, $secret);
         $this->assertSame(
             bin2hex($signed),
-            bin2hex(ParagonIE_Sodium_Crypto::sign($message, $secret)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign($message, $secret)),
             'Basic crypto_sign works'
         );
 
         $this->assertSame(
             bin2hex(\Sodium\crypto_sign_open($signed, $public)),
-            bin2hex(ParagonIE_Sodium_Crypto::sign_open($signed, $public)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_sign_open($signed, $public)),
             'Basic crypto_sign_open works'
         );
     }
@@ -645,14 +645,14 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
                 0, 32
             ),
             ParagonIE_Sodium_Core_Util::substr(
-                bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+                bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
                 0, 32
             ),
             'secretbox - short messages'
         );
         $this->assertSame(
             $message,
-            ParagonIE_Sodium_Crypto::secretbox_open(
+            ParagonIE_Sodium_Compat::crypto_secretbox_open(
                 \Sodium\crypto_secretbox($message, $nonce, $key),
                 $nonce,
                 $key
@@ -661,7 +661,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $message,
             \Sodium\crypto_secretbox_open(
-                ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key),
+                ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key),
                 $nonce,
                 $key
             )
@@ -669,7 +669,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
         $message = str_repeat('a', 97);
         $this->assertSame(
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (multiple of 16)'
         );
 
@@ -679,7 +679,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (multiple of 16)'
         );
 
@@ -687,7 +687,7 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (NOT a multiple of 16)'
         );
 
@@ -695,14 +695,14 @@ class SodiumCompatTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - medium messages'
         );
 
         $message = str_repeat(random_bytes(8), (1 << 15) - 64) . random_bytes(64);
         $this->assertSame(
             bin2hex(\Sodium\crypto_secretbox($message, $nonce, $key)),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - medium messages'
         );
     }

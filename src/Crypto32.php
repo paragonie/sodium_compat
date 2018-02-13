@@ -419,10 +419,12 @@ abstract class ParagonIE_Sodium_Crypto32
      * @param string $nonce
      * @param string $keypair
      * @return string
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function box($plaintext, $nonce, $keypair)
     {
-        $c = self::secretbox(
+        return self::secretbox(
             $plaintext,
             $nonce,
             self::box_beforenm(
@@ -430,7 +432,6 @@ abstract class ParagonIE_Sodium_Crypto32
                 self::box_publickey($keypair)
             )
         );
-        return $c;
     }
 
     /**
@@ -441,6 +442,7 @@ abstract class ParagonIE_Sodium_Crypto32
      * @param string $message
      * @param string $publicKey
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function box_seal($message, $publicKey)
@@ -486,6 +488,7 @@ abstract class ParagonIE_Sodium_Crypto32
      * @param string $message
      * @param string $keypair
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function box_seal_open($message, $keypair)
@@ -565,7 +568,6 @@ abstract class ParagonIE_Sodium_Crypto32
      * @param string $sKey
      * @param string $pKey
      * @return string
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function box_keypair_from_secretkey_and_publickey($sKey, $pKey)

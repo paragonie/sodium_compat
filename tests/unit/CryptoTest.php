@@ -236,10 +236,49 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testCryptoBox32()
+    {
+        if (PHP_INT_SIZE === 8) {
+            return;
+        }
+        $nonce = str_repeat("\x00", 24);
+        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        $message .= str_repeat("\x20", 64);
+
+        $alice_secret = ParagonIE_Sodium_Core32_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
+        $alice_public = ParagonIE_Sodium_Core32_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
+        $bob_secret = ParagonIE_Sodium_Core32_Util::hex2bin('b581fb5ae182a16f603f39270d4e3b95bc008310b727a11dd4e784a0044d461b');
+        $bob_public = ParagonIE_Sodium_Core32_Util::hex2bin('e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754');
+
+        $alice_to_bob = ParagonIE_Sodium_Crypto32::box_keypair_from_secretkey_and_publickey(
+            $alice_secret,
+            $bob_public
+        );
+        $bob_to_alice = ParagonIE_Sodium_Crypto32::box_keypair_from_secretkey_and_publickey(
+            $bob_secret,
+            $alice_public
+        );
+
+        $this->assertSame(
+            bin2hex(ParagonIE_Sodium_Crypto32::box($message, $nonce, $bob_to_alice)),
+            bin2hex(ParagonIE_Sodium_Crypto32::box($message, $nonce, $alice_to_bob)),
+            'box'
+        );
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_box()
+     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      * @throws TypeError
      */
     public function testCryptoBox()
     {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         $message .= str_repeat("\x20", 64);
@@ -264,7 +303,6 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             'box'
         );
     }
-
 
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box_seal()
@@ -304,7 +342,11 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $seed = "\x77\x07\x6d\x0a\x73\x18\xa5\x7d\x3c\x16\xc1\x72\x51\xb2\x66\x45" .
                 "\xdf\x4c\x2f\x87\xeb\xc0\x99\x2a\xb1\x77\xfb\xa5\x1d\xb9\x2c\x2a";
 
-        $keypair = ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
+        if (PHP_INT_SIZE === 4) {
+            $keypair = ParagonIE_Sodium_Crypto32::box_seed_keypair($seed);
+        } else {
+            $keypair = ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
+        }
         $this->assertSame(
             "accd44eb8e93319c0570bc11005c0e0189d34ff02f6c17773411ad191293c98f" .
             "ed7749b4d989f6957f3bfde6c56767e988e21c9f8784d91d610011cd553f9b06",
@@ -366,10 +408,17 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
         $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
 
-        $this->assertSame(
-            bin2hex($alice_public),
-            bin2hex(ParagonIE_Sodium_Crypto::scalarmult_base($alice_secret))
-        );
+        if (PHP_INT_SIZE === 4) {
+            $this->assertSame(
+                bin2hex($alice_public),
+                bin2hex(ParagonIE_Sodium_Crypto32::scalarmult_base($alice_secret))
+            );
+        } else {
+            $this->assertSame(
+                bin2hex($alice_public),
+                bin2hex(ParagonIE_Sodium_Crypto::scalarmult_base($alice_secret))
+            );
+        }
     }
 
     /**
@@ -384,9 +433,44 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $bob_secret = ParagonIE_Sodium_Core_Util::hex2bin('b581fb5ae182a16f603f39270d4e3b95bc008310b727a11dd4e784a0044d461b');
         $bob_public = ParagonIE_Sodium_Core_Util::hex2bin('e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754');
 
+        if (PHP_INT_SIZE === 4) {
+            $this->assertSame(
+                bin2hex(ParagonIE_Sodium_Crypto32::scalarmult($alice_secret, $bob_public)),
+                bin2hex(ParagonIE_Sodium_Crypto32::scalarmult($bob_secret, $alice_public))
+            );
+        } else {
+            $this->assertSame(
+                bin2hex(ParagonIE_Sodium_Crypto::scalarmult($alice_secret, $bob_public)),
+                bin2hex(ParagonIE_Sodium_Crypto::scalarmult($bob_secret, $alice_public))
+            );
+        }
+    }
+    /**
+     * @covers ParagonIE_Sodium_Crypto::sign_detached()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testSignDetached32()
+    {
+        if (PHP_INT_SIZE === 8) {
+            return;
+        }
+        $secret = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
+            'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
+        );
+        $message = 'Test message';
         $this->assertSame(
-            bin2hex(ParagonIE_Sodium_Crypto::scalarmult($alice_secret, $bob_public)),
-            bin2hex(ParagonIE_Sodium_Crypto::scalarmult($bob_secret, $alice_public))
+            '5e413e791d9bcdbaa1cfd4f83b01c73926f436a467cfc2634fc90651fb0465bfea76083b4ff247f925df96e89da3d9edc11029adf1601cd0f97d1b2c4b02e905',
+            bin2hex(ParagonIE_Sodium_Crypto32::sign_detached($message, $secret)),
+            'Generated different signatures'
+        );
+
+        $message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+        $this->assertSame(
+            '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f',
+            bin2hex(ParagonIE_Sodium_Crypto32::sign_detached($message, $secret)),
+            'Generated different signatures'
         );
     }
 
@@ -397,6 +481,9 @@ class CryptoTest extends PHPUnit_Framework_TestCase
      */
     public function testSignDetached()
     {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
             'ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc'
@@ -505,9 +592,16 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
             '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
         );
-        $this->assertTrue(
-            ParagonIE_Sodium_Crypto::sign_verify_detached($sig, $message, $public),
-            'Invalid signature verification checking'
-        );
+        if (PHP_INT_SIZE === 4) {
+            $this->assertTrue(
+                ParagonIE_Sodium_Crypto32::sign_verify_detached($sig, $message, $public),
+                'Invalid signature verification checking'
+            );
+        } else {
+            $this->assertTrue(
+                ParagonIE_Sodium_Crypto::sign_verify_detached($sig, $message, $public),
+                'Invalid signature verification checking'
+            );
+        }
     }
 }

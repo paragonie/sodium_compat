@@ -33,14 +33,14 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
                 0, 32
             ),
             ParagonIE_Sodium_Core_Util::substr(
-                bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+                bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
                 0, 32
             ),
             'secretbox - short messages'
         );
         $this->assertSame(
             $message,
-            ParagonIE_Sodium_Crypto::secretbox_open(
+            ParagonIE_Sodium_Compat::crypto_secretbox_open(
                 call_user_func_array(
                     array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
                     array($message, $nonce, $key)
@@ -54,7 +54,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
             call_user_func_array(
                 array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox_open'),
                 array(
-                    ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key),
+                    ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key),
                     $nonce,
                     $key
                 )
@@ -68,7 +68,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
                     array($message, $nonce, $key)
                 )
             ),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (multiple of 16)'
         );
 
@@ -83,7 +83,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
                     array($message, $nonce, $key)
                 )
             ),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (multiple of 16)'
         );
 
@@ -96,7 +96,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
                     array($message, $nonce, $key)
                 )
             ),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - long messages (NOT a multiple of 16)'
         );
 
@@ -109,7 +109,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
                     array($message, $nonce, $key)
                 )
             ),
-            bin2hex(ParagonIE_Sodium_Crypto::secretbox($message, $nonce, $key)),
+            bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
             'secretbox - medium messages'
         );
     }

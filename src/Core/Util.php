@@ -549,7 +549,7 @@ abstract class ParagonIE_Sodium_Core_Util
          *
          * @var int
          */
-        $mask = -(($b >> $size) & 1);
+        $mask = -(($b >> $defaultSize) & 1);
 
         /**
          * Ensure $b is a positive integer, without creating
