@@ -563,6 +563,23 @@ abstract class ParagonIE_Sodium_Crypto32
     }
 
     /**
+     * @param string $seed
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function box_seed_keypair($seed)
+    {
+        $sKey = ParagonIE_Sodium_Core32_Util::substr(
+            hash('sha512', $seed, true),
+            0,
+            32
+        );
+        $pKey = self::scalarmult_base($sKey);
+        return $sKey . $pKey;
+    }
+
+    /**
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @param string $sKey

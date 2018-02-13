@@ -1202,6 +1202,9 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_box_seed_keypair')) {
             return (string) call_user_func('\\Sodium\\crypto_box_seed_keypair', $seed);
         }
+        if (PHP_INT_SIZE === 4) {
+            return ParagonIE_Sodium_Crypto32::box_seed_keypair($seed);
+        }
         return ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
     }
 
