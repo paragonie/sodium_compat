@@ -272,6 +272,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     * @throws SodiumException
      * @throws TypeError
      */
     public function testCryptoBox()

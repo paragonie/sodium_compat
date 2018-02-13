@@ -46,6 +46,8 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      * @param int $high
      * @param int $low
      * @return ParagonIE_Sodium_Core32_Int64
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function new64($high, $low)
     {
@@ -60,6 +62,8 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      *
      * @param int $num
      * @return ParagonIE_Sodium_Core32_Int64
+     * @throws SodiumException
+     * @throws TypeError
      */
     protected static function to64($num)
     {
@@ -128,6 +132,7 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      * @param SplFixedArray $x
      * @param int $i
      * @return ParagonIE_Sodium_Core32_Int64
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function load64($x, $i)
@@ -173,6 +178,8 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      * @internal You should not use this directly from another application
      *
      * @return void
+     * @throws SodiumException
+     * @throws TypeError
      */
     public static function pseudoConstructor()
     {
@@ -205,6 +212,8 @@ abstract class ParagonIE_Sodium_Core32_BLAKE2b extends ParagonIE_Sodium_Core_Uti
      * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayAssignment
      * @psalm-suppress MixedArrayOffset
+     * @throws SodiumException
+     * @throws TypeError
      */
     protected static function context()
     {

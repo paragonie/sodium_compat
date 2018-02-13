@@ -51,6 +51,7 @@ class ParagonIE_Sodium_Core32_HChaCha20 extends ParagonIE_Sodium_Core32_ChaCha20
     /**
      * @param array $ctx
      * @return string
+     * @throws SodiumException
      * @throws TypeError
      */
     protected static function hChaCha20Bytes(array $ctx)

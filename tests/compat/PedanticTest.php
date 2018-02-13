@@ -64,6 +64,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
 
     /**
      * @return array<int, string>
+     * @throws TypeError
      */
     public function getInteresting16ByteStrings()
     {
@@ -77,6 +78,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
 
     /**
      * @return array<int, string>
+     * @throws TypeError
      */
     public function getInteresting32ByteStrings()
     {
@@ -90,6 +92,9 @@ class PedanticTest extends PHPUnit_Framework_TestCase
 
     /**
      * @return array<int, string>
+     *
+     * @return array
+     * @throws TypeError
      */
     public function getCryptoBoxKeys()
     {
@@ -104,7 +109,10 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $min
+     * @param int $max
      * @return array<int, string>
+     * @throws TypeError
      */
     public function getInterestingStringsVaryingLength($min = 1, $max = self::DEFAULT_MAX_LENGTH)
     {

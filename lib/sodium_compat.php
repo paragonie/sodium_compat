@@ -14,6 +14,8 @@ if (!is_callable('\\Sodium\\bin2hex')) {
     /**
      * @param string $string
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function bin2hex($string)
     {
@@ -25,6 +27,8 @@ if (!is_callable('\\Sodium\\compare')) {
      * @param string $a
      * @param string $b
      * @return int
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function compare($a, $b)
     {
@@ -38,6 +42,8 @@ if (!is_callable('\\Sodium\\crypto_aead_aes256gcm_decrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string|bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_aes256gcm_decrypt($message, $assocData, $nonce, $key)
     {
@@ -57,6 +63,8 @@ if (!is_callable('\\Sodium\\crypto_aead_aes256gcm_encrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_aes256gcm_encrypt($message, $assocData, $nonce, $key)
     {
@@ -79,6 +87,8 @@ if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_decrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string|bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_chacha20poly1305_decrypt($message, $assocData, $nonce, $key)
     {
@@ -98,6 +108,8 @@ if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_encrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_chacha20poly1305_encrypt($message, $assocData, $nonce, $key)
     {
@@ -111,6 +123,8 @@ if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_ietf_decrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string|bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_chacha20poly1305_ietf_decrypt($message, $assocData, $nonce, $key)
     {
@@ -130,6 +144,8 @@ if (!is_callable('\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_aead_chacha20poly1305_ietf_encrypt($message, $assocData, $nonce, $key)
     {
@@ -141,6 +157,8 @@ if (!is_callable('\\Sodium\\crypto_auth')) {
      * @param string $message
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_auth($message, $key)
     {
@@ -153,6 +171,8 @@ if (!is_callable('\\Sodium\\crypto_auth_verify')) {
      * @param string $message
      * @param string $key
      * @return bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_auth_verify($mac, $message, $key)
     {
@@ -165,6 +185,8 @@ if (!is_callable('\\Sodium\\crypto_box')) {
      * @param string $nonce
      * @param string $kp
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box($message, $nonce, $kp)
     {
@@ -174,6 +196,8 @@ if (!is_callable('\\Sodium\\crypto_box')) {
 if (!is_callable('\\Sodium\\crypto_box_keypair')) {
     /**
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_keypair()
     {
@@ -185,6 +209,8 @@ if (!is_callable('\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey')) {
      * @param string $sk
      * @param string $pk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_keypair_from_secretkey_and_publickey($sk, $pk)
     {
@@ -197,6 +223,8 @@ if (!is_callable('\\Sodium\\crypto_box_open')) {
      * @param string $nonce
      * @param string $kp
      * @return string|bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_open($message, $nonce, $kp)
     {
@@ -213,6 +241,8 @@ if (!is_callable('\\Sodium\\crypto_box_publickey')) {
     /**
      * @param string $keypair
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_publickey($keypair)
     {
@@ -223,6 +253,8 @@ if (!is_callable('\\Sodium\\crypto_box_publickey_from_secretkey')) {
     /**
      * @param string $sk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_publickey_from_secretkey($sk)
     {
@@ -234,6 +266,8 @@ if (!is_callable('\\Sodium\\crypto_box_seal')) {
      * @param string $message
      * @param string $publicKey
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_seal($message, $publicKey)
     {
@@ -245,6 +279,7 @@ if (!is_callable('\\Sodium\\crypto_box_seal_open')) {
      * @param string $message
      * @param string $kp
      * @return string|bool
+     * @throws \TypeError
      */
     function crypto_box_seal_open($message, $kp)
     {
@@ -261,6 +296,8 @@ if (!is_callable('\\Sodium\\crypto_box_secretkey')) {
     /**
      * @param string $keypair
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_box_secretkey($keypair)
     {
@@ -273,6 +310,8 @@ if (!is_callable('\\Sodium\\crypto_generichash')) {
      * @param string|null $key
      * @param int $outLen
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_generichash($message, $key = null, $outLen = 32)
     {
@@ -284,6 +323,8 @@ if (!is_callable('\\Sodium\\crypto_generichash_final')) {
      * @param string|null $ctx
      * @param int $outputLength
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_generichash_final(&$ctx, $outputLength = 32)
     {
@@ -295,6 +336,8 @@ if (!is_callable('\\Sodium\\crypto_generichash_init')) {
      * @param string|null $key
      * @param int $outLen
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_generichash_init($key = null, $outLen = 32)
     {
@@ -306,6 +349,8 @@ if (!is_callable('\\Sodium\\crypto_generichash_update')) {
      * @param string|null $ctx
      * @param string $message
      * @return void
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_generichash_update(&$ctx, $message = '')
     {
@@ -319,6 +364,8 @@ if (!is_callable('\\Sodium\\crypto_kx')) {
      * @param string $client_public
      * @param string $server_public
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_kx($my_secret, $their_public, $client_public, $server_public)
     {
@@ -338,6 +385,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash')) {
      * @param int $opslimit
      * @param int $memlimit
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit)
     {
@@ -350,6 +399,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash_str')) {
      * @param int $opslimit
      * @param int $memlimit
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash_str($passwd, $opslimit, $memlimit)
     {
@@ -361,6 +412,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash_str_verify')) {
      * @param string $passwd
      * @param string $hash
      * @return bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash_str_verify($passwd, $hash)
     {
@@ -375,6 +428,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash_scryptsalsa208sha256')) {
      * @param int $opslimit
      * @param int $memlimit
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash_scryptsalsa208sha256($outlen, $passwd, $salt, $opslimit, $memlimit)
     {
@@ -387,6 +442,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str')) {
      * @param int $opslimit
      * @param int $memlimit
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash_scryptsalsa208sha256_str($passwd, $opslimit, $memlimit)
     {
@@ -398,6 +455,8 @@ if (!is_callable('\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str_verify')) {
      * @param string $passwd
      * @param string $hash
      * @return bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_pwhash_scryptsalsa208sha256_str_verify($passwd, $hash)
     {
@@ -409,6 +468,8 @@ if (!is_callable('\\Sodium\\crypto_scalarmult')) {
      * @param string $n
      * @param string $p
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_scalarmult($n, $p)
     {
@@ -419,6 +480,8 @@ if (!is_callable('\\Sodium\\crypto_scalarmult_base')) {
     /**
      * @param string $n
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_scalarmult_base($n)
     {
@@ -431,6 +494,8 @@ if (!is_callable('\\Sodium\\crypto_secretbox')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_secretbox($message, $nonce, $key)
     {
@@ -443,6 +508,8 @@ if (!is_callable('\\Sodium\\crypto_secretbox_open')) {
      * @param string $nonce
      * @param string $key
      * @return string|bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_secretbox_open($message, $nonce, $key)
     {
@@ -460,6 +527,8 @@ if (!is_callable('\\Sodium\\crypto_shorthash')) {
      * @param string $message
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_shorthash($message, $key = '')
     {
@@ -471,6 +540,8 @@ if (!is_callable('\\Sodium\\crypto_sign')) {
      * @param string $message
      * @param string $sk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign($message, $sk)
     {
@@ -482,6 +553,8 @@ if (!is_callable('\\Sodium\\crypto_sign_detached')) {
      * @param string $message
      * @param string $sk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_detached($message, $sk)
     {
@@ -491,6 +564,8 @@ if (!is_callable('\\Sodium\\crypto_sign_detached')) {
 if (!is_callable('\\Sodium\\crypto_sign_keypair')) {
     /**
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_keypair()
     {
@@ -518,6 +593,8 @@ if (!is_callable('\\Sodium\\crypto_sign_publickey')) {
     /**
      * @param string $keypair
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_publickey($keypair)
     {
@@ -528,6 +605,8 @@ if (!is_callable('\\Sodium\\crypto_sign_publickey_from_secretkey')) {
     /**
      * @param string $sk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_publickey_from_secretkey($sk)
     {
@@ -538,6 +617,8 @@ if (!is_callable('\\Sodium\\crypto_sign_secretkey')) {
     /**
      * @param string $keypair
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_secretkey($keypair)
     {
@@ -548,6 +629,8 @@ if (!is_callable('\\Sodium\\crypto_sign_seed_keypair')) {
     /**
      * @param string $seed
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_seed_keypair($seed)
     {
@@ -560,6 +643,8 @@ if (!is_callable('\\Sodium\\crypto_sign_verify_detached')) {
      * @param string $message
      * @param string $pk
      * @return bool
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_verify_detached($signature, $message, $pk)
     {
@@ -570,6 +655,8 @@ if (!is_callable('\\Sodium\\crypto_sign_ed25519_pk_to_curve25519')) {
     /**
      * @param string $pk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_ed25519_pk_to_curve25519($pk)
     {
@@ -580,6 +667,8 @@ if (!is_callable('\\Sodium\\crypto_sign_ed25519_sk_to_curve25519')) {
     /**
      * @param string $sk
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_sign_ed25519_sk_to_curve25519($sk)
     {
@@ -592,6 +681,8 @@ if (!is_callable('\\Sodium\\crypto_stream')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_stream($len, $nonce, $key)
     {
@@ -604,6 +695,8 @@ if (!is_callable('\\Sodium\\crypto_stream_xor')) {
      * @param string $nonce
      * @param string $key
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function crypto_stream_xor($message, $nonce, $key)
     {
@@ -614,6 +707,8 @@ if (!is_callable('\\Sodium\\hex2bin')) {
     /**
      * @param string $string
      * @return string
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function hex2bin($string)
     {
@@ -625,6 +720,8 @@ if (!is_callable('\\Sodium\\memcmp')) {
      * @param string $a
      * @param string $b
      * @return int
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function memcmp($a, $b)
     {
@@ -635,6 +732,8 @@ if (!is_callable('\\Sodium\\memzero')) {
     /**
      * @param string $str
      * @return void
+     * @throws \SodiumException
+     * @throws \TypeError
      */
     function memzero(&$str)
     {
@@ -645,6 +744,7 @@ if (!is_callable('\\Sodium\\randombytes_buf')) {
     /**
      * @param int $amount
      * @return string
+     * @throws \TypeError
      */
     function randombytes_buf($amount)
     {
@@ -656,6 +756,8 @@ if (!is_callable('\\Sodium\\randombytes_uniform')) {
     /**
      * @param int $upperLimit
      * @return int
+     * @throws \Exception
+     * @throws \Error
      */
     function randombytes_uniform($upperLimit)
     {
