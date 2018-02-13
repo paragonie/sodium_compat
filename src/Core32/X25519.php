@@ -97,6 +97,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
      * @return ParagonIE_Sodium_Core32_Curve25519_Fe
      * @throws SodiumException
      * @throws TypeError
+     * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedMethodCall
      */
     public static function fe_mul121666(ParagonIE_Sodium_Core32_Curve25519_Fe $f)
@@ -160,6 +161,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         for ($i = 0; $i < 10; ++$i) {
             $h[$i] = $h[$i]->toInt32();
         }
+        /** @var array<int, ParagonIE_Sodium_Core32_Int32> $h */
         return ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray($h);
     }
 

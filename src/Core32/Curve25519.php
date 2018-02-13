@@ -2210,11 +2210,13 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
      * @param string $a
      * @return ParagonIE_Sodium_Core32_Curve25519_Ge_P3
      * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedOperand
      * @throws SodiumException
      * @throws TypeError
      */
     public static function ge_scalarmult_base($a)
     {
+        /** @var array<int, int> $e */
         $e = array();
         $r = new ParagonIE_Sodium_Core32_Curve25519_Ge_P1p1();
 
