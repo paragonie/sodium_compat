@@ -253,22 +253,6 @@ class ParagonIE_Sodium_Core32_Int64
         if (!$size) {
             $size = 63;
         }
-        $aNeg = ($this->limbs[0] >> 15) & 1;
-        $bNeg = ($int->limbs[0] >> 15) & 1;
-
-        /** @todo make this work without branches */
-        /*
-        if ($bNeg && !$aNeg) {
-            $a = clone $int;
-            $b = clone $this;
-        } elseif($bNeg && $aNeg) {
-            $a = $this->mulInt(-1);
-            $b = $int->mulInt(-1);
-        } else {
-            $a = clone $this;
-            $b = clone $int;
-        }
-        */
         list($a, $b) = self::ctSelect($this, $int);
 
         $return = new ParagonIE_Sodium_Core32_Int64();
@@ -277,11 +261,6 @@ class ParagonIE_Sodium_Core32_Int64
         /** @var int $size $i */
         /** @var int $i */
         for ($i = $size; $i >= 0; --$i) {
-            /*
-            $c += (int) ($a & -($b & 1));
-            $a <<= 1;
-            $b >>= 1;
-             */
             $return = $return->addInt64(
                 $a->mask64(
                     (int) (-($b->limbs[3] & 1)),
