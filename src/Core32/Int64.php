@@ -205,6 +205,41 @@ class ParagonIE_Sodium_Core32_Int64
     }
 
     /**
+     * @param ParagonIE_Sodium_Core32_Int64 $A
+     * @param ParagonIE_Sodium_Core32_Int64 $B
+     * @return array<int, ParagonIE_Sodium_Core32_Int64>
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function ctSelect(
+        ParagonIE_Sodium_Core32_Int64 $A,
+        ParagonIE_Sodium_Core32_Int64 $B
+    ) {
+        $a = clone $A;
+        $b = clone $B;
+        $aNeg = ($a->limbs[0] >> 15) & 1;
+        $bNeg = ($b->limbs[0] >> 15) & 1;
+        $m = (-($aNeg & $bNeg)) | 1;
+
+        /*
+        if ($bNeg && !$aNeg) {
+            $a = clone $int;
+            $b = clone $this;
+        } elseif($bNeg && $aNeg) {
+            $a = $this->mulInt(-1);
+            $b = $int->mulInt(-1);
+        }
+         */
+        $swap = $bNeg & ~$aNeg;
+        $d = -$swap;
+        $x = $a->xorInt64($b)->mask64($d, $d);
+        $a = $a->xorInt64($x)->mulInt($m);
+        $b = $b->xorInt64($x)->mulInt($m);
+
+        return array($a, $b);
+    }
+
+    /**
      * @param ParagonIE_Sodium_Core32_Int64 $int
      * @param int $size
      * @return ParagonIE_Sodium_Core32_Int64
@@ -222,6 +257,7 @@ class ParagonIE_Sodium_Core32_Int64
         $bNeg = ($int->limbs[0] >> 15) & 1;
 
         /** @todo make this work without branches */
+        /*
         if ($bNeg && !$aNeg) {
             $a = clone $int;
             $b = clone $this;
@@ -232,6 +268,8 @@ class ParagonIE_Sodium_Core32_Int64
             $a = clone $this;
             $b = clone $int;
         }
+        */
+        list($a, $b) = self::ctSelect($this, $int);
 
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;

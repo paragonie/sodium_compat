@@ -271,6 +271,54 @@ class Int64Test extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Core32_Int64::mulInt()
+     * @covers ParagonIE_Sodium_Core32_Int64::mulInt64()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testMultNegative()
+    {
+        $a = new ParagonIE_Sodium_Core32_Int64(
+            array(0, 0, 0, 3)
+        );
+        $na = new ParagonIE_Sodium_Core32_Int64(
+            array(0xffff, 0xffff, 0xffff, 0xfffd) // -3
+        );
+        $b = new ParagonIE_Sodium_Core32_Int64(
+            array(0, 0, 0, 14)
+        );
+        $nb = new ParagonIE_Sodium_Core32_Int64(
+            array(0xffff, 0xffff, 0xffff, 0xfff2) // -14
+        );
+
+        $this->assertEquals(
+            $a->mulInt64($b)->limbs,
+            $na->mulInt64($nb)->limbs
+        );
+
+        $this->assertEquals(
+            $a->mulInt64($nb)->limbs,
+            $na->mulInt64($b)->limbs
+        );
+
+        $this->assertEquals(
+            42,
+            $a->mulInt64($b)->toInt32()->toInt()
+        );
+        $this->assertEquals(
+            42,
+            $na->mulInt64($nb)->toInt32()->toInt()
+        );
+        $this->assertEquals(
+            -42,
+            $na->mulInt64($b)->toInt32()->toInt()
+        );
+        $this->assertEquals(
+            -42,
+            $a->mulInt64($nb)->toInt32()->toInt()
+        );
+    }
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateLeft()
