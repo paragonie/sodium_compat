@@ -85,6 +85,8 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_GENERICHASH_KEYBYTES_MAX = 64;
     const CRYPTO_PWHASH_SALTBYTES = 16;
     const CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
+    const CRYPTO_PWHASH_ALG_ARGON2I13 = 1;
+    const CRYPTO_PWHASH_ALG_ARGON2ID13 = 2;
     const CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
     const CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE = 4;
     const CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
@@ -194,7 +196,7 @@ class ParagonIE_Sodium_Compat
      * Authenticated Encryption with Associated Data: Decryption
      *
      * Algorithm:
-     *     ChaCha20-Poly1305
+     *     AES-256-GCM
      *
      * This mode uses a 64-bit random nonce with a 64-bit counter.
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
@@ -1464,12 +1466,13 @@ class ParagonIE_Sodium_Compat
      * @param string $salt
      * @param int $opslimit
      * @param int $memlimit
+     * @param int|null $alg
      * @return string
      * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedArgument
      */
-    public static function crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit)
+    public static function crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit, $alg = null)
     {
         ParagonIE_Sodium_Core_Util::declareScalarType($outlen, 'int', 1);
         ParagonIE_Sodium_Core_Util::declareScalarType($passwd, 'string', 2);
@@ -1478,6 +1481,10 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 5);
 
         if (self::isPhp72OrGreater()) {
+            if (!is_null($alg)) {
+                ParagonIE_Sodium_Core_Util::declareScalarType($alg, 'int', 6);
+                return sodium_crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit, $alg);
+            }
             return sodium_crypto_pwhash($outlen, $passwd, $salt, $opslimit, $memlimit);
         }
         if (self::use_fallback('crypto_pwhash')) {

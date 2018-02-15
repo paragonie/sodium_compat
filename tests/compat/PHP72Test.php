@@ -788,6 +788,46 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::crypto_pwhash()
+     *
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testCryptoPwhash()
+    {
+        if (!\extension_loaded('sodium')) {
+            $this->markTestSkipped('Libsodium not loaded');
+        }
+
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = false;
+        $passwd = 'test password';
+        $salt = random_bytes(16);
+
+        $native = \sodium_crypto_pwhash(
+            16,
+            $passwd,
+            $salt,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
+
+        $compat = ParagonIE_Sodium_Compat::crypto_pwhash(
+            16,
+            $passwd,
+            $salt,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
+
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+
+        $this->assertSame(
+            \sodium_bin2hex($native),
+            \sodium_bin2hex($compat)
+        );
+    }
+
+    /**
      *
      */
     public function testCryptoShorthash()
