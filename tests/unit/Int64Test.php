@@ -274,7 +274,6 @@ class Int64Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::mulInt()
      * @covers ParagonIE_Sodium_Core32_Int64::mulInt64()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testMultNegative()
@@ -322,7 +321,6 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateLeft()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testRotateLeft()
@@ -384,7 +382,6 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core32_Int64::rotateRight()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testRotateRight()

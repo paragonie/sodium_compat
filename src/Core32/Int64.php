@@ -69,7 +69,6 @@ class ParagonIE_Sodium_Core32_Int64
      *
      * @param int $int
      * @return ParagonIE_Sodium_Core32_Int64
-     * @throws SodiumException
      * @throws TypeError
      */
     public function addInt($int)
@@ -301,7 +300,6 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param int $c
      * @return ParagonIE_Sodium_Core32_Int64
-     * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedArrayAccess
      */
@@ -349,7 +347,6 @@ class ParagonIE_Sodium_Core32_Int64
      *
      * @param int $c
      * @return ParagonIE_Sodium_Core32_Int64
-     * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedArrayAccess
      */
@@ -513,7 +510,6 @@ class ParagonIE_Sodium_Core32_Int64
      *
      * @param int $int
      * @return ParagonIE_Sodium_Core32_Int64
-     * @throws SodiumException
      * @throws TypeError
      */
     public function subInt($int)
@@ -580,7 +576,6 @@ class ParagonIE_Sodium_Core32_Int64
      * @param int $low
      * @param int $high
      * @return self
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromInts($low, $high)
@@ -601,7 +596,6 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param string $string
      * @return self
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromString($string)
@@ -629,7 +623,6 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param string $string
      * @return self
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromReverseString($string)
