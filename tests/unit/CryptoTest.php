@@ -322,8 +322,16 @@ class CryptoTest extends PHPUnit_Framework_TestCase
         $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
             'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
         );
-
-        $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal($message, $alice_box_publickey);
+        if (PHP_INT_SIZE === 4) {
+            $sealed_to_alice =  ParagonIE_Sodium_Core_Util::hex2bin(
+                '95eb5bf05ada25ee51f4158201c261a00bfb1955a9176c8c7f1a' .
+                '62f299a32e54f6ebccc8ab9d2ce1b1d3710ba37d8db17aeeec0b' .
+                '78fc3d32b39b79ed96f18948c5a574b8e3f8eccc2f132408c216' .
+                '46f3aedae4a67fde4f77153b5458b8a6bd712dd8365534c567ec'
+            );
+        } else {
+            $sealed_to_alice = ParagonIE_Sodium_Compat::crypto_box_seal($message, $alice_box_publickey);
+        }
 
         $alice_opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed_to_alice, $alice_box_kp);
         $this->assertSame(
@@ -362,15 +370,17 @@ class CryptoTest extends PHPUnit_Framework_TestCase
      */
     public function testKeypairs()
     {
-        $box_keypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
-        $box_public = ParagonIE_Sodium_Compat::crypto_box_publickey($box_keypair);
+        if (PHP_INT_SIZE === 8) {
+            $box_keypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+            $box_public = ParagonIE_Sodium_Compat::crypto_box_publickey($box_keypair);
 
-        $sealed = ParagonIE_Sodium_Compat::crypto_box_seal('Test message', $box_public);
-        $opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed, $box_keypair);
-        $this->assertSame(
-            'Test message',
-            $opened
-        );
+            $sealed = ParagonIE_Sodium_Compat::crypto_box_seal('Test message', $box_public);
+            $opened = ParagonIE_Sodium_Compat::crypto_box_seal_open($sealed, $box_keypair);
+            $this->assertSame(
+                'Test message',
+                $opened
+            );
+        }
 
         $sign_keypair = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
