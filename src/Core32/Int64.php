@@ -210,6 +210,7 @@ class ParagonIE_Sodium_Core32_Int64
      * @return array<int, ParagonIE_Sodium_Core32_Int64>
      * @throws SodiumException
      * @throws TypeError
+     * @psalm-suppress MixedInferredReturnType
      */
     public static function ctSelect(
         ParagonIE_Sodium_Core32_Int64 $A,
@@ -217,9 +218,16 @@ class ParagonIE_Sodium_Core32_Int64
     ) {
         $a = clone $A;
         $b = clone $B;
+        /** @var int $aNeg */
         $aNeg = ($a->limbs[0] >> 15) & 1;
+        /** @var int $bNeg */
         $bNeg = ($b->limbs[0] >> 15) & 1;
+        /** @var int $m */
         $m = (-($aNeg & $bNeg)) | 1;
+        /** @var int $swap */
+        $swap = $bNeg & ~$aNeg;
+        /** @var int $d */
+        $d = -$swap;
 
         /*
         if ($bNeg && !$aNeg) {
@@ -230,13 +238,11 @@ class ParagonIE_Sodium_Core32_Int64
             $b = $int->mulInt(-1);
         }
          */
-        $swap = $bNeg & ~$aNeg;
-        $d = -$swap;
         $x = $a->xorInt64($b)->mask64($d, $d);
-        $a = $a->xorInt64($x)->mulInt($m);
-        $b = $b->xorInt64($x)->mulInt($m);
-
-        return array($a, $b);
+        return array(
+            $a->xorInt64($x)->mulInt($m),
+            $b->xorInt64($x)->mulInt($m)
+        );
     }
 
     /**
