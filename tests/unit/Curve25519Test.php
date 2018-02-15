@@ -1884,6 +1884,44 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     }
     /**
      * @covers ParagonIE_Sodium_Core32_Curve25519::fe_mul()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testFromBytes()
+    {
+        if (PHP_INT_SIZE === 4) {
+            $a = ParagonIE_Sodium_Core32_Curve25519::fe_frombytes(
+                ParagonIE_Sodium_Core_Util::hex2bin('f7efaafeb83be2f97cd351b48e78f9d158269cdecedbcb503913172158b69336')
+            );
+            $this->assertSame('f7efaafe', ParagonIE_Sodium_Core_Util::bin2hex($a[0]->toReverseString()));
+            $this->assertSame('40ee8e00', ParagonIE_Sodium_Core_Util::bin2hex($a[1]->toReverseString()));
+            $this->assertSame('3c9f6ffe', ParagonIE_Sodium_Core_Util::bin2hex($a[2]->toReverseString()));
+            $this->assertSame('8fa27500', ParagonIE_Sodium_Core_Util::bin2hex($a[3]->toReverseString()));
+            $this->assertSame('e2e547ff', ParagonIE_Sodium_Core_Util::bin2hex($a[4]->toReverseString()));
+            $this->assertSame('59269c00', ParagonIE_Sodium_Core_Util::bin2hex($a[5]->toReverseString()));
+            $this->assertSame('6fe7ed01', ParagonIE_Sodium_Core_Util::bin2hex($a[6]->toReverseString()));
+            $this->assertSame('192a6700', ParagonIE_Sodium_Core_Util::bin2hex($a[7]->toReverseString()));
+            $this->assertSame('71118201', ParagonIE_Sodium_Core_Util::bin2hex($a[8]->toReverseString()));
+            $this->assertSame('d94eda00', ParagonIE_Sodium_Core_Util::bin2hex($a[9]->toReverseString()));
+        } else {
+            $a = ParagonIE_Sodium_Core_Curve25519::fe_frombytes(
+                ParagonIE_Sodium_Core_Util::hex2bin('f7efaafeb83be2f97cd351b48e78f9d158269cdecedbcb503913172158b69336')
+            );
+            $this->assertSame('f7efaafe', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[0])));
+            $this->assertSame('40ee8e00', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[1])));
+            $this->assertSame('3c9f6ffe', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[2])));
+            $this->assertSame('8fa27500', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[3])));
+            $this->assertSame('e2e547ff', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[4])));
+            $this->assertSame('59269c00', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[5])));
+            $this->assertSame('6fe7ed01', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[6])));
+            $this->assertSame('192a6700', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[7])));
+            $this->assertSame('71118201', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[8])));
+            $this->assertSame('d94eda00', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[9])));
+        }
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Curve25519::fe_mul()
      */
     public function test121666Mul()
     {

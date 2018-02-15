@@ -84,7 +84,7 @@ class ParagonIE_Sodium_Core32_Int32
         $return->unsignedInt = $this->unsignedInt;
 
         /** @var int $tmp */
-        $tmp = $this->limbs[1] + ($int & 0xffff);
+        $tmp = ($this->limbs[1] & 0xffff) + ($int & 0xffff);
         /** @var int $carry */
         $carry = $tmp >> 16;
         $return->limbs[1] = (int) ($tmp & 0xffff);
@@ -386,6 +386,8 @@ class ParagonIE_Sodium_Core32_Int32
      * @return ParagonIE_Sodium_Core32_Int32
      * @throws SodiumException
      * @throws TypeError
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedOperand
      */
     public function shiftRight($c = 0)
     {
@@ -396,9 +398,10 @@ class ParagonIE_Sodium_Core32_Int32
         /** @var int $c */
         if ($c >= 16) {
             $return->limbs = array(
-                0,
-                $this->limbs[0]
+                (int) ($this->overflow & 0xffff),
+                (int) ($this->limbs[0])
             );
+            $return->overflow = $this->overflow >> 16;
             return $return->shiftRight($c & 15);
         }
         if ($c === 0) {
@@ -411,8 +414,10 @@ class ParagonIE_Sodium_Core32_Int32
                 throw new TypeError();
             }
             /** @var int $c */
+            // $return->limbs[0] = (int) (($this->limbs[0] >> $c) & 0xffff);
+            $carryLeft = (int) ($this->overflow & ((1 << ($c + 1)) - 1));
+            $return->limbs[0] = (int) ((($this->limbs[0] >> $c) | ($carryLeft << (16 - $c))) & 0xffff);
             $carryRight = (int) ($this->limbs[0] & ((1 << ($c + 1)) - 1));
-            $return->limbs[0] = (int) (($this->limbs[0] >> $c) & 0xffff);
             $return->limbs[1] = (int) ((($this->limbs[1] >> $c) | ($carryRight << (16 - $c))) & 0xffff);
             $return->overflow >>= $c;
         }

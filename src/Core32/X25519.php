@@ -110,7 +110,7 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
 
         /** @var ParagonIE_Sodium_Core32_Int32 $carry9 */
         $carry9 = $h[9]->addInt(1 << 24)->shiftRight(25);
-        $h[0] = $h[0]->addInt64($carry9->mulInt(19));
+        $h[0] = $h[0]->addInt64($carry9->mulInt(19, 5));
         $h[9] = $h[9]->subInt64($carry9->shiftLeft(25));
 
         /** @var ParagonIE_Sodium_Core32_Int32 $carry1 */

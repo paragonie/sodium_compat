@@ -371,7 +371,6 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             'Test message',
             $opened
         );
-        #
 
         $sign_keypair = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
