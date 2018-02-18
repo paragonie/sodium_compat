@@ -2567,7 +2567,8 @@ class ParagonIE_Sodium_Compat
         }
         // This is the best we can do.
         throw new SodiumException(
-            'This is not implemented, as it is not possible to securely wipe memory from PHP'
+            'This is not implemented in sodium_compat, as it is not possible to securely wipe memory from PHP. ' .
+            'To fix this error, make sure libsodium is installed and the PHP extension is enabled.'
         );
     }
 
