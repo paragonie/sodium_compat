@@ -103,7 +103,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
      * @param ParagonIE_Sodium_Core32_Curve25519_Fe $g
      * @param int $b
      * @return ParagonIE_Sodium_Core32_Curve25519_Fe
-     * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedMethodCall
@@ -117,7 +116,10 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $h = array();
         for ($i = 0; $i < 10; ++$i) {
             if (!($f[$i] instanceof ParagonIE_Sodium_Core32_Int32)) {
-                throw new TypeError();
+                throw new TypeError('Expected Int32');
+            }
+            if (!($g[$i] instanceof ParagonIE_Sodium_Core32_Int32)) {
+                throw new TypeError('Expected Int32');
             }
             $h[$i] = $f[$i]->xorInt32(
                 $f[$i]->xorInt32($g[$i])->mask($b)
