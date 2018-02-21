@@ -23,4 +23,4 @@ install:
 
 test_script:
   - cd C:\projects\sodium_compat
-  - vendor\bin\phpunit.bat tests/unit/CryptoTest.php
+  - vendor\bin\phpunit.bat tests/Windows32Test.php
