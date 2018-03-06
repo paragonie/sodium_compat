@@ -160,6 +160,11 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      */
     public static function crypto_scalarmult_curve25519_ref10($n, $p)
     {
+        $gc_status = null;
+        if (is_callable('gc_enabled')) {
+            $gc_status = gc_enabled();
+            gc_disable();
+        }
         # for (i = 0;i < 32;++i) e[i] = n[i];
         $e = '' . $n;
         # e[0] &= 248;
@@ -269,7 +274,16 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
         # fe_mul(x2,x2,z2);
         $x2 = self::fe_mul($x2, $z2);
         # fe_tobytes(q,x2);
-        return self::fe_tobytes($x2);
+        /** @var string $q */
+        $q = self::fe_tobytes($x2);
+        if (is_callable('gc_enabled')) {
+            if ($gc_status) {
+                gc_collect_cycles();
+                gc_mem_caches();
+                gc_enable();
+            }
+        }
+        return $q;
     }
 
     /**
@@ -299,6 +313,11 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      */
     public static function crypto_scalarmult_curve25519_ref10_base($n)
     {
+        $gc_status = null;
+        if (is_callable('gc_enabled')) {
+            $gc_status = gc_enabled();
+            gc_disable();
+        }
         # for (i = 0;i < 32;++i) e[i] = n[i];
         $e = '' . $n;
 
@@ -322,6 +341,15 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
             throw new TypeError('Null points encountered');
         }
         $pk = self::edwards_to_montgomery($A->Y, $A->Z);
-        return self::fe_tobytes($pk);
+        /** @var string $q */
+        $q = self::fe_tobytes($pk);
+        if (is_callable('gc_enabled')) {
+            if ($gc_status) {
+                gc_collect_cycles();
+                gc_mem_caches();
+                gc_enable();
+            }
+        }
+        return $q;
     }
 }

@@ -207,6 +207,11 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign_detached($message, $sk)
     {
+        $gc_status = null;
+        if (is_callable('gc_enabled')) {
+            $gc_status = gc_enabled();
+            gc_disable();
+        }
         # crypto_hash_sha512(az, sk, 32);
         $az =  hash('sha512', self::substr($sk, 0, 32), true);
 
@@ -257,6 +262,13 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         } catch (SodiumException $ex) {
             $az = null;
         }
+        if (is_callable('gc_enabled')) {
+            if ($gc_status) {
+                gc_collect_cycles();
+                gc_mem_caches();
+                gc_enable();
+            }
+        }
         return $sig;
     }
 
@@ -283,6 +295,11 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         }
         if ((self::chrToInt($sig[63]) & 224) !== 0) {
             throw new SodiumException('Invalid signature');
+        }
+        $gc_status = null;
+        if (is_callable('gc_enabled')) {
+            $gc_status = gc_enabled();
+            gc_disable();
         }
         $d = 0;
         for ($i = 0; $i < 32; ++$i) {
@@ -326,6 +343,13 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         // Reset ParagonIE_Sodium_Compat::$fastMult to what it was before.
         ParagonIE_Sodium_Compat::$fastMult = $orig;
 
+        if (is_callable('gc_enabled')) {
+            if ($gc_status) {
+                gc_collect_cycles();
+                gc_mem_caches();
+                gc_enable();
+            }
+        }
         return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
 
