@@ -297,8 +297,6 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $q = self::fe_tobytes($x2);
         if (is_callable('gc_enabled')) {
             if ($gc_status) {
-                gc_collect_cycles();
-                gc_mem_caches();
                 gc_enable();
             }
         }
@@ -366,8 +364,6 @@ abstract class ParagonIE_Sodium_Core32_X25519 extends ParagonIE_Sodium_Core32_Cu
         $q = self::fe_tobytes($pk);
         if (is_callable('gc_enabled')) {
             if ($gc_status) {
-                gc_collect_cycles();
-                gc_mem_caches();
                 gc_enable();
             }
         }
