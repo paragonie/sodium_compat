@@ -264,8 +264,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         }
         if (is_callable('gc_enabled')) {
             if ($gc_status) {
-                gc_collect_cycles();
-                gc_mem_caches();
                 gc_enable();
             }
         }
@@ -345,8 +343,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
 
         if (is_callable('gc_enabled')) {
             if ($gc_status) {
-                gc_collect_cycles();
-                gc_mem_caches();
                 gc_enable();
             }
         }
