@@ -75,6 +75,7 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_BOX_NONCEBYTES = 24;
     const CRYPTO_BOX_SEEDBYTES = 32;
     const CRYPTO_KX_BYTES = 32;
+    const CRYPTO_KX_SEEDBYTES = 32;
     const CRYPTO_KX_PUBLICKEYBYTES = 32;
     const CRYPTO_KX_SECRETKEYBYTES = 32;
     const CRYPTO_GENERICHASH_BYTES = 32;
