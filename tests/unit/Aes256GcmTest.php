@@ -21,8 +21,8 @@ class Aes256GcmTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt()
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt()
+     * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt()
      */
     public function testAes256Gcm()
     {
