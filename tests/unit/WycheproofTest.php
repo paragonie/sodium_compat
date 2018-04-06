@@ -6,6 +6,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!defined('DO_PEDANTIC_TEST')) {
+            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
+        }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
         $this->dir = dirname(__FILE__) . '/wycheproof/';
     }
@@ -15,6 +18,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      */
     public function testChaCha20Poly1305()
     {
+        if (!defined('DO_PEDANTIC_TEST')) {
+            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
+        }
         $this->mainTestingLoop('chacha20_poly1305_test.json', 'doChaCha20Poly1305Test');
     }
 
@@ -23,6 +29,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      */
     public function testX25519()
     {
+        if (!defined('DO_PEDANTIC_TEST')) {
+            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
+        }
         $this->mainTestingLoop('x25519_test.json', 'doX25519Test');
     }
 
