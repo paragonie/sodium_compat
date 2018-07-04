@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <psalm
-    stopOnFirstError="false"
     useDocblockTypes="true"
     totallyTyped="true"
 >
@@ -28,5 +27,17 @@
         <RedundantConditionGivenDocblockType errorLevel="suppress" />
 
         <TooFewArguments errorLevel="info" />
+
+        <DocblockTypeContradiction errorLevel="info" />
+        <RedundantCondition errorLevel="info" />
+        <!--
+            Redundancy is good for PHP <7
+        -->
+
+        <TypeDoesNotContainType errorLevel="info" />
+        <!--
+            This mostly fails on `PHP_INT_SIZE === 4`
+        -->
+
     </issueHandlers>
 </psalm>

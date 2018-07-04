@@ -2116,7 +2116,9 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
 
         # slide(aslide,a);
         # slide(bslide,b);
+        /** @var array<int, int> $aslide */
         $aslide = self::slide($a);
+        /** @var array<int, int> $bslide */
         $bslide = self::slide($b);
 
         # ge_p3_to_cached(&Ai[0],A);

@@ -12,7 +12,7 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @var array<int, int> - four 16-bit integers
      */
-    public $limbs;
+    public $limbs = array(0, 0, 0, 0);
 
     /**
      * @var int
@@ -74,6 +74,8 @@ class ParagonIE_Sodium_Core32_Int64
     public function addInt($int)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+        /** @var int $int */
+        $int = (int) $int;
 
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
@@ -182,6 +184,11 @@ class ParagonIE_Sodium_Core32_Int64
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
         ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
+        /** @var int $int */
+        $int = (int) $int;
+        /** @var int $size */
+        $size = (int) $size;
+
         if (!$size) {
             $size = 63;
         }
@@ -263,9 +270,9 @@ class ParagonIE_Sodium_Core32_Int64
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
 
-        /** @var int $size $i */
+        /** @var int $size */
         /** @var int $i */
-        for ($i = $size; $i >= 0; --$i) {
+        for ($i = (int) $size; $i >= 0; --$i) {
             $return = $return->addInt64(
                 $a->mask64(
                     (int) (-($b->limbs[3] & 1)),
@@ -306,6 +313,8 @@ class ParagonIE_Sodium_Core32_Int64
     public function rotateLeft($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
 
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
@@ -332,9 +341,9 @@ class ParagonIE_Sodium_Core32_Int64
                 $k = ($i + $idx_shift + 1) & 3;
                 $limbs[$i] = (int) (
                     (
-                        ($myLimbs[$j] << $sub_shift)
+                        ((int) ($myLimbs[$j]) << $sub_shift)
                             |
-                        ($myLimbs[$k] >> (16 - $sub_shift))
+                        ((int) ($myLimbs[$k]) >> (16 - $sub_shift))
                     ) & 0xffff
                 );
             }
@@ -353,6 +362,8 @@ class ParagonIE_Sodium_Core32_Int64
     public function rotateRight($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
 
         /** @var ParagonIE_Sodium_Core32_Int64 $return */
         $return = new ParagonIE_Sodium_Core32_Int64();
@@ -381,9 +392,9 @@ class ParagonIE_Sodium_Core32_Int64
                 $k = ($i - $idx_shift - 1) & 3;
                 $limbs[$i] = (int) (
                     (
-                        ($myLimbs[$j] >> (int) ($sub_shift))
+                        ((int) ($myLimbs[$j]) >> (int) ($sub_shift))
                             |
-                        ($myLimbs[$k] << (16 - (int) ($sub_shift)))
+                        ((int) ($myLimbs[$k]) << (16 - (int) ($sub_shift)))
                     ) & 0xffff
                 );
             }
@@ -399,10 +410,12 @@ class ParagonIE_Sodium_Core32_Int64
     public function shiftLeft($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
+
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
         $c &= 63;
-        /** @var int $c */
 
         if ($c >= 16) {
             if ($c >= 48) {
@@ -515,6 +528,7 @@ class ParagonIE_Sodium_Core32_Int64
     public function subInt($int)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+        $int = (int) $int;
 
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
@@ -583,6 +597,8 @@ class ParagonIE_Sodium_Core32_Int64
         ParagonIE_Sodium_Core32_Util::declareScalarType($low, 'int', 1);
         ParagonIE_Sodium_Core32_Util::declareScalarType($high, 'int', 2);
 
+        $high = (int) $high;
+        $low = (int) $low;
         return new ParagonIE_Sodium_Core32_Int64(
             array(
                 (int) (($high >> 16) & 0xffff),

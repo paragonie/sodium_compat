@@ -15,7 +15,7 @@ class ParagonIE_Sodium_Core32_Int32
      * 0 is the higher 16 bits
      * 1 is the lower 16 bits
      */
-    public $limbs;
+    public $limbs = array(0, 0);
 
     /**
      * @var int
@@ -79,6 +79,8 @@ class ParagonIE_Sodium_Core32_Int32
     public function addInt($int)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+        /** @var int $int */
+        $int = (int) $int;
 
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
@@ -152,6 +154,11 @@ class ParagonIE_Sodium_Core32_Int32
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
         ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
+        /** @var int $int */
+        $int = (int) $int;
+        /** @var int $size */
+        $size = (int) $size;
+
         if (!$size) {
             $size = 31;
         }
@@ -247,6 +254,8 @@ class ParagonIE_Sodium_Core32_Int32
     public function rotateLeft($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
 
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
@@ -276,9 +285,9 @@ class ParagonIE_Sodium_Core32_Int32
                 $k = ($i + $idx_shift + 1) & 1;
                 $limbs[$i] = (int) (
                     (
-                        ($myLimbs[$j] << $sub_shift)
+                        ((int) ($myLimbs[$j]) << $sub_shift)
                             |
-                        ($myLimbs[$k] >> (16 - $sub_shift))
+                        ((int) ($myLimbs[$k]) >> (16 - $sub_shift))
                     ) & 0xffff
                 );
             }
@@ -298,6 +307,8 @@ class ParagonIE_Sodium_Core32_Int32
     public function rotateRight($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
 
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
@@ -328,9 +339,9 @@ class ParagonIE_Sodium_Core32_Int32
                 $k = ($i - $idx_shift - 1) & 1;
                 $limbs[$i] = (int) (
                     (
-                        ($myLimbs[$j] >> (int) ($sub_shift))
+                        ((int) ($myLimbs[$j]) >> (int) ($sub_shift))
                             |
-                        ($myLimbs[$k] << (16 - (int) ($sub_shift)))
+                        ((int) ($myLimbs[$k]) << (16 - (int) ($sub_shift)))
                     ) & 0xffff
                 );
             }
@@ -357,6 +368,9 @@ class ParagonIE_Sodium_Core32_Int32
     public function shiftLeft($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
+
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
         $c &= 63;
@@ -392,6 +406,9 @@ class ParagonIE_Sodium_Core32_Int32
     public function shiftRight($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        /** @var int $c */
+        $c = (int) $c;
+
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
         $c &= 63;
@@ -435,6 +452,8 @@ class ParagonIE_Sodium_Core32_Int32
     public function subInt($int)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
+        /** @var int $int */
+        $int = (int) $int;
 
         $return = new ParagonIE_Sodium_Core32_Int32();
         $return->unsignedInt = $this->unsignedInt;
@@ -500,6 +519,8 @@ class ParagonIE_Sodium_Core32_Int32
     public static function fromInt($signed)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($signed, 'int', 1);;
+        /** @var int $signed */
+        $signed = (int) $signed;
 
         return new ParagonIE_Sodium_Core32_Int32(
             array(

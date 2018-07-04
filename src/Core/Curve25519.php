@@ -88,7 +88,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         for ($i = 0; $i < 10; ++$i) {
             /** @var int $x */
             $x = (($f[$i] ^ $g[$i]) & $b);
-            $h[$i] = (int) ($f[$i] ^ $x);
+            $h[$i] = (int) ((int) ($f[$i]) ^ $x);
         }
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($h);
     }
@@ -1840,7 +1840,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
 
         # slide(aslide,a);
         # slide(bslide,b);
+        /** @var array<int, int> $aslide */
         $aslide = self::slide($a);
+        /** @var array<int, int> $bslide */
         $bslide = self::slide($b);
 
         # ge_p3_to_cached(&Ai[0],A);

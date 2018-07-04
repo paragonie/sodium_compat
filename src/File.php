@@ -1057,6 +1057,8 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @psalm-suppress PossiblyInvalidArgument
      *                 PHP 7.2 changes from a resource to an object,
      *                 which causes Psalm to complain about an error.
+     * @psalm-suppress TypeCoercion
+     *                 Ditto.
      */
     public static function updateHashWithFile($hash, $fp, $size = 0)
     {
