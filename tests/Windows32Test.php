@@ -261,6 +261,88 @@ class Windows32Test extends PHPUnit_Framework_TestCase
         );
     }
 
+
+    /**
+     * @covers ParagonIE_Sodium_File::box()
+     * @covers ParagonIE_Sodium_File::box_open()
+     * @throws SodiumException
+     * @throws TypeError
+     * @throws Exception
+     */
+    public function testFileBox()
+    {
+        $randomSeed = random_bytes(32);
+        $randomNonce = random_bytes(24);
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
+            32, // random_int(1 << 9, 1 << 17),
+            $randomNonce,
+            $randomSeed
+        );
+        $shortMsg = 'lessthan32bytes';
+        file_put_contents('plaintext-box.data', $pseudoRandom);
+        file_put_contents('plaintext-box.data2', $shortMsg);
+
+        $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin(
+            '69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c'
+        );
+        $bob_public = ParagonIE_Sodium_Core_Util::hex2bin(
+            'e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754'
+        );
+
+        $kp = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey($alice_secret, $bob_public);
+
+        $raw = ParagonIE_Sodium_Compat::crypto_box(
+            $pseudoRandom,
+            $randomNonce,
+            $kp
+        );
+        ParagonIE_Sodium_File::box('plaintext-box.data', 'ciphertext-box.data', $randomNonce, $kp);
+        $file = file_get_contents('ciphertext-box.data');
+
+        $this->assertSame(bin2hex($raw), bin2hex($file));
+
+        // Also verify decryption works.
+        $plain = ParagonIE_Sodium_Compat::crypto_box_open(
+            $file,
+            $randomNonce,
+            $kp
+        );
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($plain));
+
+        ParagonIE_Sodium_File::box_open('ciphertext-box.data', 'plaintext-box2.data', $randomNonce, $kp);
+        $opened = file_get_contents('plaintext-box2.data');
+        $this->assertSame(bin2hex($pseudoRandom), bin2hex($opened));
+
+        $raw = ParagonIE_Sodium_Compat::crypto_box(
+            $shortMsg,
+            $randomNonce,
+            $kp
+        );
+        ParagonIE_Sodium_File::box('plaintext-box.data2', 'ciphertext-box.data2', $randomNonce, $kp);
+        $file = file_get_contents('ciphertext-box.data2');
+        $this->assertSame(bin2hex($raw), bin2hex($file));
+
+        // Also verify decryption works.
+        $plain = ParagonIE_Sodium_Compat::crypto_box_open(
+            $file,
+            $randomNonce,
+            $kp
+        );
+        $this->assertSame(bin2hex($shortMsg), bin2hex($plain));
+
+        ParagonIE_Sodium_File::box_open('ciphertext-box.data2', 'plaintext-box2.data', $randomNonce, $kp);
+        $opened = file_get_contents('plaintext-box2.data');
+        $this->assertSame(bin2hex($shortMsg), bin2hex($opened));
+
+        ParagonIE_Sodium_Compat::$fastMult = $orig;
+        unlink('ciphertext-box.data');
+        unlink('ciphertext-box.data2');
+        unlink('plaintext-box.data');
+        unlink('plaintext-box2.data');
+        unlink('plaintext-box.data2');
+    }
+
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_box_seal()
      * @covers ParagonIE_Sodium_Compat::crypto_box_seal_open()
