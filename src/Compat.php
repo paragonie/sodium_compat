@@ -2492,7 +2492,8 @@ class ParagonIE_Sodium_Compat
             return;
         }
         if (self::use_fallback('increment')) {
-            @call_user_func('\\Sodium\\increment', $var);
+            $func = '\\Sodium\\increment';
+            $func($var);
             return;
         }
 
