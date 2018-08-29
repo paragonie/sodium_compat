@@ -2592,8 +2592,11 @@ class ParagonIE_Sodium_Compat
             return;
         }
         if (self::use_fallback('memzero')) {
-            @call_user_func('\\Sodium\\memzero', $var);
-            return;
+            $func = '\\Sodium\\memzero';
+            $func($var);
+            if ($var === null) {
+                return;
+            }
         }
         // This is the best we can do.
         throw new SodiumException(
