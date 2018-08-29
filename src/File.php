@@ -761,6 +761,18 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function box_encrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
     {
+        if (PHP_INT_SIZE === 4) {
+            return self::secretbox_encrypt(
+                $ifp,
+                $ofp,
+                $mlen,
+                $nonce,
+                ParagonIE_Sodium_Crypto32::box_beforenm(
+                    ParagonIE_Sodium_Crypto32::box_secretkey($boxKeypair),
+                    ParagonIE_Sodium_Crypto32::box_publickey($boxKeypair)
+                )
+            );
+        }
         return self::secretbox_encrypt(
             $ifp,
             $ofp,
@@ -786,6 +798,18 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function box_decrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
     {
+        if (PHP_INT_SIZE === 4) {
+            return self::secretbox_decrypt(
+                $ifp,
+                $ofp,
+                $mlen,
+                $nonce,
+                ParagonIE_Sodium_Crypto32::box_beforenm(
+                    ParagonIE_Sodium_Crypto32::box_secretkey($boxKeypair),
+                    ParagonIE_Sodium_Crypto32::box_publickey($boxKeypair)
+                )
+            );
+        }
         return self::secretbox_decrypt(
             $ifp,
             $ofp,
