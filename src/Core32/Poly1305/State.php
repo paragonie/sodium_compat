@@ -226,7 +226,7 @@ class ParagonIE_Sodium_Core32_Poly1305_State extends ParagonIE_Sodium_Core32_Uti
         $h3 = $this->h[3];
         $h4 = $this->h[4];
 
-        while ($bytes >= ParagonIE_Sodium_Core_Poly1305::BLOCK_SIZE) {
+        while ($bytes >= ParagonIE_Sodium_Core32_Poly1305::BLOCK_SIZE) {
             /* h += m[i] */
             $h0 = $h0->addInt32(
                 ParagonIE_Sodium_Core32_Int32::fromReverseString(self::substr($message, 0, 4))
