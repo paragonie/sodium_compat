@@ -753,7 +753,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $f7f9_76 = self::mul($f9_38, $f7_2,  27);
         $f8f8_19 = self::mul($f8_19, $f8,    26);
         $f8f9_38 = self::mul($f9_38, $f8,    26);
-        $f9f9_38 = self::mul($f9_38, $f9,    27);
+        $f9f9_38 = self::mul($f9_38, $f9,    26);
         $h0 = $f0f0   + $f1f9_76 + $f2f8_38 + $f3f7_76 + $f4f6_38 + $f5f5_38;
         $h1 = $f0f1_2 + $f2f9_38 + $f3f8_38 + $f4f7_38 + $f5f6_38;
         $h2 = $f0f2_2 + $f1f1_2  + $f3f9_76 + $f4f8_38 + $f5f7_76 + $f6f6_19;

@@ -625,6 +625,7 @@ class ParagonIE_Sodium_Core32_Int64
      *
      * @param int $int
      * @return ParagonIE_Sodium_Core32_Int64
+     * @throws SodiumException
      * @throws TypeError
      */
     public function subInt($int)
@@ -692,6 +693,7 @@ class ParagonIE_Sodium_Core32_Int64
      * @param int $low
      * @param int $high
      * @return self
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromInts($low, $high)
@@ -712,8 +714,30 @@ class ParagonIE_Sodium_Core32_Int64
     }
 
     /**
+     * @param int $low
+     * @return self
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function fromInt($low)
+    {
+        ParagonIE_Sodium_Core32_Util::declareScalarType($low, 'int', 1);
+        $low = (int) $low;
+
+        return new ParagonIE_Sodium_Core32_Int64(
+            array(
+                0,
+                0,
+                (int) (($low >> 16) & 0xffff),
+                (int) ($low & 0xffff)
+            )
+        );
+    }
+
+    /**
      * @param string $string
      * @return self
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromString($string)
@@ -741,6 +765,7 @@ class ParagonIE_Sodium_Core32_Int64
     /**
      * @param string $string
      * @return self
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function fromReverseString($string)
