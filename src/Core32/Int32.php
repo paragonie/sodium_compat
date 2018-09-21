@@ -50,21 +50,26 @@ class ParagonIE_Sodium_Core32_Int32
      */
     public function addInt32(ParagonIE_Sodium_Core32_Int32 $addend)
     {
-        $return = new ParagonIE_Sodium_Core32_Int32();
+        $i0 = $this->limbs[0];
+        $i1 = $this->limbs[1];
+        $j0 = $addend->limbs[0];
+        $j1 = $addend->limbs[1];
+
+
+        $r1 = $i1 + ($j1 & 0xffff);
+        $carry = $r1 >> 16;
+
+        $r0 = $i0 + ($j0 & 0xffff) + $carry;
+        $carry = $r0 >> 16;
+
+        $r0 &= 0xffff;
+        $r1 &= 0xffff;
+
+        $return = new ParagonIE_Sodium_Core32_Int32(
+            array($r0, $r1)
+        );
+        $return->overflow = $carry;
         $return->unsignedInt = $this->unsignedInt;
-
-        /** @var int $tmp */
-        $tmp = $this->limbs[1] + $addend->limbs[1];
-        /** @var int $carry */
-        $carry = $tmp >> 16;
-        $return->limbs[1] = (int) ($tmp & 0xffff);
-
-        /** @var int $tmp */
-        $tmp = $this->limbs[0] + $addend->limbs[0] + $carry;
-        $return->limbs[0] = (int) ($tmp & 0xffff);
-        /** @var int overflow */
-        $return->overflow = $this->overflow + $addend->overflow + ($tmp >> 16);
-
         return $return;
     }
 
@@ -82,20 +87,23 @@ class ParagonIE_Sodium_Core32_Int32
         /** @var int $int */
         $int = (int) $int;
 
-        $return = new ParagonIE_Sodium_Core32_Int32();
+        $int = (int) $int;
+
+        $i0 = $this->limbs[0];
+        $i1 = $this->limbs[1];
+
+        $r1 = $i1 + ($int & 0xffff);
+        $carry = $r1 >> 16;
+
+        $r0 = $i0 + (($int >> 16) & 0xffff) + $carry;
+        $carry = $r0 >> 16;
+        $r0 &= 0xffff;
+        $r1 &= 0xffff;
+        $return = new ParagonIE_Sodium_Core32_Int32(
+            array($r0, $r1)
+        );
+        $return->overflow = $carry;
         $return->unsignedInt = $this->unsignedInt;
-
-        /** @var int $tmp */
-        $tmp = ($this->limbs[1] & 0xffff) + ($int & 0xffff);
-        /** @var int $carry */
-        $carry = $tmp >> 16;
-        $return->limbs[1] = (int) ($tmp & 0xffff);
-
-        /** @var int $tmp */
-        $tmp = $this->limbs[0] + (($int >> 16) & 0xffff) + $carry;
-        $return->limbs[0] = (int) ($tmp & 0xffff);
-        /** @var int overflow */
-        $return->overflow = $this->overflow + ($tmp >> 16);
         return $return;
     }
 
