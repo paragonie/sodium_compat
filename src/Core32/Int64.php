@@ -197,15 +197,58 @@ class ParagonIE_Sodium_Core32_Int64
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
 
+        // Initialize:
+        $ret0 = 0;
+        $ret1 = 0;
+        $ret2 = 0;
+        $ret3 = 0;
+        $a0 = $a->limbs[0];
+        $a1 = $a->limbs[1];
+        $a2 = $a->limbs[2];
+        $a3 = $a->limbs[3];
+
+        /** @var int $size */
+        /** @var int $i */
         for ($i = $size; $i >= 0; --$i) {
-            $return = $return->addInt64(
-                $a->mask64(
-                    (int) (-($int & 1)),
-                    (int) (-($int & 1))
-                )
-            );
-            $a = $a->shiftLeft(1);
+            $mask = -($int & 1);
+            $x0 = $a0 & $mask;
+            $x1 = $a1 & $mask;
+            $x2 = $a2 & $mask;
+            $x3 = $a3 & $mask;
+
+            $ret3 += $x3;
+            $c = $ret3 >> 16;
+
+            $ret2 += $x2 + $c;
+            $c = $ret2 >> 16;
+
+            $ret1 += $x1 + $c;
+            $c = $ret1 >> 16;
+
+            $ret0 += $x0 + $c;
+
+            $ret0 &= 0xffff;
+            $ret1 &= 0xffff;
+            $ret2 &= 0xffff;
+            $ret3 &= 0xffff;
+
+            $a3 = $a3 << 1;
+            $x3 = $a3 >> 16;
+            $a2 = ($a2 << 1) | $x3;
+            $x2 = $a2 >> 16;
+            $a1 = ($a1 << 1) | $x2;
+            $x1 = $a1 >> 16;
+            $a0 = ($a0 << 1) | $x1;
+            $a0 &= 0xffff;
+            $a1 &= 0xffff;
+            $a2 &= 0xffff;
+            $a3 &= 0xffff;
+
             $int >>= 1;
+            $return->limbs[0] = $ret0;
+            $return->limbs[1] = $ret1;
+            $return->limbs[2] = $ret2;
+            $return->limbs[3] = $ret3;
         }
         return $return;
     }
@@ -270,18 +313,77 @@ class ParagonIE_Sodium_Core32_Int64
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
 
+        // Initialize:
+        $ret0 = 0;
+        $ret1 = 0;
+        $ret2 = 0;
+        $ret3 = 0;
+        $a0 = $a->limbs[0];
+        $a1 = $a->limbs[1];
+        $a2 = $a->limbs[2];
+        $a3 = $a->limbs[3];
+        $b0 = $b->limbs[0];
+        $b1 = $b->limbs[1];
+        $b2 = $b->limbs[2];
+        $b3 = $b->limbs[3];
+
         /** @var int $size */
         /** @var int $i */
         for ($i = (int) $size; $i >= 0; --$i) {
-            $return = $return->addInt64(
-                $a->mask64(
-                    (int) (-($b->limbs[3] & 1)),
-                    (int) (-($b->limbs[3] & 1))
-                )
-            );
-            $a = $a->shiftLeft(1);
-            $b = $b->shiftRight(1);
+            $mask = -($b3 & 1);
+            $x0 = $a0 & $mask;
+            $x1 = $a1 & $mask;
+            $x2 = $a2 & $mask;
+            $x3 = $a3 & $mask;
+
+            $ret3 += $x3;
+            $c = $ret3 >> 16;
+
+            $ret2 += $x2 + $c;
+            $c = $ret2 >> 16;
+
+            $ret1 += $x1 + $c;
+            $c = $ret1 >> 16;
+
+            $ret0 += $x0 + $c;
+
+            $ret0 &= 0xffff;
+            $ret1 &= 0xffff;
+            $ret2 &= 0xffff;
+            $ret3 &= 0xffff;
+
+            $a3 = $a3 << 1;
+            $x3 = $a3 >> 16;
+            $a2 = ($a2 << 1) | $x3;
+            $x2 = $a2 >> 16;
+            $a1 = ($a1 << 1) | $x2;
+            $x1 = $a1 >> 16;
+            $a0 = ($a0 << 1) | $x1;
+            $a0 &= 0xffff;
+            $a1 &= 0xffff;
+            $a2 &= 0xffff;
+            $a3 &= 0xffff;
+
+            $x0 = ($b0 & 1) << 16;
+            $x1 = ($b1 & 1) << 16;
+            $x2 = ($b2 & 1) << 16;
+
+            $b0 = ($b0 >> 1);
+            $b1 = (($b1 | $x0) >> 1);
+            $b2 = (($b2 | $x1) >> 1);
+            $b3 = (($b3 | $x2) >> 1);
+
+            $b0 &= 0xffff;
+            $b1 &= 0xffff;
+            $b2 &= 0xffff;
+            $b3 &= 0xffff;
+
         }
+        $return->limbs[0] = $ret0;
+        $return->limbs[1] = $ret1;
+        $return->limbs[2] = $ret2;
+        $return->limbs[3] = $ret3;
+
         return $return;
     }
 
