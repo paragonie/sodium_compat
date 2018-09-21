@@ -178,9 +178,6 @@ class ParagonIE_Sodium_Core32_Int32
         /** @var int $i */
         for ($i = $size; $i >= 0; --$i) {
             $m = (int) (-($int & 1));
-            /*
-            $return = $return->addInt32($a->mask($m));
-            */
             $x0 = $a0 & $m;
             $x1 = $a1 & $m;
 
@@ -192,9 +189,6 @@ class ParagonIE_Sodium_Core32_Int32
             $ret0 &= 0xffff;
             $ret1 &= 0xffff;
 
-            /*
-            $a = $a->shiftLeft(1);
-            */
             $a1 = ($a1 << 1);
             $x1 = $a1 >> 16;
             $a0 = ($a0 << 1) | $x1;
@@ -239,9 +233,6 @@ class ParagonIE_Sodium_Core32_Int32
         /** @var int $i */
         for ($i = $size; $i >= 0; --$i) {
             $m = (int) (-($b1 & 1));
-            /*
-            $return = $return->addInt32($a->mask($m));
-            */
             $x0 = $a0 & $m;
             $x1 = $a1 & $m;
 
@@ -253,20 +244,13 @@ class ParagonIE_Sodium_Core32_Int32
             $ret0 &= 0xffff;
             $ret1 &= 0xffff;
 
-            /*
-            $a = $a->shiftLeft(1);
-            */
             $a1 = ($a1 << 1);
             $x1 = $a1 >> 16;
             $a0 = ($a0 << 1) | $x1;
             $a0 &= 0xffff;
             $a1 &= 0xffff;
 
-            /*
-            $b = $b->shiftRight(1);
-             */
             $x0 = ($b0 & 1) << 16;
-
             $b0 = ($b0 >> 1);
             $b1 = (($b1 | $x0) >> 1);
 

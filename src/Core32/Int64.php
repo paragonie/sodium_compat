@@ -210,14 +210,6 @@ class ParagonIE_Sodium_Core32_Int64
         /** @var int $size */
         /** @var int $i */
         for ($i = $size; $i >= 0; --$i) {
-            /*
-            $return = $return->addInt64(
-                $a->mask64(
-                    (int) (-($int & 1)),
-                    (int) (-($int & 1))
-                )
-            );
-            */
             $mask = -($int & 1);
             $x0 = $a0 & $mask;
             $x1 = $a1 & $mask;
@@ -240,9 +232,6 @@ class ParagonIE_Sodium_Core32_Int64
             $ret2 &= 0xffff;
             $ret3 &= 0xffff;
 
-            /*
-            $a = $a->shiftLeft(1);
-            */
             $a3 = $a3 << 1;
             $x3 = $a3 >> 16;
             $a2 = ($a2 << 1) | $x3;
@@ -260,10 +249,6 @@ class ParagonIE_Sodium_Core32_Int64
             $return->limbs[1] = $ret1;
             $return->limbs[2] = $ret2;
             $return->limbs[3] = $ret3;
-            /*
-            $a = $a->shiftLeft(1);
-            $int >>= 1;
-            */
         }
         return $return;
     }
@@ -345,14 +330,6 @@ class ParagonIE_Sodium_Core32_Int64
         /** @var int $size */
         /** @var int $i */
         for ($i = (int) $size; $i >= 0; --$i) {
-            /*
-            $return = $return->addInt64(
-                $a->mask64(
-                    (int) (-($b->limbs[3] & 1)),
-                    (int) (-($b->limbs[3] & 1))
-                )
-            );
-            */
             $mask = -($b3 & 1);
             $x0 = $a0 & $mask;
             $x1 = $a1 & $mask;
@@ -375,9 +352,6 @@ class ParagonIE_Sodium_Core32_Int64
             $ret2 &= 0xffff;
             $ret3 &= 0xffff;
 
-            /*
-            $a = $a->shiftLeft(1);
-            */
             $a3 = $a3 << 1;
             $x3 = $a3 >> 16;
             $a2 = ($a2 << 1) | $x3;
@@ -390,9 +364,6 @@ class ParagonIE_Sodium_Core32_Int64
             $a2 &= 0xffff;
             $a3 &= 0xffff;
 
-            /*
-            $b = $b->shiftRight(1);
-             */
             $x0 = ($b0 & 1) << 16;
             $x1 = ($b1 & 1) << 16;
             $x2 = ($b2 & 1) << 16;
