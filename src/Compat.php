@@ -242,7 +242,9 @@ class ParagonIE_Sodium_Compat
             throw new SodiumException('The OpenSSL extension is not installed, or openssl_decrypt() is not available');
         }
 
+        /** @var string $ctext */
         $ctext = ParagonIE_Sodium_Core_Util::substr($ciphertext, 0, -self::CRYPTO_AEAD_AES256GCM_ABYTES);
+        /** @var string $authTag */
         $authTag = ParagonIE_Sodium_Core_Util::substr($ciphertext, -self::CRYPTO_AEAD_AES256GCM_ABYTES, 16);
         return openssl_decrypt(
             $ctext,
