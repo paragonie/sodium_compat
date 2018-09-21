@@ -715,7 +715,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $h8 = $h8->subInt64($carry8->shiftLeft(26));
 
         $carry9 = $h9->addInt(1 << 24)->shiftRight(25);
-        $h0 = $h0->addInt64($carry9->mulInt(19));
+        $h0 = $h0->addInt64($carry9->mulInt(19, 5));
         $h9 = $h9->subInt64($carry9->shiftLeft(25));
 
         $carry0 = $h0->addInt(1 << 25)->shiftRight(26);
@@ -940,7 +940,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $h8 = $h8->subInt64($carry8->shiftLeft(26));
 
         $carry9 = $h9->addInt(1 << 24)->shiftRight(25);
-        $h0 = $h0->addInt64($carry9->mulInt(19));
+        $h0 = $h0->addInt64($carry9->mulInt(19, 5));
         $h9 = $h9->subInt64($carry9->shiftLeft(25));
 
         $carry0 = $h0->addInt(1 << 25)->shiftRight(26);
@@ -1144,7 +1144,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $h8 = $h8->subInt64($carry8->shiftLeft(26));
 
         $carry9 = $h9->addInt(1 << 24)->shiftRight(25);
-        $h0 = $h0->addInt64($carry9->mulInt(19));
+        $h0 = $h0->addInt64($carry9->mulInt(19, 5));
         $h9 = $h9->subInt64($carry9->shiftLeft(25));
 
         $carry0 = $h0->addInt(1 << 25)->shiftRight(26);
