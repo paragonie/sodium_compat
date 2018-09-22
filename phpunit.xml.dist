@@ -8,8 +8,8 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     processIsolation="false"
-    stopOnError="false"
-    stopOnFailure="false"
+    stopOnError="true"
+    stopOnFailure="true"
     syntaxCheck="true"
 >
     <testsuites>

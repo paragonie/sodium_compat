@@ -552,6 +552,7 @@ abstract class ParagonIE_Sodium_Crypto32
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
      *
      * @return string
+     * @throws Exception
      * @throws SodiumException
      * @throws TypeError
      */

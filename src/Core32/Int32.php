@@ -55,7 +55,6 @@ class ParagonIE_Sodium_Core32_Int32
         $j0 = $addend->limbs[0];
         $j1 = $addend->limbs[1];
 
-
         $r1 = $i1 + ($j1 & 0xffff);
         $carry = $r1 >> 16;
 

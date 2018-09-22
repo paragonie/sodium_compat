@@ -760,6 +760,18 @@ class ParagonIE_Sodium_Core32_Int64
     }
 
     /**
+     * @return int
+     */
+    public function toInt()
+    {
+        return (int) (
+            (($this->limbs[2] & 0xffff) << 16)
+                |
+            ($this->limbs[3] & 0xffff)
+        );
+    }
+
+    /**
      * @param string $string
      * @return self
      * @throws SodiumException

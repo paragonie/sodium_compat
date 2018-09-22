@@ -318,6 +318,8 @@ class ParagonIE_Sodium_Compat
      * symmetric AEAD interface.
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_aead_aes256gcm_keygen()
     {
@@ -564,6 +566,8 @@ class ParagonIE_Sodium_Compat
      * symmetric AEAD interface.
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_aead_chacha20poly1305_keygen()
     {
@@ -648,6 +652,8 @@ class ParagonIE_Sodium_Compat
      * symmetric AEAD interface. (IETF version)
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_aead_chacha20poly1305_ietf_keygen()
     {
@@ -773,6 +779,8 @@ class ParagonIE_Sodium_Compat
      * symmetric AEAD interface.
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_aead_xchacha20poly1305_ietf_keygen()
     {
@@ -821,6 +829,8 @@ class ParagonIE_Sodium_Compat
 
     /**
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_auth_keygen()
     {
@@ -1379,6 +1389,8 @@ class ParagonIE_Sodium_Compat
 
     /**
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_generichash_keygen()
     {
@@ -1876,6 +1888,8 @@ class ParagonIE_Sodium_Compat
      * Return a secure random key for use with crypto_secretbox
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_secretbox_keygen()
     {
@@ -1985,6 +1999,8 @@ class ParagonIE_Sodium_Compat
      * Return a secure random key for use with crypto_shorthash
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_shorthash_keygen()
     {
@@ -2450,6 +2466,8 @@ class ParagonIE_Sodium_Compat
      * Return a secure random key for use with crypto_stream
      *
      * @return string
+     * @throws Exception
+     * @throws Error
      */
     public static function crypto_stream_keygen()
     {
@@ -2622,6 +2640,7 @@ class ParagonIE_Sodium_Compat
      *
      * @param int $numBytes
      * @return string
+     * @throws Exception
      * @throws TypeError
      */
     public static function randombytes_buf($numBytes)
@@ -2645,6 +2664,8 @@ class ParagonIE_Sodium_Compat
      *
      * @param int $range
      * @return int
+     * @throws Exception
+     * @throws Error
      * @throws TypeError
      */
     public static function randombytes_uniform($range)
@@ -2667,6 +2688,9 @@ class ParagonIE_Sodium_Compat
      * Generate a random 16-bit integer.
      *
      * @return int
+     * @throws Exception
+     * @throws Error
+     * @throws TypeError
      */
     public static function randombytes_random16()
     {

@@ -1080,12 +1080,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $h8 = $f0f8_2->addInt64($f1f7_4)->addInt64($f2f6_2)->addInt64($f3f5_4)->addInt64($f4f4)->addInt64($f9f9_38);
         $h9 = $f0f9_2->addInt64($f1f8_2)->addInt64($f2f7_2)->addInt64($f3f6_2)->addInt64($f4f5_2);
 
-        /*
-        $h6 = (int) ($f0f6_2 + $f1f5_4  + $f2f4_2  + $f3f3_2  + $f7f9_76 + $f8f8_19);
-        $h7 = (int) ($f0f7_2 + $f1f6_2  + $f2f5_2  + $f3f4_2  + $f8f9_38);
-        $h8 = (int) ($f0f8_2 + $f1f7_4  + $f2f6_2  + $f3f5_4  + $f4f4    + $f9f9_38);
-         */
-
         /**
          * @var ParagonIE_Sodium_Core32_Int64 $h0
          * @var ParagonIE_Sodium_Core32_Int64 $h1
@@ -2356,34 +2350,56 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $s0 = $c0->addInt64($a0->mulInt64($b0, 24));
         $s1 = $c1->addInt64($a0->mulInt64($b1, 24))->addInt64($a1->mulInt64($b0, 24));
         $s2 = $c2->addInt64($a0->mulInt64($b2, 24))->addInt64($a1->mulInt64($b1, 24))->addInt64($a2->mulInt64($b0, 24));
-        $s3 = $c3->addInt64($a0->mulInt64($b3, 24))->addInt64($a1->mulInt64($b2, 24))->addInt64($a2->mulInt64($b1, 24))->addInt64($a3->mulInt64($b0, 24));
-        $s4 = $c4->addInt64($a0->mulInt64($b4, 24))->addInt64($a1->mulInt64($b3, 24))->addInt64($a2->mulInt64($b2, 24))->addInt64($a3->mulInt64($b1, 24))->addInt64($a4->mulInt64($b0, 24));
-        $s5 = $c5->addInt64($a0->mulInt64($b5, 24))->addInt64($a1->mulInt64($b4, 24))->addInt64($a2->mulInt64($b3, 24))->addInt64($a3->mulInt64($b2, 24))->addInt64($a4->mulInt64($b1, 24))->addInt64($a5->mulInt64($b0, 24));
-        $s6 = $c6->addInt64($a0->mulInt64($b6, 24))->addInt64($a1->mulInt64($b5, 24))->addInt64($a2->mulInt64($b4, 24))->addInt64($a3->mulInt64($b3, 24))->addInt64($a4->mulInt64($b2, 24))->addInt64($a5->mulInt64($b1, 24))
+        $s3 = $c3->addInt64($a0->mulInt64($b3, 24))->addInt64($a1->mulInt64($b2, 24))->addInt64($a2->mulInt64($b1, 24))
+                 ->addInt64($a3->mulInt64($b0, 24));
+        $s4 = $c4->addInt64($a0->mulInt64($b4, 24))->addInt64($a1->mulInt64($b3, 24))->addInt64($a2->mulInt64($b2, 24))
+                 ->addInt64($a3->mulInt64($b1, 24))->addInt64($a4->mulInt64($b0, 24));
+        $s5 = $c5->addInt64($a0->mulInt64($b5, 24))->addInt64($a1->mulInt64($b4, 24))->addInt64($a2->mulInt64($b3, 24))
+                 ->addInt64($a3->mulInt64($b2, 24))->addInt64($a4->mulInt64($b1, 24))->addInt64($a5->mulInt64($b0, 24));
+        $s6 = $c6->addInt64($a0->mulInt64($b6, 24))->addInt64($a1->mulInt64($b5, 24))->addInt64($a2->mulInt64($b4, 24))
+                 ->addInt64($a3->mulInt64($b3, 24))->addInt64($a4->mulInt64($b2, 24))->addInt64($a5->mulInt64($b1, 24))
                  ->addInt64($a6->mulInt64($b0, 24));
-        $s7 = $c7->addInt64($a0->mulInt64($b7, 24))->addInt64($a1->mulInt64($b6, 24))->addInt64($a2->mulInt64($b5, 24))->addInt64($a3->mulInt64($b4, 24))->addInt64($a4->mulInt64($b3, 24))->addInt64($a5->mulInt64($b2, 24))
+        $s7 = $c7->addInt64($a0->mulInt64($b7, 24))->addInt64($a1->mulInt64($b6, 24))->addInt64($a2->mulInt64($b5, 24))
+                 ->addInt64($a3->mulInt64($b4, 24))->addInt64($a4->mulInt64($b3, 24))->addInt64($a5->mulInt64($b2, 24))
                  ->addInt64($a6->mulInt64($b1, 24))->addInt64($a7->mulInt64($b0, 24));
-        $s8 = $c8->addInt64($a0->mulInt64($b8, 24))->addInt64($a1->mulInt64($b7, 24))->addInt64($a2->mulInt64($b6, 24))->addInt64($a3->mulInt64($b5, 24))->addInt64($a4->mulInt64($b4, 24))->addInt64($a5->mulInt64($b3, 24))
+        $s8 = $c8->addInt64($a0->mulInt64($b8, 24))->addInt64($a1->mulInt64($b7, 24))->addInt64($a2->mulInt64($b6, 24))
+                 ->addInt64($a3->mulInt64($b5, 24))->addInt64($a4->mulInt64($b4, 24))->addInt64($a5->mulInt64($b3, 24))
                  ->addInt64($a6->mulInt64($b2, 24))->addInt64($a7->mulInt64($b1, 24))->addInt64($a8->mulInt64($b0, 24));
-        $s9 = $c9->addInt64($a0->mulInt64($b9, 24))->addInt64($a1->mulInt64($b8, 24))->addInt64($a2->mulInt64($b7, 24))->addInt64($a3->mulInt64($b6, 24))->addInt64($a4->mulInt64($b5, 24))->addInt64($a5->mulInt64($b4, 24))
-                 ->addInt64($a6->mulInt64($b3, 24))->addInt64($a7->mulInt64($b2, 24))->addInt64($a8->mulInt64($b1, 24))->addInt64($a9->mulInt64($b0, 24));
-        $s10 = $c10->addInt64($a0->mulInt64($b10, 24))->addInt64($a1->mulInt64($b9, 24))->addInt64($a2->mulInt64($b8, 24))->addInt64($a3->mulInt64($b7, 24))->addInt64($a4->mulInt64($b6, 24))->addInt64($a5->mulInt64($b5, 24))
-                   ->addInt64($a6->mulInt64($b4, 24))->addInt64($a7->mulInt64($b3, 24))->addInt64($a8->mulInt64($b2, 24))->addInt64($a9->mulInt64($b1, 24))->addInt64($a10->mulInt64($b0, 24));
-        $s11 = $c11->addInt64($a0->mulInt64($b11, 24))->addInt64($a1->mulInt64($b10, 24))->addInt64($a2->mulInt64($b9, 24))->addInt64($a3->mulInt64($b8, 24))->addInt64($a4->mulInt64($b7, 24))->addInt64($a5->mulInt64($b6, 24))
-                   ->addInt64($a6->mulInt64($b5, 24))->addInt64($a7->mulInt64($b4, 24))->addInt64($a8->mulInt64($b3, 24))->addInt64($a9->mulInt64($b2, 24))->addInt64($a10->mulInt64($b1, 24))->addInt64($a11->mulInt64($b0, 24));
-        $s12 = $a1->mulInt64($b11, 24)->addInt64($a2->mulInt64($b10, 24))->addInt64($a3->mulInt64($b9, 24))->addInt64($a4->mulInt64($b8, 24))->addInt64($a5->mulInt64($b7, 24))->addInt64($a6->mulInt64($b6, 24))
-                  ->addInt64($a7->mulInt64($b5, 24))->addInt64($a8->mulInt64($b4, 24))->addInt64($a9->mulInt64($b3, 24))->addInt64($a10->mulInt64($b2, 24))->addInt64($a11->mulInt64($b1, 24));
-        $s13 = $a2->mulInt64($b11, 24)->addInt64($a3->mulInt64($b10, 24))->addInt64($a4->mulInt64($b9, 24))->addInt64($a5->mulInt64($b8, 24))->addInt64($a6->mulInt64($b7, 24))->addInt64($a7->mulInt64($b6, 24))
-                  ->addInt64($a8->mulInt64($b5, 24))->addInt64($a9->mulInt64($b4, 24))->addInt64($a10->mulInt64($b3, 24))->addInt64($a11->mulInt64($b2, 24));
-        $s14 = $a3->mulInt64($b11, 24)->addInt64($a4->mulInt64($b10, 24))->addInt64($a5->mulInt64($b9, 24))->addInt64($a6->mulInt64($b8, 24))->addInt64($a7->mulInt64($b7, 24))->addInt64($a8->mulInt64($b6, 24))
+        $s9 = $c9->addInt64($a0->mulInt64($b9, 24))->addInt64($a1->mulInt64($b8, 24))->addInt64($a2->mulInt64($b7, 24))
+                 ->addInt64($a3->mulInt64($b6, 24))->addInt64($a4->mulInt64($b5, 24))->addInt64($a5->mulInt64($b4, 24))
+                 ->addInt64($a6->mulInt64($b3, 24))->addInt64($a7->mulInt64($b2, 24))->addInt64($a8->mulInt64($b1, 24))
+                 ->addInt64($a9->mulInt64($b0, 24));
+        $s10 = $c10->addInt64($a0->mulInt64($b10, 24))->addInt64($a1->mulInt64($b9, 24))->addInt64($a2->mulInt64($b8, 24))
+                   ->addInt64($a3->mulInt64($b7, 24))->addInt64($a4->mulInt64($b6, 24))->addInt64($a5->mulInt64($b5, 24))
+                   ->addInt64($a6->mulInt64($b4, 24))->addInt64($a7->mulInt64($b3, 24))->addInt64($a8->mulInt64($b2, 24))
+                   ->addInt64($a9->mulInt64($b1, 24))->addInt64($a10->mulInt64($b0, 24));
+        $s11 = $c11->addInt64($a0->mulInt64($b11, 24))->addInt64($a1->mulInt64($b10, 24))->addInt64($a2->mulInt64($b9, 24))
+                   ->addInt64($a3->mulInt64($b8, 24))->addInt64($a4->mulInt64($b7, 24))->addInt64($a5->mulInt64($b6, 24))
+                   ->addInt64($a6->mulInt64($b5, 24))->addInt64($a7->mulInt64($b4, 24))->addInt64($a8->mulInt64($b3, 24))
+                   ->addInt64($a9->mulInt64($b2, 24))->addInt64($a10->mulInt64($b1, 24))->addInt64($a11->mulInt64($b0, 24));
+        $s12 = $a1->mulInt64($b11, 24)->addInt64($a2->mulInt64($b10, 24))->addInt64($a3->mulInt64($b9, 24))
+                  ->addInt64($a4->mulInt64($b8, 24))->addInt64($a5->mulInt64($b7, 24))->addInt64($a6->mulInt64($b6, 24))
+                  ->addInt64($a7->mulInt64($b5, 24))->addInt64($a8->mulInt64($b4, 24))->addInt64($a9->mulInt64($b3, 24))
+                  ->addInt64($a10->mulInt64($b2, 24))->addInt64($a11->mulInt64($b1, 24));
+        $s13 = $a2->mulInt64($b11, 24)->addInt64($a3->mulInt64($b10, 24))->addInt64($a4->mulInt64($b9, 24))
+                  ->addInt64($a5->mulInt64($b8, 24))->addInt64($a6->mulInt64($b7, 24))->addInt64($a7->mulInt64($b6, 24))
+                  ->addInt64($a8->mulInt64($b5, 24))->addInt64($a9->mulInt64($b4, 24))->addInt64($a10->mulInt64($b3, 24))
+                  ->addInt64($a11->mulInt64($b2, 24));
+        $s14 = $a3->mulInt64($b11, 24)->addInt64($a4->mulInt64($b10, 24))->addInt64($a5->mulInt64($b9, 24))
+                  ->addInt64($a6->mulInt64($b8, 24))->addInt64($a7->mulInt64($b7, 24))->addInt64($a8->mulInt64($b6, 24))
                   ->addInt64($a9->mulInt64($b5, 24))->addInt64($a10->mulInt64($b4, 24))->addInt64($a11->mulInt64($b3, 24));
-        $s15 = $a4->mulInt64($b11, 24)->addInt64($a5->mulInt64($b10, 24))->addInt64($a6->mulInt64($b9, 24))->addInt64($a7->mulInt64($b8, 24))->addInt64($a8->mulInt64($b7, 24))->addInt64($a9->mulInt64($b6, 24))
+        $s15 = $a4->mulInt64($b11, 24)->addInt64($a5->mulInt64($b10, 24))->addInt64($a6->mulInt64($b9, 24))
+                  ->addInt64($a7->mulInt64($b8, 24))->addInt64($a8->mulInt64($b7, 24))->addInt64($a9->mulInt64($b6, 24))
                   ->addInt64($a10->mulInt64($b5, 24))->addInt64($a11->mulInt64($b4, 24));
-        $s16 = $a5->mulInt64($b11, 24)->addInt64($a6->mulInt64($b10, 24))->addInt64($a7->mulInt64($b9, 24))->addInt64($a8->mulInt64($b8, 24))->addInt64($a9->mulInt64($b7, 24))->addInt64($a10->mulInt64($b6, 24))
-                   ->addInt64($a11->mulInt64($b5, 24));
-        $s17 = $a6->mulInt64($b11, 24)->addInt64($a7->mulInt64($b10, 24))->addInt64($a8->mulInt64($b9, 24))->addInt64($a9->mulInt64($b8, 24))->addInt64($a10->mulInt64($b7, 24))->addInt64($a11->mulInt64($b6, 24));
-        $s18 = $a7->mulInt64($b11, 24)->addInt64($a8->mulInt64($b10, 24))->addInt64($a9->mulInt64($b9, 24))->addInt64($a10->mulInt64($b8, 24))->addInt64($a11->mulInt64($b7, 24));
-        $s19 = $a8->mulInt64($b11, 24)->addInt64($a9->mulInt64($b10, 24))->addInt64($a10->mulInt64($b9, 24))->addInt64($a11->mulInt64($b8, 24));
+        $s16 = $a5->mulInt64($b11, 24)->addInt64($a6->mulInt64($b10, 24))->addInt64($a7->mulInt64($b9, 24))
+                  ->addInt64($a8->mulInt64($b8, 24))->addInt64($a9->mulInt64($b7, 24))->addInt64($a10->mulInt64($b6, 24))
+                  ->addInt64($a11->mulInt64($b5, 24));
+        $s17 = $a6->mulInt64($b11, 24)->addInt64($a7->mulInt64($b10, 24))->addInt64($a8->mulInt64($b9, 24))
+                  ->addInt64($a9->mulInt64($b8, 24))->addInt64($a10->mulInt64($b7, 24))->addInt64($a11->mulInt64($b6, 24));
+        $s18 = $a7->mulInt64($b11, 24)->addInt64($a8->mulInt64($b10, 24))->addInt64($a9->mulInt64($b9, 24))
+                  ->addInt64($a10->mulInt64($b8, 24))->addInt64($a11->mulInt64($b7, 24));
+        $s19 = $a8->mulInt64($b11, 24)->addInt64($a9->mulInt64($b10, 24))->addInt64($a10->mulInt64($b9, 24))
+                  ->addInt64($a11->mulInt64($b8, 24));
         $s20 = $a9->mulInt64($b11, 24)->addInt64($a10->mulInt64($b10, 24))->addInt64($a11->mulInt64($b9, 24));
         $s21 = $a10->mulInt64($b11, 24)->addInt64($a11->mulInt64($b10, 24));
         $s22 = $a11->mulInt64($b11, 24);
@@ -2704,18 +2720,18 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $s11 = $s11->addInt64($carry10);
         $s10 = $s10->subInt64($carry10->shiftLeft(21));
 
-        $S0  =  $s0->toInt32()->toInt();
-        $S1  =  $s1->toInt32()->toInt();
-        $S2  =  $s2->toInt32()->toInt();
-        $S3  =  $s3->toInt32()->toInt();
-        $S4  =  $s4->toInt32()->toInt();
-        $S5  =  $s5->toInt32()->toInt();
-        $S6  =  $s6->toInt32()->toInt();
-        $S7  =  $s7->toInt32()->toInt();
-        $S8  =  $s8->toInt32()->toInt();
-        $S9  =  $s9->toInt32()->toInt();
-        $S10 = $s10->toInt32()->toInt();
-        $S11 = $s11->toInt32()->toInt();
+        $S0  =  $s0->toInt();
+        $S1  =  $s1->toInt();
+        $S2  =  $s2->toInt();
+        $S3  =  $s3->toInt();
+        $S4  =  $s4->toInt();
+        $S5  =  $s5->toInt();
+        $S6  =  $s6->toInt();
+        $S7  =  $s7->toInt();
+        $S8  =  $s8->toInt();
+        $S9  =  $s9->toInt();
+        $S10 = $s10->toInt();
+        $S11 = $s11->toInt();
 
         /**
          * @var array<int, int>
@@ -3073,372 +3089,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $S9 = $s9->toInt32()->toInt();
         $S10 = $s10->toInt32()->toInt();
         $S11 = $s11->toInt32()->toInt();
-
-        /**
-         * @var array<int, int>
-         */
-        $arr = array(
-            (int) ($S0 >> 0),
-            (int) ($S0 >> 8),
-            (int) (($S0 >> 16) | ($S1 << 5)),
-            (int) ($S1 >> 3),
-            (int) ($S1 >> 11),
-            (int) (($S1 >> 19) | ($S2 << 2)),
-            (int) ($S2 >> 6),
-            (int) (($S2 >> 14) | ($S3 << 7)),
-            (int) ($S3 >> 1),
-            (int) ($S3 >> 9),
-            (int) (($S3 >> 17) | ($S4 << 4)),
-            (int) ($S4 >> 4),
-            (int) ($S4 >> 12),
-            (int) (($S4 >> 20) | ($S5 << 1)),
-            (int) ($S5 >> 7),
-            (int) (($S5 >> 15) | ($S6 << 6)),
-            (int) ($S6 >> 2),
-            (int) ($S6 >> 10),
-            (int) (($S6 >> 18) | ($S7 << 3)),
-            (int) ($S7 >> 5),
-            (int) ($S7 >> 13),
-            (int) ($S8 >> 0),
-            (int) ($S8 >> 8),
-            (int) (($S8 >> 16) | ($S9 << 5)),
-            (int) ($S9 >> 3),
-            (int) ($S9 >> 11),
-            (int) (($S9 >> 19) | ($S10 << 2)),
-            (int) ($S10 >> 6),
-            (int) (($S10 >> 14) | ($S11 << 7)),
-            (int) ($S11 >> 1),
-            (int) ($S11 >> 9),
-            (int) $S11 >> 17
-        );
-        return self::intArrayToString($arr);
-    }
-
-    /**
-     * @internal You should not use this directly from another application
-     *
-     * @param string $s
-     * @return string
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public static function sc_reduce_old($s)
-    {
-        /**
-         * @var ParagonIE_Sodium_Core32_Int32 $s0
-         * @var ParagonIE_Sodium_Core32_Int32 $s1
-         * @var ParagonIE_Sodium_Core32_Int32 $s2
-         * @var ParagonIE_Sodium_Core32_Int32 $s3
-         * @var ParagonIE_Sodium_Core32_Int32 $s4
-         * @var ParagonIE_Sodium_Core32_Int32 $s5
-         * @var ParagonIE_Sodium_Core32_Int32 $s6
-         * @var ParagonIE_Sodium_Core32_Int32 $s7
-         * @var ParagonIE_Sodium_Core32_Int32 $s8
-         * @var ParagonIE_Sodium_Core32_Int32 $s9
-         * @var ParagonIE_Sodium_Core32_Int32 $s10
-         * @var ParagonIE_Sodium_Core32_Int32 $s11
-         * @var ParagonIE_Sodium_Core32_Int32 $s12
-         * @var ParagonIE_Sodium_Core32_Int32 $s13
-         * @var ParagonIE_Sodium_Core32_Int32 $s14
-         * @var ParagonIE_Sodium_Core32_Int32 $s15
-         * @var ParagonIE_Sodium_Core32_Int32 $s16
-         * @var ParagonIE_Sodium_Core32_Int32 $s17
-         * @var ParagonIE_Sodium_Core32_Int32 $s18
-         * @var ParagonIE_Sodium_Core32_Int32 $s19
-         * @var ParagonIE_Sodium_Core32_Int32 $s20
-         * @var ParagonIE_Sodium_Core32_Int32 $s21
-         * @var ParagonIE_Sodium_Core32_Int32 $s22
-         * @var ParagonIE_Sodium_Core32_Int32 $s23
-         */
-        $s0 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & self::load_3(self::substr($s, 0, 3)));
-        $s1 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 2, 4)) >> 5));
-        $s2 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 5, 3)) >> 2));
-        $s3 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 7, 4)) >> 7));
-        $s4 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 10, 4)) >> 4));
-        $s5 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 13, 3)) >> 1));
-        $s6 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 15, 4)) >> 6));
-        $s7 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 18, 4)) >> 3));
-        $s8 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & self::load_3(self::substr($s, 21, 3)));
-        $s9 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 23, 4)) >> 5));
-        $s10 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 26, 3)) >> 2));
-        $s11 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 28, 4)) >> 7));
-        $s12 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 31, 4)) >> 4));
-        $s13 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 34, 3)) >> 1));
-        $s14 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 36, 4)) >> 6));
-        $s15 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 39, 4)) >> 3));
-        $s16 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & self::load_3(self::substr($s, 42, 3)));
-        $s17 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 44, 4)) >> 5));
-        $s18 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 47, 3)) >> 2));
-        $s19 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 49, 4)) >> 7));
-        $s20 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 52, 4)) >> 4));
-        $s21 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_3(self::substr($s, 55, 3)) >> 1));
-        $s22 = ParagonIE_Sodium_Core32_Int32::fromInt(2097151 & (self::load_4(self::substr($s, 57, 4)) >> 6));
-        $s23 = ParagonIE_Sodium_Core32_Int32::fromInt(self::load_4(self::substr($s, 60, 4)) >> 3);
-
-        $s11 = $s11->addInt32($s23->mulInt(666643, 20));
-        $s12 = $s12->addInt32($s23->mulInt(470296, 19));
-        $s13 = $s13->addInt32($s23->mulInt(654183, 20));
-        $s14 = $s14->subInt32($s23->mulInt(997805, 20));
-        $s15 = $s15->addInt32($s23->mulInt(136657, 18));
-        $s16 = $s16->subInt32($s23->mulInt(683901, 20));
-
-        $s10 = $s10->addInt32($s22->mulInt(666643, 20));
-        $s11 = $s11->addInt32($s22->mulInt(470296, 19));
-        $s12 = $s12->addInt32($s22->mulInt(654183, 20));
-        $s13 = $s13->subInt32($s22->mulInt(997805, 20));
-        $s14 = $s14->addInt32($s22->mulInt(136657, 18));
-        $s15 = $s15->subInt32($s22->mulInt(683901, 20));
-
-        $s9  =  $s9->addInt32($s21->mulInt(666643, 20));
-        $s10 = $s10->addInt32($s21->mulInt(470296, 19));
-        $s11 = $s11->addInt32($s21->mulInt(654183, 20));
-        $s12 = $s12->subInt32($s21->mulInt(997805, 20));
-        $s13 = $s13->addInt32($s21->mulInt(136657, 18));
-        $s14 = $s14->subInt32($s21->mulInt(683901, 20));
-
-        $s8  =  $s8->addInt32($s20->mulInt(666643, 20));
-        $s9  =  $s9->addInt32($s20->mulInt(470296, 19));
-        $s10 = $s10->addInt32($s20->mulInt(654183, 20));
-        $s11 = $s11->subInt32($s20->mulInt(997805, 20));
-        $s12 = $s12->addInt32($s20->mulInt(136657, 18));
-        $s13 = $s13->subInt32($s20->mulInt(683901, 20));
-
-        $s7  =  $s7->addInt32($s19->mulInt(666643, 20));
-        $s8  =  $s8->addInt32($s19->mulInt(470296, 19));
-        $s9  =  $s9->addInt32($s19->mulInt(654183, 20));
-        $s10 = $s10->subInt32($s19->mulInt(997805, 20));
-        $s11 = $s11->addInt32($s19->mulInt(136657, 18));
-        $s12 = $s12->subInt32($s19->mulInt(683901, 20));
-
-        $s6  =  $s6->addInt32($s18->mulInt(666643, 20));
-        $s7  =  $s7->addInt32($s18->mulInt(470296, 19));
-        $s8  =  $s8->addInt32($s18->mulInt(654183, 20));
-        $s9  =  $s9->subInt32($s18->mulInt(997805, 20));
-        $s10 = $s10->addInt32($s18->mulInt(136657, 18));
-        $s11 = $s11->subInt32($s18->mulInt(683901, 20));
-
-        $carry6 = $s6->addInt(1 << 20)->shiftRight(21);
-        $s7 = $s7->addInt32($carry6);
-        $s6 = $s6->subInt32($carry6->shiftLeft(21));
-
-        $carry8 = $s8->addInt(1 << 20)->shiftRight(21);
-        $s9 = $s9->addInt32($carry8);
-        $s8 = $s8->subInt32($carry8->shiftLeft(21));
-
-        $carry10 = $s10->addInt(1 << 20)->shiftRight(21);
-        $s11 = $s11->addInt32($carry10);
-        $s10 = $s10->subInt32($carry10->shiftLeft(21));
-
-        $carry12 = $s12->addInt(1 << 20)->shiftRight(21);
-        $s13 = $s13->addInt32($carry12);
-        $s12 = $s12->subInt32($carry12->shiftLeft(21));
-
-        $carry14 = $s14->addInt(1 << 20)->shiftRight(21);
-        $s15 = $s15->addInt32($carry14);
-        $s14 = $s14->subInt32($carry14->shiftLeft(21));
-
-        $carry16 = $s16->addInt(1 << 20)->shiftRight(21);
-        $s17 = $s17->addInt32($carry16);
-        $s16 = $s16->subInt32($carry16->shiftLeft(21));
-
-        $carry7 = $s7->addInt(1 << 20)->shiftRight(21);
-        $s8 = $s8->addInt32($carry7);
-        $s7 = $s7->subInt32($carry7->shiftLeft(21));
-
-        $carry9 = $s9->addInt(1 << 20)->shiftRight(21);
-        $s10 = $s10->addInt32($carry9);
-        $s9 = $s9->subInt32($carry9->shiftLeft(21));
-
-        $carry11 = $s11->addInt(1 << 20)->shiftRight(21);
-        $s12 = $s12->addInt32($carry11);
-        $s11 = $s11->subInt32($carry11->shiftLeft(21));
-
-        $carry13 = $s13->addInt(1 << 20)->shiftRight(21);
-        $s14 = $s14->addInt32($carry13);
-        $s13 = $s13->subInt32($carry13->shiftLeft(21));
-
-        $carry15 = $s15->addInt(1 << 20)->shiftRight(21);
-        $s16 = $s16->addInt32($carry15);
-        $s15 = $s15->subInt32($carry15->shiftLeft(21));
-
-        $s5  =  $s5->addInt32($s17->mulInt(666643, 20));
-        $s6  =  $s6->addInt32($s17->mulInt(470296, 19));
-        $s7  =  $s7->addInt32($s17->mulInt(654183, 20));
-        $s8  =  $s8->subInt32($s17->mulInt(997805, 20));
-        $s9  =  $s9->addInt32($s17->mulInt(136657, 18));
-        $s10 = $s10->subInt32($s17->mulInt(683901, 20));
-
-        $s4  =  $s4->addInt32($s16->mulInt(666643, 20));
-        $s5  =  $s5->addInt32($s16->mulInt(470296, 19));
-        $s6  =  $s6->addInt32($s16->mulInt(654183, 20));
-        $s7  =  $s7->subInt32($s16->mulInt(997805, 20));
-        $s8  =  $s8->addInt32($s16->mulInt(136657, 18));
-        $s9  =  $s9->subInt32($s16->mulInt(683901, 20));
-
-        $s3  =  $s3->addInt32($s15->mulInt(666643, 20));
-        $s4  =  $s4->addInt32($s15->mulInt(470296, 19));
-        $s5  =  $s5->addInt32($s15->mulInt(654183, 20));
-        $s6  =  $s6->subInt32($s15->mulInt(997805, 20));
-        $s7  =  $s7->addInt32($s15->mulInt(136657, 18));
-        $s8  =  $s8->subInt32($s15->mulInt(683901, 20));
-
-        $s2  =  $s2->addInt32($s14->mulInt(666643, 20));
-        $s3  =  $s3->addInt32($s14->mulInt(470296, 19));
-        $s4  =  $s4->addInt32($s14->mulInt(654183, 20));
-        $s5  =  $s5->subInt32($s14->mulInt(997805, 20));
-        $s6  =  $s6->addInt32($s14->mulInt(136657, 18));
-        $s7  =  $s7->subInt32($s14->mulInt(683901, 20));
-
-        $s1  =  $s1->addInt32($s13->mulInt(666643, 20));
-        $s2  =  $s2->addInt32($s13->mulInt(470296, 19));
-        $s3  =  $s3->addInt32($s13->mulInt(654183, 20));
-        $s4  =  $s4->subInt32($s13->mulInt(997805, 20));
-        $s5  =  $s5->addInt32($s13->mulInt(136657, 18));
-        $s6  =  $s6->subInt32($s13->mulInt(683901, 20));
-
-        $s0  =  $s0->addInt32($s12->mulInt(666643, 20));
-        $s1  =  $s1->addInt32($s12->mulInt(470296, 19));
-        $s2  =  $s2->addInt32($s12->mulInt(654183, 20));
-        $s3  =  $s3->subInt32($s12->mulInt(997805, 20));
-        $s4  =  $s4->addInt32($s12->mulInt(136657, 18));
-        $s5  =  $s5->subInt32($s12->mulInt(683901, 20));
-        $s12 = new ParagonIE_Sodium_Core32_Int32();
-
-        $carry0 = $s0->addInt(1 << 20)->shiftRight(21);
-        $s1 = $s1->addInt32($carry0);
-        $s0 = $s0->subInt32($carry0->shiftLeft(21));
-        $carry2 = $s2->addInt(1 << 20)->shiftRight(21);
-        $s3 = $s3->addInt32($carry2);
-        $s2 = $s2->subInt32($carry2->shiftLeft(21));
-        $carry4 = $s4->addInt(1 << 20)->shiftRight(21);
-        $s5 = $s5->addInt32($carry4);
-        $s4 = $s4->subInt32($carry4->shiftLeft(21));
-        $carry6 = $s6->addInt(1 << 20)->shiftRight(21);
-        $s7 = $s7->addInt32($carry6);
-        $s6 = $s6->subInt32($carry6->shiftLeft(21));
-        $carry8 = $s8->addInt(1 << 20)->shiftRight(21);
-        $s9 = $s9->addInt32($carry8);
-        $s8 = $s8->subInt32($carry8->shiftLeft(21));
-        $carry10 = $s10->addInt(1 << 20)->shiftRight(21);
-        $s11 = $s11->addInt32($carry10);
-        $s10 = $s10->subInt32($carry10->shiftLeft(21));
-        $carry1 = $s1->addInt(1 << 20)->shiftRight(21);
-        $s2 = $s2->addInt32($carry1);
-        $s1 = $s1->subInt32($carry1->shiftLeft(21));
-        $carry3 = $s3->addInt(1 << 20)->shiftRight(21);
-        $s4 = $s4->addInt32($carry3);
-        $s3 = $s3->subInt32($carry3->shiftLeft(21));
-        $carry5 = $s5->addInt(1 << 20)->shiftRight(21);
-        $s6 = $s6->addInt32($carry5);
-        $s5 = $s5->subInt32($carry5->shiftLeft(21));
-        $carry7 = $s7->addInt(1 << 20)->shiftRight(21);
-        $s8 = $s8->addInt32($carry7);
-        $s7 = $s7->subInt32($carry7->shiftLeft(21));
-        $carry9 = $s9->addInt(1 << 20)->shiftRight(21);
-        $s10 = $s10->addInt32($carry9);
-        $s9 = $s9->subInt32($carry9->shiftLeft(21));
-        $carry11 = $s11->addInt(1 << 20)->shiftRight(21);
-        $s12 = $s12->addInt32($carry11);
-        $s11 = $s11->subInt32($carry11->shiftLeft(21));
-
-        $s0  =  $s0->addInt32($s12->mulInt(666643, 20));
-        $s1  =  $s1->addInt32($s12->mulInt(470296, 19));
-        $s2  =  $s2->addInt32($s12->mulInt(654183, 20));
-        $s3  =  $s3->subInt32($s12->mulInt(997805, 20));
-        $s4  =  $s4->addInt32($s12->mulInt(136657, 18));
-        $s5  =  $s5->subInt32($s12->mulInt(683901, 20));
-        $s12 = new ParagonIE_Sodium_Core32_Int32();
-
-        $carry0 = $s0->shiftRight(21);
-        $s1 = $s1->addInt32($carry0);
-        $s0 = $s0->subInt32($carry0->shiftLeft(21));
-        $carry1 = $s1->shiftRight(21);
-        $s2 = $s2->addInt32($carry1);
-        $s1 = $s1->subInt32($carry1->shiftLeft(21));
-        $carry2 = $s2->shiftRight(21);
-        $s3 = $s3->addInt32($carry2);
-        $s2 = $s2->subInt32($carry2->shiftLeft(21));
-        $carry3 = $s3->shiftRight(21);
-        $s4 = $s4->addInt32($carry3);
-        $s3 = $s3->subInt32($carry3->shiftLeft(21));
-        $carry4 = $s4->shiftRight(21);
-        $s5 = $s5->addInt32($carry4);
-        $s4 = $s4->subInt32($carry4->shiftLeft(21));
-        $carry5 = $s5->shiftRight(21);
-        $s6 = $s6->addInt32($carry5);
-        $s5 = $s5->subInt32($carry5->shiftLeft(21));
-        $carry6 = $s6->shiftRight(21);
-        $s7 = $s7->addInt32($carry6);
-        $s6 = $s6->subInt32($carry6->shiftLeft(21));
-        $carry7 = $s7->shiftRight(21);
-        $s8 = $s8->addInt32($carry7);
-        $s7 = $s7->subInt32($carry7->shiftLeft(21));
-        $carry8 = $s8->shiftRight(21);
-        $s9 = $s9->addInt32($carry8);
-        $s8 = $s8->subInt32($carry8->shiftLeft(21));
-        $carry9 = $s9->shiftRight(21);
-        $s10 = $s10->addInt32($carry9);
-        $s9 = $s9->subInt32($carry9->shiftLeft(21));
-        $carry10 = $s10->shiftRight(21);
-        $s11 = $s11->addInt32($carry10);
-        $s10 = $s10->subInt32($carry10->shiftLeft(21));
-        $carry11 = $s11->shiftRight(21);
-        $s12 = $s12->addInt32($carry11);
-        $s11 = $s11->subInt32($carry11->shiftLeft(21));
-
-        $s0  =  $s0->addInt32($s12->mulInt(666643, 20));
-        $s1  =  $s1->addInt32($s12->mulInt(470296, 19));
-        $s2  =  $s2->addInt32($s12->mulInt(654183, 20));
-        $s3  =  $s3->subInt32($s12->mulInt(997805, 20));
-        $s4  =  $s4->addInt32($s12->mulInt(136657, 18));
-        $s5  =  $s5->subInt32($s12->mulInt(683901, 20));
-
-        $carry0 = $s0->shiftRight(21);
-        $s1 = $s1->addInt32($carry0);
-        $s0 = $s0->subInt32($carry0->shiftLeft(21));
-        $carry1 = $s1->shiftRight(21);
-        $s2 = $s2->addInt32($carry1);
-        $s1 = $s1->subInt32($carry1->shiftLeft(21));
-        $carry2 = $s2->shiftRight(21);
-        $s3 = $s3->addInt32($carry2);
-        $s2 = $s2->subInt32($carry2->shiftLeft(21));
-        $carry3 = $s3->shiftRight(21);
-        $s4 = $s4->addInt32($carry3);
-        $s3 = $s3->subInt32($carry3->shiftLeft(21));
-        $carry4 = $s4->shiftRight(21);
-        $s5 = $s5->addInt32($carry4);
-        $s4 = $s4->subInt32($carry4->shiftLeft(21));
-        $carry5 = $s5->shiftRight(21);
-        $s6 = $s6->addInt32($carry5);
-        $s5 = $s5->subInt32($carry5->shiftLeft(21));
-        $carry6 = $s6->shiftRight(21);
-        $s7 = $s7->addInt32($carry6);
-        $s6 = $s6->subInt32($carry6->shiftLeft(21));
-        $carry7 = $s7->shiftRight(21);
-        $s8 = $s8->addInt32($carry7);
-        $s7 = $s7->subInt32($carry7->shiftLeft(21));
-        $carry8 = $s8->shiftRight(21);
-        $s9 = $s9->addInt32($carry8);
-        $s8 = $s8->subInt32($carry8->shiftLeft(21));
-        $carry9 = $s9->shiftRight(21);
-        $s10 = $s10->addInt32($carry9);
-        $s9 = $s9->subInt32($carry9->shiftLeft(21));
-        $carry10 = $s10->shiftRight(21);
-        $s11 = $s11->addInt32($carry10);
-        $s10 = $s10->subInt32($carry10->shiftLeft(21));
-
-        $S0 = $s0->toInt();
-        $S1 = $s1->toInt();
-        $S2 = $s2->toInt();
-        $S3 = $s3->toInt();
-        $S4 = $s4->toInt();
-        $S5 = $s5->toInt();
-        $S6 = $s6->toInt();
-        $S7 = $s7->toInt();
-        $S8 = $s8->toInt();
-        $S9 = $s9->toInt();
-        $S10 = $s10->toInt();
-        $S11 = $s11->toInt();
 
         /**
          * @var array<int, int>
