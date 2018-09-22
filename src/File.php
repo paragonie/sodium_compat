@@ -1039,8 +1039,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function onetimeauth_verify(ParagonIE_Sodium_Core_Poly1305_State $state, $ifp, $tag = '', $mlen = 0)
-    {
+    protected static function onetimeauth_verify(
+        ParagonIE_Sodium_Core_Poly1305_State $state,
+        $ifp,
+        $tag = '',
+        $mlen = 0
+    ) {
         /** @var int $pos */
         $pos = ftell($ifp);
 
@@ -1510,8 +1514,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function onetimeauth_verify_core32(ParagonIE_Sodium_Core32_Poly1305_State $state, $ifp, $tag = '', $mlen = 0)
-    {
+    protected static function onetimeauth_verify_core32(
+        ParagonIE_Sodium_Core32_Poly1305_State $state,
+        $ifp,
+        $tag = '',
+        $mlen = 0
+    ) {
         /** @var int $pos */
         $pos = ftell($ifp);
 

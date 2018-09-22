@@ -606,7 +606,9 @@ abstract class ParagonIE_Sodium_Crypto
     public static function box_secretkey($keypair)
     {
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
-            throw new RangeException('Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.');
+            throw new RangeException(
+                'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.'
+            );
         }
         return ParagonIE_Sodium_Core_Util::substr($keypair, 0, 32);
     }
@@ -622,7 +624,9 @@ abstract class ParagonIE_Sodium_Crypto
     public static function box_publickey($keypair)
     {
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
-            throw new RangeException('Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.');
+            throw new RangeException(
+                'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.'
+            );
         }
         return ParagonIE_Sodium_Core_Util::substr($keypair, 32, 32);
     }
@@ -639,7 +643,9 @@ abstract class ParagonIE_Sodium_Crypto
     public static function box_publickey_from_secretkey($sKey)
     {
         if (ParagonIE_Sodium_Core_Util::strlen($sKey) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES) {
-            throw new RangeException('Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES bytes long.');
+            throw new RangeException(
+                'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES bytes long.'
+            );
         }
         return self::scalarmult_base($sKey);
     }

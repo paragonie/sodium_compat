@@ -2082,21 +2082,43 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s1 = $c1 + self::mul($a0, $b1, 24) + self::mul($a1, $b0, 24);
         $s2 = $c2 + self::mul($a0, $b2, 24) + self::mul($a1, $b1, 24) + self::mul($a2, $b0, 24);
         $s3 = $c3 + self::mul($a0, $b3, 24) + self::mul($a1, $b2, 24) + self::mul($a2, $b1, 24) + self::mul($a3, $b0, 24);
-        $s4 = $c4 + self::mul($a0, $b4, 24) + self::mul($a1, $b3, 24) + self::mul($a2, $b2, 24) + self::mul($a3, $b1, 24) + self::mul($a4, $b0, 24);
-        $s5 = $c5 + self::mul($a0, $b5, 24) + self::mul($a1, $b4, 24) + self::mul($a2, $b3, 24) + self::mul($a3, $b2, 24) + self::mul($a4, $b1, 24) + self::mul($a5, $b0, 24);
-        $s6 = $c6 + self::mul($a0, $b6, 24) + self::mul($a1, $b5, 24) + self::mul($a2, $b4, 24) + self::mul($a3, $b3, 24) + self::mul($a4, $b2, 24) + self::mul($a5, $b1, 24) + self::mul($a6, $b0, 24);
-        $s7 = $c7 + self::mul($a0, $b7, 24) + self::mul($a1, $b6, 24) + self::mul($a2, $b5, 24) + self::mul($a3, $b4, 24) + self::mul($a4, $b3, 24) + self::mul($a5, $b2, 24) + self::mul($a6, $b1, 24) + self::mul($a7, $b0, 24);
-        $s8 = $c8 + self::mul($a0, $b8, 24) + self::mul($a1, $b7, 24) + self::mul($a2, $b6, 24) + self::mul($a3, $b5, 24) + self::mul($a4, $b4, 24) + self::mul($a5, $b3, 24) + self::mul($a6, $b2, 24) + self::mul($a7, $b1, 24) + self::mul($a8, $b0, 24);
-        $s9 = $c9 + self::mul($a0, $b9, 24) + self::mul($a1, $b8, 24) + self::mul($a2, $b7, 24) + self::mul($a3, $b6, 24) + self::mul($a4, $b5, 24) + self::mul($a5, $b4, 24) + self::mul($a6, $b3, 24) + self::mul($a7, $b2, 24) + self::mul($a8, $b1, 24) + self::mul($a9, $b0, 24);
-        $s10 = $c10 + self::mul($a0, $b10, 24) + self::mul($a1, $b9, 24) + self::mul($a2, $b8, 24) + self::mul($a3, $b7, 24) + self::mul($a4, $b6, 24) + self::mul($a5, $b5, 24) + self::mul($a6, $b4, 24) + self::mul($a7, $b3, 24) + self::mul($a8, $b2, 24) + self::mul($a9, $b1, 24) + self::mul($a10, $b0, 24);
-        $s11 = $c11 + self::mul($a0, $b11, 24) + self::mul($a1, $b10, 24) + self::mul($a2, $b9, 24) + self::mul($a3, $b8, 24) + self::mul($a4, $b7, 24) + self::mul($a5, $b6, 24) + self::mul($a6, $b5, 24) + self::mul($a7, $b4, 24) + self::mul($a8, $b3, 24) + self::mul($a9, $b2, 24) + self::mul($a10, $b1, 24) + self::mul($a11, $b0, 24);
-        $s12 = self::mul($a1, $b11, 24) + self::mul($a2, $b10, 24) + self::mul($a3, $b9, 24) + self::mul($a4, $b8, 24) + self::mul($a5, $b7, 24) + self::mul($a6, $b6, 24) + self::mul($a7, $b5, 24) + self::mul($a8, $b4, 24) + self::mul($a9, $b3, 24) + self::mul($a10, $b2, 24) + self::mul($a11, $b1, 24);
-        $s13 = self::mul($a2, $b11, 24) + self::mul($a3, $b10, 24) + self::mul($a4, $b9, 24) + self::mul($a5, $b8, 24) + self::mul($a6, $b7, 24) + self::mul($a7, $b6, 24) + self::mul($a8, $b5, 24) + self::mul($a9, $b4, 24) + self::mul($a10, $b3, 24) + self::mul($a11, $b2, 24);
-        $s14 = self::mul($a3, $b11, 24) + self::mul($a4, $b10, 24) + self::mul($a5, $b9, 24) + self::mul($a6, $b8, 24) + self::mul($a7, $b7, 24) + self::mul($a8, $b6, 24) + self::mul($a9, $b5, 24) + self::mul($a10, $b4, 24) + self::mul($a11, $b3, 24);
-        $s15 = self::mul($a4, $b11, 24) + self::mul($a5, $b10, 24) + self::mul($a6, $b9, 24) + self::mul($a7, $b8, 24) + self::mul($a8, $b7, 24) + self::mul($a9, $b6, 24) + self::mul($a10, $b5, 24) + self::mul($a11, $b4, 24);
-        $s16 = self::mul($a5, $b11, 24) + self::mul($a6, $b10, 24) + self::mul($a7, $b9, 24) + self::mul($a8, $b8, 24) + self::mul($a9, $b7, 24) + self::mul($a10, $b6, 24) + self::mul($a11, $b5, 24);
-        $s17 = self::mul($a6, $b11, 24) + self::mul($a7, $b10, 24) + self::mul($a8, $b9, 24) + self::mul($a9, $b8, 24) + self::mul($a10, $b7, 24) + self::mul($a11, $b6, 24);
-        $s18 = self::mul($a7, $b11, 24) + self::mul($a8, $b10, 24) + self::mul($a9, $b9, 24) + self::mul($a10, $b8, 24) + self::mul($a11, $b7, 24);
+        $s4 = $c4 + self::mul($a0, $b4, 24) + self::mul($a1, $b3, 24) + self::mul($a2, $b2, 24) + self::mul($a3, $b1, 24) +
+               self::mul($a4, $b0, 24);
+        $s5 = $c5 + self::mul($a0, $b5, 24) + self::mul($a1, $b4, 24) + self::mul($a2, $b3, 24) + self::mul($a3, $b2, 24) +
+               self::mul($a4, $b1, 24) + self::mul($a5, $b0, 24);
+        $s6 = $c6 + self::mul($a0, $b6, 24) + self::mul($a1, $b5, 24) + self::mul($a2, $b4, 24) + self::mul($a3, $b3, 24) +
+               self::mul($a4, $b2, 24) + self::mul($a5, $b1, 24) + self::mul($a6, $b0, 24);
+        $s7 = $c7 + self::mul($a0, $b7, 24) + self::mul($a1, $b6, 24) + self::mul($a2, $b5, 24) + self::mul($a3, $b4, 24) +
+               self::mul($a4, $b3, 24) + self::mul($a5, $b2, 24) + self::mul($a6, $b1, 24) + self::mul($a7, $b0, 24);
+        $s8 = $c8 + self::mul($a0, $b8, 24) + self::mul($a1, $b7, 24) + self::mul($a2, $b6, 24) + self::mul($a3, $b5, 24) +
+               self::mul($a4, $b4, 24) + self::mul($a5, $b3, 24) + self::mul($a6, $b2, 24) + self::mul($a7, $b1, 24) +
+               self::mul($a8, $b0, 24);
+        $s9 = $c9 + self::mul($a0, $b9, 24) + self::mul($a1, $b8, 24) + self::mul($a2, $b7, 24) + self::mul($a3, $b6, 24) +
+               self::mul($a4, $b5, 24) + self::mul($a5, $b4, 24) + self::mul($a6, $b3, 24) + self::mul($a7, $b2, 24) +
+               self::mul($a8, $b1, 24) + self::mul($a9, $b0, 24);
+        $s10 = $c10 + self::mul($a0, $b10, 24) + self::mul($a1, $b9, 24) + self::mul($a2, $b8, 24) + self::mul($a3, $b7, 24) +
+               self::mul($a4, $b6, 24) + self::mul($a5, $b5, 24) + self::mul($a6, $b4, 24) + self::mul($a7, $b3, 24) +
+               self::mul($a8, $b2, 24) + self::mul($a9, $b1, 24) + self::mul($a10, $b0, 24);
+        $s11 = $c11 + self::mul($a0, $b11, 24) + self::mul($a1, $b10, 24) + self::mul($a2, $b9, 24) + self::mul($a3, $b8, 24) +
+               self::mul($a4, $b7, 24) + self::mul($a5, $b6, 24) + self::mul($a6, $b5, 24) + self::mul($a7, $b4, 24) +
+               self::mul($a8, $b3, 24) + self::mul($a9, $b2, 24) + self::mul($a10, $b1, 24) + self::mul($a11, $b0, 24);
+        $s12 = self::mul($a1, $b11, 24) + self::mul($a2, $b10, 24) + self::mul($a3, $b9, 24) + self::mul($a4, $b8, 24) +
+               self::mul($a5, $b7, 24) + self::mul($a6, $b6, 24) + self::mul($a7, $b5, 24) + self::mul($a8, $b4, 24) +
+               self::mul($a9, $b3, 24) + self::mul($a10, $b2, 24) + self::mul($a11, $b1, 24);
+        $s13 = self::mul($a2, $b11, 24) + self::mul($a3, $b10, 24) + self::mul($a4, $b9, 24) + self::mul($a5, $b8, 24) +
+               self::mul($a6, $b7, 24) + self::mul($a7, $b6, 24) + self::mul($a8, $b5, 24) + self::mul($a9, $b4, 24) +
+               self::mul($a10, $b3, 24) + self::mul($a11, $b2, 24);
+        $s14 = self::mul($a3, $b11, 24) + self::mul($a4, $b10, 24) + self::mul($a5, $b9, 24) + self::mul($a6, $b8, 24) +
+               self::mul($a7, $b7, 24) + self::mul($a8, $b6, 24) + self::mul($a9, $b5, 24) + self::mul($a10, $b4, 24) +
+               self::mul($a11, $b3, 24);
+        $s15 = self::mul($a4, $b11, 24) + self::mul($a5, $b10, 24) + self::mul($a6, $b9, 24) + self::mul($a7, $b8, 24) +
+               self::mul($a8, $b7, 24) + self::mul($a9, $b6, 24) + self::mul($a10, $b5, 24) + self::mul($a11, $b4, 24);
+        $s16 = self::mul($a5, $b11, 24) + self::mul($a6, $b10, 24) + self::mul($a7, $b9, 24) + self::mul($a8, $b8, 24) +
+               self::mul($a9, $b7, 24) + self::mul($a10, $b6, 24) + self::mul($a11, $b5, 24);
+        $s17 = self::mul($a6, $b11, 24) + self::mul($a7, $b10, 24) + self::mul($a8, $b9, 24) + self::mul($a9, $b8, 24) +
+               self::mul($a10, $b7, 24) + self::mul($a11, $b6, 24);
+        $s18 = self::mul($a7, $b11, 24) + self::mul($a8, $b10, 24) + self::mul($a9, $b9, 24) + self::mul($a10, $b8, 24) +
+               self::mul($a11, $b7, 24);
         $s19 = self::mul($a8, $b11, 24) + self::mul($a9, $b10, 24) + self::mul($a10, $b9, 24) + self::mul($a11, $b8, 24);
         $s20 = self::mul($a9, $b11, 24) + self::mul($a10, $b10, 24) + self::mul($a11, $b9, 24);
         $s21 = self::mul($a10, $b11, 24) + self::mul($a11, $b10, 24);
