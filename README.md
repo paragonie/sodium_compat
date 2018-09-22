@@ -25,7 +25,12 @@ If you require such an audit before you can use sodium_compat in your projects
 and have the funds for such an audit, please open an issue or contact 
 `security at paragonie dot com` so we can help get the ball rolling.
 
-If you'd like to learn more about the defensive security measures we've taken,
+However, sodium_compat has been adopted by high profile open source projects,
+such as [Joomla!](https://github.com/joomla/joomla-cms/blob/459d74686d2a638ec51149d7c44ddab8075852be/composer.json#L40)
+and [Magento](https://github.com/magento/magento2/blob/8fd89cfdf52c561ac0ca7bc20fd38ef688e201b0/composer.json#L44).
+
+If you'd like to learn more about the defensive security measures we've taken
+to prevent sodium_compat from being a source of vulnerability in your systems,
 please read [*Cryptographically Secure PHP Development*](https://paragonie.com/blog/2017/02/cryptographically-secure-php-development).
 
 # Installing Sodium Compat
@@ -200,9 +205,11 @@ of the libsodium extension from PECL or. Alternatively, simply upgrade to PHP 7
 and the slowdown will be greatly reduced.
 
 This is also true of non-Windows 32-bit operating systems, or if somehow PHP
-was compiled where `PHP_INT_SIZE` equals `4` instead of `8`.
+was compiled where `PHP_INT_SIZE` equals `4` instead of `8` (i.e. Linux on i386).
 
 ## API Coverage
+
+**Recommended reading:** [Libsodium Quick Reference](https://paragonie.com/blog/2017/06/libsodium-quick-reference-quick-comparison-similar-functions-and-which-one-use)
 
 * Mainline NaCl Features
     * `crypto_auth()`
