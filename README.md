@@ -120,8 +120,6 @@ if (\Sodium\crypto_sign_verify_detached($signature, $message, $alice_pk)) {
 The polyfill does not expose this API on PHP < 5.3, or if you have the PHP
 extension installed already.
 
-Since this doesn't require a namespace, this API *is* exposed on PHP 5.2.
-
 ## General-Use Polyfill
 
 If your users are on PHP < 5.3, or you want to write code that will work
@@ -150,6 +148,8 @@ if (ParagonIE_Sodium_Compat::crypto_sign_verify_detached($signature, $message, $
 Generally: If you replace `\Sodium\ ` with `ParagonIE_Sodium_Compat::`, any
 code already written for the libsodium PHP extension should work with our
 polyfill without additional code changes.
+
+Since this doesn't require a namespace, this API *is* exposed on PHP 5.2.
 
 Since version 0.7.0, we have our own namespaced API (`ParagonIE\Sodium\*`) to allow brevity
 in software that uses PHP 5.3+. This is useful if you want to use our file cryptography 
