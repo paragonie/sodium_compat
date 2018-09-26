@@ -107,6 +107,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_add()
+     * @throws Exception
      * @throws SodiumException
      * @throws TypeError
      */
@@ -233,8 +234,209 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Core_Curve25519::fe_sq()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testFeSq()
+    {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
+        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                70051,
+                -1455864,
+                -220599,
+                -10799067,
+                717124,
+                -11560168,
+                671906,
+                12781942,
+                1056405,
+                -13773822
+            )
+        );
+
+        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                -4080589,
+                -8170580,
+                19250910,
+                11583187,
+                -9496298,
+                14604333,
+                21151415,
+                6893025,
+                -30945925,
+                -5379679
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core_Curve25519::fe_sq($g);
+        $this->assertSame(
+            '20bcc1af4e0deef62d69da179645c6db2cd8de6e7d850a6f49b3d77c22687a6b',
+            bin2hex(ParagonIE_Sodium_Core_Curve25519::fe_tobytes($h))
+        );
+        $this->assertEquals($expected, $h);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Curve25519::fe_sq()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testFeSq32()
+    {
+        if (PHP_INT_SIZE === 8) {
+            return;
+        }
+        $g = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(70051),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-1455864),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-220599),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-10799067),
+                ParagonIE_Sodium_Core32_Int32::fromInt(717124),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-11560168),
+                ParagonIE_Sodium_Core32_Int32::fromInt(671906),
+                ParagonIE_Sodium_Core32_Int32::fromInt(12781942),
+                ParagonIE_Sodium_Core32_Int32::fromInt(1056405),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-13773822)
+            )
+        );
+        $h = ParagonIE_Sodium_Core32_Curve25519::fe_sq($g);
+        $this->assertSame(
+            '20bcc1af4e0deef62d69da179645c6db2cd8de6e7d850a6f49b3d77c22687a6b',
+            bin2hex(ParagonIE_Sodium_Core32_Curve25519::fe_tobytes($h))
+        );
+
+        $expected = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(-4080589),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-8170580),
+                ParagonIE_Sodium_Core32_Int32::fromInt(19250910),
+                ParagonIE_Sodium_Core32_Int32::fromInt(11583187),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-9496298),
+                ParagonIE_Sodium_Core32_Int32::fromInt(14604333),
+                ParagonIE_Sodium_Core32_Int32::fromInt(21151415),
+                ParagonIE_Sodium_Core32_Int32::fromInt(6893025),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-30945925),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-5379679)
+            )
+        );
+
+        for ($i = 0; $i < 10; ++$i) {
+            $this->assertEquals(
+                $expected[$i]->toInt(),
+                $h[$i]->toInt(),
+                'Index: ' . $i
+            );
+        }
+        $this->assertEquals($expected, $h);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Curve25519::fe_sq2()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testFeSqDouble()
+    {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
+        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                70051,
+                -1455864,
+                -220599,
+                -10799067,
+                717124,
+                -11560168,
+                671906,
+                12781942,
+                1056405,
+                -13773822
+            )
+        );
+
+        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                -8161178,
+                -16341160,
+                -28607044,
+                -10388057,
+                -18992595,
+                -4345766,
+                -24806033,
+                13786051,
+                5217014,
+                -10759359
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core_Curve25519::fe_sq2($g);
+        $this->assertSame(
+            '5378835f9d1adced5bd2b42f2c8b8cb759b0bdddfa0a15de9266aff944d0f456',
+            bin2hex(ParagonIE_Sodium_Core_Curve25519::fe_tobytes($h))
+        );
+        $this->assertEquals($expected, $h);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core32_Curve25519::fe_mul()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testFeSqDouble32()
+    {
+        if (PHP_INT_SIZE === 4) {
+            return;
+        }
+        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                70051,
+                -1455864,
+                -220599,
+                -10799067,
+                717124,
+                -11560168,
+                671906,
+                12781942,
+                1056405,
+                -13773822
+            )
+        );
+
+        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                -8161178,
+                -16341160,
+                -28607044,
+                -10388057,
+                -18992595,
+                -4345766,
+                -24806033,
+                13786051,
+                5217014,
+                -10759359
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core_Curve25519::fe_sq2($g);
+        $this->assertSame(
+            '5378835f9d1adced5bd2b42f2c8b8cb759b0bdddfa0a15de9266aff944d0f456',
+            bin2hex(ParagonIE_Sodium_Core_Curve25519::fe_tobytes($h))
+        );
+        $this->assertEquals($expected, $h);
+    }
+
+
+    /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_sub()
      * @throws SodiumException
+     * @throws Exception
      * @throws TypeError
      */
     public function testFeSub()
@@ -575,6 +777,94 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
             $z,
             ParagonIE_Sodium_Core32_Curve25519::fe_mul($z, $h)
         );
+        $g = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(70051),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-1455864),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-220599),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-10799067),
+                ParagonIE_Sodium_Core32_Int32::fromInt(717124),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-11560168),
+                ParagonIE_Sodium_Core32_Int32::fromInt(671906),
+                ParagonIE_Sodium_Core32_Int32::fromInt(12781942),
+                ParagonIE_Sodium_Core32_Int32::fromInt(1056405),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-13773822)
+            )
+        );
+        $this->assertEquals(
+            $g,
+            ParagonIE_Sodium_Core32_Curve25519::fe_mul($g, ParagonIE_Sodium_Core32_Curve25519::fe_1())
+        );
+
+        $expected = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(7544649),
+                ParagonIE_Sodium_Core32_Int32::fromInt(10532726),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-19637653),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-7342246),
+                ParagonIE_Sodium_Core32_Int32::fromInt(3908574),
+                ParagonIE_Sodium_Core32_Int32::fromInt(13668567),
+                ParagonIE_Sodium_Core32_Int32::fromInt(19809982),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-8668475),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-9608131),
+                ParagonIE_Sodium_Core32_Int32::fromInt(-4851782)
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core32_Curve25519::fe_mul($f, $g);
+        $this->assertEquals($expected, $h);
+
+
+        $f = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x3ffffff)
+            )
+        );
+        $g = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x1ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x0ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x1ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x0ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x1ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x0ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x1ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x0ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x1ffffff),
+                ParagonIE_Sodium_Core32_Int32::fromInt(0x0ffffff)
+            )
+        );
+        $this->assertEquals(
+            $g,
+            ParagonIE_Sodium_Core32_Curve25519::fe_mul($g, ParagonIE_Sodium_Core32_Curve25519::fe_1())
+        );
+
+        $expected = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
+            array(
+                ParagonIE_Sodium_Core32_Int32::fromInt(-33554165),
+                ParagonIE_Sodium_Core32_Int32::fromInt(16777160),
+                ParagonIE_Sodium_Core32_Int32::fromInt(33554393),
+                ParagonIE_Sodium_Core32_Int32::fromInt(16777168),
+                ParagonIE_Sodium_Core32_Int32::fromInt(33554402),
+                ParagonIE_Sodium_Core32_Int32::fromInt(16777177),
+                ParagonIE_Sodium_Core32_Int32::fromInt(33554411),
+                ParagonIE_Sodium_Core32_Int32::fromInt(16777186),
+                ParagonIE_Sodium_Core32_Int32::fromInt(33554420),
+                ParagonIE_Sodium_Core32_Int32::fromInt(16777195)
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core32_Curve25519::fe_mul($f, $g);
+        $this->assertEquals($expected, $h);
     }
 
     /**
@@ -647,6 +937,95 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
             $z,
             ParagonIE_Sodium_Core_Curve25519::fe_mul($z, $h)
         );
+
+        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                70051,
+                -1455864,
+                -220599,
+                -10799067,
+                717124,
+                -11560168,
+                671906,
+                12781942,
+                1056405,
+                -13773822
+            )
+        );
+        $this->assertEquals(
+            $g,
+            ParagonIE_Sodium_Core_Curve25519::fe_mul($g, ParagonIE_Sodium_Core_Curve25519::fe_1())
+        );
+
+        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                7544649,
+                10532726,
+                -19637653,
+                -7342246,
+                3908574,
+                13668567,
+                19809982,
+                -8668475,
+                -9608131,
+                -4851782
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core_Curve25519::fe_mul($f, $g);
+        $this->assertEquals($expected, $h);
+
+
+        $f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff,
+                0x3ffffff
+            )
+        );
+        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                0x1ffffff,
+                0x0ffffff,
+                0x1ffffff,
+                0x0ffffff,
+                0x1ffffff,
+                0x0ffffff,
+                0x1ffffff,
+                0x0ffffff,
+                0x1ffffff,
+                0x0ffffff
+            )
+        );
+        $this->assertEquals(
+            $g,
+            ParagonIE_Sodium_Core_Curve25519::fe_mul($g, ParagonIE_Sodium_Core_Curve25519::fe_1())
+        );
+
+        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+            array(
+                -33554165,
+                16777160,
+                33554393,
+                16777168,
+                33554402,
+                16777177,
+                33554411,
+                16777186,
+                33554420,
+                16777195
+            )
+        );
+
+        $h = ParagonIE_Sodium_Core_Curve25519::fe_mul($f, $g);
+        $this->assertEquals($expected, $h);
     }
 
     /**
