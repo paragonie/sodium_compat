@@ -193,6 +193,22 @@ There are three ways to make it fast:
       without harming the security of your cryptography keys. If your processor *isn't* safe, then decide whether you
       want speed or security because you can't have both.
 
+### How can I tell if sodium_compat will be slow, at runtime?
+
+Since version 1.8, you can use the `polyfill_is_fast()` static method to
+determine if sodium_compat will be slow at runtime.
+
+```php
+<?php
+if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
+    // Use libsodium now
+    $process->execute();
+} else {
+    // Defer to a cron job or other sort of asynchronous process
+    $process->enqueue();
+}
+```
+
 ### Help, my PHP only has 32-Bit Integers! It's super slow!
 
 Some features of sodium_compat are ***incredibly slow* with PHP 5 on Windows**
