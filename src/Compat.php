@@ -2640,6 +2640,22 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * Will sodium_compat run fast on the current hardware and PHP configuration?
+     *
+     * @return bool
+     */
+    public static function polyfill_is_fast()
+    {
+        if (extension_loaded('sodium')) {
+            return true;
+        }
+        if (extension_loaded('libsodium')) {
+            return true;
+        }
+        return PHP_INT_SIZE === 8;
+    }
+
+    /**
      * Generate a string of bytes from the kernel's CSPRNG.
      * Proudly uses /dev/urandom (if getrandom(2) is not available).
      *
