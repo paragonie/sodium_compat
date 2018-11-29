@@ -28,6 +28,10 @@ and have the funds for such an audit, please open an issue or contact
 However, sodium_compat has been adopted by high profile open source projects,
 such as [Joomla!](https://github.com/joomla/joomla-cms/blob/459d74686d2a638ec51149d7c44ddab8075852be/composer.json#L40)
 and [Magento](https://github.com/magento/magento2/blob/8fd89cfdf52c561ac0ca7bc20fd38ef688e201b0/composer.json#L44).
+Furthermore, sodium_compat was developed by Paragon Initiative Enterprises, a
+company that *specializes* in secure PHP development and PHP cryptography, and
+has been informally reviewed by many other security experts who also specialize
+in PHP.
 
 If you'd like to learn more about the defensive security measures we've taken
 to prevent sodium_compat from being a source of vulnerability in your systems,
