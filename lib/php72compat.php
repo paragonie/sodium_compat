@@ -431,9 +431,7 @@ if (!is_callable('sodium_crypto_box_seal_open')) {
     {
         try {
             return ParagonIE_Sodium_Compat::crypto_box_seal_open($message, $kp);
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (SodiumException $ex) {
             return false;
         }
     }
