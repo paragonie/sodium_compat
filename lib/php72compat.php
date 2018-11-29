@@ -63,6 +63,9 @@ foreach (array(
     'CRYPTO_SIGN_KEYPAIRBYTES',
     'CRYPTO_STREAM_KEYBYTES',
     'CRYPTO_STREAM_NONCEBYTES',
+    'LIBRARY_VERSION_MAJOR',
+    'LIBRARY_VERSION_MINOR',
+    'VERSION_STRING'
     ) as $constant
 ) {
     if (!defined("SODIUM_$constant")) {
