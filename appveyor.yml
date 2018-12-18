@@ -4,6 +4,7 @@ platform:
   - x86
   - x64
 clone_folder: C:\projects\sodium_compat
+image: Visual Studio 2017
 
 install:
   - cinst -y OpenSSL.Light
