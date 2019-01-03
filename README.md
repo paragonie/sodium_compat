@@ -96,6 +96,11 @@ Non-commercial report will be facilitated through [Github issues](https://github
 We offer no guarantees of our availability to resolve questions about integrating sodium_compat into third-party
 software for free, but will strive to fix any bugs (security-related or otherwise) in our library.
 
+## Support Contracts
+
+If your company uses this library in their products or services, you may be
+interested in [purchasing a support contract from Paragon Initiative Enterprises](https://paragonie.com/enterprise).
+
 # Using Sodium Compat
 
 ## True Polyfill
