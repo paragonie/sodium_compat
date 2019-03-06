@@ -669,10 +669,11 @@ class ParagonIE_Sodium_Compat
      * This mode uses a 64-bit random nonce with a 64-bit counter.
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
      *
-     * @param string $ciphertext Encrypted message (with Poly1305 MAC appended)
-     * @param string $assocData Authenticated Associated Data (unencrypted)
-     * @param string $nonce Number to be used only Once; must be 8 bytes
-     * @param string $key Encryption key
+     * @param string $ciphertext   Encrypted message (with Poly1305 MAC appended)
+     * @param string $assocData    Authenticated Associated Data (unencrypted)
+     * @param string $nonce        Number to be used only Once; must be 8 bytes
+     * @param string $key          Encryption key
+     * @param bool   $dontFallback Don't fallback to ext/sodium
      *
      * @return string            The original plaintext message
      * @throws SodiumException
@@ -683,7 +684,8 @@ class ParagonIE_Sodium_Compat
         $ciphertext = '',
         $assocData = '',
         $nonce = '',
-        $key = ''
+        $key = '',
+        $dontFallback = false
     ) {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($ciphertext, 'string', 1);
@@ -700,6 +702,16 @@ class ParagonIE_Sodium_Compat
         }
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES) {
             throw new SodiumException('Message must be at least CRYPTO_AEAD_XCHACHA20POLY1305_IETF_ABYTES long');
+        }
+        if (self::useNewSodiumAPI() && !$dontFallback) {
+            if (is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_decrypt')) {
+                return sodium_crypto_aead_xchacha20poly1305_ietf_decrypt(
+                    $ciphertext,
+                    $assocData,
+                    $nonce,
+                    $key
+                );
+            }
         }
 
         if (PHP_INT_SIZE === 4) {
@@ -727,10 +739,11 @@ class ParagonIE_Sodium_Compat
      * This mode uses a 64-bit random nonce with a 64-bit counter.
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
      *
-     * @param string $plaintext Message to be encrypted
-     * @param string $assocData Authenticated Associated Data (unencrypted)
-     * @param string $nonce Number to be used only Once; must be 8 bytes
-     * @param string $key Encryption key
+     * @param string $plaintext    Message to be encrypted
+     * @param string $assocData    Authenticated Associated Data (unencrypted)
+     * @param string $nonce        Number to be used only Once; must be 8 bytes
+     * @param string $key          Encryption key
+     * @param bool   $dontFallback Don't fallback to ext/sodium
      *
      * @return string           Ciphertext with a 16-byte Poly1305 message
      *                          authentication code appended
@@ -742,7 +755,8 @@ class ParagonIE_Sodium_Compat
         $plaintext = '',
         $assocData = '',
         $nonce = '',
-        $key = ''
+        $key = '',
+        $dontFallback = false
     ) {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($plaintext, 'string', 1);
@@ -756,6 +770,16 @@ class ParagonIE_Sodium_Compat
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES) {
             throw new SodiumException('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_KEYBYTES long');
+        }
+        if (self::useNewSodiumAPI() && !$dontFallback) {
+            if (is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_encrypt')) {
+                return sodium_crypto_aead_xchacha20poly1305_ietf_encrypt(
+                    $plaintext,
+                    $assocData,
+                    $nonce,
+                    $key
+                );
+            }
         }
 
         if (PHP_INT_SIZE === 4) {
