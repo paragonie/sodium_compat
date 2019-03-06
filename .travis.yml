@@ -33,6 +33,10 @@ matrix:
       os: linux
       env: USE_PSALM=1
            CHECK_MBSTRING=0
+    - php: "7.3"
+      os: linux
+      env: USE_PSALM=1
+           CHECK_MBSTRING=0
     - php: "nightly"
       os: linux
       env: USE_PSALM=1
