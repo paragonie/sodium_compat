@@ -37,6 +37,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
             $keys = range(0, $count - 1);
         }
         $array = array_values($array);
+        /** @var array<int, int> $keys */
 
         $obj = new ParagonIE_Sodium_Core_Curve25519_Fe();
         if ($save_indexes) {
