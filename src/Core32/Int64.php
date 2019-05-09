@@ -205,6 +205,9 @@ class ParagonIE_Sodium_Core32_Int64
      */
     public function mulInt($int = 0, $size = 0)
     {
+        if (ParagonIE_Sodium_Compat::$fastMult) {
+            return $this->mulIntFast($int);
+        }
         ParagonIE_Sodium_Core32_Util::declareScalarType($int, 'int', 1);
         ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
         /** @var int $int */
@@ -268,11 +271,11 @@ class ParagonIE_Sodium_Core32_Int64
             $a3 &= 0xffff;
 
             $int >>= 1;
-            $return->limbs[0] = $ret0;
-            $return->limbs[1] = $ret1;
-            $return->limbs[2] = $ret2;
-            $return->limbs[3] = $ret3;
         }
+        $return->limbs[0] = $ret0;
+        $return->limbs[1] = $ret1;
+        $return->limbs[2] = $ret2;
+        $return->limbs[3] = $ret3;
         return $return;
     }
 
@@ -318,6 +321,141 @@ class ParagonIE_Sodium_Core32_Int64
     }
 
     /**
+     * @param array<int, int> $a
+     * @param array<int, int> $b
+     * @param int $baseLog2
+     * @return array<int, int>
+     */
+    public function multiplyLong(array $a, array $b, $baseLog2 = 16)
+    {
+        $a_l = count($a);
+        $b_l = count($b);
+        $r = array_fill(0, $a_l + $b_l + 1, 0);
+        $base = 1 << $baseLog2;
+        for ($i = 0; $i < $a_l; ++$i) {
+            $a_i = $a[$i];
+            for ($j = 0; $j < $a_l; ++$j) {
+                $b_j = $b[$j];
+                $product = ($a_i * $b_j) + $r[$i + $j];
+                $carry = ($product >> $baseLog2 & 0xffff);
+                $r[$i + $j] = ($product - (int) ($carry * $base)) & 0xffff;
+                $r[$i + $j + 1] += $carry;
+            }
+        }
+        return array_slice($r, 0, 5);
+    }
+
+    /**
+     * @param int $int
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function mulIntFast($int)
+    {
+        // Handle negative numbers
+        $aNeg = ($this->limbs[0] >> 15) & 1;
+        $bNeg = ($int >> 31) & 1;
+        $a = array_reverse($this->limbs);
+        $b = array(
+            $int & 0xffff,
+            ($int >> 16) & 0xffff,
+            -$bNeg & 0xffff,
+            -$bNeg & 0xffff
+        );
+        if ($aNeg) {
+            for ($i = 0; $i < 4; ++$i) {
+                $a[$i] = ($a[$i] ^ 0xffff) & 0xffff;
+            }
+            ++$a[0];
+        }
+        if ($bNeg) {
+            for ($i = 0; $i < 4; ++$i) {
+                $b[$i] = ($b[$i] ^ 0xffff) & 0xffff;
+            }
+            ++$b[0];
+        }
+        // Multiply
+        $res = $this->multiplyLong($a, $b);
+
+        // Re-apply negation to results
+        if ($aNeg !== $bNeg) {
+            for ($i = 0; $i < 4; ++$i) {
+                $res[$i] = (0xffff ^ $res[$i]) & 0xffff;
+            }
+            // Handle integer overflow
+            $c = 1;
+            for ($i = 0; $i < 4; ++$i) {
+                $res[$i] += $c;
+                $c = $res[$i] >> 16;
+                $res[$i] &= 0xffff;
+            }
+        }
+
+        // Return our values
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $return->limbs = array(
+            $res[3] & 0xffff,
+            $res[2] & 0xffff,
+            $res[1] & 0xffff,
+            $res[0] & 0xffff
+        );
+        if (count($res) > 4) {
+            $return->overflow = $res[4] & 0xffff;
+        }
+        $return->unsignedInt = $this->unsignedInt;
+        return $return;
+    }
+
+    /**
+     * @param ParagonIE_Sodium_Core32_Int64 $right
+     * @return ParagonIE_Sodium_Core32_Int64
+     */
+    public function mulInt64Fast(ParagonIE_Sodium_Core32_Int64 $right)
+    {
+        $aNeg = ($this->limbs[0] >> 15) & 1;
+        $bNeg = ($right->limbs[0] >> 15) & 1;
+
+        $a = array_reverse($this->limbs);
+        $b = array_reverse($right->limbs);
+        if ($aNeg) {
+            for ($i = 0; $i < 4; ++$i) {
+                $a[$i] = ($a[$i] ^ 0xffff) & 0xffff;
+            }
+            ++$a[0];
+        }
+        if ($bNeg) {
+            for ($i = 0; $i < 4; ++$i) {
+                $b[$i] = ($b[$i] ^ 0xffff) & 0xffff;
+            }
+            ++$b[0];
+        }
+        $res = $this->multiplyLong($a, $b);
+        if ($aNeg !== $bNeg) {
+            if ($aNeg !== $bNeg) {
+                for ($i = 0; $i < 4; ++$i) {
+                    $res[$i] = ($res[$i] ^ 0xffff) & 0xffff;
+                }
+                $c = 1;
+                for ($i = 0; $i < 4; ++$i) {
+                    $res[$i] += $c;
+                    $c = $res[$i] >> 16;
+                    $res[$i] &= 0xffff;
+                }
+            }
+        }
+        $return = new ParagonIE_Sodium_Core32_Int64();
+        $return->limbs = array(
+            $res[3] & 0xffff,
+            $res[2] & 0xffff,
+            $res[1] & 0xffff,
+            $res[0] & 0xffff
+        );
+        if (count($res) > 4) {
+            $return->overflow = $res[4];
+        }
+        return $return;
+    }
+
+    /**
      * @param ParagonIE_Sodium_Core32_Int64 $int
      * @param int $size
      * @return ParagonIE_Sodium_Core32_Int64
@@ -327,6 +465,9 @@ class ParagonIE_Sodium_Core32_Int64
      */
     public function mulInt64(ParagonIE_Sodium_Core32_Int64 $int, $size = 0)
     {
+        if (ParagonIE_Sodium_Compat::$fastMult) {
+            return $this->mulInt64Fast($int);
+        }
         ParagonIE_Sodium_Core32_Util::declareScalarType($size, 'int', 2);
         if (!$size) {
             $size = 63;
