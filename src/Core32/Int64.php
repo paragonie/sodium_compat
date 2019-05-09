@@ -330,6 +330,7 @@ class ParagonIE_Sodium_Core32_Int64
     {
         $a_l = count($a);
         $b_l = count($b);
+        /** @var array<int, int> $r */
         $r = array_fill(0, $a_l + $b_l + 1, 0);
         $base = 1 << $baseLog2;
         for ($i = 0; $i < $a_l; ++$i) {
