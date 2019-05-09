@@ -188,18 +188,16 @@ class ParagonIE_Sodium_Core32_Int32
         $a = array_reverse($this->limbs);
         $b = array(
             $int & 0xffff,
-            ($int >> 16) & 0xffff,
-            -$bNeg & 0xffff,
-            -$bNeg & 0xffff
+            ($int >> 16) & 0xffff
         );
         if ($aNeg) {
-            for ($i = 0; $i < 4; ++$i) {
+            for ($i = 0; $i < 2; ++$i) {
                 $a[$i] = ($a[$i] ^ 0xffff) & 0xffff;
             }
             ++$a[0];
         }
         if ($bNeg) {
-            for ($i = 0; $i < 4; ++$i) {
+            for ($i = 0; $i < 2; ++$i) {
                 $b[$i] = ($b[$i] ^ 0xffff) & 0xffff;
             }
             ++$b[0];
@@ -209,12 +207,12 @@ class ParagonIE_Sodium_Core32_Int32
 
         // Re-apply negation to results
         if ($aNeg !== $bNeg) {
-            for ($i = 0; $i < 4; ++$i) {
+            for ($i = 0; $i < 2; ++$i) {
                 $res[$i] = (0xffff ^ $res[$i]) & 0xffff;
             }
             // Handle integer overflow
             $c = 1;
-            for ($i = 0; $i < 4; ++$i) {
+            for ($i = 0; $i < 2; ++$i) {
                 $res[$i] += $c;
                 $c = $res[$i] >> 16;
                 $res[$i] &= 0xffff;
