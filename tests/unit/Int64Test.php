@@ -10,7 +10,6 @@ class Int64Test extends PHPUnit_Framework_TestCase
         if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');
         }
-        ParagonIE_Sodium_Compat::$fastMult = true;
     }
 
     /**
