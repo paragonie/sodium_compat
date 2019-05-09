@@ -708,7 +708,7 @@ class ParagonIE_Sodium_Core32_Int64
             /** @var int $c */
             return $this->shiftRight(-$c);
         } else {
-            if (is_null($c)) {
+            if (!is_int($c)) {
                 throw new TypeError();
             }
             /** @var int $carry */
@@ -733,10 +733,11 @@ class ParagonIE_Sodium_Core32_Int64
     public function shiftRight($c = 0)
     {
         ParagonIE_Sodium_Core32_Util::declareScalarType($c, 'int', 1);
+        $c = (int) $c;
+        /** @var int $c */
         $return = new ParagonIE_Sodium_Core32_Int64();
         $return->unsignedInt = $this->unsignedInt;
         $c &= 63;
-        /** @var int $c */
 
         $negative = -(($this->limbs[0] >> 15) & 1);
         if ($c >= 16) {

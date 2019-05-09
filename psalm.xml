@@ -26,6 +26,11 @@
         -->
         <RedundantConditionGivenDocblockType errorLevel="suppress" />
 
+        <InternalMethod errorLevel="suppress" />
+        <!--
+            Don't prevent us from using our own code.
+        -->
+
         <TooFewArguments errorLevel="info" />
 
         <DocblockTypeContradiction errorLevel="info" />

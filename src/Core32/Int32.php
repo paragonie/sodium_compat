@@ -627,7 +627,7 @@ class ParagonIE_Sodium_Core32_Int32
             /** @var int $c */
             return $this->shiftLeft(-$c);
         } else {
-            if (is_null($c)) {
+            if (!is_int($c)) {
                 throw new TypeError();
             }
             /** @var int $c */
