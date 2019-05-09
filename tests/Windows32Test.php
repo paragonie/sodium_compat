@@ -7,6 +7,7 @@ class Windows32Test extends PHPUnit_Framework_TestCase
         if (PHP_INT_SIZE !== 4) {
             $this->markTestSkipped('64-bit OS');
         }
+        ParagonIE_Sodium_Compat::$fastMult = true;
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 

@@ -10,6 +10,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
         if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');
         }
+        ParagonIE_Sodium_Compat::$fastMult = true;
     }
 
     /**
@@ -195,7 +196,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
 
         $negOne = new ParagonIE_Sodium_Core32_Int64(array(0xffff, 0xffff, 0xffff, -1 & 0xffff));
         $this->assertSame(
-            array(0xffff, 0xffff, 0xffff, -5 & 0xffff),
+            array(0xffff, 0xffff, 0xffff, 0xfffb),
             $negOne->mulInt(5)->limbs
         );
         $this->assertSame(
@@ -226,7 +227,6 @@ class Int64Test extends PHPUnit_Framework_TestCase
                     ($result >> 16) & 0xffff,
                     $result & 0xffff
                 );
-
                 $this->assertSame(
                     $expected,
                     $base->mulInt($value)->limbs,
