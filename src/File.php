@@ -1076,7 +1076,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @param resource|object $hash
      * @param resource $fp
      * @param int $size
-     * @return mixed (resource on PHP < 7.2, object on PHP >= 7.2)
+     * @return resource|object Resource on PHP < 7.2, HashContext object on PHP >= 7.2
      * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress PossiblyInvalidArgument
@@ -1092,12 +1092,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             if (!is_resource($hash)) {
                 throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
             }
-
         } else {
             if (!is_object($hash)) {
                 throw new TypeError('Argument 1 must be an object (PHP 7.2+), ' . gettype($hash) . ' given.');
             }
         }
+
         if (!is_resource($fp)) {
             throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');
         }
