@@ -675,7 +675,7 @@ class ParagonIE_Sodium_Compat
      * @param string $key          Encryption key
      * @param bool   $dontFallback Don't fallback to ext/sodium
      *
-     * @return string            The original plaintext message
+     * @return string|bool         The original plaintext message
      * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedArgument
