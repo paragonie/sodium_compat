@@ -2782,7 +2782,8 @@ class ParagonIE_Sodium_Compat
             $a->mulInt64($b);
         }
         $end = microtime(true);
-        $diff = ceil(($end - $start) * 1000);
+        /** @var int $diff */
+        $diff = (int) ceil(($end - $start) * 1000);
         return $diff < $maxTimeout;
     }
 
