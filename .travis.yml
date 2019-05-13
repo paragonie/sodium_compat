@@ -55,11 +55,12 @@ matrix:
     - php: "hhvm"
 
 install:
-    - composer self-update
     - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2"; fi
     - composer update
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == 7.3 ]]; then composer require --dev "phpstan/phpstan:^0.11.5"; fi
 
 script:
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == 7.3 ]]; then vendor/bin/phpstan analyze; fi
     - travis_wait 30 vendor/bin/phpunit
     - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit; fi
     - vendor/bin/phpunit --bootstrap autoload-fast.php
