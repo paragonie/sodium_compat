@@ -2695,7 +2695,9 @@ class ParagonIE_Sodium_Compat
         if (self::polyfill_is_fast()) {
             return true;
         }
+        /** @var float $end */
         $end = 0.0;
+        /** @var float $start */
         $start = microtime(true);
         $a = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
         for ($i = 0; $i < $iterations; ++$i) {
