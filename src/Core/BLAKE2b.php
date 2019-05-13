@@ -643,7 +643,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     /**
      * @internal You should not use this directly from another application
      *
-     * @param SplFixedArray[SplFixedArray] $ctx
+     * @param SplFixedArray $ctx
      * @return string
      * @throws TypeError
      * @psalm-suppress MixedArgument
