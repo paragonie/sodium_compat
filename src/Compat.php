@@ -2776,11 +2776,14 @@ class ParagonIE_Sodium_Compat
         $end = 0.0;
         /** @var float $start */
         $start = microtime(true);
+        /** @var ParagonIE_Sodium_Core32_Int64 $a */
         $a = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
         for ($i = 0; $i < $iterations; ++$i) {
+            /** @var ParagonIE_Sodium_Core32_Int64 $b */
             $b = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
             $a->mulInt64($b);
         }
+        /** @var float $end */
         $end = microtime(true);
         /** @var int $diff */
         $diff = (int) ceil(($end - $start) * 1000);
