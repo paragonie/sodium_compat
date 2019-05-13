@@ -2685,31 +2685,6 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
-     * @param int $iterations Number of multiplications to attempt
-     * @param int $maxTimeout Milliseconds
-     * @return bool           TRUE if we're fast enough, FALSE is not
-     * @throws SodiumException
-     */
-    public static function runtime_speed_test($iterations, $maxTimeout)
-    {
-        if (self::polyfill_is_fast()) {
-            return true;
-        }
-        /** @var float $end */
-        $end = 0.0;
-        /** @var float $start */
-        $start = microtime(true);
-        $a = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
-        for ($i = 0; $i < $iterations; ++$i) {
-            $b = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
-            $a->mulInt64($b);
-        }
-        $end = microtime(true);
-        $diff = ceil(($end - $start) * 1000);
-        return $diff < $maxTimeout;
-    }
-
-    /**
      * Generate a string of bytes from the kernel's CSPRNG.
      * Proudly uses /dev/urandom (if getrandom(2) is not available).
      *
@@ -2777,6 +2752,38 @@ class ParagonIE_Sodium_Compat
             return (int) call_user_func('\\Sodium\\randombytes_random16');
         }
         return random_int(0, 65535);
+    }
+
+    /**
+     * Runtime testing method for 32-bit platforms.
+     *
+     * Usage: If runtime_speed_test() returns FALSE, then our 32-bit
+     *        implementation is to slow to use safely without risking timeouts.
+     *        If this happens, install sodium from PECL to get acceptable
+     *        performance.
+     *
+     * @param int $iterations Number of multiplications to attempt
+     * @param int $maxTimeout Milliseconds
+     * @return bool           TRUE if we're fast enough, FALSE is not
+     * @throws SodiumException
+     */
+    public static function runtime_speed_test($iterations, $maxTimeout)
+    {
+        if (self::polyfill_is_fast()) {
+            return true;
+        }
+        /** @var float $end */
+        $end = 0.0;
+        /** @var float $start */
+        $start = microtime(true);
+        $a = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
+        for ($i = 0; $i < $iterations; ++$i) {
+            $b = ParagonIE_Sodium_Core32_Int64::fromInt(random_int(3, 1 << 16));
+            $a->mulInt64($b);
+        }
+        $end = microtime(true);
+        $diff = ceil(($end - $start) * 1000);
+        return $diff < $maxTimeout;
     }
 
     /**
