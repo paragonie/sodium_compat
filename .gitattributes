@@ -1,5 +1,6 @@
 /.gitattributes export-ignore
 /.travis.yml export-ignore
 /phpunit.xml export-ignore
+/phpstan.neon.dist export-ignore
 /psalm.xml export-ignore
 /tests export-ignore
