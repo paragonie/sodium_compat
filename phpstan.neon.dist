@@ -1,18 +1,20 @@
 parameters:
     autoload_files:
-        - %rootDir%/../../../autoload-phpstan.php
+        - %rootDir%/../../../autoload-fast.php
+        - %rootDir%/../../../src/Core32/ChaCha20/Ctx.php
+        - %rootDir%/../../../src/Core32/ChaCha20/IetfCtx.php
     level: max
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/lib/
         - %currentWorkingDirectory%/namespaced/
-#    excludes_analyse:
     ignoreErrors:
         - /^Call to function is_callable.* with .* will always evaluate to .*$/
-        - /^Trying to invoke .* but it's not a callable\.$/
-        - /^Parameter .* of function call_user_func expects callable.* .*given\.$/
         - /^Method ParagonIE_Sodium_Compat::.* should return string but returns string\|false\.$/
         - /^Binary operation "\^" between float\|int\|string and float\|int\|string results in an error\.$/
+        # phpstan has problems recognizing callables
+        - /^Trying to invoke .* but it's not a callable\.$/
+        - /^Parameter .* of function call_user_func expects callable.* .*given\.$/
         # Null checks
         - '/^Result of \|\| is always false\.$/'
         # sodium_crypto_pwhash is a built-in function
