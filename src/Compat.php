@@ -116,6 +116,36 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_STREAM_NONCEBYTES = 24;
 
     /**
+     * Add two numbers (little-endian unsigned), storing the value in the first
+     * parameter.
+     *
+     * This mutates $val.
+     *
+     * @param string $val
+     * @param string $addv
+     * @return void
+     * @throws SodiumException
+     */
+    public static function add(&$val, $addv)
+    {
+        $val_len = ParagonIE_Sodium_Core_Util::strlen($val);
+        $addv_len = ParagonIE_Sodium_Core_Util::strlen($addv);
+        if ($val_len !== $addv_len) {
+            throw new SodiumException('values must have the same length');
+        }
+        $A = ParagonIE_Sodium_Core_Util::stringToIntArray($val);
+        $B = ParagonIE_Sodium_Core_Util::stringToIntArray($addv);
+
+        $c = 0;
+        for ($i = 0; $i < $val_len; $i++) {
+            $c += ($A[$i] + $B[$i]);
+            $A[$i] = ($c & 0xff);
+            $c >>= 8;
+        }
+        $val = ParagonIE_Sodium_Core_Util::intArrayToString($A);
+    }
+
+    /**
      * Cache-timing-safe implementation of bin2hex().
      *
      * @param string $string A string (probably raw binary)

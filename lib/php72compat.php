@@ -73,6 +73,19 @@ foreach (array(
     }
 }
 
+if (!is_callable('sodium_add')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::add()
+     * @param string $val
+     * @param string $addv
+     * @return void
+     * @throws SodiumException
+     */
+    function sodium_add(&$val, $addv)
+    {
+        ParagonIE_Sodium_Compat::add($val, $addv);
+    }
+}
 if (!is_callable('sodium_bin2hex')) {
     /**
      * @see ParagonIE_Sodium_Compat::hex2bin()

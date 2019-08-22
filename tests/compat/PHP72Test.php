@@ -14,6 +14,26 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     */
+    public function testAdd()
+    {
+        $a = "\x12\x34\x56\x78";
+        $b = "\x01\x00\x00\x00";
+        $c = "\xFF\xFF\xFF\xFF";
+
+        $tmp = $a;
+        ParagonIE_Sodium_Compat::add($tmp, $b);
+        $this->assertEquals("\x13\x34\x56\x78", $tmp);
+        ParagonIE_Sodium_Compat::add($tmp, $b);
+        $this->assertEquals("\x14\x34\x56\x78", $tmp);
+
+        $tmp = $a;
+        ParagonIE_Sodium_Compat::add($tmp, $c);
+        $this->assertEquals("\x11\x34\x56\x78", $tmp);
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::compare()
      */
     public function testCompare()
