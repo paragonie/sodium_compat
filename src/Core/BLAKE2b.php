@@ -88,10 +88,10 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     {
         $l = ($x[1] + $y[1]) & 0xffffffff;
         return self::new64(
-            $x[0] + $y[0] + (
+            (int) ($x[0] + $y[0] + (
                 ($l < $x[1]) ? 1 : 0
-            ),
-            $l
+            )),
+            (int) $l
         );
     }
 

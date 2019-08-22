@@ -1,4 +1,6 @@
 parameters:
+    autoload_files:
+        - %rootDir%/../../../autoload-phpstan.php
     level: max
     paths:
         - %currentWorkingDirectory%/src/
@@ -6,11 +8,17 @@ parameters:
         - %currentWorkingDirectory%/namespaced/
 #    excludes_analyse:
     ignoreErrors:
+        - /^Call to function is_callable.* with .* will always evaluate to .*$/
+        - /^Trying to invoke .* but it's not a callable\.$/
+        - /^Parameter .* of function call_user_func expects callable.* .*given\.$/
+        - /^Method ParagonIE_Sodium_Compat::.* should return string but returns string\|false\.$/
+        - /^Binary operation "\^" between float\|int\|string and float\|int\|string results in an error\.$/
+        # Null checks
+        - '/^Result of \|\| is always false\.$/'
         # sodium_crypto_pwhash is a built-in function
         - '/^Default value of the parameter #6 \$algo \(null\) of function sodium_crypto_pwhash\(\) is incompatible with type int\.$/'
-        # PHPStan issue #2124
-        - '#^Function sodium_crypto_scalarmult_base invoked with 1 parameter, 2 required\.$#'
         # On PHP >=7.2 there is HashContext
+        - '/^Parameter #1 \$context of function hash_update expects HashContext, object\|resource given\.$/'
         - '/^Parameter #1 \$context of function hash_final expects HashContext, resource given\.$/'
         # People call generichash() with all kinds of rubish
         -
