@@ -8,6 +8,10 @@
  * ParagonIE_Sodium_Compat method or class constant, respectively.
  */
 foreach (array(
+    'BASE64_VARIANT_ORIGINAL',
+    'BASE64_VARIANT_ORIGINAL_UNPADDED',
+    'BASE64_VARIANT_URLSAFE',
+    'BASE64_VARIANT_URLSAFE_UNPADDED',
     'CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
@@ -84,6 +88,35 @@ if (!is_callable('sodium_add')) {
     function sodium_add(&$val, $addv)
     {
         ParagonIE_Sodium_Compat::add($val, $addv);
+    }
+}
+if (!is_callable('sodium_base642bin')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::bin2base64()
+     * @param string $string
+     * @param int $variant
+     * @param string $ignore
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_base642bin($string, $variant, $ignore ='')
+    {
+        return ParagonIE_Sodium_Compat::base642bin($string, $variant, $ignore);
+    }
+}
+if (!is_callable('sodium_bin2base64')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::bin2base64()
+     * @param string $string
+     * @param int $variant
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_bin2base64($string, $variant)
+    {
+        return ParagonIE_Sodium_Compat::bin2base64($string, $variant);
     }
 }
 if (!is_callable('sodium_bin2hex')) {

@@ -49,6 +49,10 @@ class ParagonIE_Sodium_Compat
     const VERSION_STRING = 'polyfill-1.0.8';
 
     // From libsodium
+    const BASE64_VARIANT_ORIGINAL = 1;
+    const BASE64_VARIANT_ORIGINAL_NO_PADDING = 3;
+    const BASE64_VARIANT_URLSAFE = 5;
+    const BASE64_VARIANT_URLSAFE_NO_PADDING = 7;
     const CRYPTO_AEAD_AES256GCM_KEYBYTES = 32;
     const CRYPTO_AEAD_AES256GCM_NSECBYTES = 0;
     const CRYPTO_AEAD_AES256GCM_NPUBBYTES = 12;
@@ -143,6 +147,81 @@ class ParagonIE_Sodium_Compat
             $c >>= 8;
         }
         $val = ParagonIE_Sodium_Core_Util::intArrayToString($A);
+    }
+
+    /**
+     * @param string $encoded
+     * @param int $variant
+     * @param string $ignore
+     * @return string
+     * @throws SodiumException
+     */
+    public static function base642bin($encoded, $variant, $ignore = '')
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($encoded, 'string', 1);
+
+        /** @var string $encoded */
+        $encoded = (string) $encoded;
+
+        // Just strip before decoding
+        if (!empty($ignore)) {
+            $encoded = str_replace($ignore, '', $encoded);
+        }
+
+        try {
+            switch ($variant) {
+                case self::BASE64_VARIANT_ORIGINAL:
+                    return ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true);
+                case self::BASE64_VARIANT_ORIGINAL_NO_PADDING:
+                    return ParagonIE_Sodium_Core_Base64_Original::decode($encoded, false);
+                case self::BASE64_VARIANT_URLSAFE:
+                    return ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true);
+                case self::BASE64_VARIANT_URLSAFE_NO_PADDING:
+                    return ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, false);
+                default:
+                    throw new SodiumException('invalid base64 variant identifier');
+            }
+        } catch (Exception $ex) {
+            if ($ex instanceof SodiumException) {
+                throw $ex;
+            }
+            throw new SodiumException('invalid base64 string');
+        }
+    }
+
+    /**
+     * @param string $decoded
+     * @param int $variant
+     * @return string
+     * @throws SodiumException
+     */
+    public static function bin2base64($decoded, $variant)
+    {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($decoded, 'string', 1);
+        /** @var string $decoded */
+        $decoded = (string) $decoded;
+
+        try {
+            switch ($variant) {
+                case self::BASE64_VARIANT_ORIGINAL:
+                    return ParagonIE_Sodium_Core_Base64_Original::encode($decoded);
+                case self::BASE64_VARIANT_ORIGINAL_NO_PADDING:
+                    return ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded);
+                case self::BASE64_VARIANT_URLSAFE:
+                    return ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded);
+                case self::BASE64_VARIANT_URLSAFE_NO_PADDING:
+                    return ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded);
+                default:
+                    throw new SodiumException('invalid base64 variant identifier');
+            }
+        } catch (Exception $ex) {
+            if ($ex instanceof SodiumException) {
+                throw $ex;
+            }
+            throw new SodiumException('invalid base64 string');
+        }
     }
 
     /**
