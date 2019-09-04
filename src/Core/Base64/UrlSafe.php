@@ -6,7 +6,7 @@
  *  Copyright (c) 2016 - 2018 Paragon Initiative Enterprises.
  *  Copyright (c) 2014 Steve "Sc00bz" Thomas (steve at tobtu dot com)
  */
-class ParagonIE_Sodium_Core_Base64_UrlSafe extends ParagonIE_Sodium_Core_Base64_Common
+class ParagonIE_Sodium_Core_Base64_UrlSafe
 {
     // COPY ParagonIE_Sodium_Core_Base64_Common STARTING HERE
     /**
