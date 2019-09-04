@@ -32,7 +32,7 @@ class CompatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @throws SodiumException
      */
     public function testEd25519Keypairs()
     {
