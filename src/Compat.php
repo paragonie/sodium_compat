@@ -2245,6 +2245,30 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     * @throws SodiumException
+     */
+    public static function crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($sk, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($pk, 'string', 1);
+
+        if (ParagonIE_Sodium_Core_Util::strlen($sk) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
+            throw new SodiumException('secretkey should be SODIUM_CRYPTO_SIGN_SECRETKEYBYTES bytes');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($pk) !== self::CRYPTO_SIGN_PUBLICKEYBYTES) {
+            throw new SodiumException('publickey should be SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES bytes');
+        }
+
+        if (self::useNewSodiumAPI()) {
+            return sodium_crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk);
+        }
+        return $sk . $pk;
+    }
+
+    /**
      * Generate an Ed25519 keypair from a seed.
      *
      * @param string $seed Input seed

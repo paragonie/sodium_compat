@@ -819,6 +819,20 @@ if (!is_callable('sodium_crypto_sign_detached')) {
         return ParagonIE_Sodium_Compat::crypto_sign_detached($message, $sk);
     }
 }
+if (!is_callable('sodium_crypto_sign_keypair_from_secretkey_and_publickey')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_sign_keypair_from_secretkey_and_publickey()
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk)
+    {
+        return ParagonIE_Sodium_Compat::crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk);
+    }
+}
 if (!is_callable('sodium_crypto_sign_keypair')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_sign_keypair()
