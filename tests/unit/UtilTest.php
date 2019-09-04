@@ -45,7 +45,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
         }
 
         $x = chunk_split(base64_encode(random_bytes(100)));
-        $y = ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
+        ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
     }
 
     /**

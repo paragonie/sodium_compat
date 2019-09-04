@@ -163,6 +163,9 @@ class ParagonIE_Sodium_Compat
 
         /** @var string $encoded */
         $encoded = (string) $encoded;
+        if (empty($encoded)) {
+            return '';
+        }
 
         // Just strip before decoding
         if (!empty($ignore)) {
@@ -202,25 +205,21 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($decoded, 'string', 1);
         /** @var string $decoded */
         $decoded = (string) $decoded;
+        if (empty($decoded)) {
+            return '';
+        }
 
-        try {
-            switch ($variant) {
-                case self::BASE64_VARIANT_ORIGINAL:
-                    return ParagonIE_Sodium_Core_Base64_Original::encode($decoded);
-                case self::BASE64_VARIANT_ORIGINAL_NO_PADDING:
-                    return ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded);
-                case self::BASE64_VARIANT_URLSAFE:
-                    return ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded);
-                case self::BASE64_VARIANT_URLSAFE_NO_PADDING:
-                    return ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded);
-                default:
-                    throw new SodiumException('invalid base64 variant identifier');
-            }
-        } catch (Exception $ex) {
-            if ($ex instanceof SodiumException) {
-                throw $ex;
-            }
-            throw new SodiumException('invalid base64 string');
+        switch ($variant) {
+            case self::BASE64_VARIANT_ORIGINAL:
+                return ParagonIE_Sodium_Core_Base64_Original::encode($decoded);
+            case self::BASE64_VARIANT_ORIGINAL_NO_PADDING:
+                return ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded);
+            case self::BASE64_VARIANT_URLSAFE:
+                return ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded);
+            case self::BASE64_VARIANT_URLSAFE_NO_PADDING:
+                return ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded);
+            default:
+                throw new SodiumException('invalid base64 variant identifier');
         }
     }
 
