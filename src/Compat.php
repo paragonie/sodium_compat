@@ -93,7 +93,7 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_GENERICHASH_KEYBYTES_MIN = 16;
     const CRYPTO_GENERICHASH_KEYBYTES_MAX = 64;
     const CRYPTO_PWHASH_SALTBYTES = 16;
-    const CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
+    const CRYPTO_PWHASH_STRPREFIX = '$argon2id$';
     const CRYPTO_PWHASH_ALG_ARGON2I13 = 1;
     const CRYPTO_PWHASH_ALG_ARGON2ID13 = 2;
     const CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
@@ -1817,6 +1817,36 @@ class ParagonIE_Sodium_Compat
         throw new SodiumException(
             'This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP'
         );
+    }
+
+    /**
+     * Do we need to rehash this password?
+     *
+     * @param string $hash
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return bool
+     * @throws SodiumException
+     */
+    public static function crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($hash, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($opslimit, 'int', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($memlimit, 'int', 3);
+
+        // Just grab the first 4 pieces.
+        $pieces = explode('$', (string) $hash);
+        $prefix = implode('$', array_slice($pieces, 0, 4));
+
+        // Rebuild the expected header.
+        /** @var int $ops */
+        $ops = (int) $opslimit;
+        /** @var int $mem */
+        $mem = (int) $memlimit >> 10;
+        $encoded = self::CRYPTO_PWHASH_STRPREFIX . 'v=19$m=' . $mem . ',t=' . $ops . ',p=1';
+
+        // Do they match? If so, we don't need to rehash, so return false.
+        return !ParagonIE_Sodium_Core_Util::hashEquals($encoded, $prefix);
     }
 
     /**

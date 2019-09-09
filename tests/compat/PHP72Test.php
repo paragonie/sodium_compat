@@ -848,7 +848,51 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     */
+    public function testKdf()
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+        $subkey_id = random_int(1, PHP_INT_MAX);
+        $context = 'NaClTest';
+        $a = sodium_crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $b = ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $this->assertEquals(
+            bin2hex($a),
+            bin2hex($b),
+            'kdf outputs differ'
+        );
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testPwhashNeedsRehash()
+    {
+        $hash = sodium_crypto_pwhash_str(
+            'test',
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
+        $this->assertFalse(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        ));
+        $this->assertTrue(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE << 1
+        ));
+        $this->assertTrue(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE + 1,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        ));
+    }
+
+    /**
+     * @throws SodiumException
      */
     public function testCryptoShorthash()
     {
@@ -878,22 +922,10 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     * @param string $m
+     * @param string $k
+     * @throws SodiumException
      */
-    public function testKdf()
-    {
-        $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
-        $subkey_id = random_int(1, PHP_INT_MAX);
-        $context = 'NaClTest';
-        $a = sodium_crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
-        $b = ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
-        $this->assertEquals(
-            bin2hex($a),
-            bin2hex($b),
-            'kdf outputs differ'
-        );
-    }
-
     protected function shorthashVerify($m, $k)
     {
         $this->assertSame(

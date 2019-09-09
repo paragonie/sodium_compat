@@ -675,6 +675,19 @@ if (!is_callable('sodium_crypto_pwhash_str')) {
         return ParagonIE_Sodium_Compat::crypto_pwhash_str($passwd, $opslimit, $memlimit);
     }
 }
+if (!is_callable('sodium_crypto_pwhash_str_needs_rehash')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash()
+     * @param string $hash
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return bool
+     */
+    function sodium_crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit)
+    {
+        return ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit);
+    }
+}
 if (!is_callable('sodium_crypto_pwhash_str_verify')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_pwhash_str_verify()
