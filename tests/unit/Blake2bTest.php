@@ -193,16 +193,16 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         $salt = '5b6b41ed9b343fe0';
         $personal = '5126fb2a37400d2a';
 
-        $k = '';
+        $key = '';
         for ($h = 0; $h < 64; ++$h) {
-            $k[$h] = ParagonIE_Sodium_Core_Util::intToChr($h);
+            $key .= ParagonIE_Sodium_Core_Util::intToChr($h);
         }
 
         $in = '';
         for ($i = 0; $i < 64; ++$i) {
             $in .= ParagonIE_Sodium_Core_Util::intToChr($i);
             $state = ParagonIE_Sodium_Compat::crypto_generichash_init_salt_personal(
-                ParagonIE_Sodium_Core_Util::substr($k, 0, $i + 1),
+                ParagonIE_Sodium_Core_Util::substr((string) $key, 0, $i + 1),
                 $i + 1,
                 $salt,
                 $personal
