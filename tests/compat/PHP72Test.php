@@ -869,6 +869,9 @@ class PHP72Test extends PHPUnit_Framework_TestCase
      */
     public function testPwhashNeedsRehash()
     {
+        if (!\extension_loaded('sodium')) {
+            $this->markTestSkipped('Libsodium not loaded');
+        }
         $hash = sodium_crypto_pwhash_str(
             'test',
             SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
