@@ -33,6 +33,10 @@ foreach (array(
     'CRYPTO_BOX_MACBYTES',
     'CRYPTO_BOX_NONCEBYTES',
     'CRYPTO_BOX_SEEDBYTES',
+    'CRYPTO_KDF_BYTES_MIN',
+    'CRYPTO_KDF_BYTES_MAX',
+    'CRYPTO_KDF_CONTEXTBYTES',
+    'CRYPTO_KDF_KEYBYTES',
     'CRYPTO_KX_BYTES',
     'CRYPTO_KX_SEEDBYTES',
     'CRYPTO_KX_PUBLICKEYBYTES',
@@ -600,6 +604,10 @@ if (!is_callable('sodium_crypto_kdf_keygen')) {
 if (!is_callable('sodium_crypto_kdf_derive_from_key')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     * @param int $subkey_len
+     * @param int $subkey_id
+     * @param string $context
+     * @param string $key
      * @return string
      * @throws Exception
      */
@@ -773,6 +781,7 @@ if (!is_callable('sodium_crypto_secretbox_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_secretbox_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_secretbox_keygen()
     {
@@ -816,6 +825,7 @@ if (!is_callable('sodium_crypto_shorthash_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_shorthash_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_shorthash_keygen()
     {
@@ -1006,6 +1016,7 @@ if (!is_callable('sodium_crypto_stream_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_stream_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_stream_keygen()
     {
@@ -1140,6 +1151,7 @@ if (!is_callable('sodium_randombytes_random16')) {
     /**
      * @see ParagonIE_Sodium_Compat::randombytes_random16()
      * @return int
+     * @throws Exception
      */
     function sodium_randombytes_random16()
     {
