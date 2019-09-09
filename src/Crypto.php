@@ -778,6 +778,53 @@ abstract class ParagonIE_Sodium_Crypto
     }
 
     /**
+     * Initialize a hashing context for BLAKE2b.
+     *
+     * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.
+     *
+     * @param string $key
+     * @param int $outputLength
+     * @param string $salt
+     * @param string $personal
+     * @return string
+     * @throws RangeException
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public static function generichash_init_salt_personal(
+        $key = '',
+        $outputLength = 32,
+        $salt = '',
+        $personal = ''
+    ) {
+        // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
+        ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
+
+        $k = null;
+        if (!empty($key)) {
+            $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);
+            if ($k->count() > ParagonIE_Sodium_Core_BLAKE2b::KEYBYTES) {
+                throw new RangeException('Invalid key size');
+            }
+        }
+        if (!empty($salt)) {
+            $s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($salt);
+        } else {
+            $s = null;
+        }
+        if (!empty($salt)) {
+            $p = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($personal);
+        } else {
+            $p = null;
+        }
+
+        /** @var SplFixedArray $ctx */
+        $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outputLength, $s, $p);
+
+        return ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx);
+    }
+
+    /**
      * Update a hashing context for BLAKE2b with $message
      *
      * @internal Do not use this directly. Use ParagonIE_Sodium_Compat.

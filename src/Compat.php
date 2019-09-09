@@ -1418,6 +1418,7 @@ class ParagonIE_Sodium_Compat
      * @throws TypeError
      * @psalm-suppress MixedArgument
      * @psalm-suppress ReferenceConstraintViolation
+     * @psalm-suppress ConflictingReferenceConstraint
      */
     public static function crypto_generichash_final(&$ctx, $length = self::CRYPTO_GENERICHASH_BYTES)
     {
@@ -1431,6 +1432,14 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_generichash_final')) {
             $func = '\\Sodium\\crypto_generichash_final';
             return (string) $func($ctx, $length);
+        }
+        if ($length < 1) {
+            try {
+                self::memzero($ctx);
+            } catch (SodiumException $ex) {
+                unset($ctx);
+            }
+            return '';
         }
         if (PHP_INT_SIZE === 4) {
             $result = ParagonIE_Sodium_Crypto32::generichash_final($ctx, $length);
@@ -1485,6 +1494,51 @@ class ParagonIE_Sodium_Compat
             return ParagonIE_Sodium_Crypto32::generichash_init($key, $length);
         }
         return ParagonIE_Sodium_Crypto::generichash_init($key, $length);
+    }
+
+    /**
+     * Initialize a BLAKE2b hashing context, for use in a streaming interface.
+     *
+     * @param string|null $key If specified must be a string between 16 and 64 bytes
+     * @param int $length      The size of the desired hash output
+     * @param string $salt     Salt (up to 16 bytes)
+     * @param string $personal Personalization string (up to 16 bytes)
+     * @return string          A BLAKE2 hashing context, encoded as a string
+     *                         (To be 100% compatible with ext/libsodium)
+     * @throws SodiumException
+     * @throws TypeError
+     * @psalm-suppress MixedArgument
+     */
+    public static function crypto_generichash_init_salt_personal(
+        $key = '',
+        $length = self::CRYPTO_GENERICHASH_BYTES,
+        $salt = '',
+        $personal = ''
+    ) {
+        /* Type checks: */
+        if (is_null($key)) {
+            $key = '';
+        }
+        ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($length, 'int', 2);
+        ParagonIE_Sodium_Core_Util::declareScalarType($salt, 'string', 3);
+        ParagonIE_Sodium_Core_Util::declareScalarType($personal, 'string', 4);
+
+        /* Input validation: */
+        if (!empty($key)) {
+            /*
+            if (ParagonIE_Sodium_Core_Util::strlen($key) < self::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
+                throw new SodiumException('Unsupported key size. Must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes long.');
+            }
+            */
+            if (ParagonIE_Sodium_Core_Util::strlen($key) > self::CRYPTO_GENERICHASH_KEYBYTES_MAX) {
+                throw new SodiumException('Unsupported key size. Must be at most CRYPTO_GENERICHASH_KEYBYTES_MAX bytes long.');
+            }
+        }
+        if (PHP_INT_SIZE === 4) {
+            return ParagonIE_Sodium_Crypto32::generichash_init_salt_personal($key, $length, $salt, $personal);
+        }
+        return ParagonIE_Sodium_Crypto::generichash_init_salt_personal($key, $length, $salt, $personal);
     }
 
     /**
@@ -2254,6 +2308,8 @@ class ParagonIE_Sodium_Compat
     {
         ParagonIE_Sodium_Core_Util::declareScalarType($sk, 'string', 1);
         ParagonIE_Sodium_Core_Util::declareScalarType($pk, 'string', 1);
+        $sk = (string) $sk;
+        $pk = (string) $pk;
 
         if (ParagonIE_Sodium_Core_Util::strlen($sk) !== self::CRYPTO_SIGN_SECRETKEYBYTES) {
             throw new SodiumException('secretkey should be SODIUM_CRYPTO_SIGN_SECRETKEYBYTES bytes');
