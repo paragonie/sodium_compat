@@ -24,9 +24,11 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testPersonalizedState()
     {
-
         $exp = ParagonIE_Sodium_Core_Util::hex2bin(
             '48c9bdf267e6096a3ba7ca8485ae67bb2bf894fe72f36e3cf1361d5f3af54fa5e4e0d0cf4b636b35260e0d1fbf0e60ab' .
             '5e8c73cdcdbbb17e4a164a2329a9d23a0000000000000000000000000000000000000000000000000000000000000000' .
@@ -473,6 +475,23 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         $this->assertSame(bin2hex($hash), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') a');
         $this->assertSame(bin2hex($hash2), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') b');
         $this->assertSame(bin2hex($hash2), bin2hex($hash), 'Generichash streaming is failing (' . $i . ') c');
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     */
+    public function testKdf()
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+        $subkey_id = random_int(1, PHP_INT_MAX);
+        $context = 'SodiumCompatTest';
+        $a = sodium_crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $b = ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $this->assertEquals(
+            bin2hex($a),
+            bin2hex($b),
+            'kdf outputs differ'
+        );
     }
 
     /**

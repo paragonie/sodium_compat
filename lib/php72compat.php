@@ -278,6 +278,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_ietf_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_chacha20poly1305_ietf_keygen()
     {
@@ -324,6 +325,7 @@ if (!is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_xchacha20poly1305_ietf_keygen()
     {
@@ -348,6 +350,7 @@ if (!is_callable('sodium_crypto_auth_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_auth_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_auth_keygen()
     {
@@ -562,6 +565,7 @@ if (!is_callable('sodium_crypto_generichash_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_generichash_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_generichash_keygen()
     {
@@ -580,6 +584,33 @@ if (!is_callable('sodium_crypto_generichash_update')) {
     function sodium_crypto_generichash_update(&$ctx, $message = '')
     {
         ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
+    }
+}
+if (!is_callable('sodium_crypto_kdf_keygen')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_kdf_keygen()
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kdf_keygen()
+    {
+        return ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+    }
+}
+if (!is_callable('sodium_crypto_kdf_derive_from_key')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kdf_derive_from_key($subkey_len, $subkey_id, $context, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(
+            $subkey_len,
+            $subkey_id,
+            $context,
+            $key
+        );
     }
 }
 if (!is_callable('sodium_crypto_kx')) {
