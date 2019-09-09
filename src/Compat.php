@@ -80,7 +80,7 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_BOX_SEEDBYTES = 32;
     const CRYPTO_KDF_BYTES_MIN = 16;
     const CRYPTO_KDF_BYTES_MAX = 64;
-    const CRYPTO_KDF_CONTEXTBYTES = 16;
+    const CRYPTO_KDF_CONTEXTBYTES = 8;
     const CRYPTO_KDF_KEYBYTES = 32;
     const CRYPTO_KX_BYTES = 32;
     const CRYPTO_KX_SEEDBYTES = 32;
@@ -1527,6 +1527,8 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($length, 'int', 2);
         ParagonIE_Sodium_Core_Util::declareScalarType($salt, 'string', 3);
         ParagonIE_Sodium_Core_Util::declareScalarType($personal, 'string', 4);
+        $salt = str_pad($salt, 16, "\0", STR_PAD_RIGHT);
+        $personal = str_pad($personal, 16, "\0", STR_PAD_RIGHT);
 
         /* Input validation: */
         if (!empty($key)) {

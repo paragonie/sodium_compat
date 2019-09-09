@@ -877,6 +877,23 @@ class PHP72Test extends PHPUnit_Framework_TestCase
         $this->shorthashVerify($message, $key);
     }
 
+    /**
+     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     */
+    public function testKdf()
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+        $subkey_id = random_int(1, PHP_INT_MAX);
+        $context = 'NaClTest';
+        $a = sodium_crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $b = ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $this->assertEquals(
+            bin2hex($a),
+            bin2hex($b),
+            'kdf outputs differ'
+        );
+    }
+
     protected function shorthashVerify($m, $k)
     {
         $this->assertSame(
