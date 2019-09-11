@@ -52,6 +52,21 @@ class CompatTest extends PHPUnit_Framework_TestCase
     /**
      * @throws SodiumException
      */
+    public function testSodiumPad()
+    {
+        for ($i = 0; $i < 100; ++$i) {
+            $block = random_int(16, 256);
+            $original = str_repeat("A", random_int(1, 1024));
+
+            $padded = ParagonIE_Sodium_Compat::pad($original, $block);
+            $unpadded = ParagonIE_Sodium_Compat::unpad($padded, $block);
+            $this->assertEquals($unpadded, $original);
+        }
+    }
+
+    /**
+     * @throws SodiumException
+     */
     public function testEd25519Keypairs()
     {
         $keypair = ParagonIE_Sodium_Core_Util::hex2bin(

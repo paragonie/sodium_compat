@@ -1285,6 +1285,34 @@ if (!is_callable('sodium_memzero')) {
         ParagonIE_Sodium_Compat::memzero($str);
     }
 }
+if (!is_callable('sodium_pad')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::pad()
+     * @param string $unpadded
+     * @param int $blockSize
+     * @return int
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_pad($unpadded, $blockSize)
+    {
+        return ParagonIE_Sodium_Compat::pad($unpadded, $blockSize);
+    }
+}
+if (!is_callable('sodium_unpad')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::pad()
+     * @param string $padded
+     * @param int $blockSize
+     * @return int
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_pad($padded, $blockSize)
+    {
+        return ParagonIE_Sodium_Compat::unpad($padded, $blockSize);
+    }
+}
 if (!is_callable('sodium_randombytes_buf')) {
     /**
      * @see ParagonIE_Sodium_Compat::randombytes_buf()

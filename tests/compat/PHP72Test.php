@@ -1001,6 +1001,28 @@ class PHP72Test extends PHPUnit_Framework_TestCase
 
     /**
      * @throws SodiumException
+     * @throws Exception
+     */
+    public function testSodiumPad()
+    {
+        for ($i = 0; $i < 100; ++$i) {
+            $block = random_int(16, 256);
+            $original = str_repeat("A", random_int(1, 1024));
+
+            $paddedA = sodium_pad($original, $block);
+            $unpaddedA = sodium_unpad($paddedA, $block);
+            $this->assertEquals($unpaddedA, $original);
+            $this->assertNotEquals($paddedA, $original);
+
+            $paddedB = ParagonIE_Sodium_Compat::pad($original, $block);
+            $this->assertEquals(bin2hex($paddedA), bin2hex($paddedB), 'i = ' . $i);
+            $unpaddedB = ParagonIE_Sodium_Compat::unpad($paddedB, $block);
+            $this->assertEquals($unpaddedB, $original);
+        }
+    }
+
+    /**
+     * @throws SodiumException
      */
     public function testKeyExchange()
     {

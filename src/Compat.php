@@ -3211,6 +3211,132 @@ class ParagonIE_Sodium_Compat
     }
 
     /**
+     * @param string $unpadded
+     * @param int $blockSize
+     * @return string
+     * @throws SodiumException
+     */
+    public static function pad($unpadded, $blockSize)
+    {
+        if ($blockSize <= 0) {
+            throw new SodiumException(
+                'block size cannot be less than 1'
+            );
+        }
+        $unpadded_len = ParagonIE_Sodium_Core_Util::strlen($unpadded);
+        $xpadlen = ($blockSize - 1);
+        if (($blockSize & ($blockSize - 1)) === 0) {
+            $xpadlen -= $unpadded_len & ($blockSize - 1);
+        } else {
+            $xpadlen -= $unpadded_len % $blockSize;
+        }
+
+        $xpadded_len = $unpadded_len + $xpadlen;
+        $padded = str_repeat("\0", $xpadded_len - 1);
+        if ($unpadded_len > 0) {
+            $st = 1;
+            $i = 0;
+            $k = $unpadded_len;
+            for ($j = 0; $j <= $xpadded_len; ++$j) {
+                $i = (int) $i;
+                $k = (int) $k;
+                $st = (int) $st;
+                if ($j >= $unpadded_len) {
+                    $padded[$j] = "\0";
+                } else {
+                    $padded[$j] = $unpadded[$j];
+                }
+                /** @var int $k */
+                $k -= $st;
+                $st = (int) (~(
+                            (
+                                (
+                                    ($k >> 48)
+                                        |
+                                    ($k >> 32)
+                                        |
+                                    ($k >> 16)
+                                        |
+                                    $k
+                                ) - 1
+                            ) >> 16
+                        )
+                    ) & 1;
+                $i += $st;
+            }
+        }
+
+        $mask = 0;
+        $tail = $xpadded_len;
+        for ($i = 0; $i < $blockSize; ++$i) {
+            # barrier_mask = (unsigned char)
+            #     (((i ^ xpadlen) - 1U) >> ((sizeof(size_t) - 1U) * CHAR_BIT));
+            $barrier_mask = (($i ^ $xpadlen) -1) >> ((PHP_INT_SIZE << 3) - 1);
+            # tail[-i] = (tail[-i] & mask) | (0x80 & barrier_mask);
+            $padded[$tail - $i] = ParagonIE_Sodium_Core_Util::intToChr(
+                (ParagonIE_Sodium_Core_Util::chrToInt($padded[$tail - $i]) & $mask)
+                    |
+                (0x80 & $barrier_mask)
+            );
+            # mask |= barrier_mask;
+            $mask |= $barrier_mask;
+        }
+        return $padded;
+    }
+
+    /**
+     * @param string $padded
+     * @param int $blockSize
+     * @return string
+     * @throws SodiumException
+     */
+    public static function unpad($padded, $blockSize)
+    {
+        if ($blockSize <= 0) {
+            throw new SodiumException('block size cannot be less than 1');
+        }
+        $padded_len = ParagonIE_Sodium_Core_Util::strlen($padded);
+        if ($padded_len < $blockSize) {
+            throw new SodiumException('invalid padding');
+        }
+
+        # tail = &padded[padded_len - 1U];
+        $tail = $padded_len - 1;
+
+        $acc = 0;
+        $valid = 0;
+        $pad_len = 0;
+
+        for ($i = 0; $i < $blockSize; ++$i) {
+            # c = tail[-i];
+            $c = ParagonIE_Sodium_Core_Util::chrToInt($padded[$tail - $i]);
+
+            # is_barrier =
+            #     (( (acc - 1U) & (pad_len - 1U) & ((c ^ 0x80) - 1U) ) >> 8) & 1U;
+            $is_barrier = (
+                (
+                    ($acc - 1) & ($pad_len - 1) & (($c ^ 80) - 1)
+                ) >> 7
+            ) & 1;
+
+            # acc |= c;
+            $acc |= $c;
+
+            # pad_len |= i & (1U + ~is_barrier);
+            $pad_len |= $i & (1 + ~$is_barrier);
+
+            # valid |= (unsigned char) is_barrier;
+            $valid |= ($is_barrier & 0xff);
+        }
+        # unpadded_len = padded_len - 1U - pad_len;
+        $unpadded_len = $padded_len - 1 - $pad_len;
+        if ($valid !== 1) {
+            throw new SodiumException('invalid padding');
+        }
+        return ParagonIE_Sodium_Core_Util::substr($padded, 0, $unpadded_len);
+    }
+
+    /**
      * Will sodium_compat run fast on the current hardware and PHP configuration?
      *
      * @return bool
