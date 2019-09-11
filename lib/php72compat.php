@@ -64,6 +64,14 @@ foreach (array(
     'CRYPTO_SECRETBOX_KEYBYTES',
     'CRYPTO_SECRETBOX_MACBYTES',
     'CRYPTO_SECRETBOX_NONCEBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_ABYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_HEADERBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_KEYBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PUSH',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PULL',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_REKEY',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_FINAL',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_MESSAGEBYTES_MAX',
     'CRYPTO_SIGN_BYTES',
     'CRYPTO_SIGN_SEEDBYTES',
     'CRYPTO_SIGN_PUBLICKEYBYTES',
@@ -80,7 +88,6 @@ foreach (array(
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));
     }
 }
-
 if (!is_callable('sodium_add')) {
     /**
      * @see ParagonIE_Sodium_Compat::add()
@@ -236,6 +243,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_chacha20poly1305_keygen()
     {
@@ -682,6 +690,8 @@ if (!is_callable('sodium_crypto_pwhash_str_needs_rehash')) {
      * @param int $opslimit
      * @param int $memlimit
      * @return bool
+     *
+     * @throws SodiumException
      */
     function sodium_crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit)
     {
@@ -818,6 +828,77 @@ if (!is_callable('sodium_crypto_secretbox_open')) {
         } catch (Exception $ex) {
             return false;
         }
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_init_push')) {
+    /**
+     * @param string $key
+     * @return array<int, string>
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_init_push($key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_push')) {
+    /**
+     * @param string $state
+     * @param string $msg
+     * @param string $aad
+     * @param int $tag
+     * @return string
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_push(&$state, $msg, $aad = '', $tag = 0)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($state, $msg, $aad, $tag);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_init_pull')) {
+    /**
+     * @param string $header
+     * @param string $key
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_pull')) {
+    /**
+     * @param string $state
+     * @param string $cipher
+     * @param string $aad
+     * @return bool|array{0: string, 1: int}
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_pull(&$state, $cipher, $aad = '')
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_pull($state, $cipher, $aad);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_rekey')) {
+    /**
+     * @param string $state
+     * @return void
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_rekey(&$state)
+    {
+        ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_rekey($state);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_keygen')) {
+    /**
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_keygen()
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_keygen();
     }
 }
 if (!is_callable('sodium_crypto_shorthash')) {

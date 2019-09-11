@@ -925,6 +925,81 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Verify the _init() functions behave correctly
+     *
+     * @throws SodiumException
+     * @throws Exception
+     */
+    public function testSecretStreamStates()
+    {
+        $key = str_repeat("A", 32);
+        list($stateA, $header) = sodium_crypto_secretstream_xchacha20poly1305_init_push($key);
+        $stateB = sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB));
+
+        $x = sodium_crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = sodium_crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 1');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 1');
+
+        $x = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 2');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 2');
+
+        // This is where things may get tricky...
+        $x = sodium_crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 3');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 3');
+
+        // var_dump(bin2hex($stateA), bin2hex($header));
+
+        list($stateC, $header2) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+        $stateD = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_pull($header2, $key);
+        $this->assertEquals(bin2hex($stateC), bin2hex($stateD));
+    }
+
+    public function testSecretStream()
+    {
+        $key = str_repeat("A", 32);
+        // list($state, $header) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+        $state = ParagonIE_Sodium_Core_Util::hex2bin(
+            '5160239f7348e57e618b4a88a966ed78cb354a1e93a9bfa091f0469fc3007bf501000000280ade65e20103c20000000000000000'
+        );
+        $header = ParagonIE_Sodium_Core_Util::hex2bin(
+            '050fbb107d2050e960ed6e9988d7b2bd280ade65e20103c2'
+        );
+        $state_copy = '' . $state;
+        $inputs = array(
+            "This is just a test message! :)",
+            "Paragon Initiative Enterprises",
+            "sodium_compat improves PHP code and makes PHP 7.2 migrations easy"
+        );
+        $outputs = array();
+        $copy2 = $state_copy;
+        foreach ($inputs as $i => $input) {
+            $outputs[$i] = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($state, $input);
+            $encrypt = sodium_crypto_secretstream_xchacha20poly1305_push($copy2, $input);
+            $this->assertSame(bin2hex($outputs[$i]), bin2hex($encrypt), 'Ciphertext mismatch at (i = ' . $i . ')');
+            $this->assertSame(bin2hex($copy2), bin2hex($state), 'state after message i = ' . $i);
+        }
+
+        $state2 = sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+        $this->assertSame(bin2hex($state_copy), bin2hex($state2));
+        for ($i = 0; $i < count($outputs); ++$i) {
+            list($decrypt, $tag) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_pull($state_copy, $outputs[$i]);
+            $this->assertEquals($inputs[$i], $decrypt, 'decrypt i = ' . $i);
+            $this->assertEquals(0, $tag);
+            list($decrypt, $tag) = sodium_crypto_secretstream_xchacha20poly1305_pull($state2, $outputs[$i]);
+            $this->assertSame(bin2hex($state_copy), bin2hex($state2), 'state after message i = ' . $i);
+            $this->assertEquals($inputs[$i], $decrypt, 'decrypt i = ' . $i);
+            $this->assertEquals(0, $tag);
+        }
+        $this->assertSame(bin2hex($state), bin2hex($state2));
+    }
+
+    /**
      * @param string $m
      * @param string $k
      * @throws SodiumException
