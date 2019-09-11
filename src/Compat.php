@@ -2261,7 +2261,7 @@ class ParagonIE_Sodium_Compat
     public static function crypto_secretstream_xchacha20poly1305_init_push($key)
     {
         if (PHP_INT_SIZE === 4) {
-
+            return ParagonIE_Sodium_Crypto32::secretstream_xchacha20poly1305_init_push($key);
         }
         return ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_init_push($key);
     }
@@ -2280,7 +2280,7 @@ class ParagonIE_Sodium_Compat
             );
         }
         if (PHP_INT_SIZE === 4) {
-
+            return ParagonIE_Sodium_Crypto32::secretstream_xchacha20poly1305_init_pull($key, $header);
         }
         return ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_init_pull($key, $header);
     }
@@ -2296,7 +2296,12 @@ class ParagonIE_Sodium_Compat
     public static function crypto_secretstream_xchacha20poly1305_push(&$state, $msg, $aad = '', $tag = 0)
     {
         if (PHP_INT_SIZE === 4) {
-
+            return ParagonIE_Sodium_Crypto32::secretstream_xchacha20poly1305_push(
+                $state,
+                $msg,
+                $aad,
+                $tag
+            );
         }
         return ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_push(
             $state,
@@ -2316,7 +2321,11 @@ class ParagonIE_Sodium_Compat
     public static function crypto_secretstream_xchacha20poly1305_pull(&$state, $msg, $aad = '')
     {
         if (PHP_INT_SIZE === 4) {
-
+            return ParagonIE_Sodium_Crypto32::secretstream_xchacha20poly1305_pull(
+                $state,
+                $msg,
+                $aad
+            );
         }
         return ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_pull(
             $state,
@@ -2342,9 +2351,10 @@ class ParagonIE_Sodium_Compat
     public static function crypto_secretstream_xchacha20poly1305_rekey(&$state)
     {
         if (PHP_INT_SIZE === 4) {
-
+            ParagonIE_Sodium_Crypto32::secretstream_xchacha20poly1305_rekey($state);
+        } else {
+            ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_rekey($state);
         }
-        ParagonIE_Sodium_Crypto::secretstream_xchacha20poly1305_rekey($state);
     }
 
     /**
