@@ -1000,6 +1000,31 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     */
+    public function testKeyExchange()
+    {
+        $alice = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice);
+        $bob = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $bob_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($bob);
+
+        $alice_to_bob = ParagonIE_Sodium_Compat::crypto_kx_client_session_keys($alice, $bob_pk);
+        $bob_to_alice = ParagonIE_Sodium_Compat::crypto_kx_server_session_keys($bob, $alice_pk);
+
+        $this->assertEquals($alice_to_bob[0], $bob_to_alice[1]);
+        $this->assertEquals($alice_to_bob[1], $bob_to_alice[0]);
+
+        $alice_to_bob2 = sodium_crypto_kx_client_session_keys($alice, $bob_pk);
+        $bob_to_alice2 = sodium_crypto_kx_server_session_keys($bob, $alice_pk);
+
+        $this->assertEquals($alice_to_bob[0], $alice_to_bob2[0]);
+        $this->assertEquals($alice_to_bob[1], $alice_to_bob2[1]);
+        $this->assertEquals($bob_to_alice[0], $bob_to_alice2[0]);
+        $this->assertEquals($bob_to_alice[1], $bob_to_alice2[1]);
+    }
+
+    /**
      * @param string $m
      * @param string $k
      * @throws SodiumException

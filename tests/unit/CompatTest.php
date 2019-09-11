@@ -33,6 +33,24 @@ class CompatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @throws SodiumException
+     * @throws Exception
+     */
+    public function testKeyExchange()
+    {
+        $alice = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice);
+        $bob = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $bob_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($bob);
+
+        $alice_to_bob = ParagonIE_Sodium_Compat::crypto_kx_client_session_keys($alice, $bob_pk);
+        $bob_to_alice = sodium_crypto_kx_server_session_keys($bob, $alice_pk);
+
+        $this->assertEquals($alice_to_bob[0], $bob_to_alice[1]);
+        $this->assertEquals($alice_to_bob[1], $bob_to_alice[0]);
+    }
+
+    /**
+     * @throws SodiumException
      */
     public function testEd25519Keypairs()
     {

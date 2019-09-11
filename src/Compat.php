@@ -83,9 +83,12 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_KDF_CONTEXTBYTES = 8;
     const CRYPTO_KDF_KEYBYTES = 32;
     const CRYPTO_KX_BYTES = 32;
+    const CRYPTO_KX_PRIMITIVE = 'x25519blake2b';
     const CRYPTO_KX_SEEDBYTES = 32;
+    const CRYPTO_KX_KEYPAIRBYTES = 64;
     const CRYPTO_KX_PUBLICKEYBYTES = 32;
     const CRYPTO_KX_SECRETKEYBYTES = 32;
+    const CRYPTO_KX_SESSIONKEYBYTES = 32;
     const CRYPTO_GENERICHASH_BYTES = 32;
     const CRYPTO_GENERICHASH_BYTES_MIN = 16;
     const CRYPTO_GENERICHASH_BYTES_MAX = 64;
@@ -1742,6 +1745,149 @@ class ParagonIE_Sodium_Compat
             $their_public,
             $client_public,
             $server_public
+        );
+    }
+
+    /**
+     * @param string $seed
+     * @return string
+     * @throws SodiumException
+     */
+    public static function crypto_kx_seed_keypair($seed)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($seed, 'string', 1);
+
+        $seed = (string) $seed;
+
+        if (ParagonIE_Sodium_Core_Util::strlen($seed) !== self::CRYPTO_KX_SEEDBYTES) {
+            throw new SodiumException('seed must be SODIUM_CRYPTO_KX_SEEDBYTES bytes');
+        }
+
+        $sk = self::crypto_generichash($seed, '', self::CRYPTO_KX_SECRETKEYBYTES);
+        $pk = self::crypto_scalarmult_base($sk);
+        return $sk . $pk;
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public static function crypto_kx_keypair()
+    {
+        $sk = self::randombytes_buf(self::CRYPTO_KX_SECRETKEYBYTES);
+        $pk = self::crypto_scalarmult_base($sk);
+        return $sk . $pk;
+    }
+
+    /**
+     * @param string $keypair
+     * @param string $serverPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    public static function crypto_kx_client_session_keys($keypair, $serverPublicKey)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($keypair, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($serverPublicKey, 'string', 2);
+
+        $keypair = (string) $keypair;
+        $serverPublicKey = (string) $serverPublicKey;
+
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_KX_KEYPAIRBYTES) {
+            throw new SodiumException('keypair should be SODIUM_CRYPTO_KX_KEYPAIRBYTES bytes');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($serverPublicKey) !== self::CRYPTO_KX_PUBLICKEYBYTES) {
+            throw new SodiumException('public keys must be SODIUM_CRYPTO_KX_PUBLICKEYBYTES bytes');
+        }
+
+        $sk = self::crypto_kx_secretkey($keypair);
+        $pk = self::crypto_kx_publickey($keypair);
+        $h = self::crypto_generichash_init(null, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
+        self::crypto_generichash_update($h, self::crypto_scalarmult($sk, $serverPublicKey));
+        self::crypto_generichash_update($h, $pk);
+        self::crypto_generichash_update($h, $serverPublicKey);
+        $sessionKeys = self::crypto_generichash_final($h, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
+        return array(
+            ParagonIE_Sodium_Core_Util::substr(
+                $sessionKeys,
+                0,
+                self::CRYPTO_KX_SESSIONKEYBYTES
+            ),
+            ParagonIE_Sodium_Core_Util::substr(
+                $sessionKeys,
+                self::CRYPTO_KX_SESSIONKEYBYTES,
+                self::CRYPTO_KX_SESSIONKEYBYTES
+            )
+        );
+    }
+
+    /**
+     * @param string $keypair
+     * @param string $clientPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    public static function crypto_kx_server_session_keys($keypair, $clientPublicKey)
+    {
+        ParagonIE_Sodium_Core_Util::declareScalarType($keypair, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($clientPublicKey, 'string', 2);
+
+        $keypair = (string) $keypair;
+        $clientPublicKey = (string) $clientPublicKey;
+
+        if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== self::CRYPTO_KX_KEYPAIRBYTES) {
+            throw new SodiumException('keypair should be SODIUM_CRYPTO_KX_KEYPAIRBYTES bytes');
+        }
+        if (ParagonIE_Sodium_Core_Util::strlen($clientPublicKey) !== self::CRYPTO_KX_PUBLICKEYBYTES) {
+            throw new SodiumException('public keys must be SODIUM_CRYPTO_KX_PUBLICKEYBYTES bytes');
+        }
+
+        $sk = self::crypto_kx_secretkey($keypair);
+        $pk = self::crypto_kx_publickey($keypair);
+        $h = self::crypto_generichash_init(null, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
+        self::crypto_generichash_update($h, self::crypto_scalarmult($sk, $clientPublicKey));
+        self::crypto_generichash_update($h, $clientPublicKey);
+        self::crypto_generichash_update($h, $pk);
+        $sessionKeys = self::crypto_generichash_final($h, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
+        return array(
+            ParagonIE_Sodium_Core_Util::substr(
+                $sessionKeys,
+                self::CRYPTO_KX_SESSIONKEYBYTES,
+                self::CRYPTO_KX_SESSIONKEYBYTES
+            ),
+            ParagonIE_Sodium_Core_Util::substr(
+                $sessionKeys,
+                0,
+                self::CRYPTO_KX_SESSIONKEYBYTES
+            )
+        );
+    }
+
+    /**
+     * @param string $kp
+     * @return string
+     * @throws SodiumException
+     */
+    public static function crypto_kx_secretkey($kp)
+    {
+        return ParagonIE_Sodium_Core_Util::substr(
+            $kp,
+            0,
+            self::CRYPTO_KX_SECRETKEYBYTES
+        );
+    }
+
+    /**
+     * @param string $kp
+     * @return string
+     * @throws SodiumException
+     */
+    public static function crypto_kx_publickey($kp)
+    {
+        return ParagonIE_Sodium_Core_Util::substr(
+            $kp,
+            self::CRYPTO_KX_SECRETKEYBYTES,
+            self::CRYPTO_KX_PUBLICKEYBYTES
         );
     }
 

@@ -38,9 +38,12 @@ foreach (array(
     'CRYPTO_KDF_CONTEXTBYTES',
     'CRYPTO_KDF_KEYBYTES',
     'CRYPTO_KX_BYTES',
+    'CRYPTO_KX_KEYPAIRBYTES',
+    'CRYPTO_KX_PRIMITIVE',
     'CRYPTO_KX_SEEDBYTES',
     'CRYPTO_KX_PUBLICKEYBYTES',
     'CRYPTO_KX_SECRETKEYBYTES',
+    'CRYPTO_KX_SESSIONKEYBYTES',
     'CRYPTO_GENERICHASH_BYTES',
     'CRYPTO_GENERICHASH_BYTES_MIN',
     'CRYPTO_GENERICHASH_BYTES_MAX',
@@ -648,6 +651,73 @@ if (!is_callable('sodium_crypto_kx')) {
             $client_public,
             $server_public
         );
+    }
+}
+if (!is_callable('sodium_crypto_kx_seed_keypair')) {
+    /**
+     * @param string $seed
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_seed_keypair($seed)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_seed_keypair($seed);
+    }
+}
+if (!is_callable('sodium_crypto_kx_keypair')) {
+    /**
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_keypair()
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_keypair();
+    }
+}
+if (!is_callable('sodium_crypto_kx_client_session_keys')) {
+    /**
+     * @param string $keypair
+     * @param string $serverPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    function sodium_crypto_kx_client_session_keys($keypair, $serverPublicKey)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_client_session_keys($keypair, $serverPublicKey);
+    }
+}
+if (!is_callable('sodium_crypto_kx_server_session_keys')) {
+    /**
+     * @param string $keypair
+     * @param string $clientPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    function sodium_crypto_kx_server_session_keys($keypair, $clientPublicKey)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_server_session_keys($keypair, $clientPublicKey);
+    }
+}
+if (!is_callable('sodium_crypto_kx_secretkey')) {
+    /**
+     * @param string $keypair
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_secretkey($keypair)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_secretkey($keypair);
+    }
+}
+if (!is_callable('sodium_crypto_kx_publickey')) {
+    /**
+     * @param string $keypair
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_publickey($keypair)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_publickey($keypair);
     }
 }
 if (!is_callable('sodium_crypto_pwhash')) {
