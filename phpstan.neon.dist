@@ -9,6 +9,7 @@ parameters:
         - %currentWorkingDirectory%/lib/
         - %currentWorkingDirectory%/namespaced/
     ignoreErrors:
+        - /^Function sodium_.*pad.* should return int but returns string.$/
         - /^Call to function is_callable.* with .* will always evaluate to .*$/
         - /^Method ParagonIE_Sodium_Compat::.* should return string but returns string\|false\.$/
         - /^Binary operation "\^" between float\|int\|string and float\|int\|string results in an error\.$/
