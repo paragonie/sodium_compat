@@ -1296,7 +1296,7 @@ if (!is_callable('sodium_pad')) {
      */
     function sodium_pad($unpadded, $blockSize)
     {
-        return ParagonIE_Sodium_Compat::pad($unpadded, $blockSize);
+        return ParagonIE_Sodium_Compat::pad($unpadded, $blockSize, true);
     }
 }
 if (!is_callable('sodium_unpad')) {
@@ -1308,9 +1308,9 @@ if (!is_callable('sodium_unpad')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_pad($padded, $blockSize)
+    function sodium_unpad($padded, $blockSize)
     {
-        return ParagonIE_Sodium_Compat::unpad($padded, $blockSize);
+        return ParagonIE_Sodium_Compat::unpad($padded, $blockSize, true);
     }
 }
 if (!is_callable('sodium_randombytes_buf')) {

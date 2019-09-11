@@ -3166,6 +3166,9 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($left, 'string', 1);
         ParagonIE_Sodium_Core_Util::declareScalarType($right, 'string', 2);
 
+        if (self::useNewSodiumAPI()) {
+            return sodium_memcmp($left, $right);
+        }
         if (self::use_fallback('memcmp')) {
             return (int) call_user_func('\\Sodium\\memcmp', $left, $right);
         }
@@ -3213,11 +3216,23 @@ class ParagonIE_Sodium_Compat
     /**
      * @param string $unpadded
      * @param int $blockSize
+     * @param bool $dontFallback
      * @return string
      * @throws SodiumException
      */
-    public static function pad($unpadded, $blockSize)
+    public static function pad($unpadded, $blockSize, $dontFallback = false)
     {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($unpadded, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'string', 1);
+
+        $unpadded = (string) $unpadded;
+        $blockSize = (int) $blockSize;
+
+        if (self::useNewSodiumAPI() && !$dontFallback) {
+            return (string) sodium_pad($unpadded, $blockSize);
+        }
+
         if ($blockSize <= 0) {
             throw new SodiumException(
                 'block size cannot be less than 1'
@@ -3287,11 +3302,22 @@ class ParagonIE_Sodium_Compat
     /**
      * @param string $padded
      * @param int $blockSize
+     * @param bool $dontFallback
      * @return string
      * @throws SodiumException
      */
-    public static function unpad($padded, $blockSize)
+    public static function unpad($padded, $blockSize, $dontFallback = false)
     {
+        /* Type checks: */
+        ParagonIE_Sodium_Core_Util::declareScalarType($padded, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'string', 1);
+
+        $padded = (string) $padded;
+        $blockSize = (int) $blockSize;
+
+        if (self::useNewSodiumAPI() && !$dontFallback) {
+            return sodium_unpad($padded, $blockSize);
+        }
         if ($blockSize <= 0) {
             throw new SodiumException('block size cannot be less than 1');
         }
