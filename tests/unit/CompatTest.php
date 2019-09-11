@@ -61,6 +61,11 @@ class CompatTest extends PHPUnit_Framework_TestCase
             $padded = ParagonIE_Sodium_Compat::pad($original, $block);
             $unpadded = ParagonIE_Sodium_Compat::unpad($padded, $block);
             $this->assertEquals($unpadded, $original);
+
+            $original = random_bytes(random_int(1, 1024));
+            $padded = ParagonIE_Sodium_Compat::pad($original, $block);
+            $unpadded = ParagonIE_Sodium_Compat::unpad($padded, $block);
+            $this->assertEquals($unpadded, $original);
         }
     }
 

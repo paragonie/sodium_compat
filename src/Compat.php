@@ -3224,7 +3224,7 @@ class ParagonIE_Sodium_Compat
     {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($unpadded, 'string', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'int', 2);
 
         $unpadded = (string) $unpadded;
         $blockSize = (int) $blockSize;
@@ -3310,13 +3310,13 @@ class ParagonIE_Sodium_Compat
     {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($padded, 'string', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'string', 1);
+        ParagonIE_Sodium_Core_Util::declareScalarType($blockSize, 'int', 2);
 
         $padded = (string) $padded;
         $blockSize = (int) $blockSize;
 
         if (self::useNewSodiumAPI() && !$dontFallback) {
-            return sodium_unpad($padded, $blockSize);
+            return (string) sodium_unpad($padded, $blockSize);
         }
         if ($blockSize <= 0) {
             throw new SodiumException('block size cannot be less than 1');
@@ -3333,6 +3333,7 @@ class ParagonIE_Sodium_Compat
         $valid = 0;
         $pad_len = 0;
 
+        $found = 0;
         for ($i = 0; $i < $blockSize; ++$i) {
             # c = tail[-i];
             $c = ParagonIE_Sodium_Core_Util::chrToInt($padded[$tail - $i]);
@@ -3344,6 +3345,8 @@ class ParagonIE_Sodium_Compat
                     ($acc - 1) & ($pad_len - 1) & (($c ^ 80) - 1)
                 ) >> 7
             ) & 1;
+            $is_barrier &= ~$found;
+            $found |= $is_barrier;
 
             # acc |= c;
             $acc |= $c;

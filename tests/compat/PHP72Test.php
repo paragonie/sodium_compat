@@ -1007,7 +1007,11 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     {
         for ($i = 0; $i < 100; ++$i) {
             $block = random_int(16, 256);
-            $original = str_repeat("A", random_int(1, 1024));
+            if (($i & 1) === 0) {
+                $original = str_repeat("A", random_int(1, 1024));
+            } else {
+                $original = random_bytes(random_int(1, 1024));
+            }
 
             $paddedA = sodium_pad($original, $block);
             $unpaddedA = sodium_unpad($paddedA, $block);
