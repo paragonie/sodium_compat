@@ -275,6 +275,21 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8` (i.e. Linux on i386)
         * `crypto_stream()`
         * `crypto_stream_xor()`
     * Other utilities (e.g. `crypto_*_keypair()`)
+        * `add()`
+        * `base642bin()`
+        * `bin2base64()`
+        * `bin2hex()`
+        * `hex2bin()`
+        * `crypto_kdf_derive_from_key()`
+        * `crypto_kx_client_session_keys()`
+        * `crypto_kx_server_session_keys()`
+        * `crypto_secretstream_xchacha20poly1305_init_push()`
+        * `crypto_secretstream_xchacha20poly1305_push()`
+        * `crypto_secretstream_xchacha20poly1305_init_pull()`
+        * `crypto_secretstream_xchacha20poly1305_pull()`
+        * `crypto_secretstream_xchacha20poly1305_rekey()`
+        * `pad()`
+        * `unpad()`
 
 ### Cryptography Primitives Provided
 
