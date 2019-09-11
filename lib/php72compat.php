@@ -8,6 +8,10 @@
  * ParagonIE_Sodium_Compat method or class constant, respectively.
  */
 foreach (array(
+    'BASE64_VARIANT_ORIGINAL',
+    'BASE64_VARIANT_ORIGINAL_NO_PADDING',
+    'BASE64_VARIANT_URLSAFE',
+    'BASE64_VARIANT_URLSAFE_NO_PADDING',
     'CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
@@ -29,10 +33,17 @@ foreach (array(
     'CRYPTO_BOX_MACBYTES',
     'CRYPTO_BOX_NONCEBYTES',
     'CRYPTO_BOX_SEEDBYTES',
+    'CRYPTO_KDF_BYTES_MIN',
+    'CRYPTO_KDF_BYTES_MAX',
+    'CRYPTO_KDF_CONTEXTBYTES',
+    'CRYPTO_KDF_KEYBYTES',
     'CRYPTO_KX_BYTES',
+    'CRYPTO_KX_KEYPAIRBYTES',
+    'CRYPTO_KX_PRIMITIVE',
     'CRYPTO_KX_SEEDBYTES',
     'CRYPTO_KX_PUBLICKEYBYTES',
     'CRYPTO_KX_SECRETKEYBYTES',
+    'CRYPTO_KX_SESSIONKEYBYTES',
     'CRYPTO_GENERICHASH_BYTES',
     'CRYPTO_GENERICHASH_BYTES_MIN',
     'CRYPTO_GENERICHASH_BYTES_MAX',
@@ -56,6 +67,14 @@ foreach (array(
     'CRYPTO_SECRETBOX_KEYBYTES',
     'CRYPTO_SECRETBOX_MACBYTES',
     'CRYPTO_SECRETBOX_NONCEBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_ABYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_HEADERBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_KEYBYTES',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PUSH',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_PULL',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_REKEY',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_TAG_FINAL',
+    'CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_MESSAGEBYTES_MAX',
     'CRYPTO_SIGN_BYTES',
     'CRYPTO_SIGN_SEEDBYTES',
     'CRYPTO_SIGN_PUBLICKEYBYTES',
@@ -72,7 +91,48 @@ foreach (array(
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));
     }
 }
-
+if (!is_callable('sodium_add')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::add()
+     * @param string $val
+     * @param string $addv
+     * @return void
+     * @throws SodiumException
+     */
+    function sodium_add(&$val, $addv)
+    {
+        ParagonIE_Sodium_Compat::add($val, $addv);
+    }
+}
+if (!is_callable('sodium_base642bin')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::bin2base64()
+     * @param string $string
+     * @param int $variant
+     * @param string $ignore
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_base642bin($string, $variant, $ignore ='')
+    {
+        return ParagonIE_Sodium_Compat::base642bin($string, $variant, $ignore);
+    }
+}
+if (!is_callable('sodium_bin2base64')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::bin2base64()
+     * @param string $string
+     * @param int $variant
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_bin2base64($string, $variant)
+    {
+        return ParagonIE_Sodium_Compat::bin2base64($string, $variant);
+    }
+}
 if (!is_callable('sodium_bin2hex')) {
     /**
      * @see ParagonIE_Sodium_Compat::hex2bin()
@@ -186,6 +246,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_chacha20poly1305_keygen()
     {
@@ -232,6 +293,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_ietf_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_chacha20poly1305_ietf_keygen()
     {
@@ -278,6 +340,7 @@ if (!is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_aead_xchacha20poly1305_ietf_keygen()
     {
@@ -302,6 +365,7 @@ if (!is_callable('sodium_crypto_auth_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_auth_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_auth_keygen()
     {
@@ -516,6 +580,7 @@ if (!is_callable('sodium_crypto_generichash_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_generichash_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_generichash_keygen()
     {
@@ -534,6 +599,37 @@ if (!is_callable('sodium_crypto_generichash_update')) {
     function sodium_crypto_generichash_update(&$ctx, $message = '')
     {
         ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
+    }
+}
+if (!is_callable('sodium_crypto_kdf_keygen')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_kdf_keygen()
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kdf_keygen()
+    {
+        return ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+    }
+}
+if (!is_callable('sodium_crypto_kdf_derive_from_key')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     * @param int $subkey_len
+     * @param int $subkey_id
+     * @param string $context
+     * @param string $key
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kdf_derive_from_key($subkey_len, $subkey_id, $context, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(
+            $subkey_len,
+            $subkey_id,
+            $context,
+            $key
+        );
     }
 }
 if (!is_callable('sodium_crypto_kx')) {
@@ -555,6 +651,73 @@ if (!is_callable('sodium_crypto_kx')) {
             $client_public,
             $server_public
         );
+    }
+}
+if (!is_callable('sodium_crypto_kx_seed_keypair')) {
+    /**
+     * @param string $seed
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_seed_keypair($seed)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_seed_keypair($seed);
+    }
+}
+if (!is_callable('sodium_crypto_kx_keypair')) {
+    /**
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_keypair()
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_keypair();
+    }
+}
+if (!is_callable('sodium_crypto_kx_client_session_keys')) {
+    /**
+     * @param string $keypair
+     * @param string $serverPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    function sodium_crypto_kx_client_session_keys($keypair, $serverPublicKey)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_client_session_keys($keypair, $serverPublicKey);
+    }
+}
+if (!is_callable('sodium_crypto_kx_server_session_keys')) {
+    /**
+     * @param string $keypair
+     * @param string $clientPublicKey
+     * @return array{0: string, 1: string}
+     * @throws SodiumException
+     */
+    function sodium_crypto_kx_server_session_keys($keypair, $clientPublicKey)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_server_session_keys($keypair, $clientPublicKey);
+    }
+}
+if (!is_callable('sodium_crypto_kx_secretkey')) {
+    /**
+     * @param string $keypair
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_secretkey($keypair)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_secretkey($keypair);
+    }
+}
+if (!is_callable('sodium_crypto_kx_publickey')) {
+    /**
+     * @param string $keypair
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_kx_publickey($keypair)
+    {
+        return ParagonIE_Sodium_Compat::crypto_kx_publickey($keypair);
     }
 }
 if (!is_callable('sodium_crypto_pwhash')) {
@@ -588,6 +751,21 @@ if (!is_callable('sodium_crypto_pwhash_str')) {
     function sodium_crypto_pwhash_str($passwd, $opslimit, $memlimit)
     {
         return ParagonIE_Sodium_Compat::crypto_pwhash_str($passwd, $opslimit, $memlimit);
+    }
+}
+if (!is_callable('sodium_crypto_pwhash_str_needs_rehash')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash()
+     * @param string $hash
+     * @param int $opslimit
+     * @param int $memlimit
+     * @return bool
+     *
+     * @throws SodiumException
+     */
+    function sodium_crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit)
+    {
+        return ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash($hash, $opslimit, $memlimit);
     }
 }
 if (!is_callable('sodium_crypto_pwhash_str_verify')) {
@@ -696,6 +874,7 @@ if (!is_callable('sodium_crypto_secretbox_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_secretbox_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_secretbox_keygen()
     {
@@ -721,6 +900,77 @@ if (!is_callable('sodium_crypto_secretbox_open')) {
         }
     }
 }
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_init_push')) {
+    /**
+     * @param string $key
+     * @return array<int, string>
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_init_push($key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_push')) {
+    /**
+     * @param string $state
+     * @param string $msg
+     * @param string $aad
+     * @param int $tag
+     * @return string
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_push(&$state, $msg, $aad = '', $tag = 0)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($state, $msg, $aad, $tag);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_init_pull')) {
+    /**
+     * @param string $header
+     * @param string $key
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_pull')) {
+    /**
+     * @param string $state
+     * @param string $cipher
+     * @param string $aad
+     * @return bool|array{0: string, 1: int}
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_pull(&$state, $cipher, $aad = '')
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_pull($state, $cipher, $aad);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_rekey')) {
+    /**
+     * @param string $state
+     * @return void
+     * @throws SodiumException
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_rekey(&$state)
+    {
+        ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_rekey($state);
+    }
+}
+if (!is_callable('sodium_crypto_secretstream_xchacha20poly1305_keygen')) {
+    /**
+     * @return string
+     * @throws Exception
+     */
+    function sodium_crypto_secretstream_xchacha20poly1305_keygen()
+    {
+        return ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_keygen();
+    }
+}
 if (!is_callable('sodium_crypto_shorthash')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_shorthash()
@@ -739,6 +989,7 @@ if (!is_callable('sodium_crypto_shorthash_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_shorthash_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_shorthash_keygen()
     {
@@ -771,6 +1022,20 @@ if (!is_callable('sodium_crypto_sign_detached')) {
     function sodium_crypto_sign_detached($message, $sk)
     {
         return ParagonIE_Sodium_Compat::crypto_sign_detached($message, $sk);
+    }
+}
+if (!is_callable('sodium_crypto_sign_keypair_from_secretkey_and_publickey')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_sign_keypair_from_secretkey_and_publickey()
+     * @param string $sk
+     * @param string $pk
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk)
+    {
+        return ParagonIE_Sodium_Compat::crypto_sign_keypair_from_secretkey_and_publickey($sk, $pk);
     }
 }
 if (!is_callable('sodium_crypto_sign_keypair')) {
@@ -915,6 +1180,7 @@ if (!is_callable('sodium_crypto_stream_keygen')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_stream_keygen()
      * @return string
+     * @throws Exception
      */
     function sodium_crypto_stream_keygen()
     {
@@ -1019,6 +1285,34 @@ if (!is_callable('sodium_memzero')) {
         ParagonIE_Sodium_Compat::memzero($str);
     }
 }
+if (!is_callable('sodium_pad')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::pad()
+     * @param string $unpadded
+     * @param int $blockSize
+     * @return int
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_pad($unpadded, $blockSize)
+    {
+        return ParagonIE_Sodium_Compat::pad($unpadded, $blockSize, true);
+    }
+}
+if (!is_callable('sodium_unpad')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::pad()
+     * @param string $padded
+     * @param int $blockSize
+     * @return int
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_unpad($padded, $blockSize)
+    {
+        return ParagonIE_Sodium_Compat::unpad($padded, $blockSize, true);
+    }
+}
 if (!is_callable('sodium_randombytes_buf')) {
     /**
      * @see ParagonIE_Sodium_Compat::randombytes_buf()
@@ -1049,6 +1343,7 @@ if (!is_callable('sodium_randombytes_random16')) {
     /**
      * @see ParagonIE_Sodium_Compat::randombytes_random16()
      * @return int
+     * @throws Exception
      */
     function sodium_randombytes_random16()
     {

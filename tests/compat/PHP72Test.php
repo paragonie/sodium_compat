@@ -14,6 +14,26 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     */
+    public function testAdd()
+    {
+        $a = "\x12\x34\x56\x78";
+        $b = "\x01\x00\x00\x00";
+        $c = "\xFF\xFF\xFF\xFF";
+
+        $tmp = $a;
+        ParagonIE_Sodium_Compat::add($tmp, $b);
+        $this->assertEquals("\x13\x34\x56\x78", $tmp);
+        ParagonIE_Sodium_Compat::add($tmp, $b);
+        $this->assertEquals("\x14\x34\x56\x78", $tmp);
+
+        $tmp = $a;
+        ParagonIE_Sodium_Compat::add($tmp, $c);
+        $this->assertEquals("\x11\x34\x56\x78", $tmp);
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::compare()
      */
     public function testCompare()
@@ -828,7 +848,54 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
+     */
+    public function testKdf()
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
+        $subkey_id = random_int(1, PHP_INT_MAX);
+        $context = 'NaClTest';
+        $a = sodium_crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $b = ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, $subkey_id, $context, $key);
+        $this->assertEquals(
+            bin2hex($a),
+            bin2hex($b),
+            'kdf outputs differ'
+        );
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testPwhashNeedsRehash()
+    {
+        if (!\extension_loaded('sodium')) {
+            $this->markTestSkipped('Libsodium not loaded');
+        }
+        $hash = sodium_crypto_pwhash_str(
+            'test',
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
+        $this->assertFalse(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        ));
+        $this->assertTrue(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE << 1
+        ));
+        $this->assertTrue(ParagonIE_Sodium_Compat::crypto_pwhash_str_needs_rehash(
+            $hash,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE + 1,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        ));
+    }
+
+    /**
+     * @throws SodiumException
      */
     public function testCryptoShorthash()
     {
@@ -857,6 +924,137 @@ class PHP72Test extends PHPUnit_Framework_TestCase
         $this->shorthashVerify($message, $key);
     }
 
+    /**
+     * Verify the _init() functions behave correctly
+     *
+     * @throws SodiumException
+     * @throws Exception
+     */
+    public function testSecretStreamStates()
+    {
+        $key = str_repeat("A", 32);
+        list($stateA, $header) = sodium_crypto_secretstream_xchacha20poly1305_init_push($key);
+        $stateB = sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB));
+
+        $x = sodium_crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = sodium_crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 1');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 1');
+
+        $x = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 2');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 2');
+
+        // This is where things may get tricky...
+        $x = sodium_crypto_secretstream_xchacha20poly1305_push($stateA, 'test');
+        $y = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($stateB, 'test');
+        $this->assertEquals(bin2hex($x), bin2hex($y), 'cipher 3');
+        $this->assertEquals(bin2hex($stateA), bin2hex($stateB), 'state 3');
+
+        // var_dump(bin2hex($stateA), bin2hex($header));
+
+        list($stateC, $header2) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+        $stateD = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_pull($header2, $key);
+        $this->assertEquals(bin2hex($stateC), bin2hex($stateD));
+    }
+
+    public function testSecretStream()
+    {
+        $key = str_repeat("A", 32);
+        // list($state, $header) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
+        $state = ParagonIE_Sodium_Core_Util::hex2bin(
+            '5160239f7348e57e618b4a88a966ed78cb354a1e93a9bfa091f0469fc3007bf501000000280ade65e20103c20000000000000000'
+        );
+        $header = ParagonIE_Sodium_Core_Util::hex2bin(
+            '050fbb107d2050e960ed6e9988d7b2bd280ade65e20103c2'
+        );
+        $state_copy = '' . $state;
+        $inputs = array(
+            "This is just a test message! :)",
+            "Paragon Initiative Enterprises",
+            "sodium_compat improves PHP code and makes PHP 7.2 migrations easy"
+        );
+        $outputs = array();
+        $copy2 = $state_copy;
+        foreach ($inputs as $i => $input) {
+            $outputs[$i] = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($state, $input);
+            $encrypt = sodium_crypto_secretstream_xchacha20poly1305_push($copy2, $input);
+            $this->assertSame(bin2hex($outputs[$i]), bin2hex($encrypt), 'Ciphertext mismatch at (i = ' . $i . ')');
+            $this->assertSame(bin2hex($copy2), bin2hex($state), 'state after message i = ' . $i);
+        }
+
+        $state2 = sodium_crypto_secretstream_xchacha20poly1305_init_pull($header, $key);
+        $this->assertSame(bin2hex($state_copy), bin2hex($state2));
+        for ($i = 0; $i < count($outputs); ++$i) {
+            list($decrypt, $tag) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_pull($state_copy, $outputs[$i]);
+            $this->assertEquals($inputs[$i], $decrypt, 'decrypt i = ' . $i);
+            $this->assertEquals(0, $tag);
+            list($decrypt, $tag) = sodium_crypto_secretstream_xchacha20poly1305_pull($state2, $outputs[$i]);
+            $this->assertSame(bin2hex($state_copy), bin2hex($state2), 'state after message i = ' . $i);
+            $this->assertEquals($inputs[$i], $decrypt, 'decrypt i = ' . $i);
+            $this->assertEquals(0, $tag);
+        }
+        $this->assertSame(bin2hex($state), bin2hex($state2));
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws Exception
+     */
+    public function testSodiumPad()
+    {
+        for ($i = 0; $i < 100; ++$i) {
+            $block = random_int(16, 256);
+            if (($i & 1) === 0) {
+                $original = str_repeat("A", random_int(1, 1024));
+            } else {
+                $original = random_bytes(random_int(1, 1024));
+            }
+
+            $paddedA = sodium_pad($original, $block);
+            $unpaddedA = sodium_unpad($paddedA, $block);
+            $this->assertEquals($unpaddedA, $original);
+            $this->assertNotEquals($paddedA, $original);
+
+            $paddedB = ParagonIE_Sodium_Compat::pad($original, $block);
+            $this->assertEquals(bin2hex($paddedA), bin2hex($paddedB), 'i = ' . $i);
+            $unpaddedB = ParagonIE_Sodium_Compat::unpad($paddedB, $block);
+            $this->assertEquals($unpaddedB, $original);
+        }
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testKeyExchange()
+    {
+        $alice = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice);
+        $bob = ParagonIE_Sodium_Compat::crypto_kx_keypair();
+        $bob_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($bob);
+
+        $alice_to_bob = ParagonIE_Sodium_Compat::crypto_kx_client_session_keys($alice, $bob_pk);
+        $bob_to_alice = ParagonIE_Sodium_Compat::crypto_kx_server_session_keys($bob, $alice_pk);
+
+        $this->assertEquals($alice_to_bob[0], $bob_to_alice[1]);
+        $this->assertEquals($alice_to_bob[1], $bob_to_alice[0]);
+
+        $alice_to_bob2 = sodium_crypto_kx_client_session_keys($alice, $bob_pk);
+        $bob_to_alice2 = sodium_crypto_kx_server_session_keys($bob, $alice_pk);
+
+        $this->assertEquals($alice_to_bob[0], $alice_to_bob2[0]);
+        $this->assertEquals($alice_to_bob[1], $alice_to_bob2[1]);
+        $this->assertEquals($bob_to_alice[0], $bob_to_alice2[0]);
+        $this->assertEquals($bob_to_alice[1], $bob_to_alice2[1]);
+    }
+
+    /**
+     * @param string $m
+     * @param string $k
+     * @throws SodiumException
+     */
     protected function shorthashVerify($m, $k)
     {
         $this->assertSame(

@@ -22,9 +22,37 @@ class UtilTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::base642bin()
+     * @covers ParagonIE_Sodium_Compat::bin2base64()
+     * @throws TypeError
+     * @throws Exception
+     */
+    public function testBase64()
+    {
+        for ($i = 0; $i < 100; $i++) {
+            $bin = $i === 0 ? '' : random_bytes($i);
+            $b64 = base64_encode($bin);
+            $b64_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_ORIGINAL);
+            $this->assertEquals($b64, $b64_);
+            $bin_ = ParagonIE_Sodium_Compat::base642bin($b64, SODIUM_BASE64_VARIANT_ORIGINAL);
+            $this->assertEquals($bin, $bin_);
+
+            $b64u = strtr(base64_encode($bin), '+/', '-_');
+            $b64u_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_URLSAFE);
+            $this->assertEquals($b64u, $b64u_);
+            $binu_ = ParagonIE_Sodium_Compat::base642bin($b64u, SODIUM_BASE64_VARIANT_URLSAFE);
+            $this->assertEquals($bin, $binu_);
+        }
+
+        $x = chunk_split(base64_encode(random_bytes(100)));
+        ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::bin2hex()
      * @covers ParagonIE_Sodium_Core_Util::hex2bin()
      * @throws TypeError
+     * @throws Exception
      */
     public function testBin2hex()
     {
