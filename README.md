@@ -308,3 +308,14 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8` (i.e. Linux on i386)
   `ParagonIE_Sodium_Compat::crypto_pwhash_is_available()`, which returns a
    boolean value (`TRUE` or `FALSE`).
 
+
+### PHPCompatibility Rulset
+
+For sodium_compat users and that utilize [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility)
+in their CI process, there is now a custom ruleset available which can be used
+to prevent false positives being thrown by `PHPCompatibility` for the native
+PHP functionality being polyfilled by this repo.
+
+You can find the repo for the `PHPCompatibilityParagonieSodiumCompat` ruleset
+here [on Github](https://github.com/PHPCompatibility/PHPCompatibilityParagonie) 
+and [on Packagist](https://packagist.org/packages/phpcompatibility/phpcompatibility-paragonie).
