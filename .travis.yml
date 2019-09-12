@@ -68,3 +68,4 @@ script:
     - vendor/bin/phpunit --bootstrap autoload-fast.php
     - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit --bootstrap autoload-fast.php; fi
     - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi
+    - tests/polyfill_test.sh
