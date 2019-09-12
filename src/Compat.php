@@ -178,7 +178,7 @@ class ParagonIE_Sodium_Compat
 
         /** @var string $encoded */
         $encoded = (string) $encoded;
-        if (ParagonIE_Sodium_Core_Util::strlen($encoded) === 1) {
+        if (ParagonIE_Sodium_Core_Util::strlen($encoded) === 0) {
             return '';
         }
 
@@ -220,7 +220,7 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($decoded, 'string', 1);
         /** @var string $decoded */
         $decoded = (string) $decoded;
-        if (ParagonIE_Sodium_Core_Util::strlen($decoded) === 1) {
+        if (ParagonIE_Sodium_Core_Util::strlen($decoded) === 0) {
             return '';
         }
 
