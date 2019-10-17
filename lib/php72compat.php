@@ -89,7 +89,7 @@ foreach (array(
     'VERSION_STRING'
     ) as $constant
 ) {
-    if (!defined("SODIUM_$constant")) {
+    if (!defined("SODIUM_$constant") && defined("ParagonIE_Sodium_Compat::$constant")) {
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));
     }
 }
