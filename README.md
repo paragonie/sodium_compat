@@ -324,7 +324,7 @@ was compiled where `PHP_INT_SIZE` equals `4` instead of `8` (i.e. Linux on i386)
    boolean value (`TRUE` or `FALSE`).
 
 
-### PHPCompatibility Rulset
+### PHPCompatibility Ruleset
 
 For sodium_compat users and that utilize [`PHPCompatibility`](https://github.com/PHPCompatibility/PHPCompatibility)
 in their CI process, there is now a custom ruleset available which can be used
