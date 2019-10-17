@@ -226,7 +226,7 @@ affected), and there is nothing we can do about that, due to platform
 restrictions on integers.
 
 For acceptable performance, we highly recommend Windows users to version 1.0.6
-of the libsodium extension from PECL or. Alternatively, simply upgrade to PHP 7
+of the libsodium extension from PECL or, alternatively, simply upgrade to PHP 7
 and the slowdown will be greatly reduced.
 
 This is also true of non-Windows 32-bit operating systems, or if somehow PHP
