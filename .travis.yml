@@ -46,15 +46,15 @@ matrix:
            CHECK_MBSTRING=0
     - php: "nightly"
       os: linux
-      env: USE_PSALM=1
+      env: USE_PSALM=0
            CHECK_MBSTRING=0
     - php: "master"
       os: linux
-      env: USE_PSALM=1
+      env: USE_PSALM=0
            CHECK_MBSTRING=0
     - php: "hhvm"
       os: linux
-      env: USE_PSALM=1
+      env: USE_PSALM=0
            CHECK_MBSTRING=1
   allow_failures:
     - php: "nightly"
