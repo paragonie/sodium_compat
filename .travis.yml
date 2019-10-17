@@ -4,6 +4,11 @@ sudo: false
 matrix:
   fast_finish: true
   include:
+    - php: "5.2"
+      os: linux
+      env: USE_PSALM=0
+           CHECK_MBSTRING=1
+      dist: precise
     - php: "5.3"
       os: linux
       env: USE_PSALM=0
@@ -57,16 +62,18 @@ matrix:
     - php: "hhvm"
 
 install:
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global 5.3.29`; fi
     - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2"; fi
     - composer update
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `wget -O php52-phpunit.phar https://github.com/treffynnon/php5.2-phpunit3.6.12-phar/releases/download/1.0.2/php52-phpunit.phar`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == 7.3 ]]; then composer require --dev "phpstan/phpstan:^0.11.5"; fi
     - chmod +x tests/polyfill_test.sh
+    - chmod +x tests/travis-php52.sh
+    - chmod +x tests/travis.sh
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global "$TRAVIS_PHP_VERSION"`; fi
 
 script:
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == 7.3 ]]; then vendor/bin/phpstan analyze; fi
-    - travis_wait 30 vendor/bin/phpunit
-    - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit; fi
-    - vendor/bin/phpunit --bootstrap autoload-fast.php
-    - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit --bootstrap autoload-fast.php; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then vendor/bin/phpstan analyze; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then travis_wait 30 tests/travis-php52.sh; else travis_wait 30 tests/travis.sh; fi
     - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi
     - tests/polyfill_test.sh
