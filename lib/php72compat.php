@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+
 /**
  * This file will monkey patch the pure-PHP implementation in place of the
  * PECL functions and constants, but only if they do not already exist.
