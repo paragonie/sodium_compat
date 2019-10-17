@@ -45,13 +45,8 @@ if (PHP_VERSION_ID >= 50300) {
     require_once dirname(__FILE__) . '/lib/sodium_compat.php';
 }
 if (PHP_VERSION_ID < 70200 || !extension_loaded('sodium')) {
-    if (DIRECTORY_SEPARATOR === '\\') {
-        // Workaround for a strange behavior on Windows 10.
-        // https://github.com/paragonie/sodium_compat/issues/99
-        assert(
-            class_exists('ParagonIE_Sodium_Compat'),
-            'Class ParagonIE_Sodium_Compat not loaded (probable Windows filesystem bug?)'
-        );
+    if (PHP_VERSION_ID > 50300) {
+        require_once dirname(__FILE__) . '/lib/php72compat_const.php';
     }
     require_once dirname(__FILE__) . '/lib/php72compat.php';
 }
