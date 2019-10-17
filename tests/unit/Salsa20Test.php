@@ -16,7 +16,7 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
             return;
         }
         $this->assertEquals(
-            0x00001001,
+            0x00001000,
             ParagonIE_Sodium_Core_Salsa20::rotate(0x00000001, 12),
             'Left rotate by 12'
         );
