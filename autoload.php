@@ -45,7 +45,7 @@ if (PHP_VERSION_ID >= 50300) {
     require_once dirname(__FILE__) . '/lib/sodium_compat.php';
 }
 if (PHP_VERSION_ID < 70200 || !extension_loaded('sodium')) {
-    if (PHP_VERSION_ID >= 50300) {
+    if (PHP_VERSION_ID >= 50300 && !defined('SODIUM_LIBRARY_VERSION_MAJOR')) {
         require_once dirname(__FILE__) . '/lib/php72compat_const.php';
     }
     require_once dirname(__FILE__) . '/lib/php72compat.php';
