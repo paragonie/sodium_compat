@@ -5,3 +5,4 @@
 /dist/sodium-compat.phar.sig
 /composer.lock
 /vendor/
+/psalm.xml
