@@ -46,7 +46,7 @@ matrix:
            CHECK_MBSTRING=0
     - php: "7.4snapshot"
       os: linux
-      env: USE_PSALM=1
+      env: USE_PSALM=0
            CHECK_MBSTRING=0
     - php: "nightly"
       os: linux
