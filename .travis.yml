@@ -67,7 +67,7 @@ matrix:
 
 install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global 5.3.29`; fi
-    - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2|^3"; fi
+    - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2|^3.6"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]] && [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then `cp psalm-above-3.xml psalm.xml`; else `cp psalm-below-3.xml psalm.xml`; fi
     - composer update
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `wget -O php52-phpunit.phar https://github.com/treffynnon/php5.2-phpunit3.6.12-phar/releases/download/1.0.2/php52-phpunit.phar`; fi
