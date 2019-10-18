@@ -45,7 +45,7 @@ if (PHP_VERSION_ID >= 50300) {
     require_once dirname(__FILE__) . '/lib/sodium_compat.php';
 }
 if (PHP_VERSION_ID < 70200 || !extension_loaded('sodium')) {
-    if (PHP_VERSION_ID >= 50300 && !defined('SODIUM_LIBRARY_VERSION_MAJOR')) {
+    if (PHP_VERSION_ID >= 50300 && !defined('SODIUM_LIBRARY_MAJOR_VERSION')) {
         require_once dirname(__FILE__) . '/lib/php72compat_const.php';
     }
     assert(class_exists('ParagonIE_Sodium_Compat'), 'Possible filesystem/autoloader bug?');
