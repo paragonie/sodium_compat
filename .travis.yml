@@ -46,7 +46,7 @@ matrix:
            CHECK_MBSTRING=0
     - php: "7.4snapshot"
       os: linux
-      env: USE_PSALM=0
+      env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "nightly"
       os: linux
@@ -68,7 +68,8 @@ matrix:
 install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global 5.3.29`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then cat composer-php52.json > composer.json; fi
-    - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2|^3.6"; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^3.6"; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then `cp psalm-above-3.xml psalm.xml`; else `cp psalm-below-3.xml psalm.xml`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then chmod +x tests/fix-php52.sh; fi
     - gitcommit=$(git rev-parse HEAD) && composer config autoloader-suffix "$gitcommit"
