@@ -224,7 +224,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
      */
     public function testSubstr()
     {
-        $string = \str_repeat("\xF0\x9D\x92\xB3", 4);
+        $string = str_repeat("\xF0\x9D\x92\xB3", 4);
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 1), "\xF0");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 1, 1), "\x9D");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 1), "\x92");
