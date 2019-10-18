@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-php php52-phpunit.phar
+vendor/bin/phpunit-php52
 EXITCOMMAND=$?
 if [[ "$EXITCOMMAND" -ne 0 ]]; then
   echo "PHPunit (first run) exited with return value $EXITCOMMAND."
   exit $EXITCOMMAND
 fi
 
-php php52-phpunit.phar --bootstrap autoload-fast.php
+vendor/bin/phpunit-php52 --bootstrap autoload-fast.php
 EXITCOMMAND=$?
 if [[ "$EXITCOMMAND" -ne 0 ]]; then
   echo "PHPunit (second run) exited with return value $EXITCOMMAND."
@@ -15,13 +15,13 @@ if [[ "$EXITCOMMAND" -ne 0 ]]; then
 fi
 
 if [[ $CHECK_MBSTRING -eq 1 ]]; then
-  php -dmbstring.func_overload=7 php52-phpunit.phar
+  php -dmbstring.func_overload=7 vendor/bin/phpunit-php52
   EXITCOMMAND=$?
   if [[ "$EXITCOMMAND" -ne 0 ]]; then
     echo "PHPunit (third run) exited with return value $EXITCOMMAND."
     exit $EXITCOMMAND
   fi
-  php -dmbstring.func_overload=7 php52-phpunit.phar --bootstrap autoload-fast.php
+  php -dmbstring.func_overload=7 vendor/bin/phpunit-php52 --bootstrap autoload-fast.php
   EXITCOMMAND=$?
   if [[ "$EXITCOMMAND" -ne 0 ]]; then
     echo "PHPunit (fourth run) exited with return value $EXITCOMMAND."
