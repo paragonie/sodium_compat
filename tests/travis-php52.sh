@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+rm -rf tests/compat # We don't need these.
+
 vendor/bin/phpunit-php52
 EXITCOMMAND=$?
 if [[ "$EXITCOMMAND" -ne 0 ]]; then
