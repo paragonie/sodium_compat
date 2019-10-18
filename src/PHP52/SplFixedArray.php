@@ -42,6 +42,7 @@ class SplFixedArray implements Iterator, ArrayAccess, Countable
      */
     public function toArray()
     {
+        ksort($this->internalArray);
         return (array) $this->internalArray;
     }
 
