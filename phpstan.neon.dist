@@ -8,7 +8,13 @@ parameters:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/lib/
         - %currentWorkingDirectory%/namespaced/
+    excludes_analyse:
+        - %rootDir%/../../../src/PHP52/*
     ignoreErrors:
+        # sodium_crypto_scalarmult_base()'s definition is broken in phpstan
+        - /^Function sodium_crypto_scalarmult_base invoked with 1 parameter. 2 required\.$/
+        # @return bool|array is apparently "unresolvable" now???
+        - /^PHPDoc tag @return contains unresolvable type\.$/
         - /^Function sodium_.*pad.* should return int but returns string.$/
         - /^Call to function is_callable.* with .* will always evaluate to .*$/
         - /^Method ParagonIE_Sodium_Compat::.* should return string but returns string\|false\.$/
