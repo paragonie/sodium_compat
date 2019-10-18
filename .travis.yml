@@ -79,6 +79,6 @@ install:
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then vendor/bin/phpstan analyze; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then travis_wait 30 tests/travis-php52.sh; else travis_wait 30 tests/travis.sh; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then travis_wait 60 tests/travis-php52.sh; else travis_wait 30 tests/travis.sh; fi
     - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi
     - tests/polyfill_test.sh
