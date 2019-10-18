@@ -177,8 +177,11 @@ class SplFixedArray implements Iterator, ArrayAccess, Countable
         return $result;
     }
 
+    /**
+     * Do nothing.
+     */
     public function __wakeup()
     {
-        // TODO
+        // NOP
     }
 }
