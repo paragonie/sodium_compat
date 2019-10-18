@@ -70,10 +70,10 @@ install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then cat composer-php52.json > composer.json; fi
     - if [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2|^3.6"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then `cp psalm-above-3.xml psalm.xml`; else `cp psalm-below-3.xml psalm.xml`; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then chmod +x fix-php52.sh; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then chmod +x tests/fix-php52.sh; fi
     - gitcommit=$(git rev-parse HEAD) && composer config autoloader-suffix "$gitcommit"
     - composer update
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then fix-php52.sh; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then tests/fix-php52.sh; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == 7.3 ]]; then composer require --dev "phpstan/phpstan:^0.11.5"; fi
     - chmod +x tests/polyfill_test.sh
     - chmod +x tests/travis-php52.sh
