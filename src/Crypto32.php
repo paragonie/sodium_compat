@@ -1417,13 +1417,10 @@ abstract class ParagonIE_Sodium_Crypto32
     }
 
     /**
-     * Return type structure:
-     * {0: string, 1: int}
-     *
      * @param string $state
      * @param string $cipher
      * @param string $aad
-     * @return bool|array
+     * @return bool|array{0: string, 1: int}
      * @throws SodiumException
      */
     public static function secretstream_xchacha20poly1305_pull(&$state, $cipher, $aad = '')
