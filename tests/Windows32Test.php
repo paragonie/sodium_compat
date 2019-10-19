@@ -12,6 +12,69 @@ class Windows32Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws SodiumException
+     */
+    public function testBlake2bPersonalizedState()
+    {
+        $exp = ParagonIE_Sodium_Core32_Util::hex2bin(
+            '48c9bdf267e6096a3ba7ca8485ae67bb2bf894fe72f36e3cf1361d5f3af54fa5e4e0d0cf4b636b35260e0d1fbf0e60ab' .
+            '5e8c73cdcdbbb17e4a164a2329a9d23a0000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+        );
+
+        $k = '';
+        $salt = '5b6b41ed9b343fe0';
+        $personal = '5126fb2a37400d2a';
+
+        for ($h = 0; $h < 64; ++$h) {
+            $k[$h] = ParagonIE_Sodium_Core32_Util::intToChr($h);
+        }
+
+        $state = ParagonIE_Sodium_Compat::crypto_generichash_init_salt_personal('', 64, $salt, $personal);
+
+        // Chop off last 17 bytes if present because they'll throw off tests:
+        $a = ParagonIE_Sodium_Core32_Util::substr($state, 0, 361);
+        $b = ParagonIE_Sodium_Core32_Util::substr($exp, 0, 361);
+        $this->assertEquals(
+            ParagonIE_Sodium_Core32_Util::bin2hex($b),
+            ParagonIE_Sodium_Core32_Util::bin2hex($a),
+            'Initialized value is incorrect'
+        );
+
+        $in = '';
+
+        for ($i = 0; $i < 64; ++$i) {
+            $in .= ParagonIE_Sodium_Core32_Util::intToChr($i);
+        }
+        ParagonIE_Sodium_Compat::crypto_generichash_update($state, $in);
+
+        $exp2 = ParagonIE_Sodium_Core_Util::hex2bin(
+            '48c9bdf267e6096a3ba7ca8485ae67bb2bf894fe72f36e3cf1361d5f3af54fa5e4e0d0cf4b636b35260e0d1fbf0e60ab' .
+            '5e8c73cdcdbbb17e4a164a2329a9d23a0000000000000000000000000000000000000000000000000000000000000000' .
+            '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f' .
+            '303132333435363738393a3b3c3d3e3f0000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
+            '000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000'
+        );
+
+        // Chop off last 17 bytes if present because they'll throw off tests:
+        $a = ParagonIE_Sodium_Core32_Util::substr($state, 0, 361);
+        $b = ParagonIE_Sodium_Core32_Util::substr($exp2, 0, 361);
+        $this->assertEquals(
+            ParagonIE_Sodium_Core32_Util::bin2hex($b),
+            ParagonIE_Sodium_Core32_Util::bin2hex($a),
+            'Updated value is incorrect'
+        );
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      * @covers ParagonIE_Sodium_Compat::crypto_auth_verify()
      * @throws SodiumException
