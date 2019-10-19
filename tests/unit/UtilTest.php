@@ -137,6 +137,8 @@ class UtilTest extends PHPUnit_Framework_TestCase
                     bin2hex($a) . ' == ' . bin2hex($b) . ' should return false.'
                 );
             }
+        } else {
+            $this->markTestSkipped('PHP > 5.6 does not need this test');
         }
     }
 

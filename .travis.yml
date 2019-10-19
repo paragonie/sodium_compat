@@ -70,8 +70,7 @@ install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global 5.3.29`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then cat composer-php52.json > composer.json; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^3.6"; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "sebastian/comparator:>=1.2.4"; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "phpunit/phpunit:^5"; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "phpunit/phpunit:^7"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then `cp psalm-above-3.xml psalm.xml`; else `cp psalm-below-3.xml psalm.xml`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then chmod +x tests/fix-php52.sh; fi
