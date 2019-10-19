@@ -777,7 +777,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         # uint8_t buf[2 * 128];
         $ctx[3] = self::stringToSplFixedArray(self::substr($string, 96, 256));
 
-
         # uint8_t buf[2 * 128];
         $int = 0;
         for ($i = 0; $i < 8; ++$i) {
