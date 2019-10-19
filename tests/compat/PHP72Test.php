@@ -780,6 +780,7 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     public function testCryptoKx()
     {
         if (!is_callable('sodium_crypto_kx')) {
+            $this->markTestSkipped('sodium_crypto_kx not defined');
             return;
         }
         $alice_box_kp = sodium_crypto_box_keypair();

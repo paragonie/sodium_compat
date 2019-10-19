@@ -242,6 +242,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     public function testCryptoBox32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $nonce = str_repeat("\x00", 24);
@@ -463,6 +464,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     public function testSignDetached32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(

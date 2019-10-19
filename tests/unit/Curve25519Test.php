@@ -289,6 +289,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testFeSq32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $g = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
@@ -391,10 +392,11 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      */
     public function testFeSqDouble32()
     {
-        if (PHP_INT_SIZE === 4) {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
-        $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+        $g = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
             array(
                 70051,
                 -1455864,
@@ -409,7 +411,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
             )
         );
 
-        $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
+        $expected = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
             array(
                 -8161178,
                 -16341160,
@@ -424,10 +426,10 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
             )
         );
 
-        $h = ParagonIE_Sodium_Core_Curve25519::fe_sq2($g);
+        $h = ParagonIE_Sodium_Core32_Curve25519::fe_sq2($g);
         $this->assertSame(
             '5378835f9d1adced5bd2b42f2c8b8cb759b0bdddfa0a15de9266aff944d0f456',
-            bin2hex(ParagonIE_Sodium_Core_Curve25519::fe_tobytes($h))
+            bin2hex(ParagonIE_Sodium_Core32_Curve25519::fe_tobytes($h))
         );
         $this->assertEquals($expected, $h);
     }
@@ -709,6 +711,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testFeMul32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $f = ParagonIE_Sodium_Core32_Curve25519_Fe::fromArray(
@@ -1036,6 +1039,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testGeMAdd32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $p = new ParagonIE_Sodium_Core32_Curve25519_Ge_P3(
@@ -1558,6 +1562,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testGeScalarmultBase32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $nonce = ParagonIE_Sodium_Core32_Util::hex2bin(
@@ -1715,6 +1720,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testGeDoubleScalarMultVartime32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $h = ParagonIE_Sodium_Core32_Util::hex2bin(
@@ -1823,6 +1829,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function testSlide32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $a = ParagonIE_Sodium_Core32_Util::hex2bin(
@@ -2220,6 +2227,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     public function test121666Mul32()
     {
         if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only 32-bit');
             return;
         }
         $f = array(

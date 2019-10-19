@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/Int32Test.php';
+require_once dirname(__FILE__) . '/Int32Test.php';
 
 class Int32FastTest extends Int32Test
 {

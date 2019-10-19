@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__) . '/autoload.php';
+require_once dirname(dirname(__FILE__)) . '/autoload.php';
 $polyfill = str_replace('sodium_', '', $argv[1]);
 if (!method_exists('ParagonIE_Sodium_Compat', $polyfill)) {
     echo $polyfill, ': NOT FOUND', PHP_EOL;

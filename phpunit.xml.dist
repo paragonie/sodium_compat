@@ -2,7 +2,7 @@
 <phpunit
     backupGlobals="true"
     backupStaticAttributes="false"
-    bootstrap="vendor/autoload.php"
+    bootstrap="autoload-phpunit.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
@@ -10,7 +10,6 @@
     processIsolation="false"
     stopOnError="false"
     stopOnFailure="false"
-    syntaxCheck="true"
 >
     <testsuites>
         <testsuite name="Unit Tests">
