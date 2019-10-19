@@ -1,5 +1,9 @@
 <?php
 
+if (PHP_VERSION_ID >= 70000 && !class_exists('PHPUnit_Framework_TestCase')) {
+    require_once dirname(dirname(dirname(__FILE__))) . '/autoload-phpunit.php';
+}
+
 class Aes256GcmTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
