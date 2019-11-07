@@ -47,7 +47,7 @@ if (PHP_VERSION_ID >= 50300) {
     require_once dirname(__FILE__) . '/src/PHP52/SplFixedArray.php';
 }
 if (PHP_VERSION_ID < 70200 || !extension_loaded('sodium')) {
-    if (PHP_VERSION_ID >= 50300 && !defined('SODIUM_LIBRARY_MAJOR_VERSION')) {
+    if (PHP_VERSION_ID >= 50300 && !defined('SODIUM_CRYPTO_SCALARMULT_BYTES')) {
         require_once dirname(__FILE__) . '/lib/php72compat_const.php';
     }
     if (PHP_VERSION_ID >= 70000) {
