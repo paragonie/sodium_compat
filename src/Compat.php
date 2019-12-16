@@ -889,10 +889,10 @@ class ParagonIE_Sodium_Compat
 
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_NPUBBYTES long');
+            throw new SodiumException('Nonce must be ' . self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES . ' bytes in length');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES) {
-            throw new SodiumException('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_KEYBYTES long');
+            throw new SodiumException('Key must be ' . self::CRYPTO_AEAD_XCHACHA20POLY1305_KEYBYTES . ' bytes in length');
         }
         if (self::useNewSodiumAPI() && !$dontFallback) {
             if (is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_encrypt')) {
