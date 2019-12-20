@@ -1,69 +1,64 @@
 language: php
-sudo: false
 
 matrix:
   fast_finish: true
   include:
     - php: "5.2"
-      os: linux
+      dist: precise
       env: USE_PSALM=0
            CHECK_MBSTRING=1
-      dist: precise
     - php: "5.3"
-      os: linux
-      env: USE_PSALM=0
-           CHECK_MBSTRING=1
       dist: precise
+      env: USE_PSALM=0
+           CHECK_MBSTRING=1
     - php: "5.4"
-      os: linux
+      dist: trusty
       env: USE_PSALM=0
            CHECK_MBSTRING=1
-      dist: trusty
     - php: "5.5"
-      os: linux
+      dist: trusty
       env: USE_PSALM=0
            CHECK_MBSTRING=1
-      dist: trusty
     - php: "5.6"
-      os: linux
+      dist: xenial
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.0"
-      os: linux
+      dist: xenial
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.1"
-      os: linux
+      dist: bionic
       env: USE_PSALM=1
            CHECK_MBSTRING=1
     - php: "7.2"
-      os: linux
+      dist: bionic
       env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "7.3"
-      os: linux
+      dist: bionic
       env: USE_PSALM=1
            CHECK_MBSTRING=0
-    - php: "7.4snapshot"
-      os: linux
+    - php: "7.4"
+      dist: bionic
       env: USE_PSALM=1
            CHECK_MBSTRING=0
     - php: "nightly"
-      os: linux
+      dist: bionic
       env: USE_PSALM=0
            CHECK_MBSTRING=0
     - php: "master"
-      os: linux
+      dist: bionic
       env: USE_PSALM=0
            CHECK_MBSTRING=0
-    - php: "hhvm"
-      os: linux
+    - php: "hhvm-3.24"
+      dist: trusty
       env: USE_PSALM=0
            CHECK_MBSTRING=1
   allow_failures:
     - php: "nightly"
     - php: "master"
-    - php: "hhvm"
+    - php: "hhvm-3.24"
 
 install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "phpunit/phpunit:^7"; fi
