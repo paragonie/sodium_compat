@@ -3117,15 +3117,14 @@ class ParagonIE_Sodium_Compat
      * with (sans pwhash and memzero).
      *
      * @return int
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress UndefinedFunction
      */
     public static function library_version_major()
     {
-        if (self::useNewSodiumAPI()) {
-            return sodium_library_version_major();
+        if (self::useNewSodiumAPI() && defined('SODIUM_LIBRARY_MAJOR_VERSION')) {
+            return SODIUM_LIBRARY_MAJOR_VERSION;
         }
         if (self::use_fallback('library_version_major')) {
+            /** @psalm-suppress UndefinedFunction */
             return (int) call_user_func('\\Sodium\\library_version_major');
         }
         return self::LIBRARY_VERSION_MAJOR;
@@ -3136,15 +3135,14 @@ class ParagonIE_Sodium_Compat
      * with (sans pwhash and memzero).
      *
      * @return int
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress UndefinedFunction
      */
     public static function library_version_minor()
     {
-        if (self::useNewSodiumAPI()) {
-            return sodium_library_version_minor();
+        if (self::useNewSodiumAPI() && defined('SODIUM_LIBRARY_MINOR_VERSION')) {
+            return SODIUM_LIBRARY_MINOR_VERSION;
         }
         if (self::use_fallback('library_version_minor')) {
+            /** @psalm-suppress UndefinedFunction */
             return (int) call_user_func('\\Sodium\\library_version_minor');
         }
         return self::LIBRARY_VERSION_MINOR;
