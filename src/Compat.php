@@ -44,6 +44,8 @@ class ParagonIE_Sodium_Compat
      */
     public static $fastMult = false;
 
+    const LIBRARY_MAJOR_VERSION = 9;
+    const LIBRARY_MINOR_VERSION = 1;
     const LIBRARY_VERSION_MAJOR = 9;
     const LIBRARY_VERSION_MINOR = 1;
     const VERSION_STRING = 'polyfill-1.0.8';
