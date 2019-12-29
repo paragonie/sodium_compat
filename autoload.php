@@ -37,7 +37,9 @@ if (!is_callable('sodiumCompatAutoloader')) {
     spl_autoload_register('sodiumCompatAutoloader');
 }
 
-require_once dirname(__FILE__) . '/src/SodiumException.php';
+if (!class_exists('SodiumException', false)) {
+    require_once dirname(__FILE__) . '/src/SodiumException.php';
+}
 if (PHP_VERSION_ID >= 50300) {
     // Namespaces didn't exist before 5.3.0, so don't even try to use this
     // unless PHP >= 5.3.0
