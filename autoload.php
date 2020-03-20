@@ -1,6 +1,6 @@
 <?php
 
-if (PHP_VERSION_ID < 70400) {
+if (PHP_VERSION_ID < 70000) {
     if (!is_callable('sodiumCompatAutoloader')) {
         /**
          * Sodium_Compat autoloader.
@@ -37,6 +37,8 @@ if (PHP_VERSION_ID < 70400) {
         // Now that we have an autoloader, let's register it!
         spl_autoload_register('sodiumCompatAutoloader');
     }
+} else {
+    require_once dirname(__FILE__) . '/autoload-php7.php';
 }
 
 if (!class_exists('SodiumException', false)) {
