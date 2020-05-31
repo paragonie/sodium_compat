@@ -6,7 +6,10 @@ if (PHP_VERSION_ID >= 70000 && !class_exists('PHPUnit_Framework_TestCase')) {
 
 class Aes256GcmTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }

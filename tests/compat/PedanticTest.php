@@ -13,7 +13,10 @@ class PedanticTest extends PHPUnit_Framework_TestCase
 
     protected $oldFastMult = false;
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (!extension_loaded('libsodium')) {
             $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
@@ -31,7 +34,10 @@ class PedanticTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$fastMult = true;
     }
 
-    public function tearDown()
+    /**
+     * @after
+     */
+    public function after()
     {
         ParagonIE_Sodium_Compat::$fastMult = $this->oldFastMult;
     }

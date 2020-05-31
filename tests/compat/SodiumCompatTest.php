@@ -5,7 +5,10 @@
  */
 class SodiumCompatTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (!extension_loaded('libsodium')) {
             $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
