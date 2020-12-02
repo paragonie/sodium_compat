@@ -43,7 +43,7 @@ matrix:
       dist: bionic
       env: USE_PSALM=1
            CHECK_MBSTRING=0
-    - php: "nightly"
+    - php: "8.0"
       dist: bionic
       env: USE_PSALM=0
            CHECK_MBSTRING=0
@@ -62,7 +62,6 @@ install:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "vimeo/psalm:^1|^2"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then `cp psalm-above-3.xml psalm.xml`; else `cp psalm-below-3.xml psalm.xml`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then chmod +x tests/fix-php52.sh; fi
-    - if [[ ${TRAVIS_PHP_VERSION} == "nightly" ]]; then composer config platform.php 7.4.99; fi
     - gitcommit=$(git rev-parse HEAD) && composer config autoloader-suffix "$gitcommit"
     - composer update
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then tests/fix-php52.sh; fi
