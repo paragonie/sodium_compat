@@ -5,7 +5,10 @@
  */
 class X25519Test extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -75,7 +78,30 @@ class X25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @requires PHPUnit < 8
      * @expectedException SodiumException
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testScalarmultZeroForLegacyPhpUnit()
+    {
+        $aliceSk = ParagonIE_Sodium_Core_Util::hex2bin(
+            'b75b0a8b25c58aaef1d14fc9ce2bbaeac607407d1ade104aeaa196f8ac13b93f'
+        );
+        $bobPk = ParagonIE_Sodium_Core_Util::hex2bin(
+            str_repeat('0', 64)
+        );
+        $this->assertNotSame(
+            $bobPk,
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                ParagonIE_Sodium_Compat::crypto_scalarmult($aliceSk, $bobPk)
+            ),
+            'test'
+        );
+    }
+
+    /**
+     * @requires PHPUnit 8
      * @throws SodiumException
      * @throws TypeError
      */
@@ -87,6 +113,9 @@ class X25519Test extends PHPUnit_Framework_TestCase
         $bobPk = ParagonIE_Sodium_Core_Util::hex2bin(
             str_repeat('0', 64)
         );
+
+        $this->expectException('SodiumException');
+
         $this->assertNotSame(
             $bobPk,
             ParagonIE_Sodium_Core_Util::bin2hex(

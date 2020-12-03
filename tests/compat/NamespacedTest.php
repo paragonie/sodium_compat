@@ -5,7 +5,10 @@
  */
 class NamespacedTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (PHP_VERSION_ID < 50300) {
             $this->markTestSkipped('PHP < 5.3.0; skipping PHP 5.3+ compatibility test suite.');

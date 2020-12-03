@@ -4,7 +4,10 @@ require_once dirname(__FILE__) . '/Int64Test.php';
 
 class Int64FastTest extends Int64Test
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');

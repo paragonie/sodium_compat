@@ -2,7 +2,10 @@
 
 class Int32Test extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');

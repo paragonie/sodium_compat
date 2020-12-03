@@ -4,7 +4,10 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
 {
     private $dir;
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function before()
     {
         if (!defined('DO_PEDANTIC_TEST')) {
             $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
