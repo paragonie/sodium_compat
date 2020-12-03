@@ -48,5 +48,7 @@
             Not interesting
         -->
 
+        <RedundantCast errorLevel="info" />
+
     </issueHandlers>
 </psalm>
