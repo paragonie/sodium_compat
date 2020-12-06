@@ -62,7 +62,10 @@ matrix:
 
 install:
       # Use Composer v1 on older PHP to side-step dependency issues with Composer 2:
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.3" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.4" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.5" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then composer self-update --1; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then composer self-update --1; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then composer self-update --1; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then composer self-update --1; fi
