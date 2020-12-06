@@ -62,11 +62,11 @@ matrix:
 
 install:
       # Use Composer v1 on older PHP to side-step dependency issues with Composer 2:
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then `composer self-update --1`; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then `composer self-update --1`; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then `composer self-update --1`; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then `composer self-update --1`; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then `composer self-update --1`; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then composer self-update --1; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.3" ]]; then composer self-update --1; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]] && [[ $USE_PSALM -eq 1 ]]; then composer require --dev "phpunit/phpunit:^7"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then `phpenv global 5.3.29`; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.2" ]]; then cat composer-php52.json > composer.json; fi
