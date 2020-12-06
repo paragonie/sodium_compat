@@ -313,8 +313,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
             $na->mulInt64($nb)->toInt32()->toInt()
         );
         $this->assertEquals(
-            -42,
-            $na->mulInt64($b)->toInt32()->toInt()
+            dechex(-42),
+            dechex($na->mulInt64($b)->toInt32()->toInt())
         );
         $this->assertEquals(
             dechex(-42),
