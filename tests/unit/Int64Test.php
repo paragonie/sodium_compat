@@ -10,10 +10,9 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function before()
     {
-        if (PHP_INT_SIZE === 8 || PHP_VERSION_ID < 50300) {
+        if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');
         }
-        var_dump(PHP_VERSION_ID);
     }
 
     /**
@@ -22,6 +21,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testAssociative()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         // Test negative operands
         $f = new ParagonIE_Sodium_Core32_Int64(array(0, 0, 409, 49299));
         $g = new ParagonIE_Sodium_Core32_Int64(array(65535, 65535, 65369, 30902));
@@ -57,6 +60,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testConversion()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $binary = ParagonIE_Sodium_Compat::hex2bin("0123456789abcdef");
         $from = ParagonIE_Sodium_Core32_Int64::fromString($binary);
         $this->assertSame(
@@ -78,6 +85,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testAddInt64()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $one = new ParagonIE_Sodium_Core32_Int64(
             array(0x0000, 0x0000, 0x0000, 0x0001)
         );
@@ -132,6 +143,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testAddInt()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $one = new ParagonIE_Sodium_Core32_Int64(
             array(0x0000, 0x0000, 0x0000, 0x0001)
         );
@@ -172,6 +187,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testMult()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $begin = new ParagonIE_Sodium_Core32_Int64(
             array(0x1234, 0x5678, 0x9abc, 0xdef0)
         );
@@ -283,6 +302,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testMultNegative()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $a = new ParagonIE_Sodium_Core32_Int64(
             array(0, 0, 0, 3)
         );
@@ -319,23 +342,9 @@ class Int64Test extends PHPUnit_Framework_TestCase
             dechex($na->mulInt64($b)->toInt32()->toInt())
         );
         $this->assertEquals(
-            $this->normalize(-42),
-            $this->normalize($a->mulInt64($nb)->toInt32()->toInt())
+            -42,
+            $a->mulInt64($nb)->toInt32()->toInt()
         );
-    }
-
-    /**
-     * Normalize output to 8 hexits (32 bits)
-     *
-     * @param int $int
-     * @return string
-     */
-    private function normalize($int) {
-        $str = dechex($int);
-        if (strlen($str) > 8) {
-            return (string) substr($str, 8);
-        }
-        return $str;
     }
 
     /**
@@ -345,6 +354,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testRotateLeft()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $int64 = new ParagonIE_Sodium_Core32_Int64(
             array(0x0123, 0x4567, 0x89ab, 0xcdef)
         );
@@ -407,6 +420,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testRotateRight()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $int64 = new ParagonIE_Sodium_Core32_Int64(
             array(0x0123, 0x4567, 0x89ab, 0xcdef)
         );
@@ -473,6 +490,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testShift()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $int64 = new ParagonIE_Sodium_Core32_Int64(
             array(0x0123, 0x4567, 0x89ab, 0xcdef)
         );
@@ -540,6 +561,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testSubInt64()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $tests = array(
             array('07daac0d00000000', 'b1a1a51f00000000', 'aac7f81100000000'),
             array('98be457800000000', '70f3e84900000000', 'd834a3d1ffffffff'),
@@ -567,6 +592,10 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
+        if (PHP_INT_SIZE === 8) {
+            $this->markTestSkipped('Only relevant to 32-bit platforms.');
+            return;
+        }
         $int64 = new ParagonIE_Sodium_Core32_Int32(array(0xffff, 0xffff), true);
         $added = $int64->addInt(2)->toInt64();
 
