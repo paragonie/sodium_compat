@@ -10,7 +10,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
      */
     public function before()
     {
-        if (PHP_INT_SIZE === 8) {
+        if (PHP_INT_SIZE === 8 || PHP_VERSION_ID < 50300) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');
         }
     }
@@ -167,6 +167,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Core32_Int64::mulInt64()
      * @throws SodiumException
      * @throws TypeError
+     * @throws Exception
      */
     public function testMult()
     {
@@ -317,9 +318,23 @@ class Int64Test extends PHPUnit_Framework_TestCase
             dechex($na->mulInt64($b)->toInt32()->toInt())
         );
         $this->assertEquals(
-            dechex(-42),
-            dechex($a->mulInt64($nb)->toInt32()->toInt())
+            $this->normalize(-42),
+            $this->normalize($a->mulInt64($nb)->toInt32()->toInt())
         );
+    }
+
+    /**
+     * Normalize output to 8 hexits (32 bits)
+     *
+     * @param int $int
+     * @return string
+     */
+    private function normalize($int) {
+        $str = dechex($int);
+        if (strlen($str) > 8) {
+            return (string) substr($str, 8);
+        }
+        return $str;
     }
 
     /**
