@@ -13,6 +13,7 @@ class Int64Test extends PHPUnit_Framework_TestCase
         if (PHP_INT_SIZE === 8 || PHP_VERSION_ID < 50300) {
             $this->markTestSkipped('Only relevant to 32-bit platforms.');
         }
+        var_dump(PHP_VERSION_ID);
     }
 
     /**
