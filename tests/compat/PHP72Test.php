@@ -37,6 +37,36 @@ class PHP72Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * See Issue #125
+     * @ref https://github.com/paragonie/sodium_compat/issues/125
+     * @throws SodiumException
+     */
+    public function testAeadXChaCha20EmptyAad()
+    {
+        $key = sodium_crypto_aead_xchacha20poly1305_ietf_keygen();
+        $nonce = random_bytes(24);
+        $message = 'Pi day was a month ago and I suddenly crave pie.';
+
+        $c1 = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($message, '', $nonce, $key);
+        $c2 = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
+        $c3 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, '', $nonce, $key);
+        $c4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
+
+        $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c2));
+        $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c3));
+        $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c4));
+
+        $p1 = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($c1, '', $nonce, $key);
+        $p2 = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
+        $p3 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c1, '', $nonce, $key);
+        $p4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
+        $this->assertSame($message, $p1);
+        $this->assertSame($message, $p2);
+        $this->assertSame($message, $p3);
+        $this->assertSame($message, $p4);
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::compare()
      */
     public function testCompare()
