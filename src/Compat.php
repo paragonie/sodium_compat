@@ -820,6 +820,8 @@ class ParagonIE_Sodium_Compat
         ParagonIE_Sodium_Core_Util::declareScalarType($ciphertext, 'string', 1);
         if (!is_null($assocData)) {
             ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
+        } else {
+            $assocData = '';
         }
         ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
         ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
@@ -891,7 +893,11 @@ class ParagonIE_Sodium_Compat
     ) {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($plaintext, 'string', 1);
-        ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
+        if (!is_null($assocData)) {
+            ParagonIE_Sodium_Core_Util::declareScalarType($assocData, 'string', 2);
+        } else {
+            $assocData = '';
+        }
         ParagonIE_Sodium_Core_Util::declareScalarType($nonce, 'string', 3);
         ParagonIE_Sodium_Core_Util::declareScalarType($key, 'string', 4);
 
