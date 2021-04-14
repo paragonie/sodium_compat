@@ -1244,7 +1244,7 @@ if (!is_callable('sodium_crypto_stream_xchacha20_keygen')) {
         return ParagonIE_Sodium_Compat::crypto_stream_xchacha20_keygen();
     }
 }
-if (!is_callable('sodium_crypto_stream_xor')) {
+if (!is_callable('sodium_crypto_stream_xchacha20_xor')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor()
      * @param string $message
