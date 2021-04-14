@@ -3062,7 +3062,8 @@ class ParagonIE_Sodium_Compat
      *
      * @param int $len Number of bytes desired
      * @param string $nonce Number to be used Once; must be 24 bytes
-     * @param string $key XSalsa20 key
+     * @param string $key XChaCha20 key
+     * @param bool $dontFallback
      * @return string       Pseudorandom stream that can be XORed with messages
      *                      to provide encryption (but not authentication; see
      *                      Poly1305 or crypto_auth() for that, which is not
