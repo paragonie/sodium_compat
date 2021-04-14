@@ -1218,47 +1218,7 @@ if (!is_callable('sodium_crypto_stream_xor')) {
         return ParagonIE_Sodium_Compat::crypto_stream_xor($message, $nonce, $key);
     }
 }
-if (!is_callable('sodium_crypto_stream_xchacha20')) {
-    /**
-     * @see ParagonIE_Sodium_Compat::crypto_stream_xchacha20()
-     * @param int $len
-     * @param string $nonce
-     * @param string $key
-     * @return string
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    function sodium_crypto_stream_xchacha20($len, $nonce, $key)
-    {
-        ParagonIE_Sodium_Compat::crypto_stream_xchacha20($len, $nonce, $key, true);
-    }
-}
-if (!is_callable('sodium_crypto_stream_xchacha20_keygen')) {
-    /**
-     * @see ParagonIE_Sodium_Compat::crypto_stream_xchacha20_keygen()
-     * @return string
-     * @throws Exception
-     */
-    function sodium_crypto_stream_xchacha20_keygen()
-    {
-        return ParagonIE_Sodium_Compat::crypto_stream_xchacha20_keygen();
-    }
-}
-if (!is_callable('sodium_crypto_stream_xchacha20_xor')) {
-    /**
-     * @see ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor()
-     * @param string $message
-     * @param string $nonce
-     * @param string $key
-     * @return string
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    function sodium_crypto_stream_xchacha20_xor($message, $nonce, $key)
-    {
-        ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor($message, $nonce, $key, true);
-    }
-}
+require_once dirname(__FILE__) . '/stream-xchacha20.php';
 if (!is_callable('sodium_hex2bin')) {
     /**
      * @see ParagonIE_Sodium_Compat::hex2bin()
