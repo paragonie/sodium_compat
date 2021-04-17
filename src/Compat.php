@@ -1700,12 +1700,13 @@ class ParagonIE_Sodium_Compat
      * @param string $their_public
      * @param string $client_public
      * @param string $server_public
+     * @param bool $dontFallback
      * @return string
      * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress MixedArgument
      */
-    public static function crypto_kx($my_secret, $their_public, $client_public, $server_public)
+    public static function crypto_kx($my_secret, $their_public, $client_public, $server_public, $dontFallback = false)
     {
         /* Type checks: */
         ParagonIE_Sodium_Core_Util::declareScalarType($my_secret, 'string', 1);
@@ -1727,7 +1728,7 @@ class ParagonIE_Sodium_Compat
             throw new SodiumException('Argument 4 must be CRYPTO_BOX_PUBLICKEYBYTES long.');
         }
 
-        if (self::useNewSodiumAPI()) {
+        if (self::useNewSodiumAPI() && !$dontFallback) {
             if (is_callable('sodium_crypto_kx')) {
                 return (string) sodium_crypto_kx(
                     $my_secret,
