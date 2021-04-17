@@ -90,9 +90,7 @@ jobs:
           memory_limit: 256M
 
       - name: Install Psalm
-        if: contains(['7.4', '8.0], ${{ matrix.php-version }})
         run: composer require --dev vimeo/psalm:^4; cp psalm-above-3.xml psalm.xml
 
       - name: Static Analysis
-        if: contains(['7.4', '8.0], ${{ matrix.php-version }})
         run: vendor/bin/psalm
