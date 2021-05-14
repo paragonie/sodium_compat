@@ -3207,6 +3207,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * @param string $a
      * @param string $b
+     * @return string
      */
     public static function sc25519_mul($a, $b)
     {
@@ -4032,6 +4033,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $s
      * @param int $n
      * @param string $a
+     * @return string
      */
     public static function sc25519_sqmul($s, $n, $a)
     {

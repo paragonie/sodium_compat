@@ -3609,7 +3609,7 @@ class ParagonIE_Sodium_Compat
      * @param string $p
      * @param string $q
      * @param bool $dontFallback
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     public static function ristretto255_add($p, $q, $dontFallback = false)
@@ -3624,7 +3624,7 @@ class ParagonIE_Sodium_Compat
      * @param string $p
      * @param string $q
      * @param bool $dontFallback
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     public static function ristretto255_sub($p, $q, $dontFallback = false)
@@ -3648,22 +3648,6 @@ class ParagonIE_Sodium_Compat
             return sodium_crypto_core_ristretto255_from_hash($r);
         }
         return ParagonIE_Sodium_Core_Ristretto255::ristretto255_from_hash($r);
-    }
-
-    /**
-     * @param string $ctx
-     * @param string $msg
-     * @param bool $dontFallback
-     * @return string
-     *
-     * @throws SodiumException
-     */
-    public static function ristretto255_from_string($ctx, $msg, $hash_alg = 1, $dontFallback = false)
-    {
-        if (self::useNewSodiumAPI() && !$dontFallback) {
-            return sodium_crypto_core_ristretto255_from_string($ctx, $msg, $hash_alg);
-        }
-        return ParagonIE_Sodium_Core_Ristretto255::ristretto255_from_string($ctx, $msg, $hash_alg);
     }
 
     /**
@@ -3698,6 +3682,7 @@ class ParagonIE_Sodium_Compat
      * @param string $s
      * @param bool $dontFallback
      * @return string
+     * @throws SodiumException
      */
     public static function ristretto255_scalar_invert($s, $dontFallback = false)
     {

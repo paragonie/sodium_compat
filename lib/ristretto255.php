@@ -108,7 +108,7 @@ if (!is_callable('sodium_crypto_core_ristretto255_scalar_complement')) {
      * @see ParagonIE_Sodium_Compat::ristretto255_scalar_complement()
      *
      * @param string $p
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     function sodium_crypto_core_ristretto255_scalar_complement($p)
@@ -121,7 +121,7 @@ if (!is_callable('sodium_crypto_core_ristretto255_scalar_invert')) {
      * @see ParagonIE_Sodium_Compat::ristretto255_scalar_invert()
      *
      * @param string $p
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     function sodium_crypto_core_ristretto255_scalar_invert($p)
@@ -148,7 +148,7 @@ if (!is_callable('sodium_crypto_core_ristretto255_scalar_negate')) {
      * @see ParagonIE_Sodium_Compat::ristretto255_scalar_negate()
      *
      * @param string $p
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     function sodium_crypto_core_ristretto255_scalar_negate($p)
@@ -173,7 +173,7 @@ if (!is_callable('sodium_crypto_core_ristretto255_scalar_reduce')) {
      * @see ParagonIE_Sodium_Compat::ristretto255_scalar_reduce()
      *
      * @param string $p
-     * @return bool
+     * @return string
      * @throws SodiumException
      */
     function sodium_crypto_core_ristretto255_scalar_reduce($p)

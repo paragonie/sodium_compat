@@ -418,11 +418,12 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @param string $msg
      * @return string
      * @throws SodiumException
+     * @psalm-suppress PossiblyInvalidArgument hash API
      */
     protected static function h2c_string_to_hash_sha256($hLen, $ctx, $msg)
     {
         $h = array_fill(0, $hLen, 0);
-        $ctx_len = is_null($ctx) ? self::strlen($ctx) : 0;
+        $ctx_len = !is_null($ctx) ? self::strlen($ctx) : 0;
         if ($hLen > 0xff) {
             throw new SodiumException('Hash must be less than 256 bytes');
         }
@@ -467,11 +468,12 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @param string $msg
      * @return string
      * @throws SodiumException
+     * @psalm-suppress PossiblyInvalidArgument hash API
      */
     protected static function h2c_string_to_hash_sha512($hLen, $ctx, $msg)
     {
         $h = array_fill(0, $hLen, 0);
-        $ctx_len = is_null($ctx) ? self::strlen($ctx) : 0;
+        $ctx_len = !is_null($ctx) ? self::strlen($ctx) : 0;
         if ($hLen > 0xff) {
             throw new SodiumException('Hash must be less than 256 bytes');
         }
@@ -542,30 +544,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         return self::ristretto255_from_hash(
             self::h2c_string_to_hash(self::crypto_core_ristretto255_HASHBYTES, $ctx, $msg, $hash_alg)
         );
-    }
-
-    /**
-     * @param ?string $ctx
-     * @param string $msg
-     * @param int $hash_alg
-     * @return string
-     * @throws SodiumException
-     */
-    public static function ristretto255_from_string($ctx, $msg, $hash_alg)
-    {
-        return self::_string_to_element($ctx, $msg, $hash_alg);
-    }
-
-    /**
-     * @param ?string $ctx
-     * @param string $msg
-     * @param int $hash_alg
-     * @return string
-     * @throws SodiumException
-     */
-    public static function ristretto255_from_string_ro($ctx, $msg, $hash_alg)
-    {
-        return self::ristretto255_from_string($ctx, $msg, $hash_alg);
     }
 
     /**
