@@ -208,6 +208,14 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             'RFC 8032 - Test 1024 - Signature'
         );
     }
+    
+    public function testConstant()
+    {
+        $this->assertSame(
+            'edd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010',
+            ParagonIE_Sodium_Core_Util::bin2hex(ParagonIE_Sodium_Core_Ed25519::L)
+        );
+    }
 
     /**
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()

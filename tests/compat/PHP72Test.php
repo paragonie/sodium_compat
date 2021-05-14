@@ -48,22 +48,29 @@ class PHP72Test extends PHPUnit_Framework_TestCase
         $message = 'Pi day was a month ago and I suddenly crave pie.';
 
         $c1 = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($message, '', $nonce, $key);
-        $c2 = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
         $c3 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, '', $nonce, $key);
-        $c4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
-
-        $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c2));
+        if (PHP_VERSION_ID < 80100) {
+            $c2 = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
+            $c4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($message, NULL, $nonce, $key);
+        }
         $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c3));
-        $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c4));
+        if (PHP_VERSION_ID < 80100) {
+            $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c2));
+            $this->assertEquals(sodium_bin2hex($c1), sodium_bin2hex($c4));
+        }
 
         $p1 = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($c1, '', $nonce, $key);
-        $p2 = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
         $p3 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c1, '', $nonce, $key);
-        $p4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
+        if (PHP_VERSION_ID < 80100) {
+            $p2 = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
+            $p4 = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c1, NULL, $nonce, $key);
+        }
         $this->assertSame($message, $p1);
-        $this->assertSame($message, $p2);
         $this->assertSame($message, $p3);
-        $this->assertSame($message, $p4);
+        if (PHP_VERSION_ID < 80100) {
+            $this->assertSame($message, $p2);
+            $this->assertSame($message, $p4);
+        }
     }
 
     /**
