@@ -287,7 +287,7 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Catch hash_update() failures and throw instead of silently proceding
+     * Catch hash_update() failures and throw instead of silently proceeding
      *
      * @param HashContext|resource &$hs
      * @param string $data
