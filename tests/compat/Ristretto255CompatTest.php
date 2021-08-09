@@ -127,6 +127,15 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         $b1 = sodium_crypto_scalarmult_ristretto255($k, $a1);
         $b2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255($k, $a2);
 
+        if (sodium_bin2hex($b1) !== sodium_bin2hex($b2)) {
+            var_dump(array(
+                'k' => sodium_bin2hex($k),
+                'a1' => sodium_bin2hex($a1),
+                'a2' => sodium_bin2hex($a2),
+                'b1' => sodium_bin2hex($b1),
+                'b2' => sodium_bin2hex($b2)
+            ));
+        }
         $this->assertSame(sodium_bin2hex($b1), sodium_bin2hex($b2), 'scalarmult');
 
         $ir1 = sodium_crypto_core_ristretto255_scalar_negate($r);
