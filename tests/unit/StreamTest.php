@@ -13,6 +13,9 @@ class StreamTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testXChaChaStream()
     {
         $key = hash('sha256', 'test', true);
@@ -50,6 +53,10 @@ class StreamTest extends PHPUnit_Framework_TestCase
 
     protected function process($key, $nonce, $len, $func = '')
     {
+        if (!is_callable($func)) {
+            var_dump($func);
+            $this->fail("Test is badly designed");
+        }
         $funcxor = $func . '_xor';
         $stream = $func($len, $nonce, $key);
         $this->assertSame($len, ParagonIE_Sodium_Core_Util::strlen($stream));
