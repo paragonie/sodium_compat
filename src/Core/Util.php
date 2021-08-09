@@ -586,7 +586,7 @@ abstract class ParagonIE_Sodium_Core_Util
             $a <<= 1;
             $b >>= 1;
         }
-        $c = (int) ($c & -1);
+        $c = (int) @($c & -1);
 
         /**
          * If $b was negative, we then apply the same value to $c here.
