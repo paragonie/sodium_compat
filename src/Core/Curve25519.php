@@ -393,45 +393,25 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
         ParagonIE_Sodium_Core_Curve25519_Fe $g
     ) {
-        /** @var int $f0 */
         $f0 = $f[0];
-        /** @var int $f1 */
         $f1 = $f[1];
-        /** @var int $f2 */
         $f2 = $f[2];
-        /** @var int $f3 */
         $f3 = $f[3];
-        /** @var int $f4 */
         $f4 = $f[4];
-        /** @var int $f5 */
         $f5 = $f[5];
-        /** @var int $f6 */
         $f6 = $f[6];
-        /** @var int $f7 */
         $f7 = $f[7];
-        /** @var int $f8 */
         $f8 = $f[8];
-        /** @var int $f9 */
         $f9 = $f[9];
-        /** @var int $g0 */
         $g0 = $g[0];
-        /** @var int $g1 */
         $g1 = $g[1];
-        /** @var int $g2 */
         $g2 = $g[2];
-        /** @var int $g3 */
         $g3 = $g[3];
-        /** @var int $g4 */
         $g4 = $g[4];
-        /** @var int $g5 */
         $g5 = $g[5];
-        /** @var int $g6 */
         $g6 = $g[6];
-        /** @var int $g7 */
         $g7 = $g[7];
-        /** @var int $g8 */
         $g8 = $g[8];
-        /** @var int $g9 */
         $g9 = $g[9];
         $g1_19 = self::mul($g1, 19, 5);
         $g2_19 = self::mul($g2, 19, 5);
@@ -442,15 +422,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $g7_19 = self::mul($g7, 19, 5);
         $g8_19 = self::mul($g8, 19, 5);
         $g9_19 = self::mul($g9, 19, 5);
-        /** @var int $f1_2 */
         $f1_2 = $f1 << 1;
-        /** @var int $f3_2 */
         $f3_2 = $f3 << 1;
-        /** @var int $f5_2 */
         $f5_2 = $f5 << 1;
-        /** @var int $f7_2 */
         $f7_2 = $f7 << 1;
-        /** @var int $f9_2 */
         $f9_2 = $f9 << 1;
         $f0g0    = self::mul($f0,    $g0, 26);
         $f0g1    = self::mul($f0,    $g1, 25);
