@@ -54,7 +54,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
     protected function process($key, $nonce, $len, $func = '')
     {
         $func_pieces= explode('::', $func);
-        $func_xor_pieces= explode('::', $func);
+        $func_xor_pieces= explode('::', $func . '_xor');
         $stream = call_user_func_array($func_pieces, array($len, $nonce, $key));
         $this->assertSame($len, ParagonIE_Sodium_Core_Util::strlen($stream));
         // Pseudorandom (but deterministic) nonce:
