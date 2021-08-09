@@ -929,6 +929,10 @@ abstract class ParagonIE_Sodium_Core_Util
         static $mbstring = null;
 
         if ($mbstring === null) {
+            if (!defined('MB_OVERLOAD_STRING')) {
+                $mbstring = false;
+                return $mbstring;
+            }
             $mbstring = extension_loaded('mbstring')
                 && defined('MB_OVERLOAD_STRING')
                 &&
