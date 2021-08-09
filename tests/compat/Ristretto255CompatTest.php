@@ -14,9 +14,6 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         if (!extension_loaded('sodium') && !defined('SODIUM_COMPAT_POLYFILLED_RISTRETTO255')) {
             $this->markTestSkipped('ext/sodium is not installed; skipping the compatibility test suite.');
         }
-        if (PHP_VERSION_ID >= 80100) {
-            $this->markTestSkipped('PHP 8.1 is broken');
-        }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
