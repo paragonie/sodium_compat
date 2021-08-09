@@ -172,7 +172,8 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
 
         $b1 = sodium_crypto_scalarmult_ristretto255($k, $a);
         $b2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255($k, $a);
-        $this->assertSame($expect, sodium_bin2hex($b2), 'expectation failed');
+        $this->assertSame($expect, sodium_bin2hex($b2), 'expectation failed (sodium_compat)');
+        $this->assertSame($expect, sodium_bin2hex($b1), 'expectation failed (PHP 8.1)');
         $this->assertSame(sodium_bin2hex($b1), sodium_bin2hex($b2), 'consistency failed');
     }
 }
