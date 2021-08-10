@@ -13,6 +13,9 @@ class StreamTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testXChaChaStream()
     {
         $key = hash('sha256', 'test', true);
@@ -50,13 +53,14 @@ class StreamTest extends PHPUnit_Framework_TestCase
 
     protected function process($key, $nonce, $len, $func = '')
     {
-        $funcxor = $func . '_xor';
-        $stream = $func($len, $nonce, $key);
+        $func_pieces= explode('::', $func);
+        $func_xor_pieces= explode('::', $func . '_xor');
+        $stream = call_user_func_array($func_pieces, array($len, $nonce, $key));
         $this->assertSame($len, ParagonIE_Sodium_Core_Util::strlen($stream));
         // Pseudorandom (but deterministic) nonce:
         $n2 = ParagonIE_Sodium_Core_Util::substr(hash('sha224', $stream, true), 0, 24);
-        $encrypted = $funcxor($stream, $n2, $key);
-        $decrypted = $funcxor($encrypted, $n2, $key);
+        $encrypted = call_user_func_array($func_xor_pieces, array($stream, $n2, $key));
+        $decrypted = call_user_func_array($func_xor_pieces, array($encrypted, $n2, $key));
         $this->assertSame(sodium_bin2hex($stream), sodium_bin2hex($decrypted), 'Decryption unsuccessful');
         $this->assertNotSame(sodium_bin2hex($stream), sodium_bin2hex($encrypted), 'Encryption is a NOP');
     }

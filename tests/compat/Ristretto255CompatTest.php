@@ -124,6 +124,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         $v2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255_base($k);
         $this->assertSame(sodium_bin2hex($v1), sodium_bin2hex($v2), 'scalarmult_base');
 
+        $this->assertSame(sodium_bin2hex($a1), sodium_bin2hex($a2), 'consistency check');
         $b1 = sodium_crypto_scalarmult_ristretto255($k, $a1);
         $b2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255($k, $a2);
 
@@ -136,5 +137,43 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         $vir1 = sodium_crypto_scalarmult_ristretto255($ir1, $v1);
         $vir2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255($ir1, $v1);
         $this->assertSame(sodium_bin2hex($vir1), sodium_bin2hex($vir2), 'scalarmult inverse');
+    }
+
+    /**
+     * These test cases broken on PHP 8.1
+     *
+     * @return string[][]
+     */
+    public function brokenPHP81TestProvider()
+    {
+        return array(
+            array(
+                '71a330faff41651c6dfa6e4548877d2dc2b0c26056c2e7e17bfb14cf94a4b47c',
+                '92d753c7b3fef8b8b553e672823db0a052d7598999a3baacd5909f0c0a6d491f',
+                '0c7507876a0215c3bf5407680a7c0bef7116c9bca25deca316322d1647dff75a'
+            ),
+            array(
+                'a57445510d01b93e6ac9b4b0df02edf58dd577c527636a508ac52a015848051c',
+                '30417da32e12af747c79dd8dd239db80d6621da155abb9bcf270dfbf7f621d4f',
+                '06a686c7a7ec35374f37f8f537e7e099ce60aaca1c0c009085cc5a8f43850005'
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @dataProvider brokenPHP81TestProvider
+     * @throws SodiumException
+     */
+    public function testBrokenPHP81($k_hex, $a_hex, $expect)
+    {
+        $k = sodium_hex2bin($k_hex);
+        $a = sodium_hex2bin($a_hex);
+
+        $b1 = sodium_crypto_scalarmult_ristretto255($k, $a);
+        $b2 = ParagonIE_Sodium_Compat::scalarmult_ristretto255($k, $a);
+        $this->assertSame($expect, sodium_bin2hex($b2), 'expectation failed (sodium_compat)');
+        $this->assertSame($expect, sodium_bin2hex($b1), 'expectation failed (PHP 8.1)');
+        $this->assertSame(sodium_bin2hex($b1), sodium_bin2hex($b2), 'consistency failed');
     }
 }
