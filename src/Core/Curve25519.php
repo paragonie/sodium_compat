@@ -2055,7 +2055,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         //            e[i] -= carry * ((signed char) 1 << 4);
         //        }
         $carry = 0;
-        for ($i = 0; $i < 64; ++$i) {
+        for ($i = 0; $i < 63; ++$i) {
             $e[$i] += $carry;
             $carry = $e[$i] + 8;
             $carry >>= 4;
