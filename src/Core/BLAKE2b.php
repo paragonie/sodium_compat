@@ -164,8 +164,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $l0 = 0;
         $c = 64 - $c;
 
+        /** @var int $c */
         if ($c < 32) {
-            /** @var int $h0 */
             $h0 = ((int) ($x[0]) << $c) | (
                 (
                     (int) ($x[1]) & ((1 << $c) - 1)
@@ -173,10 +173,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
                     (32 - $c)
                 ) >> (32 - $c)
             );
-            /** @var int $l0 */
             $l0 = (int) ($x[1]) << $c;
         } else {
-            /** @var int $h0 */
             $h0 = (int) ($x[1]) << ($c - 32);
         }
 
@@ -184,12 +182,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $c1 = 64 - $c;
 
         if ($c1 < 32) {
-            /** @var int $h1 */
             $h1 = (int) ($x[0]) >> $c1;
-            /** @var int $l1 */
             $l1 = ((int) ($x[1]) >> $c1) | ((int) ($x[0]) & ((1 << $c1) - 1)) << (32 - $c1);
         } else {
-            /** @var int $l1 */
             $l1 = (int) ($x[0]) >> ($c1 - 32);
         }
 
