@@ -1833,7 +1833,14 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
      */
     public static function equal($b, $c)
     {
-        return (int) ((($b ^ $c) - 1 & 0xffffffff) >> 31);
+        $b0 = $b & 0xffff;
+        $b1 = ($b >> 16) & 0xffff;
+        $c0 = $c & 0xffff;
+        $c1 = ($c >> 16) & 0xffff;
+
+        $d0 = (($b0 ^ $c0) - 1) >> 15;
+        $d1 = (($b1 ^ $c1) - 1) >> 15;
+        return ($d0 & $d1) & 1;
     }
 
     /**
