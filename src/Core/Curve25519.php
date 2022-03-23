@@ -3808,7 +3808,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_normalize(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
-        static $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
+        $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
 
         $g = self::fe_copy($f);
         for ($i = 0; $i < 10; ++$i) {
