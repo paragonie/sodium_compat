@@ -332,7 +332,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    protected static function normalize(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    protected static function fe_normalize(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
         static $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
 
@@ -379,8 +379,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Fe $g
     ) {
         // Ensure limbs aren't oversized.
-        $f = self::normalize($f);
-        $g = self::normalize($g);
+        $f = self::fe_normalize($f);
+        $g = self::fe_normalize($g);
         $f0 = $f[0];
         $f1 = $f[1];
         $f2 = $f[2];
@@ -570,7 +570,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
-        return self::normalize(
+        return self::fe_normalize(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
                 array(
                     (int) $h0,
@@ -605,7 +605,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         for ($i = 0; $i < 10; ++$i) {
             $h[$i] = -$f[$i];
         }
-        return self::normalize($h);
+        return self::fe_normalize($h);
     }
 
     /**
@@ -620,7 +620,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_sq(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
-        $f = self::normalize($f);
+        $f = self::fe_normalize($f);
         $f0 = (int) $f[0];
         $f1 = (int) $f[1];
         $f2 = (int) $f[2];
@@ -754,7 +754,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
-        return self::normalize(
+        return self::fe_normalize(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
                 array(
                     (int) $h0,
@@ -785,7 +785,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_sq2(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
-        $f = self::normalize($f);
+        $f = self::fe_normalize($f);
         $f0 = (int) $f[0];
         $f1 = (int) $f[1];
         $f2 = (int) $f[2];
@@ -920,7 +920,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $h1 += $carry0;
         $h0 -= $carry0 << 26;
 
-        return self::normalize(
+        return self::fe_normalize(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
                 array(
                     (int) $h0,
@@ -1006,7 +1006,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_pow22523(ParagonIE_Sodium_Core_Curve25519_Fe $z)
     {
-        $z = self::normalize($z);
+        $z = self::fe_normalize($z);
         # fe_sq(t0, z);
         # fe_sq(t1, t0);
         # fe_sq(t1, t1);
@@ -1134,7 +1134,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      */
     public static function fe_sub(ParagonIE_Sodium_Core_Curve25519_Fe $f, ParagonIE_Sodium_Core_Curve25519_Fe $g)
     {
-        return self::normalize(
+        return self::fe_normalize(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
                 array(
                     (int) ($f[0] - $g[0]),
