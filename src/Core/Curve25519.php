@@ -327,18 +327,34 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * Ensure limbs are less than 28 bits long to prevent float promotion.
      *
+     * This uses a constant-time conditional swap under the hood.
+     *
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
     protected static function normalize(ParagonIE_Sodium_Core_Curve25519_Fe $f)
     {
-        $x = (PHP_INT_SIZE << 3) - 1;
+        static $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
 
         $g = self::fe_copy($f);
         for ($i = 0; $i < 10; ++$i) {
-            $mask = -(($g[$i] >> $x) & 1); // mask
+            $mask = -(($g[$i] >> $x) & 1);
+
+            /*
+             * Get two candidate normalized values for $g[$i], depending on the sign of $g[$i]:
+             */
             $a = $g[$i] & 0x7ffffff;
             $b = -((-$g[$i]) & 0x7ffffff);
+
+            /*
+             * Return the appropriate candidate value, based on the sign of the original input:
+             *
+             * The following is equivalent to this ternary:
+             *
+             * $g[$i] = (($g[$i] >> $x) & 1) ? $a : $b;
+             *
+             * Except what's written doesn't contain timing leaks.
+             */
             $g[$i] = ($a ^ (($a ^ $b) & $mask));
         }
         return $g;
