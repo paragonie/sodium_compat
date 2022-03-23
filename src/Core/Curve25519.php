@@ -2550,7 +2550,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $s20 = 2097151 & (self::load_4(self::substr($s, 52, 4)) >> 4);
         $s21 = 2097151 & (self::load_3(self::substr($s, 55, 3)) >> 1);
         $s22 = 2097151 & (self::load_4(self::substr($s, 57, 4)) >> 6);
-        $s23 = (self::load_4(self::substr($s, 60, 4)) >> 3);
+        $s23 = 0x1fffffff & (self::load_4(self::substr($s, 60, 4)) >> 3);
 
         $s11 += self::mul($s23,  666643, 20);
         $s12 += self::mul($s23,  470296, 19);
