@@ -264,7 +264,7 @@ class UtilTest extends PHPUnit_Framework_TestCase
     public function testMul()
     {
         if (PHP_INT_SIZE === 4) {
-            return;
+            $this->markTestSkipped('Ignore on 32-bit');
         }
         $arguments = array(
             array(1, 1),

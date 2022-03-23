@@ -282,7 +282,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     public function testCryptoBox()
     {
         if (PHP_INT_SIZE === 4) {
-            return;
+            $this->markTestSkipped('Ignored on 32-bit');
         }
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -459,6 +459,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
             );
         }
     }
+
     /**
      * @covers ParagonIE_Sodium_Crypto::sign_detached()
      * @throws SodiumException
@@ -468,7 +469,6 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     {
         if (PHP_INT_SIZE === 8) {
             $this->markTestSkipped('Only 32-bit');
-            return;
         }
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
@@ -497,7 +497,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase
     public function testSignDetached()
     {
         if (PHP_INT_SIZE === 4) {
-            return;
+            $this->markTestSkipped('Ignored on 32-bit');
         }
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .

@@ -1838,8 +1838,8 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         $c0 = $c & 0xffff;
         $c1 = ($c >> 16) & 0xffff;
 
-        $d0 = (($b0 ^ $c0) - 1) >> 15;
-        $d1 = (($b1 ^ $c1) - 1) >> 15;
+        $d0 = (($b0 ^ $c0) - 1) >> 31;
+        $d1 = (($b1 ^ $c1) - 1) >> 31;
         return ($d0 & $d1) & 1;
     }
 
@@ -1857,7 +1857,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
             return $char < 0 ? 1 : 0;
         }
         /** @var string $char */
-        /** @var int $x */
         $x = self::chrToInt(self::substr($char, 0, 1));
         return (int) ($x >> 31);
     }
@@ -1963,7 +1962,6 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
         }
 
         $bnegative = self::negative($b);
-        /** @var int $babs */
         $babs = $b - (((-$bnegative) & $b) << 1);
 
         $t = self::ge_precomp_0();
@@ -1971,7 +1969,7 @@ abstract class ParagonIE_Sodium_Core32_Curve25519 extends ParagonIE_Sodium_Core3
             $t = self::cmov(
                 $t,
                 $base[$pos][$i],
-                self::equal($babs, $i + 1)
+                -self::equal($babs, $i + 1)
             );
         }
         $minusT = new ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(

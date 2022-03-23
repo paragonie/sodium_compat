@@ -17,7 +17,6 @@ class SipHashTest extends PHPUnit_Framework_TestCase
     {
         if (PHP_INT_SIZE === 4) {
             $this->markTestSkipped('Test is not relevant to 32-bit');
-            return;
         }
 
         $vectors = array(
@@ -72,7 +71,6 @@ class SipHashTest extends PHPUnit_Framework_TestCase
     {
         if (PHP_INT_SIZE === 4) {
             $this->markTestSkipped('Test is not relevant to 32-bit');
-            return;
         }
         $this->assertSame(
             array(0x00010000, 0x00000000),

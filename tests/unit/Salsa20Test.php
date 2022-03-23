@@ -16,7 +16,7 @@ class Salsa20Test extends PHPUnit_Framework_TestCase
     public function testRotate()
     {
         if (PHP_INT_SIZE === 4) {
-            return;
+            $this->markTestSkipped("Ignored on 32-bit");
         }
         $this->assertEquals(
             0x00001000,

@@ -12,10 +12,16 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
     public function before()
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
     }
 
     public function testBadEncodings()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $badHex = array(
 
             /* Non-canonical field encodings */
@@ -69,6 +75,9 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
 
     public function testFromHash()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $inputHashes = array(
             "5d1be09e3d0c82fc538112490e35701979d99e06ca3e2b5b54bffe8b4dc772c1" .
             "4d98b696a1bbfb5ca32c436cc61c16563790306c79eaca7705668b47dffe5bb6",
@@ -115,6 +124,9 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
      */
     public function testScalarMult()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $expected = array(
             '0000000000000000000000000000000000000000000000000000000000000000',
             'e2f2ae0a6abc4e71a884a961c500515f58e30b6aa582dd8db6a65945e08d2d76',
@@ -160,6 +172,9 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
 
     public function testScalarOpMul()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $x = sodium_hex2bin('5698f8e0556275ac6725829dcc8505a23349c49994db45b126e4234e8e081908');
         $y = sodium_hex2bin('bf33fc4ef227d64aa6e257e544bad16b52a3185a38baa56ce21de8af97aa2606');
         $expect = '9cc7e7bdad442f9734f404a9960e7a0ca16cdbe55f322bb5c5242cfbce071606';
@@ -175,6 +190,9 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
      */
     protected function assertValidPoint($s, $msg)
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $this->assertTrue(
             ParagonIE_Sodium_Compat::ristretto255_is_valid_point($s, true),
             $msg
@@ -186,6 +204,9 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
      */
     public function testScalarMultTestVectors()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('Ignore on 32-bit');
+        }
         $k = sodium_hex2bin('40a47d219ac550a3dcd7993356cfe639ff0e0cebbce2c82dd8010597db7d305d');
         $a = sodium_hex2bin('9015dc069ae1fde7a640c8df344ae3753e691305a8e05199485c515f34d9bf13');
         $b = sodium_crypto_scalarmult_ristretto255($k, $a);
