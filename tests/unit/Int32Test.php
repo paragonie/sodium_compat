@@ -83,7 +83,7 @@ class Int32Test extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             array(
-                ($a + $c + (($b + $d) >> 16)) & 0xffff,
+                ((int) ($a + $c + (($b + $d) >> 16))) & 0xffff,
                 ($b + $d) & 0xffff
             ),
             $c32->limbs
@@ -228,8 +228,8 @@ class Int32Test extends PHPUnit_Framework_TestCase
             $value = random_int(1, 65536);
             $result = ($baseSmall * $value);
             $expected = array(
-                ($result >> 16) & 0xffff,
-                $result & 0xffff
+                ((int) $result >> 16) & 0xffff,
+                (int) $result & 0xffff
             );
 
             $this->assertSame(

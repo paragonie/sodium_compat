@@ -247,8 +247,8 @@ class Int64Test extends PHPUnit_Framework_TestCase
                 $expected = array(
                     0,
                     0,
-                    ($result >> 16) & 0xffff,
-                    $result & 0xffff
+                    ((int) $result >> 16) & 0xffff,
+                    (int) $result & 0xffff
                 );
                 $this->assertSame(
                     $expected,

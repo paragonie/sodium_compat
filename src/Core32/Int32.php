@@ -138,9 +138,10 @@ class ParagonIE_Sodium_Core32_Int32
     public function mask($m = 0)
     {
         /** @var int $hi */
-        $hi = ($m >> 16) & 0xffff;
+        $hi = ((int) $m >> 16);
+        $hi &= 0xffff;
         /** @var int $lo */
-        $lo = ($m & 0xffff);
+        $lo = ((int) $m) & 0xffff;
         return new ParagonIE_Sodium_Core32_Int32(
             array(
                 (int) ($this->limbs[0] & $hi),
