@@ -142,4 +142,27 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             );
         }
     }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testXchacha20Ic()
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+
+        $left  = str_repeat("\x01", 64);
+        $right = str_repeat("\xfe", 64);
+        $stream7_unified = sodium_crypto_stream_xchacha20_xor($left . $right, $nonce, $key);
+        $stream7_left  = sodium_crypto_stream_xchacha20_xor_ic($left, $nonce, 0, $key);
+        $stream7_right = sodium_crypto_stream_xchacha20_xor_ic($right, $nonce, 1, $key);
+        $stream7_concat = $stream7_left . $stream7_right;
+
+        $this->assertSame(128, ParagonIE_Sodium_Core_Util::strlen($stream7_concat));
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::bin2hex($stream7_unified),
+            ParagonIE_Sodium_Core_Util::bin2hex($stream7_concat),
+            "XChaCha20 initial counter failed"
+        );
+    }
 }
