@@ -1,6 +1,15 @@
 /.gitattributes export-ignore
-/.travis.yml export-ignore
-/phpunit.xml export-ignore
+/.gitignore export-ignore
+/.github export-ignore
+/phpunit.xml.dist export-ignore
 /phpstan.neon.dist export-ignore
-/psalm.xml export-ignore
+/psalm-above-3.xml export-ignore
+/psalm-below-3.xml export-ignore
 /tests export-ignore
+/build-phar.sh export-ignore
+/appveyor.yml export-ignore
+/dist export-ignore
+/autoload-phpunit.php export-ignore
+/autoload-pedantic.php export-ignore
+/autoload-fast.php export-ignore
+
