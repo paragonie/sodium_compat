@@ -42,7 +42,7 @@ if (PHP_VERSION_ID < 70000) {
 }
 
 /* Explicitly, always load the Compat class: */
-if (!class_exists('ParagonIE_Sodium_Compat')) {
+if (!class_exists('ParagonIE_Sodium_Compat', false)) {
     require_once dirname(__FILE__) . '/src/Compat.php';
 }
 
