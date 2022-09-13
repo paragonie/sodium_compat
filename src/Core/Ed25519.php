@@ -3,7 +3,7 @@
 if (class_exists('ParagonIE_Sodium_Core_Ed25519', false)) {
     return;
 }
-if (!class_exists('ParagonIE_Sodium_Core_Curve25519')) {
+if (!class_exists('ParagonIE_Sodium_Core_Curve25519', false)) {
     require_once dirname(__FILE__) . '/Curve25519.php';
 }
 
