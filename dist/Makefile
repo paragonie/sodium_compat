@@ -30,8 +30,13 @@ clean:
 # Inside workdir/:
 
 sodium-compat.phar: dist/box.json composer.lock
+	if [ ! -d dist ]; then mkdir dist; fi
+	if [ ! -f dist/box.json ]; then cp ../dist/box.json dist/box.json; fi
 	cp dist/box.json .
 	php -d phar.readonly=0 $(box) build -c box.json -v
+
+dist/box.json:
+	cp ../box.json box.json
 
 composer.lock:
 	$(composer) config autoloader-suffix $(gitcommit)
