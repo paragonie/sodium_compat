@@ -329,11 +329,13 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_aes256gcm_decrypt(
         string $ciphertext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = ''
     ) {
-        if (!self::crypto_aead_aes256gcm_is_available()) {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }        if (!self::crypto_aead_aes256gcm_is_available()) {
             throw new SodiumException('AES-256-GCM is not available');
         }
         /* Input validation: */
@@ -382,10 +384,13 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_aes256gcm_encrypt(
         string $plaintext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = ''
     ): string {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
         if (!self::crypto_aead_aes256gcm_is_available()) {
             throw new SodiumException('AES-256-GCM is not available');
         }
@@ -451,10 +456,14 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_chacha20poly1305_decrypt(
         string $ciphertext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = ''
     ) {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
+
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
@@ -525,10 +534,13 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_chacha20poly1305_encrypt(
         string $plaintext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = ''
     ): string {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES long');
@@ -538,7 +550,7 @@ class ParagonIE_Sodium_Compat
         }
 
         if (self::useNewSodiumAPI()) {
-            return (string) sodium_crypto_aead_chacha20poly1305_encrypt(
+            return sodium_crypto_aead_chacha20poly1305_encrypt(
                 $plaintext,
                 $assocData,
                 $nonce,
@@ -593,10 +605,14 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_chacha20poly1305_ietf_decrypt(
         string $ciphertext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = ''
     ) {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
+
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
@@ -684,6 +700,9 @@ class ParagonIE_Sodium_Compat
         string $nonce = '',
         string $key = ''
     ): string {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES long');
@@ -695,7 +714,7 @@ class ParagonIE_Sodium_Compat
         if (self::useNewSodiumAPI()) {
             return (string) sodium_crypto_aead_chacha20poly1305_ietf_encrypt(
                 $plaintext,
-                (string) $assocData,
+                $assocData,
                 $nonce,
                 $key
             );
@@ -704,7 +723,7 @@ class ParagonIE_Sodium_Compat
             return (string) call_user_func(
                 '\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt',
                 $plaintext,
-                (string) $assocData,
+                $assocData,
                 $nonce,
                 $key
             );
@@ -712,14 +731,14 @@ class ParagonIE_Sodium_Compat
         if (PHP_INT_SIZE === 4) {
             return ParagonIE_Sodium_Crypto32::aead_chacha20poly1305_ietf_encrypt(
                 $plaintext,
-                (string) $assocData,
+                $assocData,
                 $nonce,
                 $key
             );
         }
         return ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt(
             $plaintext,
-            (string) $assocData,
+            $assocData,
             $nonce,
             $key
         );
@@ -760,11 +779,15 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_xchacha20poly1305_ietf_decrypt(
         string $ciphertext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = '',
         bool $dontFallback = false
     ) {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
+
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES long');
@@ -825,11 +848,14 @@ class ParagonIE_Sodium_Compat
      */
     public static function crypto_aead_xchacha20poly1305_ietf_encrypt(
         string $plaintext = '',
-        string $assocData = '',
+        ?string $assocData = '',
         string $nonce = '',
         string $key = '',
         bool $dontFallback = false
     ): string {
+        if (is_null($assocData)) {
+            $assocData = '';
+        }
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
             throw new SodiumException('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_NPUBBYTES long');
