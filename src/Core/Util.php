@@ -10,28 +10,6 @@ if (class_exists('ParagonIE_Sodium_Core_Util', false)) {
 abstract class ParagonIE_Sodium_Core_Util
 {
     /**
-     * @param int $integer
-     * @param int $size (16, 32, 64)
-     * @return int
-     */
-    public static function abs(int $integer, int $size = 0): int
-    {
-        $realSize = (PHP_INT_SIZE << 3) - 1;
-        if ($size) {
-            --$size;
-        } else {
-            $size = $realSize;
-        }
-
-        $negative = -(($integer >> $size) & 1);
-        return (
-            ($integer ^ $negative)
-                +
-            (($negative >> $realSize) & 1)
-        );
-    }
-
-    /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *
@@ -54,44 +32,6 @@ abstract class ParagonIE_Sodium_Core_Util
                 'CC',
                 (87 + $b + ((($b - 10) >> 8) & ~38)),
                 (87 + $c + ((($c - 10) >> 8) & ~38))
-            );
-        }
-        return $hex;
-    }
-
-    /**
-     * Convert a binary string into a hexadecimal string without cache-timing
-     * leaks, returning uppercase letters (as per RFC 4648)
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param string $bin_string (raw binary)
-     * @return string
-     * @throws TypeError
-     */
-    public static function bin2hexUpper(string $bin_string): string
-    {
-        $hex = '';
-        $len = self::strlen($bin_string);
-        for ($i = 0; $i < $len; ++$i) {
-            /** @var array<int, int> $chunk */
-            $chunk = unpack('C', $bin_string[$i]);
-
-            /* Lower 16 bits */
-            $c = $chunk[1] & 0xf;
-            /* Upper 16 bits */
-            $b = $chunk[1] >> 4;
-
-            /**
-             * Use pack() and binary operators to turn the two integers
-             * into hexadecimal characters. We don't use chr() here, because
-             * it uses a lookup table internally and we want to avoid
-             * cache-timing side-channels.
-             */
-            $hex .= pack(
-                'CC',
-                (55 + $b + ((($b - 10) >> 8) & ~6)),
-                (55 + $c + ((($c - 10) >> 8) & ~6))
             );
         }
         return $hex;
@@ -322,21 +262,9 @@ abstract class ParagonIE_Sodium_Core_Util
                 'String must be 4 bytes or more; ' . self::strlen($string) . ' given.'
             );
         }
-        if (PHP_VERSION_ID >= 50603 && PHP_INT_SIZE === 8) {
-            /** @var array<int, int> $unpacked */
-            $unpacked = unpack('P', $string);
-            return (int) $unpacked[1];
-        }
-
-        $result  = (self::chrToInt($string[0]) & 0xff);
-        $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
-        $result |= (self::chrToInt($string[2]) & 0xff) << 16;
-        $result |= (self::chrToInt($string[3]) & 0xff) << 24;
-        $result |= (self::chrToInt($string[4]) & 0xff) << 32;
-        $result |= (self::chrToInt($string[5]) & 0xff) << 40;
-        $result |= (self::chrToInt($string[6]) & 0xff) << 48;
-        $result |= (self::chrToInt($string[7]) & 0xff) << 56;
-        return (int) $result;
+        /** @var array<int, int> $unpacked */
+        $unpacked = unpack('P', $string);
+        return (int) $unpacked[1];
     }
 
     /**
@@ -463,22 +391,6 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Store a 24-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     * @throws TypeError
-     */
-    public static function store_3(int $int): string
-    {
-        /** @var string $packed */
-        $packed = pack('N', $int);
-        return self::substr($packed, 1, 3);
-    }
-
-    /**
      * Store a 32-bit integer into a string, treating it as little-endian.
      *
      * @internal You should not use this directly from another application
@@ -495,22 +407,6 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Store a 32-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     * @throws TypeError
-     */
-    public static function store_4(int $int): string
-    {
-        /** @var string $packed */
-        $packed = pack('N', $int);
-        return $packed;
-    }
-
-    /**
      * Stores a 64-bit integer as an string, treating it as little-endian.
      *
      * @internal You should not use this directly from another application
@@ -521,35 +417,9 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function store64_le(int $int): string
     {
-        if (PHP_INT_SIZE === 8) {
-            if (PHP_VERSION_ID >= 50603) {
-                /** @var string $packed */
-                $packed = pack('P', $int);
-                return $packed;
-            }
-            return self::intToChr($int & 0xff) .
-                self::intToChr(($int >>  8) & 0xff) .
-                self::intToChr(($int >> 16) & 0xff) .
-                self::intToChr(($int >> 24) & 0xff) .
-                self::intToChr(($int >> 32) & 0xff) .
-                self::intToChr(($int >> 40) & 0xff) .
-                self::intToChr(($int >> 48) & 0xff) .
-                self::intToChr(($int >> 56) & 0xff);
-        }
-        if ($int > PHP_INT_MAX) {
-            list($hiB, $int) = self::numericTo64BitInteger($int);
-        } else {
-            $hiB = 0;
-        }
-        return
-            self::intToChr(($int      ) & 0xff) .
-            self::intToChr(($int >>  8) & 0xff) .
-            self::intToChr(($int >> 16) & 0xff) .
-            self::intToChr(($int >> 24) & 0xff) .
-            self::intToChr($hiB & 0xff) .
-            self::intToChr(($hiB >>  8) & 0xff) .
-            self::intToChr(($hiB >> 16) & 0xff) .
-            self::intToChr(($hiB >> 24) & 0xff);
+        /** @var string $packed */
+        $packed = pack('P', $int);
+        return $packed;
     }
 
     /**
@@ -626,7 +496,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
-     * @throws SodiumException
+     *
      * @throws TypeError
      */
     public static function verify_16(string $a, string $b): bool
@@ -645,7 +515,6 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function verify_32(string $a, string $b): bool
