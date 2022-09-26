@@ -23,6 +23,8 @@ class HexTest extends PHPUnit_Framework_TestCase
             $decoded = ParagonIE_Sodium_Compat::hex2bin($hex, $ignore);
             $this->assertFalse($fail, 'This should have failed but did not!');
             $this->assertSame($binary, $decoded, 'Binary mismatch');
+        } catch (RangeException $ex) {
+            $this->assertTrue($fail, 'An unexpected hex2bin failure occurred');
         } catch (SodiumException $ex) {
             $this->assertTrue($fail, 'An unexpected hex2bin failure occurred');
         }
