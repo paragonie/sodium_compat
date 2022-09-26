@@ -1286,13 +1286,14 @@ if (!is_callable('sodium_hex2bin')) {
     /**
      * @see ParagonIE_Sodium_Compat::hex2bin()
      * @param string $string
+     * @param string $ignore
      * @return string
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_hex2bin($string)
+    function sodium_hex2bin($string, $ignore = '')
     {
-        return ParagonIE_Sodium_Compat::hex2bin($string);
+        return ParagonIE_Sodium_Compat::hex2bin($string, $ignore);
     }
 }
 if (!is_callable('sodium_increment')) {
