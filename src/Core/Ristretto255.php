@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Class ParagonIE_Sodium_Core_Ristretto255
