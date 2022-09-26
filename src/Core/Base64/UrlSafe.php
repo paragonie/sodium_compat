@@ -8,7 +8,6 @@
  */
 class ParagonIE_Sodium_Core_Base64_UrlSafe
 {
-    // COPY ParagonIE_Sodium_Core_Base64_Common STARTING HERE
     /**
      * Encode into Base64
      *
@@ -172,7 +171,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            } elseif ($i < $srcLen && $strictPadding) {
+            } elseif ($strictPadding) {
                 $err |= 1;
             }
         }
@@ -184,7 +183,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
         }
         return $dest;
     }
-    // COPY ParagonIE_Sodium_Core_Base64_Common ENDING HERE
+
     /**
      * Uses bitwise operators instead of table-lookups to turn 6-bit integers
      * into 8-bit integers.

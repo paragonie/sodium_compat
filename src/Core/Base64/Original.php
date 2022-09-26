@@ -8,7 +8,6 @@
  */
 class ParagonIE_Sodium_Core_Base64_Original
 {
-    // COPY ParagonIE_Sodium_Core_Base64_Common STARTING HERE
     /**
      * Encode into Base64
      *
@@ -172,11 +171,10 @@ class ParagonIE_Sodium_Core_Base64_Original
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            } elseif ($i < $srcLen && $strictPadding) {
+            } elseif ($strictPadding) {
                 $err |= 1;
             }
         }
-        /** @var bool $check */
         $check = ($err === 0);
         if (!$check) {
             throw new RangeException(
@@ -185,7 +183,6 @@ class ParagonIE_Sodium_Core_Base64_Original
         }
         return $dest;
     }
-    // COPY ParagonIE_Sodium_Core_Base64_Common ENDING HERE
 
     /**
      * Uses bitwise operators instead of table-lookups to turn 6-bit integers

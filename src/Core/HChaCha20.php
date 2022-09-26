@@ -71,28 +71,14 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
         $x15 = (int) $ctx[15];
 
         for ($i = 0; $i < 10; ++$i) {
-            # QUARTERROUND( x0,  x4,  x8,  x12)
             list($x0, $x4, $x8, $x12) = self::quarterRound($x0, $x4, $x8, $x12);
-
-            # QUARTERROUND( x1,  x5,  x9,  x13)
             list($x1, $x5, $x9, $x13) = self::quarterRound($x1, $x5, $x9, $x13);
-
-            # QUARTERROUND( x2,  x6,  x10,  x14)
             list($x2, $x6, $x10, $x14) = self::quarterRound($x2, $x6, $x10, $x14);
-
-            # QUARTERROUND( x3,  x7,  x11,  x15)
             list($x3, $x7, $x11, $x15) = self::quarterRound($x3, $x7, $x11, $x15);
 
-            # QUARTERROUND( x0,  x5,  x10,  x15)
             list($x0, $x5, $x10, $x15) = self::quarterRound($x0, $x5, $x10, $x15);
-
-            # QUARTERROUND( x1,  x6,  x11,  x12)
             list($x1, $x6, $x11, $x12) = self::quarterRound($x1, $x6, $x11, $x12);
-
-            # QUARTERROUND( x2,  x7,  x8,  x13)
             list($x2, $x7, $x8, $x13) = self::quarterRound($x2, $x7, $x8, $x13);
-
-            # QUARTERROUND( x3,  x4,  x9,  x14)
             list($x3, $x4, $x9, $x14) = self::quarterRound($x3, $x4, $x9, $x14);
         }
 

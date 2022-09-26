@@ -165,8 +165,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         $v = self::fe_sub($v, $u2u2); /* v = -(d*u1^2)-u2^2 */
         $v_u2u2 = self::fe_mul($v, $u2u2); /* v_u2u2 = v*u2^2 */
 
-        // fe25519_1(one);
-        // notsquare = ristretto255_sqrt_ratio_m1(inv_sqrt, one, v_u2u2);
         $one = self::fe_1();
         $result = self::ristretto255_sqrt_ratio_m1($one, $v_u2u2);
         $inv_sqrt = $result['x'];
@@ -207,8 +205,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         $u1_u2u2 = self::fe_mul(self::fe_sq($u2), $u1); /* u1_u2u2 = u1*u2^2 */
         $one = self::fe_1();
 
-        // fe25519_1(one);
-        // (void) ristretto255_sqrt_ratio_m1(inv_sqrt, one, u1_u2u2);
         $result = self::ristretto255_sqrt_ratio_m1($one, $u1_u2u2);
         $inv_sqrt = $result['x'];
 
@@ -234,11 +230,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         $x_z_inv = self::fe_mul($x_, $z_inv);
         $y_ = self::fe_cneg($y_, self::fe_isnegative($x_z_inv));
 
-
-        // fe25519_sub(s_, h->Z, y_);
-        // fe25519_mul(s_, den_inv, s_);
-        // fe25519_abs(s_, s_);
-        // fe25519_tobytes(s, s_);
         return self::fe_tobytes(
             self::fe_abs(
                 self::fe_mul(
@@ -290,10 +281,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         $s = self::fe_cmov($s, $s_prime, $wasnt_square);
         $c = self::fe_cmov($c, $r, $wasnt_square);
 
-        // fe25519_sub(n, r, one);            /* n = r-1 */
-        // fe25519_mul(n, n, c);              /* n = c*(r-1) */
-        // fe25519_mul(n, n, ed25519_sqdmone); /* n = c*(r-1)*(d-1)^2 */
-        // fe25519_sub(n, n, v);              /* n =  c*(r-1)*(d-1)^2-v */
+        /* n =  c*(r-1)*(d-1)^2-v */
         $n = self::fe_sub(
             self::fe_mul(
                 self::fe_mul(
@@ -333,25 +321,17 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         if (self::strlen($h) !== 64) {
             throw new SodiumException('Hash must be 64 bytes');
         }
-        //fe25519_frombytes(r0, h);
-        //fe25519_frombytes(r1, h + 32);
         $r0 = self::fe_frombytes(self::substr($h, 0, 32));
         $r1 = self::fe_frombytes(self::substr($h, 32, 32));
 
-        //ristretto255_elligator(&p0, r0);
-        //ristretto255_elligator(&p1, r1);
         $p0 = self::ristretto255_elligator($r0);
         $p1 = self::ristretto255_elligator($r1);
 
-        //ge25519_p3_to_cached(&p1_cached, &p1);
-        //ge25519_add_cached(&p_p1p1, &p0, &p1_cached);
         $p_p1p1 = self::ge_add(
             $p0,
             self::ge_p3_to_cached($p1)
         );
 
-        //ge25519_p1p1_to_p3(&p, &p_p1p1);
-        //ristretto255_p3_tobytes(s, &p);
         return self::ristretto255_p3_tobytes(
             self::ge_p1p1_to_p3($p_p1p1)
         );

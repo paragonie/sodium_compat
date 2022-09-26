@@ -423,12 +423,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Increasing by a negative number makes no sense.');
         }
         $t = self::to64($inc);
-        # S->t is $ctx[1] in our implementation
-
-        # S->t[0] = ( uint64_t )( t >> 0 );
         $ctx[1][0] = self::add64($ctx[1][0], $t);
-
-        # S->t[1] += ( S->t[0] < inc );
         if (self::flatten64($ctx[1][0]) < $inc) {
             $ctx[1][1] = self::add64($ctx[1][1], self::to64(1));
         }
@@ -460,32 +455,19 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             $fill = 256 - $left;
 
             if ($plen > $fill) {
-                # memcpy( S->buf + left, in, fill ); /* Fill buffer */
                 for ($i = $fill; $i--;) {
                     $ctx[3][$i + $left] = $p[$i + $offset];
                 }
-
-                # S->buflen += fill;
                 $ctx[4] += $fill;
 
-                # blake2b_increment_counter( S, BLAKE2B_BLOCKBYTES );
                 self::increment_counter($ctx, 128);
-
-                # blake2b_compress( S, S->buf ); /* Compress */
                 self::compress($ctx, $ctx[3]);
-
-                # memcpy( S->buf, S->buf + BLAKE2B_BLOCKBYTES, BLAKE2B_BLOCKBYTES ); /* Shift buffer left */
                 for ($i = 128; $i--;) {
                     $ctx[3][$i] = $ctx[3][$i + 128];
                 }
 
-                # S->buflen -= BLAKE2B_BLOCKBYTES;
                 $ctx[4] -= 128;
-
-                # in += fill;
                 $offset += $fill;
-
-                # inlen -= fill;
                 $plen -= $fill;
             } else {
                 for ($i = $plen; $i--;) {
@@ -689,14 +671,11 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         /** @var array<int, array<int, int>> $ctxA */
         $ctxA = $ctx[0]->toArray();
 
-        # uint64_t h[8];
         for ($i = 0; $i < 8; ++$i) {
             $str .= self::store32_le($ctxA[$i][1]);
             $str .= self::store32_le($ctxA[$i][0]);
         }
 
-        # uint64_t t[2];
-        # uint64_t f[2];
         for ($i = 1; $i < 3; ++$i) {
             $ctxA = $ctx[$i]->toArray();
             $str .= self::store32_le($ctxA[0][1]);
@@ -705,13 +684,10 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             $str .= self::store32_le($ctxA[1][0]);
         }
 
-        # uint8_t buf[2 * 128];
         $str .= self::SplFixedArrayToString($ctx[3]);
 
-        /** @var int $ctx4 */
         $ctx4 = (int) $ctx[4];
 
-        # size_t buflen;
         $str .= implode('', array(
             self::intToChr($ctx4 & 0xff),
             self::intToChr(($ctx4 >> 8) & 0xff),
@@ -722,7 +698,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             self::intToChr(($ctx4 >> 48) & 0xff),
             self::intToChr(($ctx4 >> 56) & 0xff)
         ));
-        # uint8_t last_node;
         return $str . self::intToChr($ctx[5]) . str_repeat("\x00", 23);
     }
 
@@ -742,7 +717,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
     {
         $ctx = self::context();
 
-        # uint64_t h[8];
         for ($i = 0; $i < 8; ++$i) {
             $ctx[0][$i] = SplFixedArray::fromArray(
                 array(
@@ -756,8 +730,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             );
         }
 
-        # uint64_t t[2];
-        # uint64_t f[2];
         for ($i = 1; $i < 3; ++$i) {
             $ctx[$i][1] = SplFixedArray::fromArray(
                 array(
@@ -773,10 +745,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             );
         }
 
-        # uint8_t buf[2 * 128];
         $ctx[3] = self::stringToSplFixedArray(self::substr($string, 96, 256));
 
-        # uint8_t buf[2 * 128];
         $int = 0;
         for ($i = 0; $i < 8; ++$i) {
             $int |= self::chrToInt($string[352 + $i]) << ($i << 3);
