@@ -2,9 +2,6 @@
 /*
  This file should only ever be loaded on PHP 7+
  */
-if (PHP_VERSION_ID < 70000) {
-    return;
-}
 
 spl_autoload_register(function ($class) {
     $namespace = 'ParagonIE_Sodium_';
