@@ -2,7 +2,7 @@
 
 class Windows32Test extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (PHP_INT_SIZE !== 4) {
             $this->markTestSkipped('64-bit OS');
