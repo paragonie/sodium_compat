@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class KeyConversionTest
  */
-class KeyConversionTest extends PHPUnit_Framework_TestCase
+class KeyConversionTest extends TestCase
 {
     /**
      * @before

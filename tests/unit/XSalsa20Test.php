@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class XSalsa20Test extends PHPUnit_Framework_TestCase
+class XSalsa20Test extends TestCase
 {
     /**
      * @oovers ParagonIE_Sodium_Core_XSalsa20::xsalsa20()

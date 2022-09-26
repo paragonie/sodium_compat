@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class Salsa20Test extends PHPUnit_Framework_TestCase
+class Salsa20Test extends TestCase
 {
     /**
      * @before

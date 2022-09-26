@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class WycheproofTest extends PHPUnit_Framework_TestCase
+class WycheproofTest extends TestCase
 {
     private $dir;
 

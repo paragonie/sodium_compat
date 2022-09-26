@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class SipHashTest extends PHPUnit_Framework_TestCase
+class SipHashTest extends TestCase
 {
     /**
      * @before

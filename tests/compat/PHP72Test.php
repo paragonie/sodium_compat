@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SodiumCompatTest
  */
-class PHP72Test extends PHPUnit_Framework_TestCase
+class PHP72Test extends TestCase
 {
     /**
      * @before

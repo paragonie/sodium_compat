@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PedanticTest
@@ -7,7 +8,7 @@
  *
  * To include this in the test suite: vendor/bin/phpunit --bootstrap=autoload-pedantic.php
  */
-class PedanticTest extends PHPUnit_Framework_TestCase
+class PedanticTest extends TestCase
 {
     const DEFAULT_MAX_LENGTH = 32;
 

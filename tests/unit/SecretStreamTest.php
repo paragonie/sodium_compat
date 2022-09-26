@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SecretStreamTest
  */
-class SecretStreamTest extends PHPUnit_Framework_TestCase
+class SecretStreamTest extends TestCase
 {
     /**
      * @throws Exception

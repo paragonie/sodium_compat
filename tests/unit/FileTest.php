@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class FileTest extends PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * @before

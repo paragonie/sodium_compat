@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class Blake2bTest extends PHPUnit_Framework_TestCase
+class Blake2bTest extends TestCase
 {
     /**
      * @before

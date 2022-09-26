@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ExceptionTest
  *
  * This tests failure conditions.
  */
-class ExceptionTest extends PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     /**
      * @before

@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class Curve25519Test
  */
-class Curve25519Test extends PHPUnit_Framework_TestCase
+class Curve25519Test extends TestCase
 {
     /**
      * @before

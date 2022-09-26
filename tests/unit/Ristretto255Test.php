@@ -1,10 +1,11 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class Ristretto255Test
  * @package unit
  */
-class Ristretto255Test extends PHPUnit_Framework_TestCase
+class Ristretto255Test extends TestCase
 {
     /**
      * @before

@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class KeygenTest
  */
-class KeygenTest extends PHPUnit_Framework_TestCase
+class KeygenTest extends TestCase
 {
     public function testVectors()
     {
