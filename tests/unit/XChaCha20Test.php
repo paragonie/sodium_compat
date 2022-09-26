@@ -37,11 +37,7 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             $expect = ParagonIE_Sodium_Core_Util::hex2bin($t[2]);
             $out_len = ParagonIE_Sodium_Core_Util::strlen($expect);
 
-            if (PHP_INT_SIZE === 4) {
-                $out = ParagonIE_Sodium_Core32_XChaCha20::stream($out_len, $nonce, $key);
-            } else {
-                $out = ParagonIE_Sodium_Core_XChaCha20::stream($out_len, $nonce, $key);
-            }
+            $out = ParagonIE_Sodium_Core_XChaCha20::stream($out_len, $nonce, $key);
             $this->assertSame(
                 bin2hex($expect),
                 bin2hex($out),
@@ -75,19 +71,11 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             $message = ParagonIE_Sodium_Core_Util::hex2bin($test[2]);
             $expect = ParagonIE_Sodium_Core_Util::hex2bin($test[3]);
 
-            if (PHP_INT_SIZE === 4) {
-                $out = ParagonIE_Sodium_Crypto32::secretbox_xchacha20poly1305(
-                    $message,
-                    $nonce,
-                    $key
-                );
-            } else {
-                $out = ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305(
-                    $message,
-                    $nonce,
-                    $key
-                );
-            }
+            $out = ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305(
+                $message,
+                $nonce,
+                $key
+            );
             $this->assertSame(
                 bin2hex($expect),
                 bin2hex($out),
@@ -120,21 +108,12 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             $out = ParagonIE_Sodium_Core_Util::hex2bin($out);
             $m = str_repeat("\0", ParagonIE_Sodium_Core_Util::strlen($out));
 
-            if (PHP_INT_SIZE === 4) {
-                $calc = ParagonIE_Sodium_Core32_XChaCha20::ietfStreamXorIc(
-                    $m,
-                    $nonce,
-                    $key,
-                    "\x00\x00\x00\x00\x00\x00\x00\x00"
-                );
-            } else {
-                $calc = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc(
-                    $m,
-                    $nonce,
-                    $key,
-                    "\x00\x00\x00\x00\x00\x00\x00\x00"
-                );
-            }
+            $calc = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc(
+                $m,
+                $nonce,
+                $key,
+                "\x00\x00\x00\x00\x00\x00\x00\x00"
+            );
             $this->assertSame(
                 ParagonIE_Sodium_Core_Util::bin2hex($out),
                 ParagonIE_Sodium_Core_Util::bin2hex($calc),

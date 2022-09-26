@@ -16,7 +16,7 @@ class Windows32Test extends PHPUnit_Framework_TestCase
      */
     public function testBlake2bPersonalizedState()
     {
-        $exp = ParagonIE_Sodium_Core32_Util::hex2bin(
+        $exp = ParagonIE_Sodium_Core_Util::hex2bin(
             '48c9bdf267e6096a3ba7ca8485ae67bb2bf894fe72f36e3cf1361d5f3af54fa5e4e0d0cf4b636b35260e0d1fbf0e60ab' .
             '5e8c73cdcdbbb17e4a164a2329a9d23a0000000000000000000000000000000000000000000000000000000000000000' .
             '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000' .
@@ -32,24 +32,24 @@ class Windows32Test extends PHPUnit_Framework_TestCase
         $personal = '5126fb2a37400d2a';
 
         for ($h = 0; $h < 64; ++$h) {
-            $k[$h] = ParagonIE_Sodium_Core32_Util::intToChr($h);
+            $k[$h] = ParagonIE_Sodium_Core_Util::intToChr($h);
         }
 
         $state = ParagonIE_Sodium_Compat::crypto_generichash_init_salt_personal('', 64, $salt, $personal);
 
         // Chop off last 17 bytes if present because they'll throw off tests:
-        $a = ParagonIE_Sodium_Core32_Util::substr($state, 0, 361);
-        $b = ParagonIE_Sodium_Core32_Util::substr($exp, 0, 361);
+        $a = ParagonIE_Sodium_Core_Util::substr($state, 0, 361);
+        $b = ParagonIE_Sodium_Core_Util::substr($exp, 0, 361);
         $this->assertEquals(
-            ParagonIE_Sodium_Core32_Util::bin2hex($b),
-            ParagonIE_Sodium_Core32_Util::bin2hex($a),
+            ParagonIE_Sodium_Core_Util::bin2hex($b),
+            ParagonIE_Sodium_Core_Util::bin2hex($a),
             'Initialized value is incorrect'
         );
 
         $in = '';
 
         for ($i = 0; $i < 64; ++$i) {
-            $in .= ParagonIE_Sodium_Core32_Util::intToChr($i);
+            $in .= ParagonIE_Sodium_Core_Util::intToChr($i);
         }
         ParagonIE_Sodium_Compat::crypto_generichash_update($state, $in);
 
@@ -65,11 +65,11 @@ class Windows32Test extends PHPUnit_Framework_TestCase
         );
 
         // Chop off last 17 bytes if present because they'll throw off tests:
-        $a = ParagonIE_Sodium_Core32_Util::substr($state, 0, 361);
-        $b = ParagonIE_Sodium_Core32_Util::substr($exp2, 0, 361);
+        $a = ParagonIE_Sodium_Core_Util::substr($state, 0, 361);
+        $b = ParagonIE_Sodium_Core_Util::substr($exp2, 0, 361);
         $this->assertEquals(
-            ParagonIE_Sodium_Core32_Util::bin2hex($b),
-            ParagonIE_Sodium_Core32_Util::bin2hex($a),
+            ParagonIE_Sodium_Core_Util::bin2hex($b),
+            ParagonIE_Sodium_Core_Util::bin2hex($a),
             'Updated value is incorrect'
         );
     }
@@ -134,7 +134,7 @@ class Windows32Test extends PHPUnit_Framework_TestCase
      */
     public function testChapolyIetf()
     {
-        $preTest = ParagonIE_Sodium_Core32_ChaCha20::ietfStream(
+        $preTest = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
             32,
             ParagonIE_Sodium_Core_Util::hex2bin("0000000050532d4d73673035"),
             ParagonIE_Sodium_Core_Util::hex2bin("846394900c6c826431361885cfbedf4ec77c44f3022b13e9a7d0200728f0a0e1")
@@ -291,40 +291,6 @@ class Windows32Test extends PHPUnit_Framework_TestCase
             'Test vectors'
         );
     }
-
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public function testCryptoBox32()
-    {
-        $nonce = str_repeat("\x00", 24);
-        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-        $message .= str_repeat("\x20", 64);
-
-        $alice_secret = ParagonIE_Sodium_Core32_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
-        $alice_public = ParagonIE_Sodium_Core32_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
-        $bob_secret = ParagonIE_Sodium_Core32_Util::hex2bin('b581fb5ae182a16f603f39270d4e3b95bc008310b727a11dd4e784a0044d461b');
-        $bob_public = ParagonIE_Sodium_Core32_Util::hex2bin('e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754');
-
-        $alice_to_bob = ParagonIE_Sodium_Crypto32::box_keypair_from_secretkey_and_publickey(
-            $alice_secret,
-            $bob_public
-        );
-        $bob_to_alice = ParagonIE_Sodium_Crypto32::box_keypair_from_secretkey_and_publickey(
-            $bob_secret,
-            $alice_public
-        );
-
-        $this->assertSame(
-            bin2hex(ParagonIE_Sodium_Crypto32::box($message, $nonce, $bob_to_alice)),
-            bin2hex(ParagonIE_Sodium_Crypto32::box($message, $nonce, $alice_to_bob)),
-            'box'
-        );
-    }
-
 
     /**
      * @covers ParagonIE_Sodium_File::box()
@@ -529,16 +495,9 @@ class Windows32Test extends PHPUnit_Framework_TestCase
             '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
             '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
         );
-        if (PHP_INT_SIZE === 4) {
-            $this->assertTrue(
-                ParagonIE_Sodium_Crypto32::sign_verify_detached($sig, $message, $public),
-                'Invalid signature verification checking'
-            );
-        } else {
-            $this->assertTrue(
-                ParagonIE_Sodium_Crypto::sign_verify_detached($sig, $message, $public),
-                'Invalid signature verification checking'
-            );
-        }
+        $this->assertTrue(
+            ParagonIE_Sodium_Crypto::sign_verify_detached($sig, $message, $public),
+            'Invalid signature verification checking'
+        );
     }
 }

@@ -574,9 +574,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (self::strlen($secretKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES) {
             throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
         }
-        if (PHP_INT_SIZE === 4) {
-            return self::sign_core32($filePath, $secretKey);
-        }
 
         /** @var int $size */
         $size = filesize($filePath);
@@ -669,10 +666,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Signature is too short');
         }
 
-        if (PHP_INT_SIZE === 4) {
-            return self::verify_core32($sig, $filePath, $publicKey);
-        }
-
         /* Security checks */
         if (
             (ParagonIE_Sodium_Core_Ed25519::chrToInt($sig[63]) & 240)
@@ -752,18 +745,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function box_encrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
     {
-        if (PHP_INT_SIZE === 4) {
-            return self::secretbox_encrypt(
-                $ifp,
-                $ofp,
-                $mlen,
-                $nonce,
-                ParagonIE_Sodium_Crypto32::box_beforenm(
-                    ParagonIE_Sodium_Crypto32::box_secretkey($boxKeypair),
-                    ParagonIE_Sodium_Crypto32::box_publickey($boxKeypair)
-                )
-            );
-        }
         return self::secretbox_encrypt(
             $ifp,
             $ofp,
@@ -789,18 +770,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function box_decrypt($ifp, $ofp, $mlen, $nonce, $boxKeypair)
     {
-        if (PHP_INT_SIZE === 4) {
-            return self::secretbox_decrypt(
-                $ifp,
-                $ofp,
-                $mlen,
-                $nonce,
-                ParagonIE_Sodium_Crypto32::box_beforenm(
-                    ParagonIE_Sodium_Crypto32::box_secretkey($boxKeypair),
-                    ParagonIE_Sodium_Crypto32::box_publickey($boxKeypair)
-                )
-            );
-        }
         return self::secretbox_decrypt(
             $ifp,
             $ofp,
@@ -827,10 +796,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function secretbox_encrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
-        if (PHP_INT_SIZE === 4) {
-            return self::secretbox_encrypt_core32($ifp, $ofp, $mlen, $nonce, $key);
-        }
-
         $plaintext = fread($ifp, 32);
         if (!is_string($plaintext)) {
             throw new SodiumException('Could not read input file');
@@ -948,9 +913,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     protected static function secretbox_decrypt($ifp, $ofp, $mlen, $nonce, $key)
     {
-        if (PHP_INT_SIZE === 4) {
-            return self::secretbox_decrypt_core32($ifp, $ofp, $mlen, $nonce, $key);
-        }
         $tag = fread($ifp, 16);
         if (!is_string($tag)) {
             throw new SodiumException('Could not read input file');
@@ -1103,388 +1065,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         // Reset file pointer's position
         fseek($fp, $originalPosition, SEEK_SET);
         return $hash;
-    }
-
-    /**
-     * Sign a file (rather than a string). Uses less memory than
-     * ParagonIE_Sodium_Compat::crypto_sign_detached(), but produces
-     * the same result. (32-bit)
-     *
-     * @param string $filePath  Absolute path to a file on the filesystem
-     * @param string $secretKey Secret signing key
-     *
-     * @return string           Ed25519 signature
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    private static function sign_core32($filePath, $secretKey)
-    {
-        $size = filesize($filePath);
-        if (!is_int($size)) {
-            throw new SodiumException('Could not obtain the file size');
-        }
-
-        $fp = fopen($filePath, 'rb');
-        if (!is_resource($fp)) {
-            throw new SodiumException('Could not open input file for reading');
-        }
-
-        /** @var string $az */
-        $az = hash('sha512', self::substr($secretKey, 0, 32), true);
-
-        $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
-        $az[31] = self::intToChr((self::chrToInt($az[31]) & 63) | 64);
-
-        $hs = hash_init('sha512');
-        self::hash_update($hs, self::substr($az, 32, 32));
-        /** @var HashContext $hs */
-        $hs = self::updateHashWithFile($hs, $fp, $size);
-
-        $nonceHash = hash_final($hs, true);
-        $pk = self::substr($secretKey, 32, 32);
-        $nonce = ParagonIE_Sodium_Core32_Ed25519::sc_reduce($nonceHash) . self::substr($nonceHash, 32);
-        $sig = ParagonIE_Sodium_Core32_Ed25519::ge_p3_tobytes(
-            ParagonIE_Sodium_Core32_Ed25519::ge_scalarmult_base($nonce)
-        );
-
-        $hs = hash_init('sha512');
-        self::hash_update($hs, self::substr($sig, 0, 32));
-        self::hash_update($hs, self::substr($pk, 0, 32));
-        /** @var HashContext $hs */
-        $hs = self::updateHashWithFile($hs, $fp, $size);
-
-        $hramHash = hash_final($hs, true);
-
-        $hram = ParagonIE_Sodium_Core32_Ed25519::sc_reduce($hramHash);
-
-        $sigAfter = ParagonIE_Sodium_Core32_Ed25519::sc_muladd($hram, $az, $nonce);
-
-        /** @var string $sig */
-        $sig = self::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);
-
-        try {
-            ParagonIE_Sodium_Compat::memzero($az);
-        } catch (SodiumException $ex) {
-            $az = null;
-        }
-        fclose($fp);
-        return $sig;
-    }
-
-    /**
-     *
-     * Verify a file (rather than a string). Uses less memory than
-     * ParagonIE_Sodium_Compat::crypto_sign_verify_detached(), but
-     * produces the same result. (32-bit)
-     *
-     * @param string $sig       Ed25519 signature
-     * @param string $filePath  Absolute path to a file on the filesystem
-     * @param string $publicKey Signing public key
-     *
-     * @return bool
-     * @throws SodiumException
-     * @throws Exception
-     */
-    public static function verify_core32($sig, $filePath, $publicKey)
-    {
-        /* Security checks */
-        if (ParagonIE_Sodium_Core32_Ed25519::check_S_lt_L(self::substr($sig, 32, 32))) {
-            throw new SodiumException('S < L - Invalid signature');
-        }
-        if (ParagonIE_Sodium_Core32_Ed25519::small_order($sig)) {
-            throw new SodiumException('Signature is on too small of an order');
-        }
-
-        if ((self::chrToInt($sig[63]) & 224) !== 0) {
-            throw new SodiumException('Invalid signature');
-        }
-        $d = 0;
-        for ($i = 0; $i < 32; ++$i) {
-            $d |= self::chrToInt($publicKey[$i]);
-        }
-        if ($d === 0) {
-            throw new SodiumException('All zero public key');
-        }
-
-        /** @var int|bool $size */
-        $size = filesize($filePath);
-        if (!is_int($size)) {
-            throw new SodiumException('Could not obtain the file size');
-        }
-        /** @var int $size */
-
-        /** @var resource|bool $fp */
-        $fp = fopen($filePath, 'rb');
-        if (!is_resource($fp)) {
-            throw new SodiumException('Could not open input file for reading');
-        }
-        /** @var resource $fp */
-
-        /** @var bool The original value of ParagonIE_Sodium_Compat::$fastMult */
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-
-        // Set ParagonIE_Sodium_Compat::$fastMult to true to speed up verification.
-        ParagonIE_Sodium_Compat::$fastMult = true;
-
-        /** @var ParagonIE_Sodium_Core32_Curve25519_Ge_P3 $A */
-        $A = ParagonIE_Sodium_Core32_Ed25519::ge_frombytes_negate_vartime($publicKey);
-
-        $hs = hash_init('sha512');
-        self::hash_update($hs, self::substr($sig, 0, 32));
-        self::hash_update($hs, self::substr($publicKey, 0, 32));
-        /** @var HashContext $hs */
-        $hs = self::updateHashWithFile($hs, $fp, $size);
-        $hDigest = hash_final($hs, true);
-
-        $h = ParagonIE_Sodium_Core32_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
-
-        $R = ParagonIE_Sodium_Core32_Ed25519::ge_double_scalarmult_vartime(
-            $h,
-            $A,
-            self::substr($sig, 32)
-        );
-
-        /** @var string $rcheck */
-        $rcheck = ParagonIE_Sodium_Core32_Ed25519::ge_tobytes($R);
-
-        // Close the file handle
-        fclose($fp);
-
-        // Reset ParagonIE_Sodium_Compat::$fastMult to what it was before.
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        return self::verify_32($rcheck, self::substr($sig, 0, 32));
-    }
-
-    /**
-     * Encrypt a file (32-bit)
-     *
-     * @param resource $ifp
-     * @param resource $ofp
-     * @param int $mlen
-     * @param string $nonce
-     * @param string $key
-     * @return bool
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    protected static function secretbox_encrypt_core32($ifp, $ofp, $mlen, $nonce, $key)
-    {
-        $plaintext = fread($ifp, 32);
-        if (!is_string($plaintext)) {
-            throw new SodiumException('Could not read input file');
-        }
-        $first32 = self::ftell($ifp);
-        $subkey = ParagonIE_Sodium_Core32_HSalsa20::hsalsa20($nonce, $key);
-        $realNonce = ParagonIE_Sodium_Core32_Util::substr($nonce, 16, 8);
-        $block0 = str_repeat("\x00", 32);
-
-        /* Length of the plaintext message */
-        $mlen0 = $mlen;
-        if ($mlen0 > 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES) {
-            $mlen0 = 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES;
-        }
-        $block0 .= ParagonIE_Sodium_Core32_Util::substr($plaintext, 0, $mlen0);
-
-        /** @var string $block0 */
-        $block0 = ParagonIE_Sodium_Core32_Salsa20::salsa20_xor(
-            $block0,
-            $realNonce,
-            $subkey
-        );
-
-        $state = new ParagonIE_Sodium_Core32_Poly1305_State(
-            ParagonIE_Sodium_Core32_Util::substr(
-                $block0,
-                0,
-                ParagonIE_Sodium_Crypto::onetimeauth_poly1305_KEYBYTES
-            )
-        );
-
-        // Pre-write 16 blank bytes for the Poly1305 tag
-        $start = self::ftell($ofp);
-        fwrite($ofp, str_repeat("\x00", 16));
-
-        /** @var string $c */
-        $cBlock = ParagonIE_Sodium_Core32_Util::substr(
-            $block0,
-            ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES
-        );
-        $state->update($cBlock);
-        fwrite($ofp, $cBlock);
-        $mlen -= 32;
-
-        /** @var int $iter */
-        $iter = 1;
-
-        /** @var int $incr */
-        $incr = self::BUFFER_SIZE >> 6;
-
-        /*
-         * Set the cursor to the end of the first half-block. All future bytes will
-         * generated from salsa20_xor_ic, starting from 1 (second block).
-         */
-        fseek($ifp, $first32, SEEK_SET);
-
-        while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
-            $plaintext = fread($ifp, $blockSize);
-            if (!is_string($plaintext)) {
-                throw new SodiumException('Could not read input file');
-            }
-            $cBlock = ParagonIE_Sodium_Core32_Salsa20::salsa20_xor_ic(
-                $plaintext,
-                $realNonce,
-                $iter,
-                $subkey
-            );
-            fwrite($ofp, $cBlock, $blockSize);
-            $state->update($cBlock);
-
-            $mlen -= $blockSize;
-            $iter += $incr;
-        }
-        try {
-            ParagonIE_Sodium_Compat::memzero($block0);
-            ParagonIE_Sodium_Compat::memzero($subkey);
-        } catch (SodiumException $ex) {
-            $block0 = null;
-            $subkey = null;
-        }
-        $end = self::ftell($ofp);
-
-        /*
-         * Write the Poly1305 authentication tag that provides integrity
-         * over the ciphertext (encrypt-then-MAC)
-         */
-        fseek($ofp, $start, SEEK_SET);
-        fwrite($ofp, $state->finish(), ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_MACBYTES);
-        fseek($ofp, $end, SEEK_SET);
-        unset($state);
-
-        return true;
-    }
-
-    /**
-     * Decrypt a file (32-bit)
-     *
-     * @param resource $ifp
-     * @param resource $ofp
-     * @param int $mlen
-     * @param string $nonce
-     * @param string $key
-     * @return bool
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    protected static function secretbox_decrypt_core32($ifp, $ofp, $mlen, $nonce, $key)
-    {
-        $tag = fread($ifp, 16);
-        if (!is_string($tag)) {
-            throw new SodiumException('Could not read input file');
-        }
-
-        /** @var string $subkey */
-        $subkey = ParagonIE_Sodium_Core32_HSalsa20::hsalsa20($nonce, $key);
-
-        /** @var string $realNonce */
-        $realNonce = ParagonIE_Sodium_Core32_Util::substr($nonce, 16, 8);
-
-        /** @var string $block0 */
-        $block0 = ParagonIE_Sodium_Core32_Salsa20::salsa20(
-            64,
-            ParagonIE_Sodium_Core32_Util::substr($nonce, 16, 8),
-            $subkey
-        );
-
-        /* Verify the Poly1305 MAC -before- attempting to decrypt! */
-        $state = new ParagonIE_Sodium_Core32_Poly1305_State(self::substr($block0, 0, 32));
-        if (!self::onetimeauth_verify_core32($state, $ifp, $tag, $mlen)) {
-            throw new SodiumException('Invalid MAC');
-        }
-
-        /*
-         * Set the cursor to the end of the first half-block. All future bytes will
-         * generated from salsa20_xor_ic, starting from 1 (second block).
-         */
-        $first32 = fread($ifp, 32);
-        if (!is_string($first32)) {
-            throw new SodiumException('Could not read input file');
-        }
-        $first32len = self::strlen($first32);
-        fwrite(
-            $ofp,
-            self::xorStrings(
-                self::substr($block0, 32, $first32len),
-                self::substr($first32, 0, $first32len)
-            )
-        );
-        $mlen -= 32;
-
-        /** @var int $iter */
-        $iter = 1;
-
-        /** @var int $incr */
-        $incr = self::BUFFER_SIZE >> 6;
-
-        /* Decrypts ciphertext, writes to output file. */
-        while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
-            $ciphertext = fread($ifp, $blockSize);
-            if (!is_string($ciphertext)) {
-                throw new SodiumException('Could not read input file');
-            }
-            $pBlock = ParagonIE_Sodium_Core32_Salsa20::salsa20_xor_ic(
-                $ciphertext,
-                $realNonce,
-                $iter,
-                $subkey
-            );
-            fwrite($ofp, $pBlock, $blockSize);
-            $mlen -= $blockSize;
-            $iter += $incr;
-        }
-        return true;
-    }
-
-    /**
-     * One-time message authentication for 32-bit systems
-     *
-     * @param ParagonIE_Sodium_Core32_Poly1305_State $state
-     * @param resource $ifp
-     * @param string $tag
-     * @param int $mlen
-     * @return bool
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    protected static function onetimeauth_verify_core32(
-        ParagonIE_Sodium_Core32_Poly1305_State $state,
-        $ifp,
-        $tag = '',
-        $mlen = 0
-    ) {
-        /** @var int $pos */
-        $pos = self::ftell($ifp);
-
-        while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
-            $ciphertext = fread($ifp, $blockSize);
-            if (!is_string($ciphertext)) {
-                throw new SodiumException('Could not read input file');
-            }
-            $state->update($ciphertext);
-            $mlen -= $blockSize;
-        }
-        $res = ParagonIE_Sodium_Core32_Util::verify_16($tag, $state->finish());
-
-        fseek($ifp, $pos, SEEK_SET);
-        return $res;
     }
 
     /**

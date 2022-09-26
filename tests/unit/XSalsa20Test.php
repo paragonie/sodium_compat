@@ -12,12 +12,7 @@ class XSalsa20Test extends PHPUnit_Framework_TestCase
 
         $key = "\x80" . str_repeat("\x00", 31);
         $iv = str_repeat("\x00", 24);
-
-        if (PHP_INT_SIZE === 4) {
-            $output = ParagonIE_Sodium_Core32_XSalsa20::xsalsa20(512, $iv, $key);
-        } else {
-            $output = ParagonIE_Sodium_Core_XSalsa20::xsalsa20(512, $iv, $key);
-        }
+        $output = ParagonIE_Sodium_Core_XSalsa20::xsalsa20(512, $iv, $key);
 
         $this->assertSame(
             '93D88C085B8433B1FBAD2221FAD71807' .

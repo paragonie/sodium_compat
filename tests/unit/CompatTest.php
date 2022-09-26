@@ -25,15 +25,6 @@ class CompatTest extends PHPUnit_Framework_TestCase
         $this->assertSame("00000220", ParagonIE_Sodium_Core_Util::bin2hex($string));
     }
 
-    public function testRuntimeSpeed()
-    {
-        if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
-            $this->markTestSkipped('Polyfill is fast, no need to test this.');
-            return;
-        }
-        $this->assertTrue(ParagonIE_Sodium_Compat::runtime_speed_test(100, 10));
-    }
-
     /**
      * @throws SodiumException
      * @throws Exception

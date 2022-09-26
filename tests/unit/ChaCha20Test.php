@@ -18,11 +18,7 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
     {
         $key = str_repeat("\x00", 32);
         $nonce = str_repeat("\x00", 8);
-        if (PHP_INT_SIZE === 4) {
-            $keystream = ParagonIE_Sodium_Core32_ChaCha20::stream(192, $nonce, $key);
-        } else {
-            $keystream = ParagonIE_Sodium_Core_ChaCha20::stream(192, $nonce, $key);
-        }
+        $keystream = ParagonIE_Sodium_Core_ChaCha20::stream(192, $nonce, $key);
 
         $block1 = ParagonIE_Sodium_Core_Util::substr($keystream, 0, 64);
         $block2 = ParagonIE_Sodium_Core_Util::substr($keystream, 64, 64);
@@ -52,11 +48,7 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
         // Test with a key and nonce:
         $key = str_repeat("\x00", 31) . "\x01";
         $nonce = str_repeat("\x00", 7) . "\x02";
-        if (PHP_INT_SIZE === 4) {
-            $keystream = ParagonIE_Sodium_Core32_ChaCha20::stream(256, $nonce, $key);
-        } else {
-            $keystream = ParagonIE_Sodium_Core_ChaCha20::stream(256, $nonce, $key);
-        }
+        $keystream = ParagonIE_Sodium_Core_ChaCha20::stream(256, $nonce, $key);
 
         $block1 = ParagonIE_Sodium_Core_Util::substr($keystream, 0, 64);
         $block2 = ParagonIE_Sodium_Core_Util::substr($keystream, 64, 64);
@@ -95,21 +87,12 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin('0102030405060708');
 
         $message = str_repeat("\x00", 63) . "\xff";
-        if (PHP_INT_SIZE === 4) {
-            $block = ParagonIE_Sodium_Core32_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(0)
-            );
-        } else {
-            $block = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(0)
-            );
-        }
+        $block = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $message,
+            $nonce,
+            $key,
+            ParagonIE_Sodium_Core_Util::store64_le(0)
+        );
         $this->assertSame(
             '8cea583fc7886a36cbaffaa595edd2e3a0d76956217379cdc6eabcd330936f24' .
             'cc93ffa78f45908885cfa0eac4a5dd95726a1318f4471646d17af1d6b9b0b634',
@@ -120,28 +103,17 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
             '8cea583fc7886a36cbaffaa595edd2e3a0d76956217379cdc6eabcd330936f24' .
             'cc93ffa78f45908885cfa0eac4a5dd95726a1318f4471646d17af1d6b9b0b6cb',
             ParagonIE_Sodium_Core_Util::bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_ChaCha20::stream(64, $nonce, $key)
-                    : ParagonIE_Sodium_Core_ChaCha20::stream(64, $nonce, $key)
+                ParagonIE_Sodium_Core_ChaCha20::stream(64, $nonce, $key)
             ),
             'Test Vector #8b for ChaCha20 failed -- key/nonce is likely broken'
         );
 
-        if (PHP_INT_SIZE === 4) {
-            $block = ParagonIE_Sodium_Core32_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(1)
-            );
-        } else {
-            $block = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(1)
-            );
-        }
+        $block = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $message,
+            $nonce,
+            $key,
+            ParagonIE_Sodium_Core_Util::store64_le(1)
+        );
         $this->assertSame(
             'efe6a5f8a58ca89c10bfe8d68aec275e958c64511c4d281c1bd534e26ce8a585' .
             '37100f8d6a6f568f7d19870eda79eeb24e809a7f6b1ef702c7843a7c1167d012',
@@ -153,9 +125,7 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
             '37100f8d6a6f568f7d19870eda79eeb24e809a7f6b1ef702c7843a7c1167d0ed',
             ParagonIE_Sodium_Core_Util::bin2hex(
                 ParagonIE_Sodium_Core_Util::substr(
-                    PHP_INT_SIZE === 4
-                        ? ParagonIE_Sodium_Core32_ChaCha20::stream(128, $nonce, $key)
-                        : ParagonIE_Sodium_Core_ChaCha20::stream(128, $nonce, $key),
+                    ParagonIE_Sodium_Core_ChaCha20::stream(128, $nonce, $key),
                     64
                 )
             ),
@@ -190,21 +160,12 @@ class ChaCha20Test extends PHPUnit_Framework_TestCase
         $key = str_repeat("\x00", 31) . "\x01";
         $nonce = str_repeat("\x00", 7) . "\x02";
 
-        if (PHP_INT_SIZE === 4) {
-            $ietfBlock = ParagonIE_Sodium_Core32_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(1)
-            );
-        } else {
-            $ietfBlock = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
-                $message,
-                $nonce,
-                $key,
-                ParagonIE_Sodium_Core_Util::store64_le(1)
-            );
-        }
+        $ietfBlock = ParagonIE_Sodium_Core_ChaCha20::streamXorIc(
+            $message,
+            $nonce,
+            $key,
+            ParagonIE_Sodium_Core_Util::store64_le(1)
+        );
 
         $this->assertSame(
             'a3fbf07df3fa2fde4f376ca23e82737041605d9f4f4f57bd8cff2c1d4b7955ec' .

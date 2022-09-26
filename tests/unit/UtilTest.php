@@ -179,19 +179,11 @@ class UtilTest extends PHPUnit_Framework_TestCase
             ParagonIE_Sodium_Core_Util::load_4("\xcf\xf4\x80\x00"),
             'Unexpected result from load_4'
         );
-        if (PHP_INT_SIZE === 8) {
-            $this->assertSame(
-                2163527424,
-                ParagonIE_Sodium_Core_Util::load_4("\x00\xcf\xf4\x80"),
-                'Unexpected result from load_4'
-            );
-        } else {
-            $this->assertSame(
-                -2131439872,
-                ParagonIE_Sodium_Core_Util::load_4("\x00\xcf\xf4\x80"),
-                'Unexpected result from load_4'
-            );
-        }
+        $this->assertSame(
+            2163527424,
+            ParagonIE_Sodium_Core_Util::load_4("\x00\xcf\xf4\x80"),
+            'Unexpected result from load_4'
+        );
     }
 
     /**
@@ -201,9 +193,6 @@ class UtilTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad64()
     {
-        if (PHP_INT_SIZE < 8) {
-            $this->markTestSkipped('Public utility test for load64_le()');
-        }
         $this->assertSame(
             8451279,
             ParagonIE_Sodium_Core_Util::load64_le("\xcf\xf4\x80\x00\x00\x00\x00\x00"),
@@ -242,9 +231,6 @@ class UtilTest extends PHPUnit_Framework_TestCase
      */
     public function testStore64()
     {
-        if (PHP_INT_SIZE < 8) {
-            $this->markTestSkipped('Public utility test for load64_le()');
-        }
         $this->assertSame(
             bin2hex("\xcf\xf4\x80\x00\x00\x00\x00\x00"),
             bin2hex(ParagonIE_Sodium_Core_Util::store64_le(8451279)),
@@ -263,9 +249,6 @@ class UtilTest extends PHPUnit_Framework_TestCase
      */
     public function testMul()
     {
-        if (PHP_INT_SIZE === 4) {
-            $this->markTestSkipped('Ignore on 32-bit');
-        }
         $arguments = array(
             array(1, 1),
             array(65534, 65534),
