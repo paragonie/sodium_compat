@@ -14,14 +14,12 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param int $size (16, 32, 64)
      * @return int
      */
-    public static function abs($integer, $size = 0)
+    public static function abs(int $integer, int $size = 0): int
     {
-        /** @var int $realSize */
         $realSize = (PHP_INT_SIZE << 3) - 1;
         if ($size) {
             --$size;
         } else {
-            /** @var int $size */
             $size = $realSize;
         }
 
@@ -43,21 +41,14 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function bin2hex($binaryString)
+    public static function bin2hex(string $binaryString): string
     {
-        /* Type checks: */
-        if (!is_string($binaryString)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($binaryString) . ' given.');
-        }
-
         $hex = '';
         $len = self::strlen($binaryString);
         for ($i = 0; $i < $len; ++$i) {
             /** @var array<int, int> $chunk */
             $chunk = unpack('C', $binaryString[$i]);
-            /** @var int $c */
             $c = $chunk[1] & 0xf;
-            /** @var int $b */
             $b = $chunk[1] >> 4;
             $hex .= pack(
                 'CC',
@@ -78,7 +69,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function bin2hexUpper($bin_string)
+    public static function bin2hexUpper(string $bin_string): string
     {
         $hex = '';
         $len = self::strlen($bin_string);
@@ -123,12 +114,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function chrToInt($chr)
+    public static function chrToInt(string $chr): int
     {
-        /* Type checks: */
-        if (!is_string($chr)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($chr) . ' given.');
-        }
         if (self::strlen($chr) !== 1) {
             throw new SodiumException('chrToInt() expects a string that is exactly 1 character long');
         }
@@ -144,12 +131,12 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $left
      * @param string $right
-     * @param int $len
+     * @param ?int $len
      * @return int
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function compare($left, $right, $len = null)
+    public static function compare(string $left, string $right, ?int $len = null)
     {
         $leftLen = self::strlen($left);
         $rightLen = self::strlen($right);
@@ -257,33 +244,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function hashEquals($left, $right)
+    public static function hashEquals(string $left, string $right): bool
     {
-        /* Type checks: */
-        if (!is_string($left)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($left) . ' given.');
-        }
-        if (!is_string($right)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($right) . ' given.');
-        }
-
-        if (is_callable('hash_equals')) {
-            return hash_equals($left, $right);
-        }
-        $d = 0;
-        /** @var int $len */
-        $len = self::strlen($left);
-        if ($len !== self::strlen($right)) {
-            return false;
-        }
-        for ($i = 0; $i < $len; ++$i) {
-            $d |= self::chrToInt($left[$i]) ^ self::chrToInt($right[$i]);
-        }
-
-        if ($d !== 0) {
-            return false;
-        }
-        return $left === $right;
+        return hash_equals($left, $right);
     }
 
     /**
@@ -295,7 +258,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @psalm-suppress PossiblyInvalidArgument
      */
-    protected static function hash_update(&$hs, $data)
+    protected static function hash_update(&$hs, string $data): void
     {
         if (!hash_update($hs, $data)) {
             throw new SodiumException('hash_update() failed');
@@ -315,16 +278,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws RangeException
      * @throws TypeError
      */
-    public static function hex2bin($hexString, $ignore = '', $strictPadding = false)
+    public static function hex2bin(string $hexString, string $ignore = '', bool $strictPadding = false): string
     {
-        /* Type checks: */
-        if (!is_string($hexString)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($hexString) . ' given.');
-        }
-        if (!is_string($ignore)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($hexString) . ' given.');
-        }
-
         $hex_pos = 0;
         $bin = '';
         $c_acc = 0;
@@ -377,7 +332,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param array<int, int> $ints
      * @return string
      */
-    public static function intArrayToString(array $ints)
+    public static function intArrayToString(array $ints): string
     {
         $args = $ints;
         foreach ($args as $i => $v) {
@@ -396,7 +351,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function intToChr($int)
+    public static function intToChr(int $int): string
     {
         return pack('C', $int);
     }
@@ -411,13 +366,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws RangeException
      * @throws TypeError
      */
-    public static function load_3($string)
+    public static function load_3(string $string): int
     {
-        /* Type checks: */
-        if (!is_string($string)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($string) . ' given.');
-        }
-
         /* Input validation: */
         if (self::strlen($string) < 3) {
             throw new RangeException(
@@ -439,13 +389,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws RangeException
      * @throws TypeError
      */
-    public static function load_4($string)
+    public static function load_4(string $string): int
     {
-        /* Type checks: */
-        if (!is_string($string)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($string) . ' given.');
-        }
-
         /* Input validation: */
         if (self::strlen($string) < 4) {
             throw new RangeException(
@@ -468,13 +413,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function load64_le($string)
+    public static function load64_le(string $string): int
     {
-        /* Type checks: */
-        if (!is_string($string)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($string) . ' given.');
-        }
-
         /* Input validation: */
         if (self::strlen($string) < 4) {
             throw new RangeException(
@@ -487,7 +427,6 @@ abstract class ParagonIE_Sodium_Core_Util
             return (int) $unpacked[1];
         }
 
-        /** @var int $result */
         $result  = (self::chrToInt($string[0]) & 0xff);
         $result |= (self::chrToInt($string[1]) & 0xff) <<  8;
         $result |= (self::chrToInt($string[2]) & 0xff) << 16;
@@ -508,7 +447,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function memcmp($left, $right)
+    public static function memcmp(string $left, string $right): int
     {
         if (self::hashEquals($left, $right)) {
             return 0;
@@ -533,7 +472,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *                  constant operands)
      * @return int
      */
-    public static function mul($a, $b, $size = 0)
+    public static function mul(int $a, int $b, int $size = 0): int
     {
         if (ParagonIE_Sodium_Compat::$fastMult) {
             return (int) ($a * $b);
@@ -542,11 +481,9 @@ abstract class ParagonIE_Sodium_Core_Util
         static $defaultSize = null;
         /** @var int $defaultSize */
         if (!$defaultSize) {
-            /** @var int $defaultSize */
             $defaultSize = (PHP_INT_SIZE << 3) - 1;
         }
         if ($size < 1) {
-            /** @var int $size */
             $size = $defaultSize;
         }
         /** @var int $size */
@@ -605,7 +542,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param int|float $num
      * @return array<int, int>
      */
-    public static function numericTo64BitInteger($num)
+    public static function numericTo64BitInteger($num): array
     {
         $high = 0;
         /** @var int $low */
@@ -636,16 +573,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function store_3($int)
+    public static function store_3(int $int): string
     {
-        /* Type checks: */
-        if (!is_int($int)) {
-            if (is_numeric($int)) {
-                $int = (int) $int;
-            } else {
-                throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
-            }
-        }
         /** @var string $packed */
         $packed = pack('N', $int);
         return self::substr($packed, 1, 3);
@@ -660,17 +589,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function store32_le($int)
+    public static function store32_le(int $int): string
     {
-        /* Type checks: */
-        if (!is_int($int)) {
-            if (is_numeric($int)) {
-                $int = (int) $int;
-            } else {
-                throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
-            }
-        }
-
         /** @var string $packed */
         $packed = pack('V', $int);
         return $packed;
@@ -685,17 +605,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function store_4($int)
+    public static function store_4(int $int): string
     {
-        /* Type checks: */
-        if (!is_int($int)) {
-            if (is_numeric($int)) {
-                $int = (int) $int;
-            } else {
-                throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
-            }
-        }
-
         /** @var string $packed */
         $packed = pack('N', $int);
         return $packed;
@@ -710,17 +621,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function store64_le($int)
+    public static function store64_le(int $int): string
     {
-        /* Type checks: */
-        if (!is_int($int)) {
-            if (is_numeric($int)) {
-                $int = (int) $int;
-            } else {
-                throw new TypeError('Argument 1 must be an integer, ' . gettype($int) . ' given.');
-            }
-        }
-
         if (PHP_INT_SIZE === 8) {
             if (PHP_VERSION_ID >= 50603) {
                 /** @var string $packed */
@@ -763,13 +665,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return int
      * @throws TypeError
      */
-    public static function strlen($str)
+    public static function strlen(string $str): int
     {
-        /* Type checks: */
-        if (!is_string($str)) {
-            throw new TypeError('String expected');
-        }
-
         return (int) (
         self::isMbStringOverride()
             ? mb_strlen($str, '8bit')
@@ -786,11 +683,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return array<int, int>
      * @throws TypeError
      */
-    public static function stringToIntArray($string)
+    public static function stringToIntArray(string $string): array
     {
-        if (!is_string($string)) {
-            throw new TypeError('String expected');
-        }
         /**
          * @var array<int, int>
          */
@@ -809,11 +703,11 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $str
      * @param int $start
-     * @param int $length
+     * @param ?int $length
      * @return string
      * @throws TypeError
      */
-    public static function substr($str, $start = 0, $length = null)
+    public static function substr(string $str, int $start = 0, ?int $length = null): string
     {
         /* Type checks: */
         if (!is_string($str)) {
@@ -851,15 +745,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function verify_16($a, $b)
+    public static function verify_16(string $a, string $b): bool
     {
-        /* Type checks: */
-        if (!is_string($a)) {
-            throw new TypeError('String expected');
-        }
-        if (!is_string($b)) {
-            throw new TypeError('String expected');
-        }
         return self::hashEquals(
             self::substr($a, 0, 16),
             self::substr($b, 0, 16)
@@ -877,15 +764,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function verify_32($a, $b)
+    public static function verify_32(string $a, string $b): bool
     {
-        /* Type checks: */
-        if (!is_string($a)) {
-            throw new TypeError('String expected');
-        }
-        if (!is_string($b)) {
-            throw new TypeError('String expected');
-        }
         return self::hashEquals(
             self::substr($a, 0, 32),
             self::substr($b, 0, 32)
@@ -902,16 +782,8 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public static function xorStrings($a, $b)
+    public static function xorStrings(string $a, string $b): string
     {
-        /* Type checks: */
-        if (!is_string($a)) {
-            throw new TypeError('Argument 1 must be a string');
-        }
-        if (!is_string($b)) {
-            throw new TypeError('Argument 2 must be a string');
-        }
-
         return (string) ($a ^ $b);
     }
 
@@ -925,7 +797,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @return bool
      */
-    protected static function isMbStringOverride()
+    protected static function isMbStringOverride(): bool
     {
         static $mbstring = null;
 

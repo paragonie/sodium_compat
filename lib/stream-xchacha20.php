@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!is_callable('sodium_crypto_stream_xchacha20')) {
     /**
@@ -10,7 +11,7 @@ if (!is_callable('sodium_crypto_stream_xchacha20')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_crypto_stream_xchacha20($len, $nonce, $key)
+    function sodium_crypto_stream_xchacha20(int $len, string $nonce, string $key): string
     {
         return ParagonIE_Sodium_Compat::crypto_stream_xchacha20($len, $nonce, $key, true);
     }
@@ -21,7 +22,7 @@ if (!is_callable('sodium_crypto_stream_xchacha20_keygen')) {
      * @return string
      * @throws Exception
      */
-    function sodium_crypto_stream_xchacha20_keygen()
+    function sodium_crypto_stream_xchacha20_keygen(): string
     {
         return ParagonIE_Sodium_Compat::crypto_stream_xchacha20_keygen();
     }
@@ -36,7 +37,7 @@ if (!is_callable('sodium_crypto_stream_xchacha20_xor')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_crypto_stream_xchacha20_xor($message, $nonce, $key)
+    function sodium_crypto_stream_xchacha20_xor(string $message, string $nonce, string $key): string
     {
         return ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor($message, $nonce, $key, true);
     }
@@ -52,8 +53,12 @@ if (!is_callable('sodium_crypto_stream_xchacha20_xor_ic')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_crypto_stream_xchacha20_xor_ic($message, $nonce, $counter, $key)
-    {
+    function sodium_crypto_stream_xchacha20_xor_ic(
+        string $message,
+        string $nonce,
+        int $counter,
+        string $key
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor_ic($message, $nonce, $counter, $key, true);
     }
 }
