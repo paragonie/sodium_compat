@@ -22,3 +22,10 @@ if (!extension_loaded('sodium')) {
 }
 require_once(dirname(__FILE__) . '/lib/stream-xchacha20.php');
 require_once(dirname(__FILE__) . '/lib/ristretto255.php');
+
+if (PHP_INT_SIZE === 4) {
+    trigger_error(
+        'sodium_compat v2.x only supports 64-bit integers; please downgrade to v1.x',
+        E_USER_WARNING
+    );
+}
