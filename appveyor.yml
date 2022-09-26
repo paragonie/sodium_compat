@@ -1,7 +1,6 @@
 build: false
 shallow_clone: false
 platform:
-  - x86
   - x64
 clone_folder: C:\projects\sodium_compat
 image: Visual Studio 2017
