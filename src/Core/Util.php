@@ -352,7 +352,6 @@ abstract class ParagonIE_Sodium_Core_Util
             $c_alpha0 = (($c_alpha - 10) ^ ($c_alpha - 16)) >> 8;
             if (($c_num0 | $c_alpha0) === 0) {
                 if ($ignore && $state === 0 && strpos($ignore, self::intToChr($c)) !== false) {
-                    ++$hex_pos;
                     continue;
                 }
                 throw new RangeException(
