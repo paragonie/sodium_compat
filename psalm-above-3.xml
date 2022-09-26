@@ -4,6 +4,7 @@
 >
     <projectFiles>
         <directory name="src" />
+        <directory name="lib" />
     </projectFiles>
     <issueHandlers>
         <InvalidFunctionCall errorLevel="suppress" />
