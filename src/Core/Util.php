@@ -151,20 +151,6 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Evaluate whether or not two strings are equal (in constant-time)
-     *
-     * @param string $left
-     * @param string $right
-     * @return bool
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public static function hashEquals(string $left, string $right): bool
-    {
-        return hash_equals($left, $right);
-    }
-
-    /**
      * Catch hash_update() failures and throw instead of silently proceeding
      *
      * @param HashContext|resource &$hs
@@ -364,7 +350,7 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function memcmp(string $left, string $right): int
     {
-        if (self::hashEquals($left, $right)) {
+        if (hash_equals($left, $right)) {
             return 0;
         }
         return -1;
@@ -645,7 +631,7 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function verify_16(string $a, string $b): bool
     {
-        return self::hashEquals(
+        return hash_equals(
             self::substr($a, 0, 16),
             self::substr($b, 0, 16)
         );
@@ -664,7 +650,7 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function verify_32(string $a, string $b): bool
     {
-        return self::hashEquals(
+        return hash_equals(
             self::substr($a, 0, 32),
             self::substr($b, 0, 32)
         );

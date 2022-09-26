@@ -1,5 +1,4 @@
 <?php
-
 if (class_exists('ParagonIE_Sodium_File', false)) {
     return;
 }
@@ -151,11 +150,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             $publicKey
         );
         $ephemeralPK = ParagonIE_Sodium_Compat::crypto_box_publickey($ephKeypair);
-        $nonce = ParagonIE_Sodium_Compat::crypto_generichash(
-            $ephemeralPK . $publicKey,
-            '',
-            24
-        );
+        $nonce = ParagonIE_Sodium_Compat::crypto_generichash($ephemeralPK . $publicKey, '', 24);
 
         /** @var int $firstWrite */
         $firstWrite = fwrite(
@@ -213,7 +208,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         }
 
         $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($ecdhKeypair);
-
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
@@ -239,11 +233,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Could not read public key from sealed file');
         }
 
-        $nonce = ParagonIE_Sodium_Compat::crypto_generichash(
-            $ephemeralPK . $publicKey,
-            '',
-            24
-        );
+        $nonce = ParagonIE_Sodium_Compat::crypto_generichash($ephemeralPK . $publicKey, '', 24);
         $msgKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
             ParagonIE_Sodium_Compat::crypto_box_secretkey($ecdhKeypair),
             $ephemeralPK
@@ -443,14 +433,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
-
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
         $az = hash('sha512', self::substr($secretKey, 0, 32), true);
-
         $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
         $az[31] = self::intToChr((self::chrToInt($az[31]) & 63) | 64);
 

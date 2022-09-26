@@ -307,7 +307,7 @@ class ParagonIE_Sodium_Compat
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
      *
      * @param string $ciphertext Encrypted message (with Poly1305 MAC appended)
-     * @param string $assocData  Authenticated Associated Data (unencrypted)
+     * @param ?string $assocData  Authenticated Associated Data (unencrypted)
      * @param string $nonce      Number to be used only Once; must be 8 bytes
      * @param string $key        Encryption key
      *
@@ -363,7 +363,7 @@ class ParagonIE_Sodium_Compat
      *     AES-256-GCM
      *
      * @param string $plaintext Message to be encrypted
-     * @param string $assocData Authenticated Associated Data (unencrypted)
+     * @param ?string $assocData Authenticated Associated Data (unencrypted)
      * @param string $nonce     Number to be used only Once; must be 8 bytes
      * @param string $key       Encryption key
      *
@@ -434,7 +434,7 @@ class ParagonIE_Sodium_Compat
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
      *
      * @param string $ciphertext Encrypted message (with Poly1305 MAC appended)
-     * @param string $assocData  Authenticated Associated Data (unencrypted)
+     * @param ?string $assocData  Authenticated Associated Data (unencrypted)
      * @param string $nonce      Number to be used only Once; must be 8 bytes
      * @param string $key        Encryption key
      *
@@ -496,7 +496,7 @@ class ParagonIE_Sodium_Compat
      * IETF mode uses a 96-bit random nonce with a 32-bit counter.
      *
      * @param string $plaintext Message to be encrypted
-     * @param string $assocData Authenticated Associated Data (unencrypted)
+     * @param ?string $assocData Authenticated Associated Data (unencrypted)
      * @param string $nonce     Number to be used only Once; must be 8 bytes
      * @param string $key       Encryption key
      *
@@ -549,7 +549,7 @@ class ParagonIE_Sodium_Compat
      * Regular mode uses a 64-bit random nonce with a 64-bit counter.
      *
      * @param string $ciphertext Encrypted message (with Poly1305 MAC appended)
-     * @param string $assocData  Authenticated Associated Data (unencrypted)
+     * @param ?string $assocData  Authenticated Associated Data (unencrypted)
      * @param string $nonce      Number to be used only Once; must be 12 bytes
      * @param string $key        Encryption key
      *
@@ -1276,11 +1276,6 @@ class ParagonIE_Sodium_Compat
 
         /* Input validation: */
         if (!empty($key)) {
-            /*
-            if (ParagonIE_Sodium_Core_Util::strlen($key) < self::CRYPTO_GENERICHASH_KEYBYTES_MIN) {
-                throw new SodiumException('Unsupported key size. Must be at least CRYPTO_GENERICHASH_KEYBYTES_MIN bytes long.');
-            }
-            */
             if (ParagonIE_Sodium_Core_Util::strlen($key) > self::CRYPTO_GENERICHASH_KEYBYTES_MAX) {
                 throw new SodiumException('Unsupported key size. Must be at most CRYPTO_GENERICHASH_KEYBYTES_MAX bytes long.');
             }
@@ -1586,7 +1581,7 @@ class ParagonIE_Sodium_Compat
         $encoded = self::CRYPTO_PWHASH_STRPREFIX . 'v=19$m=' . $mem . ',t=' . $ops . ',p=1';
 
         // Do they match? If so, we don't need to rehash, so return false.
-        return !ParagonIE_Sodium_Core_Util::hashEquals($encoded, $prefix);
+        return !hash_equals($encoded, $prefix);
     }
 
     /**
@@ -1731,10 +1726,10 @@ class ParagonIE_Sodium_Compat
         }
 
         /* Output validation: Forbid all-zero keys */
-        if (ParagonIE_Sodium_Core_Util::hashEquals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
+        if (hash_equals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
             throw new SodiumException('Zero secret key is not allowed');
         }
-        if (ParagonIE_Sodium_Core_Util::hashEquals($publicKey, str_repeat("\0", self::CRYPTO_BOX_PUBLICKEYBYTES))) {
+        if (hash_equals($publicKey, str_repeat("\0", self::CRYPTO_BOX_PUBLICKEYBYTES))) {
             throw new SodiumException('Zero public key is not allowed');
         }
         return ParagonIE_Sodium_Crypto::scalarmult($secretKey, $publicKey);
@@ -1760,7 +1755,7 @@ class ParagonIE_Sodium_Compat
         if (self::useNewSodiumAPI()) {
             return sodium_crypto_scalarmult_base($secretKey);
         }
-        if (ParagonIE_Sodium_Core_Util::hashEquals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
+        if (hash_equals($secretKey, str_repeat("\0", self::CRYPTO_BOX_SECRETKEYBYTES))) {
             throw new SodiumException('Zero secret key is not allowed');
         }
         return ParagonIE_Sodium_Crypto::scalarmult_base($secretKey);
@@ -2380,7 +2375,7 @@ class ParagonIE_Sodium_Compat
      * @throws Exception
      * @throws Error
      */
-    public static function crypto_stream_keygen()
+    public static function crypto_stream_keygen(): string
     {
         return random_bytes(self::CRYPTO_STREAM_KEYBYTES);
     }
@@ -2701,7 +2696,6 @@ class ParagonIE_Sodium_Compat
                 } else {
                     $padded[$j] = $unpadded[$j];
                 }
-                /** @var int $k */
                 $k -= $st;
                 $st = (int) (~(
                             (
@@ -2724,16 +2718,12 @@ class ParagonIE_Sodium_Compat
         $mask = 0;
         $tail = $xpadded_len;
         for ($i = 0; $i < $blockSize; ++$i) {
-            # barrier_mask = (unsigned char)
-            #     (((i ^ xpadlen) - 1U) >> ((sizeof(size_t) - 1U) * CHAR_BIT));
             $barrier_mask = (($i ^ $xpadlen) -1) >> ((PHP_INT_SIZE << 3) - 1);
-            # tail[-i] = (tail[-i] & mask) | (0x80 & barrier_mask);
             $padded[$tail - $i] = ParagonIE_Sodium_Core_Util::intToChr(
                 (ParagonIE_Sodium_Core_Util::chrToInt($padded[$tail - $i]) & $mask)
                     |
                 (0x80 & $barrier_mask)
             );
-            # mask |= barrier_mask;
             $mask |= $barrier_mask;
         }
         return $padded;
@@ -2758,8 +2748,6 @@ class ParagonIE_Sodium_Compat
         if ($padded_len < $blockSize) {
             throw new SodiumException('invalid padding');
         }
-
-        # tail = &padded[padded_len - 1U];
         $tail = $padded_len - 1;
 
         $acc = 0;
@@ -2768,11 +2756,7 @@ class ParagonIE_Sodium_Compat
 
         $found = 0;
         for ($i = 0; $i < $blockSize; ++$i) {
-            # c = tail[-i];
             $c = ParagonIE_Sodium_Core_Util::chrToInt($padded[$tail - $i]);
-
-            # is_barrier =
-            #     (( (acc - 1U) & (pad_len - 1U) & ((c ^ 0x80) - 1U) ) >> 8) & 1U;
             $is_barrier = (
                 (
                     ($acc - 1) & ($pad_len - 1) & (($c ^ 80) - 1)
@@ -2781,16 +2765,10 @@ class ParagonIE_Sodium_Compat
             $is_barrier &= ~$found;
             $found |= $is_barrier;
 
-            # acc |= c;
             $acc |= $c;
-
-            # pad_len |= i & (1U + ~is_barrier);
             $pad_len |= $i & (1 + ~$is_barrier);
-
-            # valid |= (unsigned char) is_barrier;
             $valid |= ($is_barrier & 0xff);
         }
-        # unpadded_len = padded_len - 1U - pad_len;
         $unpadded_len = $padded_len - 1 - $pad_len;
         if ($valid !== 1) {
             throw new SodiumException('invalid padding');

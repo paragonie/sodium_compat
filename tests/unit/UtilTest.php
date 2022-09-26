@@ -126,27 +126,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::hashEquals()
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public function testHashEquals()
-    {
-        if (PHP_VERSION_ID < 50600) {
-            for ($i = 0; $i < 65536; ++$i) {
-                $a = random_bytes(64);
-                $b = random_bytes(64);
-                $this->assertFalse(
-                    ParagonIE_Sodium_Core_Util::hashEquals($a, $b),
-                    bin2hex($a) . ' == ' . bin2hex($b) . ' should return false.'
-                );
-            }
-        } else {
-            $this->markTestSkipped('PHP > 5.6 does not need this test');
-        }
-    }
-
-    /**
      * @covers ParagonIE_Sodium_Core_Util::load_3()
      * @throws TypeError
      */

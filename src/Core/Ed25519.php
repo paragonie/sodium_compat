@@ -122,9 +122,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             throw new SodiumException('Unexpected zero result');
         }
 
-        # fe_1(one_minus_y);
-        # fe_sub(one_minus_y, one_minus_y, A.Y);
-        # fe_invert(one_minus_y, one_minus_y);
         $one_minux_y = self::fe_invert(
             self::fe_sub(
                 self::fe_1(),
@@ -132,15 +129,11 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
             )
         );
 
-        # fe_1(x);
-        # fe_add(x, x, A.Y);
-        # fe_mul(x, x, one_minus_y);
         $x = self::fe_mul(
             self::fe_add(self::fe_1(), $A->Y),
             $one_minux_y
         );
 
-        # fe_tobytes(curve25519_pk, x);
         return self::fe_tobytes($x);
     }
 
@@ -186,7 +179,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign_open(string $message, string $pk): string
     {
-        /** @var string $signature */
         $signature = self::substr($message, 0, 64);
 
         /** @var string $message */
@@ -209,47 +201,29 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign_detached(string $message, string $sk): string
     {
-        # crypto_hash_sha512(az, sk, 32);
         $az =  hash('sha512', self::substr($sk, 0, 32), true);
 
-        # az[0] &= 248;
-        # az[31] &= 63;
-        # az[31] |= 64;
         $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
         $az[31] = self::intToChr((self::chrToInt($az[31]) & 63) | 64);
 
-        # crypto_hash_sha512_init(&hs);
-        # crypto_hash_sha512_update(&hs, az + 32, 32);
-        # crypto_hash_sha512_update(&hs, m, mlen);
-        # crypto_hash_sha512_final(&hs, nonce);
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($az, 32, 32));
         hash_update($hs, $message);
         $nonceHash = hash_final($hs, true);
 
-        # memmove(sig + 32, sk + 32, 32);
         $pk = self::substr($sk, 32, 32);
 
-        # sc_reduce(nonce);
-        # ge_scalarmult_base(&R, nonce);
-        # ge_p3_tobytes(sig, &R);
         $nonce = self::sc_reduce($nonceHash) . self::substr($nonceHash, 32);
         $sig = self::ge_p3_tobytes(
             self::ge_scalarmult_base($nonce)
         );
 
-        # crypto_hash_sha512_init(&hs);
-        # crypto_hash_sha512_update(&hs, sig, 64);
-        # crypto_hash_sha512_update(&hs, m, mlen);
-        # crypto_hash_sha512_final(&hs, hram);
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
         hash_update($hs, self::substr($pk, 0, 32));
         hash_update($hs, $message);
         $hramHash = hash_final($hs, true);
 
-        # sc_reduce(hram);
-        # sc_muladd(sig + 32, hram, az, nonce);
         $hram = self::sc_reduce($hramHash);
         $sigAfter = self::sc_muladd($hram, $az, $nonce);
         $sig = self::substr($sig, 0, 32) . self::substr($sigAfter, 0, 32);

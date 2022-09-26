@@ -199,9 +199,7 @@ if (!is_callable('sodium_crypto_aead_aes256gcm_decrypt')) {
                 $nonce,
                 $key
             );
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             if (($ex instanceof SodiumException) && ($ex->getMessage() === 'AES-256-GCM is not available')) {
                 throw $ex;
             }
@@ -261,9 +259,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_decrypt')) {
                 $nonce,
                 $key
             );
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }
@@ -326,9 +322,7 @@ if (!is_callable('sodium_crypto_aead_chacha20poly1305_ietf_decrypt')) {
                 $nonce,
                 $key
             );
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }
@@ -392,9 +386,7 @@ if (!is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_decrypt')) {
                 $key,
                 true
             );
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }
@@ -531,9 +523,7 @@ if (!is_callable('sodium_crypto_box_open')) {
     {
         try {
             return ParagonIE_Sodium_Compat::crypto_box_open($ciphertext, $nonce, $key_pair);
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }
@@ -984,9 +974,7 @@ if (!is_callable('sodium_crypto_secretbox_open')) {
     {
         try {
             return ParagonIE_Sodium_Compat::crypto_secretbox_open($ciphertext, $nonce, $key);
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }
@@ -1173,9 +1161,7 @@ if (!is_callable('sodium_crypto_sign_open')) {
     {
         try {
             return ParagonIE_Sodium_Compat::crypto_sign_open($signedMessage, $public_key);
-        } catch (Error $ex) {
-            return false;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
     }

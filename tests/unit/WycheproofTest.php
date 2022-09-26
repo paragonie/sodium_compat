@@ -83,7 +83,7 @@ class WycheproofTest extends TestCase
             $iv,
             $key
         );
-        return ParagonIE_Sodium_Core_Util::hashEquals($ct . $tag, $encrypted);
+        return hash_equals($ct . $tag, $encrypted);
     }
     /**
      * @param array $test
@@ -95,7 +95,7 @@ class WycheproofTest extends TestCase
         $public = ParagonIE_Sodium_Compat::hex2bin($test['public']);
         $shared = ParagonIE_Sodium_Compat::hex2bin($test['shared']);
 
-        return ParagonIE_Sodium_Core_Util::hashEquals(
+        return hash_equals(
             $shared,
             ParagonIE_Sodium_Compat::crypto_scalarmult($private, $public)
         );
