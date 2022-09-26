@@ -1,15 +1,11 @@
 parameters:
     autoload_files:
         - %rootDir%/../../../autoload-fast.php
-        - %rootDir%/../../../src/Core32/ChaCha20/Ctx.php
-        - %rootDir%/../../../src/Core32/ChaCha20/IetfCtx.php
     level: max
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/lib/
         - %currentWorkingDirectory%/namespaced/
-    excludes_analyse:
-        - %rootDir%/../../../src/PHP52/*
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # sodium_crypto_scalarmult_base()'s definition is broken in phpstan
