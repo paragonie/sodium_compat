@@ -9,7 +9,6 @@ if (!class_exists('SodiumException', false)) {
     require_once dirname(__FILE__) . '/src/SodiumException.php';
 }
 require_once dirname(__FILE__) . '/lib/namespaced.php';
-require_once dirname(__FILE__) . '/lib/sodium_compat.php';
 if (!extension_loaded('sodium')) {
     if (!defined('SODIUM_CRYPTO_SCALARMULT_BYTES')) {
         require_once dirname(__FILE__) . '/lib/php72compat_const.php';
