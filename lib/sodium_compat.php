@@ -374,28 +374,6 @@ if (!is_callable('\\Sodium\\crypto_generichash_update')) {
         ParagonIE_Sodium_Compat::crypto_generichash_update($ctx, $message);
     }
 }
-if (!is_callable('\\Sodium\\crypto_kx')) {
-    /**
-     * @see ParagonIE_Sodium_Compat::crypto_kx()
-     * @param string $my_secret
-     * @param string $their_public
-     * @param string $client_public
-     * @param string $server_public
-     * @return string
-     * @throws \SodiumException
-     * @throws \TypeError
-     */
-    function crypto_kx($my_secret, $their_public, $client_public, $server_public)
-    {
-        return ParagonIE_Sodium_Compat::crypto_kx(
-            $my_secret,
-            $their_public,
-            $client_public,
-            $server_public,
-            true
-        );
-    }
-}
 if (!is_callable('\\Sodium\\crypto_pwhash')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_pwhash()

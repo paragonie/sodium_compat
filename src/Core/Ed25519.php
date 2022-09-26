@@ -369,7 +369,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function small_order(string $R): bool
     {
-        /** @var array<int, array<int, int>> $blocklist */
         $blocklist = array(
             /* 0 (order 4) */
             array(
@@ -456,7 +455,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
                 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
             )
         );
-        /** @var int $countBlocklist */
         $countBlocklist = count($blocklist);
 
         for ($i = 0; $i < $countBlocklist; ++$i) {

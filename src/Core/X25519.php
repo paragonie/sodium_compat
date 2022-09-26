@@ -46,6 +46,7 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
         $g8 = $g[8];
         $g9 = $g[9];
         $b = -$b;
+
         $x0 = ($f0 ^ $g0) & $b;
         $x1 = ($f1 ^ $g1) & $b;
         $x2 = ($f2 ^ $g2) & $b;
@@ -313,7 +314,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
         ) {
             throw new TypeError('Null points encountered');
         }
-        $pk = self::edwards_to_montgomery($A->Y, $A->Z);
-        return self::fe_tobytes($pk);
+        return self::fe_tobytes(
+            self::edwards_to_montgomery($A->Y, $A->Z)
+        );
     }
 }

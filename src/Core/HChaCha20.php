@@ -16,7 +16,7 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
      * @return string
      * @throws TypeError
      */
-    public static function hChaCha20($in = '', $key = '', $c = null)
+    public static function hChaCha20(string $in = '', string $key = '', ?string $c = null): string
     {
         $ctx = array();
 
@@ -51,7 +51,7 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
      * @return string
      * @throws TypeError
      */
-    protected static function hChaCha20Bytes(array $ctx)
+    protected static function hChaCha20Bytes(array $ctx): string
     {
         $x0  = (int) $ctx[0];
         $x1  = (int) $ctx[1];

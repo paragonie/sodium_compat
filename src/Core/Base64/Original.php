@@ -18,7 +18,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    public static function encode($src)
+    public static function encode(string $src): string
     {
         return self::doEncode($src, true);
     }
@@ -32,7 +32,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    public static function encodeUnpadded($src)
+    public static function encodeUnpadded(string $src): string
     {
         return self::doEncode($src, false);
     }
@@ -43,7 +43,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    protected static function doEncode($src, $pad = true)
+    protected static function doEncode(string $src, bool $pad = true): string
     {
         $dest = '';
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
@@ -99,7 +99,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @throws TypeError
      * @psalm-suppress RedundantCondition
      */
-    public static function decode($src, $strictPadding = false)
+    public static function decode(string $src, bool $strictPadding = false): string
     {
         // Remove padding
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
@@ -198,7 +198,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @param int $src
      * @return int
      */
-    protected static function decode6Bits($src)
+    protected static function decode6Bits(int $src): int
     {
         $ret = -1;
 
@@ -227,7 +227,7 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @param int $src
      * @return string
      */
-    protected static function encode6Bits($src)
+    protected static function encode6Bits(int $src): string
     {
         $diff = 0x41;
 

@@ -642,7 +642,7 @@ if (!is_callable('sodium_crypto_generichash')) {
 if (!is_callable('sodium_crypto_generichash_final')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_generichash_final()
-     * @param string|null $state
+     * @param string $state
      * @param int $outputLength
      * @return string
      * @throws SodiumException
@@ -681,7 +681,7 @@ if (!is_callable('sodium_crypto_generichash_keygen')) {
 if (!is_callable('sodium_crypto_generichash_update')) {
     /**
      * @see ParagonIE_Sodium_Compat::crypto_generichash_update()
-     * @param string|null $state
+     * @param string $state
      * @param string $message
      * @return void
      * @throws SodiumException

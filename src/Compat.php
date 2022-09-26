@@ -1423,7 +1423,7 @@ class ParagonIE_Sodium_Compat
      * @psalm-suppress MixedArgument
      */
     public static function crypto_generichash_init_salt_personal(
-        string $key = '',
+        ?string $key = '',
         int $length = self::CRYPTO_GENERICHASH_BYTES,
         string $salt = '',
         string $personal = ''
@@ -1733,7 +1733,7 @@ class ParagonIE_Sodium_Compat
      * @throws TypeError
      * @psalm-suppress MixedArgument
      */
-    public static function crypto_pwhash_str(string $passwd, string $opslimit, string $memlimit): string
+    public static function crypto_pwhash_str(string $passwd, int $opslimit, int $memlimit): string
     {
         if (self::useNewSodiumAPI()) {
             return sodium_crypto_pwhash_str($passwd, $opslimit, $memlimit);
@@ -3040,9 +3040,7 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('memzero')) {
             $func = '\\Sodium\\memzero';
             $func($var);
-            if ($var === null) {
-                return;
-            }
+            return;
         }
         // This is the best we can do.
         throw new SodiumException(

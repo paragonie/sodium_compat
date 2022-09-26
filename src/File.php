@@ -598,16 +598,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($az, 32, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
-
-        /** @var string $nonceHash */
         $nonceHash = hash_final($hs, true);
-
-        /** @var string $pk */
         $pk = self::substr($secretKey, 32, 32);
 
-        /** @var string $nonce */
         $nonce = ParagonIE_Sodium_Core_Ed25519::sc_reduce($nonceHash) . self::substr($nonceHash, 32);
 
         /** @var string $sig */
@@ -618,16 +613,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($sig, 0, 32));
         self::hash_update($hs, self::substr($pk, 0, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
-
-        /** @var string $hramHash */
         $hramHash = hash_final($hs, true);
-
-        /** @var string $hram */
         $hram = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hramHash);
-
-        /** @var string $sigAfter */
         $sigAfter = ParagonIE_Sodium_Core_Ed25519::sc_muladd($hram, $az, $nonce);
 
         /** @var string $sig */
@@ -730,15 +719,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($sig, 0, 32));
         self::hash_update($hs, self::substr($publicKey, 0, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
-        /** @var string $hDigest */
         $hDigest = hash_final($hs, true);
-
-        /** @var string $h */
         $h = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
-
-        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P2 $R */
         $R = ParagonIE_Sodium_Core_Ed25519::ge_double_scalarmult_vartime(
             $h,
             $A,
@@ -1083,10 +1067,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * Update a hash context with the contents of a file, without
      * loading the entire file into memory.
      *
-     * @param resource|HashContext $hash
+     * @param HashContext|resource $hash
      * @param resource $fp
      * @param int $size
-     * @return resource|object Resource on PHP < 7.2, HashContext object on PHP >= 7.2
+     * @return HashContext|resource
      * @throws SodiumException
      * @throws TypeError
      * @psalm-suppress PossiblyInvalidArgument
@@ -1095,27 +1079,8 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @psalm-suppress TypeCoercion
      *                 Ditto.
      */
-    public static function updateHashWithFile($hash, $fp, $size = 0)
+    public static function updateHashWithFile($hash, $fp, int $size = 0)
     {
-        /* Type checks: */
-        if (PHP_VERSION_ID < 70200) {
-            if (!is_resource($hash)) {
-                throw new TypeError('Argument 1 must be a resource, ' . gettype($hash) . ' given.');
-            }
-        } else {
-            if (!is_object($hash)) {
-                throw new TypeError('Argument 1 must be an object (PHP 7.2+), ' . gettype($hash) . ' given.');
-            }
-        }
-
-        if (!is_resource($fp)) {
-            throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');
-        }
-        if (!is_int($size)) {
-            throw new TypeError('Argument 3 must be an integer, ' . gettype($size) . ' given.');
-        }
-
-        /** @var int $originalPosition */
         $originalPosition = self::ftell($fp);
 
         // Move file pointer to beginning of file
@@ -1172,7 +1137,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($az, 32, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
 
         $nonceHash = hash_final($hs, true);
@@ -1185,7 +1150,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($sig, 0, 32));
         self::hash_update($hs, self::substr($pk, 0, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
 
         $hramHash = hash_final($hs, true);
@@ -1267,15 +1232,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $hs = hash_init('sha512');
         self::hash_update($hs, self::substr($sig, 0, 32));
         self::hash_update($hs, self::substr($publicKey, 0, 32));
-        /** @var resource $hs */
+        /** @var HashContext $hs */
         $hs = self::updateHashWithFile($hs, $fp, $size);
-        /** @var string $hDigest */
         $hDigest = hash_final($hs, true);
 
-        /** @var string $h */
         $h = ParagonIE_Sodium_Core32_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
 
-        /** @var ParagonIE_Sodium_Core32_Curve25519_Ge_P2 $R */
         $R = ParagonIE_Sodium_Core32_Ed25519::ge_double_scalarmult_vartime(
             $h,
             $A,
@@ -1312,17 +1274,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Could not read input file');
         }
         $first32 = self::ftell($ifp);
-
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core32_HSalsa20::hsalsa20($nonce, $key);
-
-        /** @var string $realNonce */
         $realNonce = ParagonIE_Sodium_Core32_Util::substr($nonce, 16, 8);
-
-        /** @var string $block0 */
         $block0 = str_repeat("\x00", 32);
 
-        /** @var int $mlen - Length of the plaintext message */
+        /* Length of the plaintext message */
         $mlen0 = $mlen;
         if ($mlen0 > 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES) {
             $mlen0 = 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES;

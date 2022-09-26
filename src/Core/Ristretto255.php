@@ -26,7 +26,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
     /**
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
-     * @throws SodiumException
      */
     public static function fe_abs(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {

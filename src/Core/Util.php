@@ -24,7 +24,7 @@ abstract class ParagonIE_Sodium_Core_Util
         }
 
         $negative = -(($integer >> $size) & 1);
-        return (int) (
+        return (
             ($integer ^ $negative)
                 +
             (($negative >> $realSize) & 1)
@@ -76,17 +76,10 @@ abstract class ParagonIE_Sodium_Core_Util
         for ($i = 0; $i < $len; ++$i) {
             /** @var array<int, int> $chunk */
             $chunk = unpack('C', $bin_string[$i]);
-            /**
-             * Lower 16 bits
-             *
-             * @var int $c
-             */
-            $c = $chunk[1] & 0xf;
 
-            /**
-             * Upper 16 bits
-             * @var int $b
-             */
+            /* Lower 16 bits */
+            $c = $chunk[1] & 0xf;
+            /* Upper 16 bits */
             $b = $chunk[1] >> 4;
 
             /**
@@ -121,7 +114,7 @@ abstract class ParagonIE_Sodium_Core_Util
         }
         /** @var array<int, int> $chunk */
         $chunk = unpack('C', $chr);
-        return (int) ($chunk[1]);
+        return $chunk[1];
     }
 
     /**
@@ -136,7 +129,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function compare(string $left, string $right, ?int $len = null)
+    public static function compare(string $left, string $right, ?int $len = null): int
     {
         $leftLen = self::strlen($left);
         $rightLen = self::strlen($right);
@@ -495,10 +488,8 @@ abstract class ParagonIE_Sodium_Core_Util
          *
          * -1 in binary looks like 0x1111 ... 1111
          *  0 in binary looks like 0x0000 ... 0000
-         *
-         * @var int
          */
-        $mask = -(($b >> ((int) $defaultSize)) & 1);
+        $mask = -(($b >> ($defaultSize)) & 1);
 
         /**
          * Ensure $b is a positive integer, without creating
@@ -515,11 +506,11 @@ abstract class ParagonIE_Sodium_Core_Util
          * This loop always runs 64 times when PHP_INT_SIZE is 8.
          */
         for ($i = $size; $i >= 0; --$i) {
-            $c += (int) ($a & -($b & 1));
+            $c += ($a & -($b & 1));
             $a <<= 1;
             $b >>= 1;
         }
-        $c = (int) @($c & -1);
+        $c = @($c & -1);
 
         /**
          * If $b was negative, we then apply the same value to $c here.
@@ -530,7 +521,7 @@ abstract class ParagonIE_Sodium_Core_Util
          *
          * The end result is what we'd expect from integer multiplication.
          */
-        return (int) (($c & ~$mask) | ($mask & -$c));
+        return (($c & ~$mask) | ($mask & -$c));
     }
 
     /**
@@ -557,7 +548,6 @@ abstract class ParagonIE_Sodium_Core_Util
                 /** @var int $high */
                 $high = min((+(floor($num/4294967296))), 4294967295);
             } else {
-                /** @var int $high */
                 $high = ~~((+(ceil(($num - (+((~~($num)))))/4294967296))));
             }
         }
@@ -685,13 +675,7 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function stringToIntArray(string $string): array
     {
-        /**
-         * @var array<int, int>
-         */
-        $values = array_values(
-            unpack('C*', $string)
-        );
-        return $values;
+        return array_values(unpack('C*', $string));
     }
 
     /**
@@ -709,20 +693,12 @@ abstract class ParagonIE_Sodium_Core_Util
      */
     public static function substr(string $str, int $start = 0, ?int $length = null): string
     {
-        /* Type checks: */
-        if (!is_string($str)) {
-            throw new TypeError('String expected');
-        }
-
         if ($length === 0) {
             return '';
         }
 
         if (self::isMbStringOverride()) {
-            if (PHP_VERSION_ID < 50400 && $length === null) {
-                $length = self::strlen($str);
-            }
-            $sub = (string) mb_substr($str, $start, $length, '8bit');
+            $sub = mb_substr($str, $start, $length, '8bit');
         } elseif ($length === null) {
             $sub = (string) substr($str, $start);
         } else {
