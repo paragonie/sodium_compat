@@ -60,6 +60,7 @@
     "test": "phpunit"
   },
   "provide": {
+    "ext-libsodium": "*",
     "ext-sodium": "*"
   },
   "suggest": {
