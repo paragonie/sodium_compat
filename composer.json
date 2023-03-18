@@ -59,6 +59,9 @@
   "scripts": {
     "test": "phpunit"
   },
+  "provide": {
+    "ext-sodium": "*"
+  },
   "suggest": {
     "ext-libsodium": "PHP < 7.0: Better performance, password hashing (Argon2i), secure memory management (memzero), and better security.",
     "ext-sodium": "PHP >= 7.0: Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
