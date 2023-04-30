@@ -9,9 +9,6 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      */
     public function before()
     {
-        if (!defined('DO_PEDANTIC_TEST')) {
-            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
-        }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
         $this->dir = dirname(__FILE__) . '/wycheproof/';
     }
@@ -21,10 +18,21 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      */
     public function testChaCha20Poly1305()
     {
-        if (!defined('DO_PEDANTIC_TEST')) {
-            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
+        if (empty($this->dir)) {
+            $this->before();
         }
-        $this->mainTestingLoop('chacha20_poly1305_test.json', 'doChaCha20Poly1305Test');
+        $this->mainTestingLoop('chacha20_poly1305_test.json', 'doChaCha20Poly1305Test', false);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testXChaCha20Poly1305()
+    {
+        if (empty($this->dir)) {
+            $this->before();
+        }
+        $this->mainTestingLoop('xchacha20_poly1305_test.json', 'doXChaCha20Poly1305Test', false);
     }
 
     /**
@@ -35,7 +43,10 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
         if (!defined('DO_PEDANTIC_TEST')) {
             $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
         }
-        $this->mainTestingLoop('x25519_test.json', 'doX25519Test');
+        if (empty($this->dir)) {
+            $this->before();
+        }
+        $this->mainTestingLoop('x25519_test.json', 'doX25519Test', false);
     }
 
     /**
@@ -44,21 +55,43 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      *
      * @throws Exception
      */
-    public function mainTestingLoop($filename, $method)
+    public function mainTestingLoop($filename, $method, $progress = false)
     {
+        $total = 0;
         $document = $this->getJson($this->dir . $filename);
+        if ($progress) {
+            $groupCount = count($document['testGroups']);
+            $groupId = 1;
+        }
         foreach ($document['testGroups'] as $testGroup) {
+            if ($progress) {
+                $testCount = count($testGroup['tests']);
+                $testId = 1;
+            }
             foreach ($testGroup['tests'] as $test) {
+                ++$total;
+                if ($progress) {
+                    echo "[Group {$groupId} : Test {$testId}]", PHP_EOL;
+                }
                 $message = "{$document['algorithm']} :: #{$test['tcId']} - {$test['comment']}";
                 try {
                     $result = call_user_func_array(array($this, $method), array($test));
                     $expected = ($test['result'] === 'valid');
+                    if ($result !== $expected) {
+                        call_user_func_array(array($this, $method), array($test, true));
+                    }
                     $this->assertSame($result, $expected, $message);
                 } catch (Exception $ex) {
                     if ($test['result'] === 'valid') {
                         $this->fail("{$message} (" . $ex->getMessage() . ")");
                     }
                 }
+                if ($progress) {
+                    ++$groupId;
+                }
+            }
+            if ($progress) {
+                ++$groupId;
             }
         }
     }
@@ -67,7 +100,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      * @param array $test
      * @return bool
      */
-    public function doChaCha20Poly1305Test(array $test)
+    public function doChaCha20Poly1305Test(array $test, $verbose = false)
     {
         $key = ParagonIE_Sodium_Compat::hex2bin($test['key']);
         $iv = ParagonIE_Sodium_Compat::hex2bin($test['iv']);
@@ -82,22 +115,58 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
             $iv,
             $key
         );
+        if ($verbose && !ParagonIE_Sodium_Core_Util::hashEquals($ct . $tag, $encrypted)) {
+            echo 'Difference in Wycheproof test vectors:', PHP_EOL;
+            echo '- ', ParagonIE_Sodium_Core_Util::bin2hex($ct . $tag), PHP_EOL;
+            echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($encrypted), PHP_EOL;
+        }
         return ParagonIE_Sodium_Core_Util::hashEquals($ct . $tag, $encrypted);
     }
+
     /**
      * @param array $test
      * @return bool
      */
-    public function doX25519Test(array $test)
+    public function doXChaCha20Poly1305Test(array $test, $verbose = false)
+    {
+        $key = ParagonIE_Sodium_Compat::hex2bin($test['key']);
+        $iv = ParagonIE_Sodium_Compat::hex2bin($test['iv']);
+        $aad = ParagonIE_Sodium_Compat::hex2bin($test['aad']);
+        $msg = ParagonIE_Sodium_Compat::hex2bin($test['msg']);
+        $ct = ParagonIE_Sodium_Compat::hex2bin($test['ct']);
+        $tag = ParagonIE_Sodium_Compat::hex2bin($test['tag']);
+
+        $encrypted = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt(
+            $msg,
+            $aad,
+            $iv,
+            $key
+        );
+        if ($verbose && !ParagonIE_Sodium_Core_Util::hashEquals($ct . $tag, $encrypted)) {
+            echo 'Difference in Wycheproof test vectors:', PHP_EOL;
+            echo '- ', ParagonIE_Sodium_Core_Util::bin2hex($ct . $tag), PHP_EOL;
+            echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($encrypted), PHP_EOL;
+        }
+        return ParagonIE_Sodium_Core_Util::hashEquals($ct . $tag, $encrypted);
+    }
+
+    /**
+     * @param array $test
+     * @return bool
+     */
+    public function doX25519Test(array $test, $verbose = false)
     {
         $private = ParagonIE_Sodium_Compat::hex2bin($test['private']);
         $public = ParagonIE_Sodium_Compat::hex2bin($test['public']);
         $shared = ParagonIE_Sodium_Compat::hex2bin($test['shared']);
 
-        return ParagonIE_Sodium_Core_Util::hashEquals(
-            $shared,
-            ParagonIE_Sodium_Compat::crypto_scalarmult($private, $public)
-        );
+        $scalarmult = ParagonIE_Sodium_Compat::crypto_scalarmult($private, $public);
+        if ($verbose &&!ParagonIE_Sodium_Core_Util::hashEquals($shared, $scalarmult)) {
+            echo 'Difference in Wycheproof test vectors:', PHP_EOL;
+            echo '- ', ParagonIE_Sodium_Core_Util::bin2hex($shared), PHP_EOL;
+            echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($scalarmult), PHP_EOL;
+        }
+        return ParagonIE_Sodium_Core_Util::hashEquals($shared, $scalarmult);
     }
 
     /**
