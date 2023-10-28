@@ -3,7 +3,7 @@
 class XSalsa20Test extends PHPUnit_Framework_TestCase
 {
     /**
-     * @oovers ParagonIE_Sodium_Core_XSalsa20::xsalsa20()
+     * @covers ParagonIE_Sodium_Core_XSalsa20::xsalsa20()
      * @throws SodiumException
      * @throws TypeError
      */
