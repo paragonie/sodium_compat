@@ -38,6 +38,17 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
     /**
      * @throws Exception
      */
+    public function testSipHash24()
+    {
+        if (empty($this->dir)) {
+            $this->before();
+        }
+        $this->mainTestingLoop('siphash_2_4_test.json', 'doSipHash24Test', false);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testX25519()
     {
         if (!defined('DO_PEDANTIC_TEST')) {
@@ -98,7 +109,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param array $test
+     * @param bool $verbose
      * @return bool
+     * @throws SodiumException
      */
     public function doChaCha20Poly1305Test(array $test, $verbose = false)
     {
@@ -125,7 +138,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param array $test
+     * @param bool $verbose
      * @return bool
+     * @throws SodiumException
      */
     public function doXChaCha20Poly1305Test(array $test, $verbose = false)
     {
@@ -152,7 +167,9 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param array $test
+     * @param bool $verbose
      * @return bool
+     * @throws SodiumException
      */
     public function doX25519Test(array $test, $verbose = false)
     {
@@ -167,6 +184,26 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
             echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($scalarmult), PHP_EOL;
         }
         return ParagonIE_Sodium_Core_Util::hashEquals($shared, $scalarmult);
+    }
+
+    /**
+     * @param array $test
+     * @param bool $verbose
+     * @return bool
+     * @throws SodiumException
+     */
+    public function doSipHash24Test(array $test, $verbose = false)
+    {
+        $key = ParagonIE_Sodium_Compat::hex2bin($test['key']);
+        $msg = ParagonIE_Sodium_Compat::hex2bin($test['msg']);
+        $tag = ParagonIE_Sodium_Compat::hex2bin($test['tag']);
+        $result = ParagonIE_Sodium_Compat::crypto_shorthash($msg, $key);
+        if ($verbose && !ParagonIE_Sodium_Core_Util::hashEquals($tag, $result)) {
+            echo 'Difference in Wycheproof test vectors:', PHP_EOL;
+            echo '- ', ParagonIE_Sodium_Core_Util::bin2hex($tag), PHP_EOL;
+            echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($result), PHP_EOL;
+        }
+        return ParagonIE_Sodium_Core_Util::hashEquals($tag, $result);
     }
 
     /**

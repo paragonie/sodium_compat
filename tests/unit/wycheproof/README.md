@@ -1,3 +1,3 @@
 # Wycheproof Tests
 
-Sourced from Google's [Project Wycheproof](https://github.com/google/wycheproof/tree/master/testvectors).
+Sourced from [Project Wycheproof](https://github.com/C2SP/wycheproof/tree/master/testvectors_v1).
