@@ -6,6 +6,10 @@
             "name": "autoload.php"
         },
         {
+            "in": "",
+            "name": "autoload-php7.php"
+        },
+        {
             "in": "src",
             "name": "*.php"
         },
