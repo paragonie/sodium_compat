@@ -9,6 +9,8 @@ if (class_exists('ParagonIE_Sodium_Core_Util', false)) {
  */
 abstract class ParagonIE_Sodium_Core_Util
 {
+    const U32_MAX = 0xFFFFFFFF;
+
     /**
      * @param int $integer
      * @param int $size (16, 32, 64)
