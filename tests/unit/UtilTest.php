@@ -10,6 +10,23 @@ class UtilTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    public function testAndString()
+    {
+        $x = "\x01\x02\x03\x04";
+        $y = "\xff\xff\xff\xff";
+        $z = "\xcc\x8a\xcc\x00";
+
+        $this->assertSame($x, ParagonIE_Sodium_Core_Util::andStrings($x, $y));
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::bin2hex($z),
+            ParagonIE_Sodium_Core_Util::bin2hex(ParagonIE_Sodium_Core_Util::andStrings($y, $z))
+        );
+        $this->assertSame(
+            '00020000',
+            ParagonIE_Sodium_Core_Util::bin2hex(ParagonIE_Sodium_Core_Util::andStrings($x, $z))
+        );
+    }
+
     public function testAbs()
     {
         $this->assertEquals(0, ParagonIE_Sodium_Core_Util::abs(0));
