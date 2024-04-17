@@ -18,7 +18,10 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      * @var int
      */
     protected $size;
-    
+
+    /**
+     * @param int $size
+     */
     public function __construct($size = 8)
     {
         parent::__construct($size);
@@ -26,6 +29,9 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
         $this->values = array_fill(0, $size, 0);
     }
 
+    /**
+     * @return self
+     */
     public static function init()
     {
         return new self(8);
@@ -37,6 +43,8 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      * @param array<int, int> $array
      * @param bool $save_indexes
      * @return self
+     *
+     * @psalm-suppress MethodSignatureMismatch
      */
     #[ReturnTypeWillChange]
     public static function fromArray($array, $save_indexes = null)
@@ -70,6 +78,8 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      * @param int|null $offset
      * @param int $value
      * @return void
+     *
+     * @psalm-suppress MethodSignatureMismatch
      * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]
@@ -90,6 +100,8 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      *
      * @param int $offset
      * @return bool
+     *
+     * @psalm-suppress MethodSignatureMismatch
      * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]
@@ -103,6 +115,8 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      *
      * @param int $offset
      * @return void
+     *
+     * @psalm-suppress MethodSignatureMismatch
      * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]
@@ -116,6 +130,8 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      *
      * @param int $offset
      * @return int
+     *
+     * @psalm-suppress MethodSignatureMismatch
      * @psalm-suppress MixedArrayOffset
      */
     #[ReturnTypeWillChange]

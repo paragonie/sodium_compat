@@ -7,7 +7,7 @@ class PHP84Test extends PHPUnit_Framework_TestCase
      */
     public function before()
     {
-        if (PHP_VERSION_ID < 80400) {
+        if (PHP_VERSION_ID < 80400 || !extension_loaded('sodium')) {
             $this->markTestSkipped('PHP < 8.4.0; skipping PHP 8.4 compatibility test suite.');
         }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
