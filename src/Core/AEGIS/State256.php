@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_AEGIS_State256', false)) {
+    return;
+}
+
 if (!defined('SODIUM_COMPAT_AEGIS_C0')) {
     define('SODIUM_COMPAT_AEGIS_C0', "\x00\x01\x01\x02\x03\x05\x08\x0d\x15\x22\x37\x59\x90\xe9\x79\x62");
 }

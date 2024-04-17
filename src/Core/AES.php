@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_AES', false)) {
+    return;
+}
+
 /**
  * Bitsliced implementation of the AES block cipher.
  *
