@@ -41,13 +41,22 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_P2
         if ($x === null) {
             $x = new ParagonIE_Sodium_Core_Curve25519_Fe();
         }
+        if (!($x instanceof ParagonIE_Sodium_Core_Curve25519_Fe)) {
+            throw new TypeError('Argument 1 must be an instance of ParagonIE_Sodium_Core_Curve25519_Fe');
+        }
         $this->X = $x;
         if ($y === null) {
             $y = new ParagonIE_Sodium_Core_Curve25519_Fe();
         }
+        if (!($y instanceof ParagonIE_Sodium_Core_Curve25519_Fe)) {
+            throw new TypeError('Argument 2 must be an instance of ParagonIE_Sodium_Core_Curve25519_Fe');
+        }
         $this->Y = $y;
         if ($z === null) {
             $z = new ParagonIE_Sodium_Core_Curve25519_Fe();
+        }
+        if (!($z instanceof ParagonIE_Sodium_Core_Curve25519_Fe)) {
+            throw new TypeError('Argument 3 must be an instance of ParagonIE_Sodium_Core_Curve25519_Fe');
         }
         $this->Z = $z;
     }
