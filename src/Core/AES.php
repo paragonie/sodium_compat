@@ -408,6 +408,40 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @param string $x
+     * @param string $y
+     * @return string
+     */
+    public static function aesRound($x, $y)
+    {
+        $q = ParagonIE_Sodium_Core_AES_Block::init();
+        $q[0] = self::load_4(self::substr($x, 0, 4));
+        $q[2] = self::load_4(self::substr($x, 4, 4));
+        $q[4] = self::load_4(self::substr($x, 8, 4));
+        $q[6] = self::load_4(self::substr($x, 12, 4));
+
+        $rk = ParagonIE_Sodium_Core_AES_Block::init();
+        $rk[0] = $rk[1] = self::load_4(self::substr($y, 0, 4));
+        $rk[2] = $rk[3] = self::load_4(self::substr($y, 4, 4));
+        $rk[4] = $rk[5] = self::load_4(self::substr($y, 8, 4));
+        $rk[6] = $rk[7] = self::load_4(self::substr($y, 12, 4));
+
+        $q->orthogonalize();
+        self::sbox($q);
+        $q->shiftRows();
+        $q->mixColumns();
+        $q->orthogonalize();
+        // add round key without key schedule:
+        for ($i = 0; $i < 8; ++$i) {
+            $q[$i] ^= $rk[$i];
+        }
+        return self::store32_le($q[0]) .
+            self::store32_le($q[2]) .
+            self::store32_le($q[4]) .
+            self::store32_le($q[6]);
+    }
+
+    /**
      * @param ParagonIE_Sodium_Core_AES_Expanded $skey
      * @param ParagonIE_Sodium_Core_AES_Block $q
      * @return void

@@ -36,6 +36,28 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     * @throws SodiumException
+     */
+    public static function andStrings($a, $b)
+    {
+        /* Type checks: */
+        if (!is_string($a)) {
+            throw new TypeError('Argument 1 must be a string');
+        }
+        if (!is_string($b)) {
+            throw new TypeError('Argument 2 must be a string');
+        }
+        $len = self::strlen($a);
+        if (self::strlen($b) !== $len) {
+            throw new SodiumException('Both strings must be of equal length to combine with bitwise AND');
+        }
+        return $a & $b;
+    }
+
+    /**
      * Convert a binary string into a hexadecimal string without cache-timing
      * leaks
      *

@@ -319,6 +319,18 @@ class AESTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testAesRound()
+    {
+        $in = ParagonIE_Sodium_Core_Util::hex2bin('000102030405060708090a0b0c0d0e0f');
+        $rk = ParagonIE_Sodium_Core_Util::hex2bin('101112131415161718191a1b1c1d1e1f');
+        $this->assertSame(
+            '7a7b4e5638782546a8c0477a3b813f43',
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                ParagonIE_Sodium_Core_AES::aesRound($in, $rk)
+            )
+        );
+    }
+
     /**
      * @dataProvider aes128ecbProvider
      * @covers ParagonIE_Sodium_Core_AES::encryptBlockECB
