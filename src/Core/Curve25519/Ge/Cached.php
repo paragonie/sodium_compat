@@ -40,10 +40,10 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_Cached
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $T2d
      */
     public function __construct(
-        ParagonIE_Sodium_Core_Curve25519_Fe $YplusX = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $YminusX = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $Z = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $T2d = null
+        $YplusX = null,
+        $YminusX = null,
+        $Z = null,
+        $T2d = null
     ) {
         if ($YplusX === null) {
             $YplusX = new ParagonIE_Sodium_Core_Curve25519_Fe();

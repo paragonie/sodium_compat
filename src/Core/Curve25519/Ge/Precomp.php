@@ -34,9 +34,9 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_Precomp
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $xy2d
      */
     public function __construct(
-        ParagonIE_Sodium_Core_Curve25519_Fe $yplusx = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $yminusx = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $xy2d = null
+        $yplusx = null,
+        $yminusx = null,
+        $xy2d = null
     ) {
         if ($yplusx === null) {
             $yplusx = new ParagonIE_Sodium_Core_Curve25519_Fe();

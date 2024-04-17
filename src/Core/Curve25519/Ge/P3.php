@@ -40,10 +40,10 @@ class ParagonIE_Sodium_Core_Curve25519_Ge_P3
      * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $t
      */
     public function __construct(
-        ParagonIE_Sodium_Core_Curve25519_Fe $x = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $y = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $z = null,
-        ParagonIE_Sodium_Core_Curve25519_Fe $t = null
+        $x = null,
+        $y = null,
+        $z = null,
+        $t = null
     ) {
         if ($x === null) {
             $x = new ParagonIE_Sodium_Core_Curve25519_Fe();
