@@ -18,7 +18,10 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      * @var int
      */
     protected $size;
-    
+
+    /**
+     * @param int $size
+     */
     public function __construct($size = 8)
     {
         parent::__construct($size);
