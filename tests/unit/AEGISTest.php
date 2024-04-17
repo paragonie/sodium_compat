@@ -387,4 +387,25 @@ class AEGISTest extends PHPUnit_Framework_TestCase
         $this->assertSame($got_pt, $msg, $name);
     }
 
+    public function testPublicAegis128l()
+    {
+        $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
+        $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_NPUBBYTES);
+        $ad = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_keygen();
+        $ciphertext = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt($msg, $ad, $nonce, $key);
+        $msg2 = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt($ciphertext, $ad, $nonce, $key);
+        $this->assertSame($msg, $msg2);
+    }
+
+    public function testPublicAegis256()
+    {
+        $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
+        $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_NPUBBYTES);
+        $ad = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aegis256_keygen();
+        $ciphertext = ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt($msg, $ad, $nonce, $key);
+        $msg2 = ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($ciphertext, $ad, $nonce, $key);
+        $this->assertSame($msg, $msg2);
+    }
 }

@@ -14,14 +14,22 @@ foreach (array(
     'BASE64_VARIANT_ORIGINAL_NO_PADDING',
     'BASE64_VARIANT_URLSAFE',
     'BASE64_VARIANT_URLSAFE_NO_PADDING',
-    'CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES',
-    'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
-    'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
-    'CRYPTO_AEAD_CHACHA20POLY1305_ABYTES',
+    'CRYPTO_AEAD_AESGIS128L_KEYBYTES',
+    'CRYPTO_AEAD_AESGIS128L_NSECBYTES',
+    'CRYPTO_AEAD_AESGIS128L_NPUBBYTES',
+    'CRYPTO_AEAD_AESGIS128L_ABYTES',
+    'CRYPTO_AEAD_AESGIS256_KEYBYTES',
+    'CRYPTO_AEAD_AESGIS256_NSECBYTES',
+    'CRYPTO_AEAD_AESGIS256_NPUBBYTES',
+    'CRYPTO_AEAD_AESGIS256_ABYTES',
     'CRYPTO_AEAD_AES256GCM_KEYBYTES',
     'CRYPTO_AEAD_AES256GCM_NSECBYTES',
     'CRYPTO_AEAD_AES256GCM_NPUBBYTES',
     'CRYPTO_AEAD_AES256GCM_ABYTES',
+    'CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES',
+    'CRYPTO_AEAD_CHACHA20POLY1305_NSECBYTES',
+    'CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES',
+    'CRYPTO_AEAD_CHACHA20POLY1305_ABYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_KEYBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_NSECBYTES',
     'CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES',
@@ -174,6 +182,88 @@ if (!is_callable('sodium_compare')) {
     function sodium_compare($string1, $string2)
     {
         return ParagonIE_Sodium_Compat::compare($string1, $string2);
+    }
+}
+if (!is_callable('sodium_crypto_aead_aegis128l_decrypt')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt()
+     * @param string $ciphertext
+     * @param string $additional_data
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws SodiumException
+     */
+    function sodium_crypto_aead_aegis128l_decrypt($ciphertext, $additional_data, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt(
+            $ciphertext,
+            $additional_data,
+            $nonce,
+            $key
+        );
+    }
+}
+if (!is_callable('sodium_crypto_aead_aegis128l_encrypt')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt()
+     * @param string $message
+     * @param string $additional_data
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_crypto_aead_aegis128l_encrypt($message, $additional_data, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt(
+            $message,
+            $additional_data,
+            $nonce,
+            $key
+        );
+    }
+}
+if (!is_callable('sodium_crypto_aead_aegis256_decrypt')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt()
+     * @param string $ciphertext
+     * @param string $additional_data
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws SodiumException
+     */
+    function sodium_crypto_aead_aegis256_decrypt($ciphertext, $additional_data, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt(
+            $ciphertext,
+            $additional_data,
+            $nonce,
+            $key
+        );
+    }
+}
+if (!is_callable('sodium_crypto_aead_aegis256_encrypt')) {
+    /**
+     * @see ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt()
+     * @param string $message
+     * @param string $additional_data
+     * @param string $nonce
+     * @param string $key
+     * @return string
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    function sodium_crypto_aead_aegis256_encrypt($message, $additional_data, $nonce, $key)
+    {
+        return ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt(
+            $message,
+            $additional_data,
+            $nonce,
+            $key
+        );
     }
 }
 if (!is_callable('sodium_crypto_aead_aes256gcm_decrypt')) {
