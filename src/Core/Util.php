@@ -345,7 +345,6 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $left
      * @param string $right
      * @return int
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function memcmp(
@@ -588,7 +587,6 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
-     * @throws SodiumException
      * @throws TypeError
      */
     public static function verify_16(
