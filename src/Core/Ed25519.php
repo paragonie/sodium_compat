@@ -281,7 +281,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
 
         try {
             ParagonIE_Sodium_Compat::memzero($az);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             $az = null;
         }
         return $sig;

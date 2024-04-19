@@ -116,7 +116,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         try {
             ParagonIE_Sodium_Compat::memzero($nonce);
             ParagonIE_Sodium_Compat::memzero($ephKeypair);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             if (isset($ephKeypair)) {
                 unset($ephKeypair);
             }
@@ -199,7 +199,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         try {
             ParagonIE_Sodium_Compat::memzero($nonce);
             ParagonIE_Sodium_Compat::memzero($ephKeypair);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             /** @psalm-suppress PossiblyUndefinedVariable */
             unset($ephKeypair);
         }
@@ -277,7 +277,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         try {
             ParagonIE_Sodium_Compat::memzero($nonce);
             ParagonIE_Sodium_Compat::memzero($ephKeypair);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             if (isset($ephKeypair)) {
                 unset($ephKeypair);
             }
@@ -450,7 +450,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         fclose($ofp);
         try {
             ParagonIE_Sodium_Compat::memzero($key);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             /** @psalm-suppress PossiblyUndefinedVariable */
             unset($key);
         }
@@ -532,7 +532,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         try {
             ParagonIE_Sodium_Compat::memzero($az);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             $az = null;
         }
         fclose($fp);
@@ -786,7 +786,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         try {
             ParagonIE_Sodium_Compat::memzero($block0);
             ParagonIE_Sodium_Compat::memzero($subkey);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             $block0 = null;
             $subkey = null;
         }
