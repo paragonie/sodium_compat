@@ -18,7 +18,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     public function __construct(
         #[\SensitiveParameter]
         string $key,
-        string $nonce = null
+        ?string $nonce = null
     ) {
         $this->key = $key;
         $this->counter = 1;

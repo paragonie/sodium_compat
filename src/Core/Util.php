@@ -170,7 +170,7 @@ abstract class ParagonIE_Sodium_Core_Util
         string $left,
         #[\SensitiveParameter]
         string $right,
-        int $len = null
+        ?int $len = null
     ): int {
         $leftLen = self::strlen($left);
         $rightLen = self::strlen($right);
