@@ -16,10 +16,6 @@
         {
             "in": "vendor/composer",
             "name": "*.php"
-        },
-        {
-            "in": "vendor/paragonie",
-            "name": "*.php"
         }
     ],
     "compactors": [
