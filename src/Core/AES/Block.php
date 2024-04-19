@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_AES_Block', false)) {
     return;
@@ -6,6 +7,8 @@ if (class_exists('ParagonIE_Sodium_Core_AES_Block', false)) {
 
 /**
  * @internal This should only be used by sodium_compat
+ *
+ * @psalm-suppress MissingTemplateParam
  */
 class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
 {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_AEGIS_State128L', false)) {
     return;

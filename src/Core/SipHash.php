@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_SipHash', false)) {
     return;
@@ -159,6 +160,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @return string
      * @throws SodiumException
      * @throws TypeError
+     *
+     * @psalm-suppress PossiblyUndefinedArrayOffset
      */
     public static function sipHash24(
         #[SensitiveParameter]

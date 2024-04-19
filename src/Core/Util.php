@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_Util', false)) {
     return;
@@ -88,50 +89,6 @@ abstract class ParagonIE_Sodium_Core_Util
     }
 
     /**
-     * Convert a binary string into a hexadecimal string without cache-timing
-     * leaks, returning uppercase letters (as per RFC 4648)
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param string $bin_string (raw binary)
-     * @return string
-     * @throws TypeError
-     */
-    public static function bin2hexUpper(
-        #[SensitiveParameter]
-        string $bin_string
-    ): string {
-        $hex = '';
-        $len = self::strlen($bin_string);
-        for ($i = 0; $i < $len; ++$i) {
-            /** @var array<int, int> $chunk */
-            $chunk = unpack('C', $bin_string[$i]);
-            /**
-             * Lower 16 bits
-             */
-            $c = $chunk[1] & 0xf;
-
-            /**
-             * Upper 16 bits
-             */
-            $b = $chunk[1] >> 4;
-
-            /**
-             * Use pack() and binary operators to turn the two integers
-             * into hexadecimal characters. We don't use chr() here, because
-             * it uses a lookup table internally and we want to avoid
-             * cache-timing side-channels.
-             */
-            $hex .= pack(
-                'CC',
-                (55 + $b + ((($b - 10) >> 8) & ~6)),
-                (55 + $c + ((($c - 10) >> 8) & ~6))
-            );
-        }
-        return $hex;
-    }
-
-    /**
      * Cache-timing-safe variant of ord()
      *
      * @internal You should not use this directly from another application
@@ -189,85 +146,6 @@ abstract class ParagonIE_Sodium_Core_Util
             $eq &= ((self::chrToInt($right[$i]) ^ self::chrToInt($left[$i])) - 1) >> 8;
         }
         return ($gt + $gt + $eq) - 1;
-    }
-
-    /**
-     * If a variable does not match a given type, throw a TypeError.
-     *
-     * @param mixed $mixedVar
-     * @param string $type
-     * @param int $argumentIndex
-     * @throws TypeError
-     * @throws SodiumException
-     * @return void
-     */
-    public static function declareScalarType(
-        #[SensitiveParameter]
-        mixed &$mixedVar = null,
-        string $type = 'void',
-        int $argumentIndex = 0
-    ): void {
-        if (func_num_args() === 0) {
-            /* Tautology, by default */
-            return;
-        }
-        if (func_num_args() === 1) {
-            throw new TypeError('Declared void, but passed a variable');
-        }
-        $realType = strtolower(gettype($mixedVar));
-        $type = strtolower($type);
-        switch ($type) {
-            case 'null':
-                if ($mixedVar !== null) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be null, ' . $realType . ' given.');
-                }
-                break;
-            case 'integer':
-            case 'int':
-                $allow = array('int', 'integer');
-                if (!in_array($type, $allow)) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be an integer, ' . $realType . ' given.');
-                }
-                $mixedVar = (int) $mixedVar;
-                break;
-            case 'boolean':
-            case 'bool':
-                $allow = array('bool', 'boolean');
-                if (!in_array($type, $allow)) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be a boolean, ' . $realType . ' given.');
-                }
-                $mixedVar = (bool) $mixedVar;
-                break;
-            case 'string':
-                if (!is_string($mixedVar)) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be a string, ' . $realType . ' given.');
-                }
-                break;
-            case 'decimal':
-            case 'double':
-            case 'float':
-                $allow = array('decimal', 'double', 'float');
-                if (!in_array($type, $allow)) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be a float, ' . $realType . ' given.');
-                }
-                $mixedVar = (float) $mixedVar;
-                break;
-            case 'object':
-                if (!is_object($mixedVar)) {
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be an object, ' . $realType . ' given.');
-                }
-                break;
-            case 'array':
-                if (!is_array($mixedVar)) {
-                    if ($mixedVar instanceof ArrayAccess) {
-                        return;
-                    }
-                    throw new TypeError('Argument ' . $argumentIndex . ' must be an array, ' . $realType . ' given.');
-                }
-                break;
-            default:
-                throw new SodiumException('Unknown type (' . $realType .') does not match expect type (' . $type . ')');
-        }
     }
 
     /**
@@ -570,6 +448,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param int|float $num
      * @return array<int, int>
+     * @psalm-suppress RedundantCastGivenDocblockType
      */
     public static function numericTo64BitInteger(int|float $num): array
     {
@@ -593,22 +472,7 @@ abstract class ParagonIE_Sodium_Core_Util
          * @var int $high
          * @var int $low
          */
-        return array($high, $low);
-    }
-
-    /**
-     * Store a 24-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     * @throws TypeError
-     */
-    public static function store_3(int $int): string
-    {
-        $packed = pack('N', $int);
-        return self::substr($packed, 1, 3);
+        return array((int) $high, (int) $low);
     }
 
     /**
@@ -623,20 +487,6 @@ abstract class ParagonIE_Sodium_Core_Util
     public static function store32_le(int $int): string
     {
        return pack('V', $int);
-    }
-
-    /**
-     * Store a 32-bit integer into a string, treating it as big-endian.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * @param int $int
-     * @return string
-     * @throws TypeError
-     */
-    public static function store_4(int $int): string
-    {
-        return pack('N', $int);
     }
 
     /**

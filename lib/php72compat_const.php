@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 const SODIUM_LIBRARY_MAJOR_VERSION = 9;
 const SODIUM_LIBRARY_MINOR_VERSION = 1;
 const SODIUM_LIBRARY_VERSION = '1.0.8';

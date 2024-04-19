@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_BLAKE2b', false)) {
     return;
@@ -450,7 +451,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             if ($plen > $fill) {
                 # memcpy( S->buf + left, in, fill ); /* Fill buffer */
                 for ($i = $fill; $i--;) {
-                    $ctx[3][$i + $left] = $p[$i + $offset];
+                    $ctx[3][$i + $left] = $p[(int) ($i + $offset)];
                 }
 
                 # S->buflen += fill;
@@ -477,7 +478,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
                 $plen -= $fill;
             } else {
                 for ($i = $plen; $i--;) {
-                    $ctx[3][$i + $left] = $p[$i + $offset];
+                    $ctx[3][$i + $left] = $p[(int) ($i + $offset)];
                 }
                 $ctx[4] += $plen;
                 $offset += $plen;

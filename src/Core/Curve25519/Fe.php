@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_Curve25519_Fe', false)) {
     return;
@@ -8,6 +9,8 @@ if (class_exists('ParagonIE_Sodium_Core_Curve25519_Fe', false)) {
  * Class ParagonIE_Sodium_Core_Curve25519_Fe
  *
  * This represents a Field Element
+ *
+ * @psalm-suppress MissingTemplateParam
  */
 class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
 {
@@ -98,6 +101,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      *
      * @param int $offset
      * @return int
+     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)

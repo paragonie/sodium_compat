@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_AES', false)) {
     return;
@@ -271,6 +272,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
         for ($i = $nk, $j = 0, $k = 0; $i < $nkf; ++$i) {
             if ($j === 0) {
                 $tmp = (($tmp & 0xff) << 24) | ($tmp >> 8);
+                /** @psalm-suppress InvalidArrayOffset */
                 $tmp = (self::subWord($tmp) ^ self::Rcon[$k]) & self::U32_MAX;
             } elseif ($nk > 6 && $j === 4) {
                 $tmp = self::subWord($tmp);

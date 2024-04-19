@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Crypto', false)) {
     return;
@@ -743,6 +744,7 @@ abstract class ParagonIE_Sodium_Crypto
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
 
         $k = null;
+        /** @psalm-suppress RiskyTruthyFalsyComparison */
         if (!empty($key)) {
             /** @var SplFixedArray $k */
             $k = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($key);

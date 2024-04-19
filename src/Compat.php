@@ -3219,6 +3219,7 @@ class ParagonIE_Sodium_Compat
             $k = $unpadded_len;
             for ($j = 0; $j <= $xpadded_len; ++$j) {
                 $i = (int) $i;
+                /** @psalm-suppress RedundantCast */
                 $k = (int) $k;
                 if ($j >= $unpadded_len) {
                     $padded[$j] = "\0";

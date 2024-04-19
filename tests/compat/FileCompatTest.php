@@ -38,5 +38,6 @@ class FileCompatTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(ParagonIE_Sodium_File::verify($sigA, 'test.txt', $public));
         $this->assertTrue(sodium_crypto_sign_verify_detached($sigB, $message, $public));
+        unlink('test.txt');
     }
 }
