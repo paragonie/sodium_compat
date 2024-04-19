@@ -11,11 +11,46 @@
 Sodium Compat is a pure PHP polyfill for the Sodium cryptography library 
 (libsodium), a core extension in PHP 7.2.0+ and otherwise [available in PECL](https://pecl.php.net/package/libsodium).
 
-This library tentatively supports PHP 5.2.4 - 8.x (latest), but officially
-only supports [non-EOL'd versions of PHP](https://secure.php.net/supported-versions.php).
-
 If you have the PHP extension installed, Sodium Compat will opportunistically
 and transparently use the PHP extension instead of our implementation.
+
+## Major Versions and Branches
+
+sodium_compat v1.21.0 was the last v1.x release from the master branch. From now
+on, all future releases that support PHP 5.2 - 5.6 and 32-bit integers will be
+[in the `v1.x` branch](v1.x).
+
+Newer versions of sodium_compat (i.e., v2.0.0) will continue to live in the master
+branch, unless a new major version is needed. The goal of this work is to improve
+code readability and performance, while reducing boilerplate code.
+
+When in doubt, refer to the README file in [the master branch](https://github.com/paragonie/sodium_compat/blob/master/README.md)
+for the latest in version information.
+
+### Which version should I use?
+
+| sodium_compat version | PHP versions supported | 32-bit support? | Branch                                                        |
+|-----------------------|------------------------|-----------------|---------------------------------------------------------------|
+| `v1.x.y`              | 5.2.4 - LATEST         | YES             | [v1.x](https://github.com/paragonie/sodium_compat/tree/v1.x)  |
+| `v2.x.y`              | 7.2 - LATEST           | NO              | **master**                                                    |
+
+If you need 32-bit PHP support (`PHP_INT_SIZE == 4`), continue using sodium_compat v1.x.
+If you want improved performance and smaller dependencies, use v2.x.
+
+We recommend libraries and frameworks set a Composer version constraint as follows:
+
+```javascript
+{
+    "require": {
+        /* ... */
+        "paragonie/sodium_compat": ">= 1"
+        /* ... */
+    }
+}
+```
+
+Applications should, conversely, specify the actual version that matters to them 
+and their deployments.
 
 ## IMPORTANT!
 
