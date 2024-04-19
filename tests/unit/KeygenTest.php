@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class KeygenTest
  */
-class KeygenTest extends PHPUnit_Framework_TestCase
+class KeygenTest extends TestCase
 {
-    public function testVectors()
+    public function testVectors(): void
     {
         $this->assertSame(
             ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES,

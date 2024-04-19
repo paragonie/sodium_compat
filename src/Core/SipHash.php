@@ -300,10 +300,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         # SIPROUND;
         # SIPROUND;
         # SIPROUND;
-        $v = self::sipRound($v);
-        $v = self::sipRound($v);
-        $v = self::sipRound($v);
-        $v = self::sipRound($v);
+        $v = self::sipRound(self::sipRound(self::sipRound(self::sipRound($v))));
 
         # b = v0 ^ v1 ^ v2 ^ v3;
         # STORE64_LE( out, b );

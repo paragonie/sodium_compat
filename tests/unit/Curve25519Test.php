@@ -1,14 +1,15 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class Curve25519Test
  */
-class Curve25519Test extends PHPUnit_Framework_TestCase
+class Curve25519Test extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -18,7 +19,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFe0()
+    public function testFe0(): void
     {
         $f = array(
             0,
@@ -44,7 +45,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFe1()
+    public function testFe1(): void
     {
         $f = array(
             1,
@@ -71,7 +72,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFeAdd()
+    public function testFeAdd(): void
     {
         $f = array(
             random_int(0, 65535),
@@ -118,7 +119,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFeSq()
+    public function testFeSq(): void
     {
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -163,7 +164,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFeSqDouble()
+    public function testFeSqDouble(): void
     {
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -209,7 +210,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws Exception
      * @throws TypeError
      */
-    public function testFeSub()
+    public function testFeSub(): void
     {
         $f = array(
             random_int(0, 65535),
@@ -256,7 +257,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testReduce()
+    public function testReduce(): void
     {
         $input = ParagonIE_Sodium_Core_Util::hex2bin(
             "2771062b6b536fe7ffbdda0320c3827b035df10d284df3f08222f04dbca7a4c2" .
@@ -286,7 +287,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScMulAdd()
+    public function testScMulAdd(): void
     {
         $a = ParagonIE_Sodium_Core_Util::hex2bin(
             "86eabc8e4c96193d290504e7c600df6cf8d8256131ec2c138a3e7e162e525404"
@@ -310,7 +311,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGeSelect()
+    public function testGeSelect(): void
     {
         $this->assertEquals(
             ParagonIE_Sodium_Core_Curve25519::ge_select(0, 6),
@@ -332,7 +333,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_mul()
      */
-    public function testFeMul()
+    public function testFeMul(): void
     {
         $f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(
@@ -490,7 +491,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_madd()
      */
-    public function testGeMAdd()
+    public function testGeMAdd(): void
     {
         $p = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
@@ -643,7 +644,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::ge_scalarmult_base()
      */
-    public function testGeScalarmultBase()
+    public function testGeScalarmultBase(): void
     {
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin(
             'a5cdb7382d5282472312e739b7b8fded4b0bc73a8d3b7ac24e6ee259df74800a' .
@@ -718,7 +719,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSlide()
+    public function testSlide(): void
     {
         $a = ParagonIE_Sodium_Core_Util::hex2bin(
             'fc2ef90e2ddab38c55d0edbf41167048061a03b99d00112dcc92777c1b17300c' .
@@ -774,7 +775,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGeDoubleScalarMultVartime()
+    public function testGeDoubleScalarMultVartime(): void
     {
         $h = ParagonIE_Sodium_Core_Util::hex2bin(
             'fc2ef90e2ddab38c55d0edbf41167048061a03b99d00112dcc92777c1b17300c' .
@@ -856,7 +857,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGeP3Double()
+    public function testGeP3Double(): void
     {
         $h = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
@@ -897,7 +898,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGeP3ToBytes32()
+    public function testGeP3ToBytes32(): void
     {
         $R = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
@@ -962,7 +963,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testFromBytes()
+    public function testFromBytes(): void
     {
         $a = ParagonIE_Sodium_Core_Curve25519::fe_frombytes(
             ParagonIE_Sodium_Core_Util::hex2bin('f7efaafeb83be2f97cd351b48e78f9d158269cdecedbcb503913172158b69336')
@@ -982,7 +983,7 @@ class Curve25519Test extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Curve25519::fe_mul()
      */
-    public function test121666Mul()
+    public function test121666Mul(): void
     {
         $f = array(
             6334098, -296341, -25402037, 14130508, 28301433, 10881396, -32579582, 21932206, 23531802, -8703561

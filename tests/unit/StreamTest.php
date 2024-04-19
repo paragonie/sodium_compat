@@ -1,14 +1,15 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class StreamTest
  */
-class StreamTest extends PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -16,7 +17,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
     /**
      * @throws SodiumException
      */
-    public function testXChaChaStream()
+    public function testXChaChaStream(): void
     {
         $key = hash('sha256', 'test', true);
         $nonce = ParagonIE_Sodium_Core_Util::substr(hash('sha224', 'test', true), 0, 24);
@@ -33,7 +34,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSalsaStream()
+    public function testSalsaStream(): void
     {
         $key = hash('sha256', 'test', true);
         $nonce = ParagonIE_Sodium_Core_Util::substr(hash('sha224', 'test', true), 0, 24);

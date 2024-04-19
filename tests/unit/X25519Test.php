@@ -1,14 +1,15 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class X25519Test
  */
-class X25519Test extends PHPUnit_Framework_TestCase
+class X25519Test extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -18,7 +19,7 @@ class X25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScalarmultBase()
+    public function testScalarmultBase(): void
     {
         $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
         $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
@@ -34,7 +35,7 @@ class X25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testRef10()
+    public function testRef10(): void
     {
         $staticSk = ParagonIE_Sodium_Core_Util::hex2bin(
             'b75b0a8b25c58aaef1d14fc9ce2bbaeac607407d1ade104aeaa196f8ac13b93f'
@@ -63,7 +64,7 @@ class X25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScalarmultZeroForLegacyPhpUnit()
+    public function testScalarmultZeroForLegacyPhpUnit(): void
     {
         $aliceSk = ParagonIE_Sodium_Core_Util::hex2bin(
             'b75b0a8b25c58aaef1d14fc9ce2bbaeac607407d1ade104aeaa196f8ac13b93f'
@@ -85,7 +86,7 @@ class X25519Test extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScalarmultZero()
+    public function testScalarmultZero(): void
     {
         $aliceSk = ParagonIE_Sodium_Core_Util::hex2bin(
             'b75b0a8b25c58aaef1d14fc9ce2bbaeac607407d1ade104aeaa196f8ac13b93f'

@@ -1,13 +1,14 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class XSalsa20Test extends PHPUnit_Framework_TestCase
+class XSalsa20Test extends TestCase
 {
     /**
      * @covers ParagonIE_Sodium_Core_XSalsa20::xsalsa20()
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testVectors()
+    public function testVectors(): void
     {
 
         $key = "\x80" . str_repeat("\x00", 31);

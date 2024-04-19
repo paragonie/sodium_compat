@@ -1,11 +1,12 @@
 <?php
 
-class PHP84Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+class PHP84Test extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (PHP_VERSION_ID < 80400 || !extension_loaded('sodium')) {
             $this->markTestSkipped('PHP < 8.4.0; skipping PHP 8.4 compatibility test suite.');
@@ -13,7 +14,7 @@ class PHP84Test extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testAegis128l()
+    public function testAegis128l(): void
     {
         $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
         $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_NPUBBYTES);
@@ -28,7 +29,7 @@ class PHP84Test extends PHPUnit_Framework_TestCase
         $this->assertSame($msg, $msg2b);
     }
 
-    public function testAegis256()
+    public function testAegis256(): void
     {
         $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
         $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_NPUBBYTES);

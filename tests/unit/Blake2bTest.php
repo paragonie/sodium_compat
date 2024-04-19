@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class Blake2bTest extends PHPUnit_Framework_TestCase
+class Blake2bTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -16,7 +17,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGenericHash()
+    public function testGenericHash(): void
     {
         $this->assertSame(
             'df654812bac492663825520ba2f6e67cf5ca5bdc13d4e7507a98cc4c2fcc3ad8',
@@ -30,7 +31,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     /**
      * @throws SodiumException
      */
-    public function testPersonalizedState()
+    public function testPersonalizedState(): void
     {
         $exp = ParagonIE_Sodium_Core_Util::hex2bin(
             '48c9bdf267e6096a3ba7ca8485ae67bb2bf894fe72f36e3cf1361d5f3af54fa5e4e0d0cf4b636b35260e0d1fbf0e60ab' .
@@ -96,7 +97,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGenericHashSaltPersonal()
+    public function testGenericHashSaltPersonal(): void
     {
         $outputs = array(
             'ba',
@@ -235,7 +236,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGenericHashUpdate()
+    public function testGenericHashUpdate(): void
     {
         for ($h = 8; $h < 15; ++$h) {
             $hbuf = new SplFixedArray(1 << $h);
@@ -274,7 +275,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Core_BLAKE2b::increment_counter()
      */
-    public function testCounter()
+    public function testCounter(): void
     {
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
 
@@ -305,7 +306,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Core_BLAKE2b::contextToString()
      * @covers ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray()
      */
-    public function testContext()
+    public function testContext(): void
     {
         $ctxA = ParagonIE_Sodium_Compat::crypto_generichash_init();
 
@@ -375,7 +376,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws Exception
      */
-    public function testGenericHashStream()
+    public function testGenericHashStream(): void
     {
         $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init();
         $this->assertSame(
@@ -453,7 +454,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testRotate()
+    public function testRotate(): void
     {
         $int = ParagonIE_Sodium_Core_BLAKE2b::new64(0x7f000000, 0x3ffffff0);
         $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0x3f800000, 0x1ffffff8);

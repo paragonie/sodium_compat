@@ -1,13 +1,14 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class WycheproofTest extends PHPUnit_Framework_TestCase
+class WycheproofTest extends TestCase
 {
     private $dir;
 
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
         $this->dir = dirname(__FILE__) . '/wycheproof/';
@@ -16,7 +17,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
     /**
      * @throws Exception
      */
-    public function testChaCha20Poly1305()
+    public function testChaCha20Poly1305(): void
     {
         if (empty($this->dir)) {
             $this->before();
@@ -27,7 +28,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
     /**
      * @throws Exception
      */
-    public function testXChaCha20Poly1305()
+    public function testXChaCha20Poly1305(): void
     {
         if (empty($this->dir)) {
             $this->before();
@@ -38,7 +39,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
     /**
      * @throws Exception
      */
-    public function testSipHash24()
+    public function testSipHash24(): void
     {
         if (empty($this->dir)) {
             $this->before();
@@ -49,7 +50,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
     /**
      * @throws Exception
      */
-    public function testX25519()
+    public function testX25519(): void
     {
         if (!defined('DO_PEDANTIC_TEST')) {
             $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
@@ -66,7 +67,7 @@ class WycheproofTest extends PHPUnit_Framework_TestCase
      *
      * @throws Exception
      */
-    public function mainTestingLoop($filename, $method, $progress = false)
+    public function mainTestingLoop($filename, $method, $progress = false): void
     {
         $total = 0;
         $document = $this->getJson($this->dir . $filename);

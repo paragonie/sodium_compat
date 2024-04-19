@@ -1,15 +1,15 @@
 <?php
-
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SodiumCompatTest
  */
-class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
+class Ristretto255CompatTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (!extension_loaded('sodium') && !defined('SODIUM_COMPAT_POLYFILLED_RISTRETTO255')) {
             $this->markTestSkipped('ext/sodium is not installed; skipping the compatibility test suite.');
@@ -17,7 +17,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testRistrettoFromHash()
+    public function testRistrettoFromHash(): void
     {
         $seed = random_bytes(64);
         $fromhash_1 = ParagonIE_Sodium_Compat::ristretto255_from_hash($seed, true);
@@ -28,7 +28,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRistrettoOps()
+    public function testRistrettoOps(): void
     {
         $p = sodium_crypto_core_ristretto255_random();
         $q = sodium_crypto_core_ristretto255_random();
@@ -47,7 +47,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
     /**
      * @throws SodiumException
      */
-    public function testRistrettoScalarOps()
+    public function testRistrettoScalarOps(): void
     {
         $p = sodium_crypto_core_ristretto255_scalar_random();
         $q = sodium_crypto_core_ristretto255_scalar_random();
@@ -97,7 +97,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
      *
      * @throws SodiumException
      */
-    public function testExchange()
+    public function testExchange(): void
     {
         $x = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_CORE_RISTRETTO255_HASHBYTES);
         $px1 = sodium_crypto_core_ristretto255_from_hash($x);
@@ -165,7 +165,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
      * @dataProvider brokenPHP81TestProvider
      * @throws SodiumException
      */
-    public function testBrokenPHP81($k_hex, $a_hex, $expect)
+    public function testBrokenPHP81($k_hex, $a_hex, $expect): void
     {
         $k = sodium_hex2bin($k_hex);
         $a = sodium_hex2bin($a_hex);

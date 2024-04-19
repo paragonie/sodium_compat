@@ -165,9 +165,9 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         }
 
         $l0 = 0;
+        /** @var int $c */
         $c = 64 - $c;
 
-        /** @var int $c */
         if ($c < 32) {
             $h0 = ((int) ($x[0]) << $c) | (
                 (
@@ -211,8 +211,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $x
      * @param int $i
      * @return SplFixedArray
-     *
-     * @throws SodiumException
      */
     protected static function load64(SplFixedArray $x, int $i): SplFixedArray
     {

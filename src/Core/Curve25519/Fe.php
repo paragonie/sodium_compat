@@ -17,7 +17,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     /**
      * @var array<int, int>
      */
-    protected array $container = array();
+    protected array $container = [];
 
     /**
      * @var int
@@ -63,7 +63,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -79,7 +79,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      * @return bool
      */
     #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -91,7 +91,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      * @return void
      */
     #[ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }

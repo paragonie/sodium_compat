@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class FileTest extends PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -16,7 +17,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testBox()
+    public function testBox(): void
     {
         $randomSeed = random_bytes(32);
         $randomNonce = random_bytes(24);
@@ -91,7 +92,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testGenerichash()
+    public function testGenerichash(): void
     {
         $randomSeed = random_bytes(32);
         $randomNonce = random_bytes(24);
@@ -125,7 +126,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_File::box_seal()
      * @covers ParagonIE_Sodium_File::box_seal_open()
      */
-    public function testSeal()
+    public function testSeal(): void
     {
         $randomSeed = random_bytes(32);
         $randomNonce = random_bytes(24);
@@ -166,7 +167,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_File::secretbox()
      * @covers ParagonIE_Sodium_File::secretbox_open()
      */
-    public function testSecretbox()
+    public function testSecretbox(): void
     {
         $randomNonce = random_bytes(24);
         $orig = ParagonIE_Sodium_Compat::$fastMult;
@@ -198,7 +199,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSignVerify()
+    public function testSignVerify(): void
     {
         $randomSeed = random_bytes(32);
         $randomNonce = random_bytes(24);

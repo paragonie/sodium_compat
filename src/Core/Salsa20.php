@@ -175,7 +175,7 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         }
         try {
             ParagonIE_Sodium_Compat::memzero($kcopy);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             $kcopy = null;
         }
         return $c;
@@ -237,7 +237,7 @@ abstract class ParagonIE_Sodium_Core_Salsa20 extends ParagonIE_Sodium_Core_Util
         try {
             ParagonIE_Sodium_Compat::memzero($block);
             ParagonIE_Sodium_Compat::memzero($kcopy);
-        } catch (SodiumException $ex) {
+        } catch (SodiumException) {
             $block = null;
             $kcopy = null;
         }

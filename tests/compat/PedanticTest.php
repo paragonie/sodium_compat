@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PedanticTest
@@ -7,7 +8,7 @@
  *
  * To include this in the test suite: vendor/bin/phpunit --bootstrap=autoload-pedantic.php
  */
-class PedanticTest extends PHPUnit_Framework_TestCase
+class PedanticTest extends TestCase
 {
     const DEFAULT_MAX_LENGTH = 32;
 
@@ -16,7 +17,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (!extension_loaded('libsodium')) {
             $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
@@ -37,7 +38,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @after
      */
-    public function after()
+    public function after(): void
     {
         ParagonIE_Sodium_Compat::$fastMult = $this->oldFastMult;
     }
@@ -45,7 +46,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @return array<int, int>
      */
-    public function getInteresting32BitInts()
+    public function getInteresting32BitInts(): array
     {
         return array(
             0x00000000, 0x01234567,
@@ -72,7 +73,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @return array<int, string>
      * @throws TypeError
      */
-    public function getInteresting16ByteStrings()
+    public function getInteresting16ByteStrings(): array
     {
         $strings = array();
         foreach ($this->getInteresting32BitInts() as $i => $int) {
@@ -86,7 +87,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @return array<int, string>
      * @throws TypeError
      */
-    public function getInteresting32ByteStrings()
+    public function getInteresting32ByteStrings(): array
     {
         $strings = array();
         foreach ($this->getInteresting32BitInts() as $i => $int) {
@@ -156,7 +157,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt()
      */
-    public function testCryptoAeadChapoly()
+    public function testCryptoAeadChapoly(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -187,7 +188,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      */
-    public function testCryptoAuth()
+    public function testCryptoAuth(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -212,7 +213,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */
-    public function testCryptoBox()
+    public function testCryptoBox(): void
     {
         $secretKeys = $this->getCryptoBoxKeys();
         $publicKeys = array();
@@ -253,7 +254,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_generichash()
      */
-    public function testGenerichash()
+    public function testGenerichash(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -285,7 +286,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
      */
-    public function testCryptoSecretbox()
+    public function testCryptoSecretbox(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -311,7 +312,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_shorthash()
      */
-    public function testShorthash()
+    public function testShorthash(): void
     {
         $keys = $this->getInteresting16ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -333,7 +334,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
      */
-    public function testCryptoSign()
+    public function testCryptoSign(): void
     {
         $seeds = $this->getCryptoBoxKeys();
         $secretKeys = array();

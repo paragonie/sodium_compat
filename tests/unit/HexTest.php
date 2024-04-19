@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class HexTest extends PHPUnit_Framework_TestCase
+class HexTest extends TestCase
 {
     public function hexProvider()
     {
@@ -17,7 +18,7 @@ class HexTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider hexProvider
      */
-    public function testHex2Bin($hex, $ignore, $binary, $fail)
+    public function testHex2Bin($hex, $ignore, $binary, $fail): void
     {
         try {
             $decoded = ParagonIE_Sodium_Compat::hex2bin($hex, $ignore);

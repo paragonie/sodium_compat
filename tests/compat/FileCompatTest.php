@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class FileCompatTest extends PHPUnit_Framework_TestCase
+class FileCompatTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (PHP_VERSION_ID < 70200) {
             $this->markTestSkipped('PHP < 7.2.0; skipping PHP 7.2 File compatibility test suite.');
@@ -16,7 +17,7 @@ class FileCompatTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure
      */
-    public function testCompat()
+    public function testCompat(): void
     {
         $keypair = hex2bin(
             '5f2e1b83a832f890fc463fb3ff1cdf672e474eb07d26944d4c4bf5d385f49835' .

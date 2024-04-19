@@ -1,14 +1,16 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class SodiumCompatTest
  */
-class NamespacedTest extends PHPUnit_Framework_TestCase
+class NamespacedTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (PHP_VERSION_ID < 50300) {
             $this->markTestSkipped('PHP < 5.3.0; skipping PHP 5.3+ compatibility test suite.');
@@ -19,7 +21,7 @@ class NamespacedTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      */
-    public function testCryptoSecretBox()
+    public function testCryptoSecretBox(): void
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);

@@ -1,15 +1,13 @@
 <?php
 
-if (PHP_VERSION_ID >= 70000 && !class_exists('PHPUnit_Framework_TestCase')) {
-    require_once dirname(dirname(dirname(__FILE__))) . '/autoload-phpunit.php';
-}
+use PHPUnit\Framework\TestCase;
 
-class Aes256GcmTest extends PHPUnit_Framework_TestCase
+class Aes256GcmTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -17,7 +15,7 @@ class Aes256GcmTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()
      */
-    public function testIsAvailable()
+    public function testIsAvailable(): void
     {
         $this->assertTrue(
             is_bool(
@@ -31,7 +29,7 @@ class Aes256GcmTest extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt()
      */
-    public function testAes256Gcm()
+    public function testAes256Gcm(): void
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
