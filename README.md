@@ -266,6 +266,10 @@ insightful technical information you may find helpful.
     * `crypto_sign()`
     * `crypto_sign_open()`
 * PECL Libsodium Features
+    * `crypto_aead_aegis128l_encrypt()`
+    * `crypto_aead_aegis128l_decrypt()`
+    * `crypto_aead_aegis256_encrypt()`
+    * `crypto_aead_aegis256_decrypt()`
     * `crypto_aead_aes256gcm_encrypt()`
     * `crypto_aead_aes256gcm_decrypt()`
     * `crypto_aead_chacha20poly1305_encrypt()`
@@ -343,13 +347,13 @@ insightful technical information you may find helpful.
 
 ### Features Excluded from this Polyfill
 
-* `\Sodium\memzero()` - Although we expose this API endpoint, we can't reliably
+* `sodium_memzero()` - Although we expose this API endpoint, we can't reliably
   zero buffers from PHP.
   
   If you have the PHP extension installed, sodium_compat
   will use the native implementation to zero out the string provided. Otherwise
   it will throw a `SodiumException`.
-* `\Sodium\crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2
+* `sodium_crypto_pwhash()` - It's not feasible to polyfill scrypt or Argon2
   into PHP and get reasonable performance. Users would feel motivated to select
   parameters that downgrade security to avoid denial of service (DoS) attacks.
   
@@ -361,6 +365,8 @@ insightful technical information you may find helpful.
   To detect support for Argon2i at runtime, use
   `ParagonIE_Sodium_Compat::crypto_pwhash_is_available()`, which returns a
    boolean value (`TRUE` or `FALSE`).
+* Libsodium's HKDF API (`crypto_kdf_hkdf_*()`) is not included because PHP has
+  its own [HMAC features](https://php.met/hash_hmac) amd it was not deemed necessary.
 
 ### PHPCompatibility Ruleset
 

@@ -1,4 +1,9 @@
 <?php
+
+if (class_exists('ParagonIE_Sodium_Core_AEGIS_State128L', false)) {
+    return;
+}
+
 if (!defined('SODIUM_COMPAT_AEGIS_C0')) {
     define('SODIUM_COMPAT_AEGIS_C0', "\x00\x01\x01\x02\x03\x05\x08\x0d\x15\x22\x37\x59\x90\xe9\x79\x62");
 }
@@ -237,20 +242,24 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
            S'6 = AESRound(S5, S6)
            S'7 = AESRound(S6, S7)
          */
-        $s_0 = ParagonIE_Sodium_Core_AES::aesRound(
-            $this->state[7],
-            $this->state[0] ^ $m0
+        list($s_0, $s_1) = ParagonIE_Sodium_Core_AES::doubleRound(
+            $this->state[7], $this->state[0] ^ $m0,
+            $this->state[0], $this->state[1]
         );
-        $s_1 = ParagonIE_Sodium_Core_AES::aesRound($this->state[0], $this->state[1]);
-        $s_2 = ParagonIE_Sodium_Core_AES::aesRound($this->state[1], $this->state[2]);
-        $s_3 = ParagonIE_Sodium_Core_AES::aesRound($this->state[2], $this->state[3]);
-        $s_4 = ParagonIE_Sodium_Core_AES::aesRound(
-            $this->state[3],
-            $this->state[4] ^ $m1
+
+        list($s_2, $s_3) = ParagonIE_Sodium_Core_AES::doubleRound(
+            $this->state[1], $this->state[2],
+            $this->state[2], $this->state[3]
         );
-        $s_5 = ParagonIE_Sodium_Core_AES::aesRound($this->state[4], $this->state[5]);
-        $s_6 = ParagonIE_Sodium_Core_AES::aesRound($this->state[5], $this->state[6]);
-        $s_7 = ParagonIE_Sodium_Core_AES::aesRound($this->state[6], $this->state[7]);
+
+        list($s_4, $s_5) = ParagonIE_Sodium_Core_AES::doubleRound(
+            $this->state[3], $this->state[4] ^ $m1,
+            $this->state[4], $this->state[5]
+        );
+        list($s_6, $s_7) = ParagonIE_Sodium_Core_AES::doubleRound(
+            $this->state[5], $this->state[6],
+            $this->state[6], $this->state[7]
+        );
 
         /*
            S0  = S'0

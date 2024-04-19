@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('ParagonIE_Sodium_Core_AES_KeySchedule', false)) {
+    return;
+}
+
 /**
  * @internal This should only be used by sodium_compat
  */
