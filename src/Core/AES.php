@@ -446,6 +446,56 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     }
 
     /**
+     * Process two AES blocks in one shot.
+     *
+     * @param string $b0  First AES block
+     * @param string $rk0 First round key
+     * @param string $b1  Second AES block
+     * @param string $rk1 Second round key
+     * @return string[]
+     */
+    public static function doubleRound($b0, $rk0, $b1, $rk1)
+    {
+        $q = ParagonIE_Sodium_Core_AES_Block::init();
+        // First block
+        $q[0] = self::load_4(self::substr($b0, 0, 4));
+        $q[2] = self::load_4(self::substr($b0, 4, 4));
+        $q[4] = self::load_4(self::substr($b0, 8, 4));
+        $q[6] = self::load_4(self::substr($b0, 12, 4));
+        // Second block
+        $q[1] = self::load_4(self::substr($b1, 0, 4));
+        $q[3] = self::load_4(self::substr($b1, 4, 4));
+        $q[5] = self::load_4(self::substr($b1, 8, 4));
+        $q[7] = self::load_4(self::substr($b1, 12, 4));;
+
+        $rk = ParagonIE_Sodium_Core_AES_Block::init();
+        // First round key
+        $rk[0] = self::load_4(self::substr($rk0, 0, 4));
+        $rk[2] = self::load_4(self::substr($rk0, 4, 4));
+        $rk[4] = self::load_4(self::substr($rk0, 8, 4));
+        $rk[6] = self::load_4(self::substr($rk0, 12, 4));
+        // Second round key
+        $rk[1] = self::load_4(self::substr($rk1, 0, 4));
+        $rk[3] = self::load_4(self::substr($rk1, 4, 4));
+        $rk[5] = self::load_4(self::substr($rk1, 8, 4));
+        $rk[7] = self::load_4(self::substr($rk1, 12, 4));
+
+        $q->orthogonalize();
+        self::sbox($q);
+        $q->shiftRows();
+        $q->mixColumns();
+        $q->orthogonalize();
+        // add round key without key schedule:
+        for ($i = 0; $i < 8; ++$i) {
+            $q[$i] ^= $rk[$i];
+        }
+        return array(
+            self::store32_le($q[0]) . self::store32_le($q[2]) . self::store32_le($q[4]) . self::store32_le($q[6]),
+            self::store32_le($q[1]) . self::store32_le($q[3]) . self::store32_le($q[5]) . self::store32_le($q[7]),
+        );
+    }
+
+    /**
      * @param ParagonIE_Sodium_Core_AES_Expanded $skey
      * @param ParagonIE_Sodium_Core_AES_Block $q
      * @return void

@@ -331,6 +331,36 @@ class AESTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testAesDoubleRound()
+    {
+        $in = ParagonIE_Sodium_Core_Util::hex2bin('000102030405060708090a0b0c0d0e0f');
+        $rk = ParagonIE_Sodium_Core_Util::hex2bin('101112131415161718191a1b1c1d1e1f');
+        $this->assertSame(
+            '7a7b4e5638782546a8c0477a3b813f437a7b4e5638782546a8c0477a3b813f43',
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                implode('', ParagonIE_Sodium_Core_AES::doubleRound($in, $rk, $in, $rk))
+            )
+        );
+
+        // Let's randomize this to test equivalence.
+        $in0 = random_bytes(16);
+        $in1 = random_bytes(16);
+        $rk0 = random_bytes(16);
+        $rk1 = random_bytes(16);
+
+        $c0 = ParagonIE_Sodium_Core_AES::aesRound($in0, $rk0);
+        $c1 = ParagonIE_Sodium_Core_AES::aesRound($in1, $rk1);
+        list($c2, $c3) = ParagonIE_Sodium_Core_AES::doubleRound($in0, $rk0, $in1, $rk1);
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::bin2hex($c0),
+            ParagonIE_Sodium_Core_Util::bin2hex($c2)
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Core_Util::bin2hex($c1),
+            ParagonIE_Sodium_Core_Util::bin2hex($c3)
+        );
+    }
+
     /**
      * @dataProvider aes128ecbProvider
      * @covers ParagonIE_Sodium_Core_AES::encryptBlockECB
