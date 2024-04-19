@@ -157,13 +157,13 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @throws TypeError
      */
     public static function crypto_scalarmult_curve25519_ref10(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $n,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $p
     ): string {
         # for (i = 0;i < 32;++i) e[i] = n[i];
-        $e = '' . $n;
+        $e = $n;
         # e[0] &= 248;
         $e[0] = self::intToChr(
             self::chrToInt($e[0]) & 248
@@ -300,11 +300,11 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @throws TypeError
      */
     public static function crypto_scalarmult_curve25519_ref10_base(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $n
     ): string {
         # for (i = 0;i < 32;++i) e[i] = n[i];
-        $e = '' . $n;
+        $e = $n;
 
         # e[0] &= 248;
         $e[0] = self::intToChr(

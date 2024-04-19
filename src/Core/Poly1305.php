@@ -22,7 +22,7 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
      */
     public static function onetimeauth(
         string $m,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): string {
         if (self::strlen($key) < 32) {
@@ -51,7 +51,7 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
     public static function onetimeauth_verify(
         string $mac,
         string $m,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): bool {
         if (self::strlen($key) < 32) {

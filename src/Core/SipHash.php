@@ -18,7 +18,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @return int[]
      *
      */
-    public static function sipRound(array $v)
+    public static function sipRound(array $v): array
     {
         # v0 += v1;
         list($v[0], $v[1]) = self::add(
@@ -90,7 +90,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @param int[] $b
      * @return array<int, mixed>
      */
-    public static function add(array $a, array $b)
+    public static function add(array $a, array $b): array
     {
         /** @var int $x1 */
         $x1 = $a[1] + $b[1];
@@ -161,9 +161,9 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function sipHash24(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $in,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): string {
         $inlen = self::strlen($in);

@@ -22,7 +22,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     {
         $v &= 0xffffffff;
         $n &= 31;
-        return (int) (
+        return (
             0xffffffff & (
                 ($v << $n)
                     |
@@ -78,7 +78,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      */
     public static function encryptBytes(
         ParagonIE_Sodium_Core_ChaCha20_Ctx $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message = ''
     ): string {
         $bytes = self::strlen($message);
@@ -317,7 +317,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     public static function stream(
         int $len = 64,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = ''
     ): string {
         return self::encryptBytes(
@@ -339,7 +339,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     public static function ietfStream(
         int $len,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = ''
     ): string {
         return self::encryptBytes(
@@ -360,10 +360,10 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function ietfStreamXorIc(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         string $ic = ''
     ): string {
@@ -385,10 +385,10 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function streamXorIc(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         string $ic = ''
     ): string {

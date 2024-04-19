@@ -32,7 +32,7 @@ if (!is_callable('sodium_crypto_aead_aegis128l_decrypt')) {
      * @param string $additional_data
      * @param string $nonce
      * @param string $key
-     * @return string
+     * @return string|bool
      * @throws SodiumException
      */
     function sodium_crypto_aead_aegis128l_decrypt(
@@ -41,7 +41,7 @@ if (!is_callable('sodium_crypto_aead_aegis128l_decrypt')) {
         string $nonce,
         #[\SensitiveParameter]
         string $key
-    ): string {
+    ): string|bool {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt(
             $ciphertext,
             $additional_data,
@@ -84,7 +84,7 @@ if (!is_callable('sodium_crypto_aead_aegis256_decrypt')) {
      * @param string $additional_data
      * @param string $nonce
      * @param string $key
-     * @return string
+     * @return string|bool
      * @throws SodiumException
      */
     function sodium_crypto_aead_aegis256_decrypt(
@@ -93,7 +93,7 @@ if (!is_callable('sodium_crypto_aead_aegis256_decrypt')) {
         string $nonce,
         #[\SensitiveParameter]
         string $key
-    ): string {
+    ): string|bool {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt(
             $ciphertext,
             $additional_data,

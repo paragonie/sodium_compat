@@ -19,10 +19,10 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @throws TypeError
      */
     public static function encode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src
     ): string {
-        return self::doEncode($src, true);
+        return self::doEncode($src);
     }
 
     /**
@@ -35,7 +35,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @throws TypeError
      */
     public static function encodeUnpadded(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src
     ): string {
         return self::doEncode($src, false);
@@ -48,7 +48,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @throws TypeError
      */
     protected static function doEncode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src,
         bool $pad = true
     ): string {
@@ -106,7 +106,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @throws TypeError
      */
     public static function decode(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $src,
         bool $strictPadding = false
     ): string {
@@ -181,11 +181,8 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            } elseif ($i < $srcLen && $strictPadding) {
-                $err |= 1;
             }
         }
-        /** @var bool $check */
         $check = ($err === 0);
         if (!$check) {
             throw new RangeException(
@@ -207,7 +204,7 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @return int
      */
     protected static function decode6Bits(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         int $src
     ): int {
         $ret = -1;

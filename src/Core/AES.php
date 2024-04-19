@@ -16,9 +16,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     /**
      * @var int[] AES round constants
      */
-    private static $Rcon = array(
-        0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36
-    );
+    private const Rcon = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36];
 
     /**
      * Mutates the values of $q!
@@ -248,23 +246,16 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      */
     public static function keySchedule(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): ParagonIE_Sodium_Core_AES_KeySchedule {
         $key_len = self::strlen($key);
-        switch ($key_len) {
-            case 16:
-                $num_rounds = 10;
-                break;
-            case 24:
-                $num_rounds = 12;
-                break;
-            case 32:
-                $num_rounds = 14;
-                break;
-            default:
-                throw new SodiumException('Invalid key length: ' . $key_len);
-        }
+        $num_rounds = match ($key_len) {
+            16 => 10,
+            24 => 12,
+            32 => 14,
+            default => throw new SodiumException('Invalid key length: ' . $key_len),
+        };
         $skey = array();
         $comp_skey = array();
         $nk = $key_len >> 2;
@@ -280,7 +271,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
         for ($i = $nk, $j = 0, $k = 0; $i < $nkf; ++$i) {
             if ($j === 0) {
                 $tmp = (($tmp & 0xff) << 24) | ($tmp >> 8);
-                $tmp = (self::subWord($tmp) ^ self::$Rcon[$k]) & self::U32_MAX;
+                $tmp = (self::subWord($tmp) ^ self::Rcon[$k]) & self::U32_MAX;
             } elseif ($nk > 6 && $j === 4) {
                 $tmp = self::subWord($tmp);
             }
@@ -339,7 +330,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      */
     public static function decryptBlockECB(
         string $message,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): string {
         if (self::strlen($message) !== 16) {
@@ -371,9 +362,9 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      */
     public static function encryptBlockECB(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): string {
         if (self::strlen($message) !== 16) {
@@ -426,9 +417,9 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @return string
      */
     public static function aesRound(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $x,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $y
     ): string {
         $q = ParagonIE_Sodium_Core_AES_Block::init();
@@ -468,13 +459,13 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @return string[]
      */
     public static function doubleRound(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b0,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $rk0,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b1,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $rk1
     ): array {
         $q = ParagonIE_Sodium_Core_AES_Block::init();
@@ -487,7 +478,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
         $q[1] = self::load_4(self::substr($b1, 0, 4));
         $q[3] = self::load_4(self::substr($b1, 4, 4));
         $q[5] = self::load_4(self::substr($b1, 8, 4));
-        $q[7] = self::load_4(self::substr($b1, 12, 4));;
+        $q[7] = self::load_4(self::substr($b1, 12, 4));
 
         $rk = ParagonIE_Sodium_Core_AES_Block::init();
         // First round key

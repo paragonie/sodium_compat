@@ -25,7 +25,7 @@ abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Sals
      */
     public static function hsalsa20(
         string $in,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $k,
         ?string $c = null
     ): string {

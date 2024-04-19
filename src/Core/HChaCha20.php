@@ -18,7 +18,7 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
      */
     public static function hChaCha20(
         string $in = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         ?string $c = null
     ): string {
@@ -100,13 +100,13 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
             list($x3, $x4, $x9, $x14) = self::quarterRound($x3, $x4, $x9, $x14);
         }
 
-        return self::store32_le((int) ($x0  & 0xffffffff)) .
-            self::store32_le((int) ($x1  & 0xffffffff)) .
-            self::store32_le((int) ($x2  & 0xffffffff)) .
-            self::store32_le((int) ($x3  & 0xffffffff)) .
-            self::store32_le((int) ($x12 & 0xffffffff)) .
-            self::store32_le((int) ($x13 & 0xffffffff)) .
-            self::store32_le((int) ($x14 & 0xffffffff)) .
-            self::store32_le((int) ($x15 & 0xffffffff));
+        return self::store32_le(($x0  & 0xffffffff)) .
+            self::store32_le(($x1  & 0xffffffff)) .
+            self::store32_le(($x2  & 0xffffffff)) .
+            self::store32_le(($x3  & 0xffffffff)) .
+            self::store32_le(($x12 & 0xffffffff)) .
+            self::store32_le(($x13 & 0xffffffff)) .
+            self::store32_le(($x14 & 0xffffffff)) .
+            self::store32_le(($x15 & 0xffffffff));
     }
 }

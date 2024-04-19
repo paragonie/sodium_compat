@@ -16,7 +16,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @param string|null $nonce
      */
     public function __construct(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key,
         ?string $nonce = null
     ) {
@@ -25,7 +25,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
         if (is_null($nonce)) {
             $nonce = str_repeat("\0", 12);
         }
-        $this->nonce = str_pad($nonce, 12, "\0", STR_PAD_RIGHT);;
+        $this->nonce = str_pad($nonce, 12, "\0");
         $this->_pad = str_repeat("\0", 4);
     }
 
@@ -61,7 +61,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     public function getNonce(): string
     {
         if (ParagonIE_Sodium_Core_Util::strlen($this->nonce) !== 12) {
-            $this->nonce = str_pad($this->nonce, 12, "\0", STR_PAD_RIGHT);
+            $this->nonce = str_pad($this->nonce, 12, "\0");
         }
         return $this->nonce;
     }
@@ -97,15 +97,14 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @return self
      */
     public function rekey(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $newKeyAndNonce
     ): self {
         $this->key = ParagonIE_Sodium_Core_Util::substr($newKeyAndNonce, 0, 32);
         $this->nonce = str_pad(
             ParagonIE_Sodium_Core_Util::substr($newKeyAndNonce, 32),
             12,
-            "\0",
-            STR_PAD_RIGHT
+            "\0"
         );
         return $this;
     }
@@ -115,7 +114,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @return self
      */
     public function xorNonce(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): self {
         $this->nonce = ParagonIE_Sodium_Core_Util::xorStrings(
@@ -123,8 +122,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
             str_pad(
                 ParagonIE_Sodium_Core_Util::substr($str, 0, 8),
                 12,
-                "\0",
-                STR_PAD_RIGHT
+                "\0"
             )
         );
         return $this;
@@ -135,7 +133,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @return self
      */
     public static function fromString(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $string
     ): self {
         $state = new ParagonIE_Sodium_Core_SecretStream_State(

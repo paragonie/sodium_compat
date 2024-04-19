@@ -124,7 +124,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_point_is_canonical(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): int {
         $c = (self::chrToInt($s[31]) & 0x7f) ^ 0x7f;
@@ -145,7 +145,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_frombytes(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s,
         bool $skipCanonicalCheck = false
     ): array {
@@ -337,7 +337,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_from_hash(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $h
     ): string {
         if (self::strlen($h) !== 64) {
@@ -373,7 +373,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function is_valid_point(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $p
     ): int {
         $result = self::ristretto255_frombytes($p);
@@ -413,9 +413,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_sub(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $p,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $q
     ): string {
         $p_res = self::ristretto255_frombytes($p);
@@ -441,9 +441,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      */
     protected static function h2c_string_to_hash_sha256(
         int $hLen,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         ?string $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $msg
     ): string {
         $h = array_fill(0, $hLen, 0);
@@ -498,9 +498,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      */
     protected static function h2c_string_to_hash_sha512(
         int $hLen,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         ?string $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $msg
     ): string {
         $h = array_fill(0, $hLen, 0);
@@ -556,20 +556,17 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      */
     public static function h2c_string_to_hash(
         int $hLen,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         ?string $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $msg,
         int $hash_alg
     ): string {
-        switch ($hash_alg) {
-            case self::CORE_H2C_SHA256:
-                return self::h2c_string_to_hash_sha256($hLen, $ctx, $msg);
-            case self::CORE_H2C_SHA512:
-                return self::h2c_string_to_hash_sha512($hLen, $ctx, $msg);
-            default:
-                throw new SodiumException('Invalid H2C hash algorithm');
-        }
+        return match ($hash_alg) {
+            self::CORE_H2C_SHA256 => self::h2c_string_to_hash_sha256($hLen, $ctx, $msg),
+            self::CORE_H2C_SHA512 => self::h2c_string_to_hash_sha512($hLen, $ctx, $msg),
+            default => throw new SodiumException('Invalid H2C hash algorithm'),
+        };
     }
 
     /**
@@ -580,9 +577,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     protected static function _string_to_element(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         ?string $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $msg,
         int $hash_alg
     ): string {
@@ -618,7 +615,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_scalar_complement(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         return self::scalar_complement($s);
@@ -630,7 +627,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @return string
      */
     public static function ristretto255_scalar_invert(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         return self::sc25519_invert($s);
@@ -642,7 +639,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_scalar_negate(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         return self::scalar_negate($s);
@@ -656,9 +653,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_scalar_add(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $x,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $y
     ): string {
         return self::scalar_add($x, $y);
@@ -672,9 +669,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_scalar_sub(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $x,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $y
     ): string {
         return self::scalar_sub($x, $y);
@@ -686,9 +683,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @return string
      */
     public static function ristretto255_scalar_mul(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $x,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $y
     ): string {
         return self::sc25519_mul($x, $y);
@@ -702,9 +699,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function ristretto255_scalar_from_string(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $ctx,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $msg,
         int $hash_alg
     ): string {
@@ -726,7 +723,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @return string
      */
     public static function ristretto255_scalar_reduce(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         return self::sc_reduce($s);
@@ -739,9 +736,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function scalarmult_ristretto255(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $n,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $p
     ): string {
         if (self::strlen($n) !== 32) {
@@ -772,7 +769,7 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @throws SodiumException
      */
     public static function scalarmult_ristretto255_base(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $n
     ): string {
         $t = self::stringToIntArray($n);

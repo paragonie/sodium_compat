@@ -55,7 +55,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @return self
      */
     public static function init(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key,
         string $nonce
     ): self {
@@ -144,7 +144,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
             ^ ParagonIE_Sodium_Core_Util::andStrings($this->state[2], $this->state[3]);
 
         // t = ZeroPad(cn, 128)
-        $t = str_pad($cn, 16, "\0", STR_PAD_RIGHT);
+        $t = str_pad($cn, 16, "\0");
 
         // out = t ^ z
         $out = $t ^ $z;
@@ -153,7 +153,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
         $xn = ParagonIE_Sodium_Core_Util::substr($out, 0, $len);
 
         // v = ZeroPad(xn, 128)
-        $v = str_pad($xn, 16, "\0", STR_PAD_RIGHT);
+        $v = str_pad($xn, 16, "\0");
         // Update(v)
         $this->update($v);
 
@@ -167,7 +167,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @throws SodiumException
      */
     public function enc(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $xi
     ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($xi) !== 16) {

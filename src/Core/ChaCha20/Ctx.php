@@ -27,7 +27,7 @@ class ParagonIE_Sodium_Core_ChaCha20_Ctx extends ParagonIE_Sodium_Core_Util impl
      * @throws TypeError
      */
     public function __construct(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         string $iv = '',
         string $counter = ''

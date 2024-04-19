@@ -46,7 +46,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     public static function seed_keypair(
         string &$pk,
         string &$sk,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $seed
     ): string {
         if (self::strlen($seed) !== self::SEED_BYTES) {
@@ -67,7 +67,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws TypeError
      */
     public static function secretkey(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $keypair
     ): string {
         if (self::strlen($keypair) !== self::KEYPAIR_BYTES) {
@@ -84,7 +84,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws TypeError
      */
     public static function publickey(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $keypair
     ): string {
         if (self::strlen($keypair) !== self::KEYPAIR_BYTES) {
@@ -102,7 +102,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws TypeError
      */
     public static function publickey_from_secretkey(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $sk
     ): string {
         /** @var string $sk */
@@ -165,7 +165,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws TypeError
      */
     public static function sk_to_pk(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $sk
     ): string {
         return self::ge_p3_tobytes(
@@ -186,7 +186,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign(
         string $message,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $sk
     ): string {
         /** @var string $signature */
@@ -230,7 +230,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      */
     public static function sign_detached(
         string $message,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $sk
     ): string {
         # crypto_hash_sha512(az, sk, 32);
@@ -512,7 +512,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws SodiumException
      */
     public static function scalar_complement(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         $t_ = self::L . str_repeat("\x00", 32);
@@ -545,7 +545,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws SodiumException
      */
     public static function scalar_negate(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $s
     ): string {
         $t_ = self::L . str_repeat("\x00", 32) ;
@@ -561,9 +561,9 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws SodiumException
      */
     public static function scalar_add(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b
     ): string {
         $a_ = $a . str_repeat("\x00", 32);
@@ -579,9 +579,9 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
      * @throws SodiumException
      */
     public static function scalar_sub(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $x,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $y
     ): string {
         $yn = self::scalar_negate($y);

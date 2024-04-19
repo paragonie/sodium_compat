@@ -22,7 +22,7 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
     public static function stream(
         int $len = 64,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = ''
     ): string {
         if (self::strlen($nonce) !== 24) {
@@ -53,7 +53,7 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
     public static function ietfStream(
         int $len = 64,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = ''
     ): string {
         if (self::strlen($nonce) !== 24) {
@@ -83,10 +83,10 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws TypeError
      */
     public static function streamXorIc(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message,
         string $nonce = '',
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         string $ic = ''
     ): string {
@@ -115,7 +115,7 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws TypeError
      */
     public static function ietfStreamXorIc(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $message,
         string $nonce = '',
         string $key = '',

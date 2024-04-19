@@ -17,7 +17,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return int
      */
     public static function abs(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         int $integer,
         int $size = 0
     ): int {
@@ -29,7 +29,7 @@ abstract class ParagonIE_Sodium_Core_Util
         }
 
         $negative = -(($integer >> $size) & 1);
-        return (int) (
+        return (
             ($integer ^ $negative)
                 +
             (($negative >> $realSize) & 1)
@@ -43,9 +43,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      */
     public static function andStrings(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b
     ): string {
         $len = self::strlen($a);
@@ -66,7 +66,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function bin2hex(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $binaryString
     ): string {
         $hex = '';
@@ -98,7 +98,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function bin2hexUpper(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $bin_string
     ): string {
         $hex = '';
@@ -142,7 +142,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function chrToInt(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $chr
     ): int {
         if (self::strlen($chr) !== 1) {
@@ -166,9 +166,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function compare(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $left,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $right,
         ?int $len = null
     ): int {
@@ -176,8 +176,8 @@ abstract class ParagonIE_Sodium_Core_Util
         $rightLen = self::strlen($right);
         if ($len === null) {
             $len = max($leftLen, $rightLen);
-            $left = str_pad($left, $len, "\x00", STR_PAD_RIGHT);
-            $right = str_pad($right, $len, "\x00", STR_PAD_RIGHT);
+            $left = str_pad($left, $len, "\x00");
+            $right = str_pad($right, $len, "\x00");
         }
 
         $gt = 0;
@@ -202,7 +202,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return void
      */
     public static function declareScalarType(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         mixed &$mixedVar = null,
         string $type = 'void',
         int $argumentIndex = 0
@@ -259,10 +259,8 @@ abstract class ParagonIE_Sodium_Core_Util
                 break;
             case 'array':
                 if (!is_array($mixedVar)) {
-                    if (is_object($mixedVar)) {
-                        if ($mixedVar instanceof ArrayAccess) {
-                            return;
-                        }
+                    if ($mixedVar instanceof ArrayAccess) {
+                        return;
                     }
                     throw new TypeError('Argument ' . $argumentIndex . ' must be an array, ' . $realType . ' given.');
                 }
@@ -282,9 +280,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function hashEquals(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $left,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $right
     ): bool {
         return hash_equals($left, $right);
@@ -304,7 +302,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function hex2bin(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $hexString,
         string $ignore = '',
         bool $strictPadding = false
@@ -365,7 +363,7 @@ abstract class ParagonIE_Sodium_Core_Util
     {
         $args = $ints;
         foreach ($args as $i => $v) {
-            $args[$i] = (int) ($v & 0xff);
+            $args[$i] = ($v & 0xff);
         }
         array_unshift($args, str_repeat('C', count($ints)));
         return (string) (call_user_func_array('pack', $args));
@@ -381,7 +379,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function intToChr(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         int $int
     ): string {
         return pack('C', $int);
@@ -398,7 +396,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function load_3(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $string
     ): int {
         /* Input validation: */
@@ -409,7 +407,7 @@ abstract class ParagonIE_Sodium_Core_Util
         }
         /** @var array<int, int> $unpacked */
         $unpacked = unpack('V', $string . "\0");
-        return (int) ($unpacked[1] & 0xffffff);
+        return ($unpacked[1] & 0xffffff);
     }
 
     /**
@@ -423,7 +421,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function load_4(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $string
     ): int {
         /* Input validation: */
@@ -450,7 +448,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function load64_le(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $string
     ): int {
         /* Input validation: */
@@ -473,9 +471,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function memcmp(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $left,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $right
     ): int {
         if (self::hashEquals($left, $right)) {
@@ -502,9 +500,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @return int
      */
     public static function mul(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         int $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         int $b,
         int $size = 0
     ): int {
@@ -667,7 +665,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function strlen(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str
     ): int {
         return (
@@ -707,7 +705,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function substr(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $str,
         int $start = 0,
         ?int $length = null
@@ -744,9 +742,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function verify_16(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b
     ): bool {
         return self::hashEquals(
@@ -768,9 +766,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function verify_32(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b
     ): bool {
         return self::hashEquals(
@@ -790,9 +788,9 @@ abstract class ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function xorStrings(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $a,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $b
     ): string {
         return $a ^ $b;

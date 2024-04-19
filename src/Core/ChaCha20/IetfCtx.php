@@ -22,7 +22,7 @@ class ParagonIE_Sodium_Core_ChaCha20_IetfCtx extends ParagonIE_Sodium_Core_ChaCh
      * @throws TypeError
      */
     public function __construct(
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key = '',
         string $iv = '',
         string $counter = ''

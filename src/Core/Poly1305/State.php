@@ -48,7 +48,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @throws InvalidArgumentException
      * @throws TypeError
      */
-    public function __construct($key = '')
+    public function __construct(string $key = '')
     {
         if (self::strlen($key) < 32) {
             throw new InvalidArgumentException(
@@ -110,7 +110,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public function update($message = '')
+    public function update(string $message = ''): self
     {
         $bytes = self::strlen($message);
         if ($bytes < 1) {
@@ -173,15 +173,14 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      *
      * @param string $message
      * @param int $bytes
-     * @return self
+     * @return static
      * @throws TypeError
      */
-    public function blocks($message, $bytes)
+    public function blocks(string $message, int $bytes): static
     {
         if (self::strlen($message) < 16) {
-            $message = str_pad($message, 16, "\x00", STR_PAD_RIGHT);
+            $message = str_pad($message, 16, "\x00");
         }
-        /** @var int $hibit */
         $hibit = $this->final ? 0 : 1 << 24; /* 1 << 128 */
         $r0 = $this->r[0];
         $r1 = $this->r[1];
@@ -250,39 +249,27 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
             );
 
             /* (partial) h %= p */
-            /** @var int $c */
             $c = $d0 >> 26;
-            /** @var int $h0 */
             $h0 = $d0 & 0x3ffffff;
             $d1 += $c;
 
-            /** @var int $c */
             $c = $d1 >> 26;
-            /** @var int $h1 */
             $h1 = $d1 & 0x3ffffff;
             $d2 += $c;
 
-            /** @var int $c */
             $c = $d2 >> 26;
-            /** @var int $h2  */
             $h2 = $d2 & 0x3ffffff;
             $d3 += $c;
 
-            /** @var int $c */
             $c = $d3 >> 26;
-            /** @var int $h3 */
             $h3 = $d3 & 0x3ffffff;
             $d4 += $c;
 
-            /** @var int $c */
             $c = $d4 >> 26;
-            /** @var int $h4 */
             $h4 = $d4 & 0x3ffffff;
             $h0 += self::mul($c, 5, 3);
 
-            /** @var int $c */
             $c = $h0 >> 26;
-            /** @var int $h0 */
             $h0 &= 0x3ffffff;
             $h1 += $c;
 
@@ -310,7 +297,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
      * @return string
      * @throws TypeError
      */
-    public function finish()
+    public function finish(): string
     {
         /* process the remaining block */
         if ($this->leftover) {

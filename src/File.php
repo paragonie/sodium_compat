@@ -29,7 +29,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         string $inputFile,
         string $outputFile,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $keyPair
     ): bool {
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES) {
@@ -82,7 +82,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         string $inputFile,
         string $outputFile,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $keypair
     ): bool {
         /* Input validation: */
@@ -224,7 +224,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     public static function box_seal_open(
         string $inputFile,
         string $outputFile,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $ecdhKeypair
     ): bool {
         /* Input validation: */
@@ -297,7 +297,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     public static function generichash(
         string $filePath,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         ?string $key = '',
         int $outputLength = 32
     ): string {
@@ -363,7 +363,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         string $inputFile,
         string $outputFile,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): bool {
         /* Input validation: */
@@ -417,7 +417,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         string $inputFile,
         string $outputFile,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): bool {
         /* Input validation: */
@@ -470,7 +470,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      */
     public static function sign(
         string $filePath,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $secretKey
     ): string {
         /* Input validation: */
@@ -645,7 +645,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $ofp,
         int $mlen,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $boxKeypair
     ): bool {
         return self::secretbox_encrypt(
@@ -676,7 +676,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $ofp,
         int $mlen,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $boxKeypair
     ): bool {
         return self::secretbox_decrypt(
@@ -708,7 +708,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $ofp,
         int $mlen,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): bool {
         $plaintext = fread($ifp, 32);
@@ -762,7 +762,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
          * Set the cursor to the end of the first half-block. All future bytes will
          * generated from salsa20_xor_ic, starting from 1 (second block).
          */
-        fseek($ifp, $first32, SEEK_SET);
+        fseek($ifp, $first32);
 
         while ($mlen > 0) {
             $blockSize = min($mlen, self::BUFFER_SIZE);
@@ -795,9 +795,9 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
          * Write the Poly1305 authentication tag that provides integrity
          * over the ciphertext (encrypt-then-MAC)
          */
-        fseek($ofp, $start, SEEK_SET);
+        fseek($ofp, $start);
         fwrite($ofp, $state->finish(), ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_MACBYTES);
-        fseek($ofp, $end, SEEK_SET);
+        fseek($ofp, $end);
         unset($state);
 
         return true;
@@ -820,7 +820,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $ofp,
         int $mlen,
         string $nonce,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         string $key
     ): bool {
         $tag = fread($ifp, 16);
@@ -909,7 +909,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         }
         $res = ParagonIE_Sodium_Core_Util::verify_16($tag, $state->finish());
 
-        fseek($ifp, $pos, SEEK_SET);
+        fseek($ifp, $pos);
         return $res;
     }
 
@@ -936,7 +936,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         $originalPosition = self::ftell($fp);
 
         // Move file pointer to beginning of file
-        fseek($fp, 0, SEEK_SET);
+        fseek($fp, 0);
         for ($i = 0; $i < $size; $i += self::BUFFER_SIZE) {
             /** @var string|bool $message */
             $message = fread(
@@ -951,7 +951,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             hash_update($hash, $message);
         }
         // Reset file pointer's position
-        fseek($fp, $originalPosition, SEEK_SET);
+        fseek($fp, $originalPosition);
         return $hash;
     }
 
