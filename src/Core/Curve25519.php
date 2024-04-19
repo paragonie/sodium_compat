@@ -22,7 +22,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_0()
+    public static function fe_0(): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -36,7 +36,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_1()
+    public static function fe_1(): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         return ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
             array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -57,7 +57,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function fe_add(
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
         ParagonIE_Sodium_Core_Curve25519_Fe $g
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         /** @var array<int, int> $arr */
         $arr = array();
         for ($i = 0; $i < 10; ++$i) {
@@ -80,8 +80,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function fe_cmov(
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
         ParagonIE_Sodium_Core_Curve25519_Fe $g,
-        $b = 0
-    ) {
+        int $b = 0
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         /** @var array<int, int> $h */
         $h = array();
         $b *= -1;
@@ -100,7 +100,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_copy(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_copy(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $h = clone $f;
         return $h;
@@ -117,8 +117,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws RangeException
      * @throws TypeError
      */
-    public static function fe_frombytes($s)
-    {
+    public static function fe_frombytes(
+        #[\SensitiveParameter]
+        string $s
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         if (self::strlen($s) !== 32) {
             throw new RangeException('Expected a 32-byte string.');
         }
@@ -189,7 +191,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $h
      * @return string
      */
-    public static function fe_tobytes(ParagonIE_Sodium_Core_Curve25519_Fe $h)
+    public static function fe_tobytes(ParagonIE_Sodium_Core_Curve25519_Fe $h): string
     {
         $h0 = (int) $h[0];
         $h1 = (int) $h[1];
@@ -296,7 +298,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function fe_isnegative(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_isnegative(ParagonIE_Sodium_Core_Curve25519_Fe $f): int
     {
         $str = self::fe_tobytes($f);
         return (int) (self::chrToInt($str[0]) & 1);
@@ -312,7 +314,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function fe_isnonzero(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_isnonzero(ParagonIE_Sodium_Core_Curve25519_Fe $f): bool
     {
         static $zero;
         if ($zero === null) {
@@ -341,7 +343,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function fe_mul(
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
         ParagonIE_Sodium_Core_Curve25519_Fe $g
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         // Ensure limbs aren't oversized.
         $f = self::fe_normalize($f);
         $g = self::fe_normalize($g);
@@ -563,7 +565,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      * @psalm-suppress MixedAssignment
      */
-    public static function fe_neg(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_neg(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $h = new ParagonIE_Sodium_Core_Curve25519_Fe();
         for ($i = 0; $i < 10; ++$i) {
@@ -582,7 +584,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_sq(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_sq(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $f = self::fe_normalize($f);
         $f0 = (int) $f[0];
@@ -747,7 +749,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_sq2(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_sq2(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $f = self::fe_normalize($f);
         $f0 = (int) $f[0];
@@ -908,7 +910,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $Z
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_invert(ParagonIE_Sodium_Core_Curve25519_Fe $Z)
+    public static function fe_invert(ParagonIE_Sodium_Core_Curve25519_Fe $Z): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $z = clone $Z;
         $t0 = self::fe_sq($z);
@@ -968,7 +970,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $z
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_pow22523(ParagonIE_Sodium_Core_Curve25519_Fe $z)
+    public static function fe_pow22523(ParagonIE_Sodium_Core_Curve25519_Fe $z): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $z = self::fe_normalize($z);
         # fe_sq(t0, z);
@@ -1096,8 +1098,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      * @psalm-suppress MixedOperand
      */
-    public static function fe_sub(ParagonIE_Sodium_Core_Curve25519_Fe $f, ParagonIE_Sodium_Core_Curve25519_Fe $g)
-    {
+    public static function fe_sub(
+        ParagonIE_Sodium_Core_Curve25519_Fe $f,
+        ParagonIE_Sodium_Core_Curve25519_Fe $g
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         return self::fe_normalize(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
                 array(
@@ -1130,7 +1134,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function ge_add(
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p,
         ParagonIE_Sodium_Core_Curve25519_Ge_Cached $q
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
         $r->X = self::fe_add($p->Y, $p->X);
         $r->Y = self::fe_sub($p->Y, $p->X);
@@ -1155,7 +1159,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function slide($a)
+    public static function slide(string $a): array
     {
         if (self::strlen($a) < 256) {
             if (self::strlen($a) < 16) {
@@ -1210,11 +1214,12 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ge_frombytes_negate_vartime($s)
-    {
+    public static function ge_frombytes_negate_vartime(
+        string $s
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         static $d = null;
         if (!$d) {
-            $d = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$d);
+            $d = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::D);
         }
 
         # fe_frombytes(h->Y,s);
@@ -1274,7 +1279,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             }
             $h->X = self::fe_mul(
                 $h->X,
-                ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$sqrtm1)
+                ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::SQRTM1)
             );
         }
 
@@ -1303,7 +1308,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $R,
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p,
         ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $q
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $r = clone $R;
         $r->X = self::fe_add($p->Y, $p->X);
         $r->Y = self::fe_sub($p->Y, $p->X);
@@ -1331,7 +1336,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $R,
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p,
         ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $q
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $r = clone $R;
 
         $r->X = self::fe_add($p->Y, $p->X);
@@ -1354,8 +1359,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
-    public static function ge_p1p1_to_p2(ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p)
-    {
+    public static function ge_p1p1_to_p2(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P2{
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P2();
         $r->X = self::fe_mul($p->X, $p->T);
         $r->Y = self::fe_mul($p->Y, $p->Z);
@@ -1369,8 +1375,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
-    public static function ge_p1p1_to_p3(ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p)
-    {
+    public static function ge_p1p1_to_p3(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P3();
         $r->X = self::fe_mul($p->X, $p->T);
         $r->Y = self::fe_mul($p->Y, $p->Z);
@@ -1384,7 +1391,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
-    public static function ge_p2_0()
+    public static function ge_p2_0(): ParagonIE_Sodium_Core_Curve25519_Ge_P2
     {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_P2(
             self::fe_0(),
@@ -1399,8 +1406,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P2 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
      */
-    public static function ge_p2_dbl(ParagonIE_Sodium_Core_Curve25519_Ge_P2 $p)
-    {
+    public static function ge_p2_dbl(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P2 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
 
         $r->X = self::fe_sq($p->X);
@@ -1421,7 +1429,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      *
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
-    public static function ge_p3_0()
+    public static function ge_p3_0(): ParagonIE_Sodium_Core_Curve25519_Ge_P3
     {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             self::fe_0(),
@@ -1437,11 +1445,12 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_Cached
      */
-    public static function ge_p3_to_cached(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p)
-    {
+    public static function ge_p3_to_cached(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_Cached {
         static $d2 = null;
         if ($d2 === null) {
-            $d2 = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$d2);
+            $d2 = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::D2);
         }
         /** @var ParagonIE_Sodium_Core_Curve25519_Fe $d2 */
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_Cached();
@@ -1458,8 +1467,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P2
      */
-    public static function ge_p3_to_p2(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p)
-    {
+    public static function ge_p3_to_p2(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P2 {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_P2(
             self::fe_copy($p->X),
             self::fe_copy($p->Y),
@@ -1475,8 +1485,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ge_p3_tobytes(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $h)
-    {
+    public static function ge_p3_tobytes(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $h
+    ): string {
         $recip = self::fe_invert($h->Z);
         $x = self::fe_mul($h->X, $recip);
         $y = self::fe_mul($h->Y, $recip);
@@ -1493,8 +1504,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P1p1
      */
-    public static function ge_p3_dbl(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p)
-    {
+    public static function ge_p3_dbl(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $q = self::ge_p3_to_p2($p);
         return self::ge_p2_dbl($q);
     }
@@ -1502,7 +1514,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     /**
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_Precomp
      */
-    public static function ge_precomp_0()
+    public static function ge_precomp_0(): ParagonIE_Sodium_Core_Curve25519_Ge_Precomp
     {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
             self::fe_1(),
@@ -1518,7 +1530,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param int $c
      * @return int
      */
-    public static function equal($b, $c)
+    public static function equal(int $b, int $c): int
     {
         return (int) ((($b ^ $c) - 1) >> 31) & 1;
     }
@@ -1531,7 +1543,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function negative($char)
+    public static function negative($char): int
     {
         if (is_int($char)) {
             return ($char >> 63) & 1;
@@ -1553,11 +1565,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function cmov(
         ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $t,
         ParagonIE_Sodium_Core_Curve25519_Ge_Precomp $u,
-        $b
-    ) {
-        if (!is_int($b)) {
-            throw new InvalidArgumentException('Expected an integer.');
-        }
+        #[\SensitiveParameter]
+        int $b
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_Precomp {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
             self::fe_cmov($t->yplusx,  $u->yplusx,  $b),
             self::fe_cmov($t->yminusx, $u->yminusx, $b),
@@ -1574,8 +1584,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function ge_cmov_cached(
         ParagonIE_Sodium_Core_Curve25519_Ge_Cached $t,
         ParagonIE_Sodium_Core_Curve25519_Ge_Cached $u,
-        $b
-    ) {
+        #[\SensitiveParameter]
+        int $b
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_Cached {
         $b &= 1;
         $ret = new ParagonIE_Sodium_Core_Curve25519_Ge_Cached();
         $ret->YplusX  = self::fe_cmov($t->YplusX,  $u->YplusX,  $b);
@@ -1591,8 +1602,11 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_Cached
      * @throws SodiumException
      */
-    public static function ge_cmov8_cached(array $cached, $b)
-    {
+    public static function ge_cmov8_cached(
+        array $cached,
+        #[\SensitiveParameter]
+        int $b
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_Cached {
         // const unsigned char bnegative = negative(b);
         // const unsigned char babs      = b - (((-bnegative) & b) * ((signed char) 1 << 1));
         $bnegative = self::negative($b);
@@ -1643,13 +1657,13 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
      */
-    public static function ge_select($pos = 0, $b = 0)
+    public static function ge_select(int $pos = 0, int $b = 0): ParagonIE_Sodium_Core_Curve25519_Ge_Precomp
     {
         static $base = null;
         if ($base === null) {
             $base = array();
             /** @var int $i */
-            foreach (self::$base as $i => $bas) {
+            foreach (self::BASE as $i => $bas) {
                 for ($j = 0; $j < 8; ++$j) {
                     $base[$i][$j] = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
                         ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($bas[$j][0]),
@@ -1700,7 +1714,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function ge_sub(
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p,
         ParagonIE_Sodium_Core_Curve25519_Ge_Cached $q
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
 
         $r->X = self::fe_add($p->Y, $p->X);
@@ -1726,7 +1740,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ge_tobytes(ParagonIE_Sodium_Core_Curve25519_Ge_P2 $h)
+    public static function ge_tobytes(ParagonIE_Sodium_Core_Curve25519_Ge_P2 $h): string
     {
         $recip = self::fe_invert($h->Z);
         $x = self::fe_mul($h->X, $recip);
@@ -1751,10 +1765,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @psalm-suppress MixedArrayAccess
      */
     public static function ge_double_scalarmult_vartime(
-        $a,
+        string $a,
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A,
-        $b
-    ) {
+        string $b
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P2 {
         /** @var array<int, ParagonIE_Sodium_Core_Curve25519_Ge_Cached> $Ai */
         $Ai = array();
 
@@ -1763,9 +1777,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         if (!$Bi) {
             for ($i = 0; $i < 8; ++$i) {
                 $Bi[$i] = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
-                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$base2[$i][0]),
-                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$base2[$i][1]),
-                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::$base2[$i][2])
+                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::BASE2[$i][0]),
+                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::BASE2[$i][1]),
+                    ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(self::BASE2[$i][2])
                 );
             }
         }
@@ -1876,8 +1890,11 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedOperand
      */
-    public static function ge_scalarmult($a, $p)
-    {
+    public static function ge_scalarmult(
+        #[\SensitiveParameter]
+        string $a,
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         $e = array_fill(0, 64, 0);
 
         /** @var ParagonIE_Sodium_Core_Curve25519_Ge_Cached[] $pi */
@@ -2014,8 +2031,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedOperand
      */
-    public static function ge_scalarmult_base($a)
-    {
+    public static function ge_scalarmult_base(
+        #[\SensitiveParameter]
+        string $a
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         /** @var array<int, int> $e */
         $e = array();
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
@@ -2074,8 +2093,14 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @return string
      * @throws TypeError
      */
-    public static function sc_muladd($a, $b, $c)
-    {
+    public static function sc_muladd(
+        #[\SensitiveParameter]
+        string $a,
+        #[\SensitiveParameter]
+        string $b,
+        #[\SensitiveParameter]
+        string $c
+    ): string {
         $a0 = 2097151 & self::load_3(self::substr($a, 0, 3));
         $a1 = 2097151 & (self::load_4(self::substr($a, 2, 4)) >> 5);
         $a2 = 2097151 & (self::load_3(self::substr($a, 5, 3)) >> 2);
@@ -2525,8 +2550,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @return string
      * @throws TypeError
      */
-    public static function sc_reduce($s)
-    {
+    public static function sc_reduce(
+        #[\SensitiveParameter]
+        string $s
+    ): string {
         $s0 = 2097151 & self::load_3(self::substr($s, 0, 3));
         $s1 = 2097151 & (self::load_4(self::substr($s, 2, 4)) >> 5);
         $s2 = 2097151 & (self::load_3(self::substr($s, 5, 3)) >> 2);
@@ -2842,8 +2869,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A
      * @return ParagonIE_Sodium_Core_Curve25519_Ge_P3
      */
-    public static function ge_mul_l(ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A)
-    {
+    public static function ge_mul_l(
+        ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A
+    ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         $aslide = array(
             13, 0, 0, 0, 0, -1, 0, 0, 0, 0, -11, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0,
             0, 0, 0, -3, 0, 0, 0, 0, -13, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 3, 0,
@@ -2903,8 +2931,12 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $b
      * @return string
      */
-    public static function sc25519_mul($a, $b)
-    {
+    public static function sc25519_mul(
+        #[\SensitiveParameter]
+        string $a,
+        #[\SensitiveParameter]
+        string $b
+    ): string {
         //    int64_t a0  = 2097151 & load_3(a);
         //    int64_t a1  = 2097151 & (load_4(a + 2) >> 5);
         //    int64_t a2  = 2097151 & (load_3(a + 5) >> 2);
@@ -3718,8 +3750,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $s
      * @return string
      */
-    public static function sc25519_sq($s)
-    {
+    public static function sc25519_sq(
+        #[\SensitiveParameter]
+        string $s
+    ): string {
         return self::sc25519_mul($s, $s);
     }
 
@@ -3729,8 +3763,13 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $a
      * @return string
      */
-    public static function sc25519_sqmul($s, $n, $a)
-    {
+    public static function sc25519_sqmul(
+        #[\SensitiveParameter]
+        string $s,
+        int $n,
+        #[\SensitiveParameter]
+        string $a
+    ): string {
         for ($i = 0; $i < $n; ++$i) {
             $s = self::sc25519_sq($s);
         }
@@ -3741,8 +3780,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $s
      * @return string
      */
-    public static function sc25519_invert($s)
-    {
+    public static function sc25519_invert(
+        #[\SensitiveParameter]
+        string $s
+    ): string {
         $_10 = self::sc25519_sq($s);
         $_11 = self::sc25519_mul($s, $_10);
         $_100 = self::sc25519_mul($s, $_11);
@@ -3789,8 +3830,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param string $s
      * @return string
      */
-    public static function clamp($s)
-    {
+    public static function clamp(
+        #[\SensitiveParameter]
+        string $s
+    ): string {
         $s_ = self::stringToIntArray($s);
         $s_[0] &= 248;
         $s_[31] |= 64;
@@ -3806,8 +3849,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_normalize(ParagonIE_Sodium_Core_Curve25519_Fe $f)
-    {
+    public static function fe_normalize(
+        ParagonIE_Sodium_Core_Curve25519_Fe $f
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
 
         $g = self::fe_copy($f);

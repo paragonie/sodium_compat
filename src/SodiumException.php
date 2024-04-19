@@ -1,11 +1,12 @@
 <?php
 
-if (!class_exists('SodiumException', false)) {
-    /**
-     * Class SodiumException
-     */
-    class SodiumException extends Exception
-    {
+if (class_exists('SodiumException', false)) {
+    return;
+}
+/**
+ * Class SodiumException
+ */
+class SodiumException extends Exception
+{
 
-    }
 }

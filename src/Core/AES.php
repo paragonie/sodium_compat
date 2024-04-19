@@ -26,7 +26,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param ParagonIE_Sodium_Core_AES_Block $q
      * @return void
      */
-    public static function sbox(ParagonIE_Sodium_Core_AES_Block $q)
+    public static function sbox(ParagonIE_Sodium_Core_AES_Block $q): void
     {
         /**
          * @var int $x0
@@ -189,7 +189,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param ParagonIE_Sodium_Core_AES_Block $q
      * @return void
      */
-    public static function invSbox(ParagonIE_Sodium_Core_AES_Block $q)
+    public static function invSbox(ParagonIE_Sodium_Core_AES_Block $q): void
     {
         self::processInversion($q);
         self::sbox($q);
@@ -205,7 +205,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param ParagonIE_Sodium_Core_AES_Block $q
      * @return void
      */
-    protected static function processInversion(ParagonIE_Sodium_Core_AES_Block $q)
+    protected static function processInversion(ParagonIE_Sodium_Core_AES_Block $q): void
     {
         $q0 = (~$q[0]) & self::U32_MAX;
         $q1 = (~$q[1]) & self::U32_MAX;
@@ -229,7 +229,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param int $x
      * @return int
      */
-    public static function subWord($x)
+    public static function subWord(int $x): int
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(
             array($x, $x, $x, $x, $x, $x, $x, $x)
@@ -247,8 +247,10 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @return ParagonIE_Sodium_Core_AES_KeySchedule
      * @throws SodiumException
      */
-    public static function keySchedule($key)
-    {
+    public static function keySchedule(
+        #[\SensitiveParameter]
+        string $key
+    ): ParagonIE_Sodium_Core_AES_KeySchedule {
         $key_len = self::strlen($key);
         switch ($key_len) {
             case 16:
@@ -319,8 +321,8 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     public static function addRoundKey(
         ParagonIE_Sodium_Core_AES_Block $q,
         ParagonIE_Sodium_Core_AES_KeySchedule $skey,
-        $offset = 0
-    ) {
+        int $offset = 0
+    ): void {
         $block = $skey->getRoundKey($offset);
         for ($j = 0; $j < 8; ++$j) {
             $q[$j] = ($q[$j] ^ $block[$j]) & ParagonIE_Sodium_Core_Util::U32_MAX;
@@ -335,8 +337,11 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @return string
      * @throws SodiumException
      */
-    public static function decryptBlockECB($message, $key)
-    {
+    public static function decryptBlockECB(
+        string $message,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         if (self::strlen($message) !== 16) {
             throw new SodiumException('decryptBlockECB() expects a 16 byte message');
         }
@@ -365,8 +370,12 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @return string
      * @throws SodiumException
      */
-    public static function encryptBlockECB($message, $key)
-    {
+    public static function encryptBlockECB(
+        #[\SensitiveParameter]
+        string $message,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         if (self::strlen($message) !== 16) {
             throw new SodiumException('encryptBlockECB() expects a 16 byte message');
         }
@@ -398,7 +407,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     public static function bitsliceEncryptBlock(
         ParagonIE_Sodium_Core_AES_Expanded $skey,
         ParagonIE_Sodium_Core_AES_Block $q
-    ) {
+    ): void {
         self::addRoundKey($q, $skey);
         for ($u = 1; $u < $skey->getNumRounds(); ++$u) {
             self::sbox($q);
@@ -416,8 +425,12 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param string $y
      * @return string
      */
-    public static function aesRound($x, $y)
-    {
+    public static function aesRound(
+        #[\SensitiveParameter]
+        string $x,
+        #[\SensitiveParameter]
+        string $y
+    ): string {
         $q = ParagonIE_Sodium_Core_AES_Block::init();
         $q[0] = self::load_4(self::substr($x, 0, 4));
         $q[2] = self::load_4(self::substr($x, 4, 4));
@@ -454,8 +467,16 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
      * @param string $rk1 Second round key
      * @return string[]
      */
-    public static function doubleRound($b0, $rk0, $b1, $rk1)
-    {
+    public static function doubleRound(
+        #[\SensitiveParameter]
+        string $b0,
+        #[\SensitiveParameter]
+        string $rk0,
+        #[\SensitiveParameter]
+        string $b1,
+        #[\SensitiveParameter]
+        string $rk1
+    ): array {
         $q = ParagonIE_Sodium_Core_AES_Block::init();
         // First block
         $q[0] = self::load_4(self::substr($b0, 0, 4));
@@ -503,7 +524,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     public static function bitsliceDecryptBlock(
         ParagonIE_Sodium_Core_AES_Expanded $skey,
         ParagonIE_Sodium_Core_AES_Block $q
-    ) {
+    ): void {
         self::addRoundKey($q, $skey, ($skey->getNumRounds() << 3));
         for ($u = $skey->getNumRounds() - 1; $u > 0; --$u) {
             $q->inverseShiftRows();

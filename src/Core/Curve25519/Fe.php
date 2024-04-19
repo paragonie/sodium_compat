@@ -14,12 +14,12 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
     /**
      * @var array<int, int>
      */
-    protected $container = array();
+    protected array $container = array();
 
     /**
      * @var int
      */
-    protected $size = 10;
+    protected int $size = 10;
 
     /**
      * @internal You should not use this directly from another application
@@ -28,7 +28,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      * @param bool $save_indexes
      * @return self
      */
-    public static function fromArray($array, $save_indexes = null)
+    public static function fromArray(array $array, bool $save_indexes = false): self
     {
         $count = count($array);
         if ($save_indexes) {

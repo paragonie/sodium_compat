@@ -23,8 +23,12 @@ abstract class ParagonIE_Sodium_Core_HSalsa20 extends ParagonIE_Sodium_Core_Sals
      * @return string
      * @throws TypeError
      */
-    public static function hsalsa20($in, $k, $c = null)
-    {
+    public static function hsalsa20(
+        string $in,
+        #[\SensitiveParameter]
+        string $k,
+        ?string $c = null
+    ): string {
         if ($c === null) {
             $x0  = 0x61707865;
             $x5  = 0x3320646e;

@@ -10,19 +10,19 @@ if (class_exists('ParagonIE_Sodium_Core_AES_KeySchedule', false)) {
 class ParagonIE_Sodium_Core_AES_KeySchedule
 {
     /** @var array<int, int> $skey -- has size 120 */
-    protected $skey;
+    protected array $skey;
 
     /** @var bool $expanded */
-    protected $expanded = false;
+    protected bool $expanded = false;
 
     /** @var int $numRounds */
-    private $numRounds;
+    private int $numRounds;
 
     /**
      * @param array $skey
      * @param int $numRounds
      */
-    public function __construct(array $skey, $numRounds = 10)
+    public function __construct(array $skey, int $numRounds = 10)
     {
         $this->skey = $skey;
         $this->numRounds = $numRounds;
@@ -34,7 +34,7 @@ class ParagonIE_Sodium_Core_AES_KeySchedule
      * @param int $i
      * @return int
      */
-    public function get($i)
+    public function get(int $i): int
     {
         return $this->skey[$i];
     }
@@ -42,7 +42,7 @@ class ParagonIE_Sodium_Core_AES_KeySchedule
     /**
      * @return int
      */
-    public function getNumRounds()
+    public function getNumRounds(): int
     {
         return $this->numRounds;
     }
@@ -51,7 +51,7 @@ class ParagonIE_Sodium_Core_AES_KeySchedule
      * @param int $offset
      * @return ParagonIE_Sodium_Core_AES_Block
      */
-    public function getRoundKey($offset)
+    public function getRoundKey(int $offset): ParagonIE_Sodium_Core_AES_Block
     {
         return ParagonIE_Sodium_Core_AES_Block::fromArray(
             array_slice($this->skey, $offset, 8)
@@ -63,7 +63,7 @@ class ParagonIE_Sodium_Core_AES_KeySchedule
      *
      * @return ParagonIE_Sodium_Core_AES_Expanded
      */
-    public function expand()
+    public function expand(): ParagonIE_Sodium_Core_AES_Expanded
     {
         $exp = new ParagonIE_Sodium_Core_AES_Expanded(
             array_fill(0, 120, 0),

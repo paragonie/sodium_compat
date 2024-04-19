@@ -16,7 +16,7 @@ and transparently use the PHP extension instead of our implementation.
 ## Major Versions and Branches
 
 sodium_compat v1.21.0 was the last v1.x release from the master branch. From now
-on, all future releases that support PHP 5.2 - 5.6 and 32-bit integers will be
+on, all future releases that support PHP 5.2 - 8.0 and 32-bit integers will be
 [in the `v1.x` branch](v1.x).
 
 Newer versions of sodium_compat (i.e., v2.0.0) will continue to live in the master
@@ -31,7 +31,7 @@ for the latest in version information.
 | sodium_compat version | PHP versions supported | 32-bit support? | Branch                                                        |
 |-----------------------|------------------------|-----------------|---------------------------------------------------------------|
 | `v1.x.y`              | 5.2.4 - LATEST         | YES             | [v1.x](https://github.com/paragonie/sodium_compat/tree/v1.x)  |
-| `v2.x.y`              | 7.2 - LATEST           | NO              | **master**                                                    |
+| `v2.x.y`              | 8.1 - LATEST           | NO              | **master**                                                    |
 
 If you need 32-bit PHP support (`PHP_INT_SIZE == 4`), continue using sodium_compat v1.x.
 If you want improved performance and smaller dependencies, use v2.x.

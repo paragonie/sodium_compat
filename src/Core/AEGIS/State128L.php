@@ -14,7 +14,8 @@ if (!defined('SODIUM_COMPAT_AEGIS_C1')) {
 class ParagonIE_Sodium_Core_AEGIS_State128L
 {
     /** @var array<int, string> $state */
-    protected $state;
+    protected array $state;
+
     public function __construct()
     {
         $this->state = array_fill(0, 8, '');
@@ -24,7 +25,7 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      * @internal Only use this for unit tests!
      * @return string[]
      */
-    public function getState()
+    public function getState(): array
     {
         return array_values($this->state);
     }
@@ -36,7 +37,7 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      *
      * @internal Only for unit tests
      */
-    public static function initForUnitTests(array $input)
+    public static function initForUnitTests(array $input): self
     {
         if (count($input) < 8) {
             throw new SodiumException('invalid input');
@@ -53,8 +54,11 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      * @param string $nonce
      * @return self
      */
-    public static function init($key, $nonce)
-    {
+    public static function init(
+        #[\SensitiveParameter]
+        string $key,
+        string $nonce
+    ): self {
         $state = new self();
 
         // S0 = key ^ nonce
@@ -83,9 +87,11 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
 
     /**
      * @param string $ai
-     * @return self
+     * @return static
+     *
+     * @throws SodiumException
      */
-    public function absorb($ai)
+    public function absorb(string $ai): static
     {
         if (ParagonIE_Sodium_Core_Util::strlen($ai) !== 32) {
             throw new SodiumException('Input must be two AES blocks in size');
@@ -101,7 +107,7 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      * @return string
      * @throws SodiumException
      */
-    public function dec($ci)
+    public function dec(string $ci): string
     {
         if (ParagonIE_Sodium_Core_Util::strlen($ci) !== 32) {
             throw new SodiumException('Input must be two AES blocks in size');
@@ -134,8 +140,10 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
     /**
      * @param string $cn
      * @return string
+     *
+     * @throws SodiumException
      */
-    public function decPartial($cn)
+    public function decPartial(string $cn): string
     {
         $len = ParagonIE_Sodium_Core_Util::strlen($cn);
 
@@ -176,8 +184,10 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      * @return string
      * @throws SodiumException
      */
-    public function enc($xi)
-    {
+    public function enc(
+        #[\SensitiveParameter]
+        string $xi
+    ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($xi) !== 32) {
             throw new SodiumException('Input must be two AES blocks in size');
         }
@@ -213,7 +223,7 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
      * @param int $msg_len_bits
      * @return string
      */
-    public function finalize($ad_len_bits, $msg_len_bits)
+    public function finalize(int $ad_len_bits, int $msg_len_bits): string
     {
         $encoded = ParagonIE_Sodium_Core_Util::store64_le($ad_len_bits) .
             ParagonIE_Sodium_Core_Util::store64_le($msg_len_bits);
@@ -228,9 +238,9 @@ class ParagonIE_Sodium_Core_AEGIS_State128L
     /**
      * @param string $m0
      * @param string $m1
-     * @return self
+     * @return static
      */
-    public function update($m0, $m1)
+    public function update(string $m0, string $m1): static
     {
         /*
            S'0 = AESRound(S7, S0 ^ M0)

@@ -12,32 +12,32 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
     /**
      * @var array<int, int>
      */
-    protected $buffer = array();
+    protected array $buffer = array();
 
     /**
      * @var bool
      */
-    protected $final = false;
+    protected bool $final = false;
 
     /**
      * @var array<int, int>
      */
-    public $h;
+    public array $h;
 
     /**
      * @var int
      */
-    protected $leftover = 0;
+    protected int $leftover = 0;
 
     /**
      * @var int[]
      */
-    public $r;
+    public array $r;
 
     /**
      * @var int[]
      */
-    public $pad;
+    public array $pad;
 
     /**
      * ParagonIE_Sodium_Core_Poly1305_State constructor.

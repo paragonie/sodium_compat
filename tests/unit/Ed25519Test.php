@@ -16,8 +16,6 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
      * @ref https://www.rfc-editor.org/rfc/rfc8032.txt
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
-     * @covers ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey()
-     * @covers ParagonIE_Sodium_Core32_Ed25519::sign_detached()
      */
     public function testVectorsRFC8032()
     {
@@ -189,9 +187,6 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      * @covers ParagonIE_Sodium_Core_Ed25519::verify_detached()
-     * @covers ParagonIE_Sodium_Core32_Ed25519::publickey_from_secretkey()
-     * @covers ParagonIE_Sodium_Core32_Ed25519::sign_detached()
-     * @covers ParagonIE_Sodium_Core32_Ed25519::verify_detached()
      */
     public function testVectors()
     {

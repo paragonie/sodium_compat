@@ -21,8 +21,12 @@ abstract class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSal
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function xsalsa20($len, $nonce, $key)
-    {
+    public static function xsalsa20(
+        int $len,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         $ret = self::salsa20(
             $len,
             self::substr($nonce, 16, 8),
@@ -43,8 +47,13 @@ abstract class ParagonIE_Sodium_Core_XSalsa20 extends ParagonIE_Sodium_Core_HSal
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function xsalsa20_xor($message, $nonce, $key)
-    {
+    public static function xsalsa20_xor(
+        #[\SensitiveParameter]
+        string $message,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return self::xorStrings(
             $message,
             self::xsalsa20(

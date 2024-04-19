@@ -19,8 +19,12 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function stream($len = 64, $nonce = '', $key = '')
-    {
+    public static function stream(
+        int $len = 64,
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
         if (self::strlen($nonce) !== 24) {
             throw new SodiumException('Nonce must be 24 bytes long');
         }
@@ -46,8 +50,12 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ietfStream($len = 64, $nonce = '', $key = '')
-    {
+    public static function ietfStream(
+        int $len = 64,
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
         if (self::strlen($nonce) !== 24) {
             throw new SodiumException('Nonce must be 24 bytes long');
         }
@@ -74,8 +82,14 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function streamXorIc($message, $nonce = '', $key = '', $ic = '')
-    {
+    public static function streamXorIc(
+        #[\SensitiveParameter]
+        string $message,
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = '',
+        string $ic = ''
+    ): string {
         if (self::strlen($nonce) !== 24) {
             throw new SodiumException('Nonce must be 24 bytes long');
         }
@@ -100,8 +114,13 @@ class ParagonIE_Sodium_Core_XChaCha20 extends ParagonIE_Sodium_Core_HChaCha20
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ietfStreamXorIc($message, $nonce = '', $key = '', $ic = '')
-    {
+    public static function ietfStreamXorIc(
+        #[\SensitiveParameter]
+        string $message,
+        string $nonce = '',
+        string $key = '',
+        string $ic = ''
+    ): string {
         if (self::strlen($nonce) !== 24) {
             throw new SodiumException('Nonce must be 24 bytes long');
         }

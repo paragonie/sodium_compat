@@ -5,25 +5,21 @@
  */
 class ParagonIE_Sodium_Core_SecretStream_State
 {
-    /** @var string $key */
-    protected $key;
-
-    /** @var int $counter */
-    protected $counter;
-
-    /** @var string $nonce */
-    protected $nonce;
-
-    /** @var string $_pad */
-    protected $_pad;
+    protected string $key;
+    protected int $counter;
+    protected string $nonce;
+    protected string $_pad;
 
     /**
      * ParagonIE_Sodium_Core_SecretStream_State constructor.
      * @param string $key
      * @param string|null $nonce
      */
-    public function __construct($key, $nonce = null)
-    {
+    public function __construct(
+        #[\SensitiveParameter]
+        string $key,
+        string $nonce = null
+    ) {
         $this->key = $key;
         $this->counter = 1;
         if (is_null($nonce)) {
@@ -36,7 +32,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return self
      */
-    public function counterReset()
+    public function counterReset(): self
     {
         $this->counter = 1;
         $this->_pad = str_repeat("\0", 4);
@@ -46,7 +42,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -54,7 +50,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return string
      */
-    public function getCounter()
+    public function getCounter(): string
     {
         return ParagonIE_Sodium_Core_Util::store32_le($this->counter);
     }
@@ -62,7 +58,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return string
      */
-    public function getNonce()
+    public function getNonce(): string
     {
         if (!is_string($this->nonce)) {
             $this->nonce = str_repeat("\0", 12);
@@ -76,7 +72,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return string
      */
-    public function getCombinedNonce()
+    public function getCombinedNonce(): string
     {
         return $this->getCounter() .
             ParagonIE_Sodium_Core_Util::substr($this->getNonce(), 0, 8);
@@ -85,7 +81,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return self
      */
-    public function incrementCounter()
+    public function incrementCounter(): self
     {
         ++$this->counter;
         return $this;
@@ -94,7 +90,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return bool
      */
-    public function needsRekey()
+    public function needsRekey(): bool
     {
         return ($this->counter & 0xffff) === 0;
     }
@@ -103,8 +99,10 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @param string $newKeyAndNonce
      * @return self
      */
-    public function rekey($newKeyAndNonce)
-    {
+    public function rekey(
+        #[\SensitiveParameter]
+        string $newKeyAndNonce
+    ): self {
         $this->key = ParagonIE_Sodium_Core_Util::substr($newKeyAndNonce, 0, 32);
         $this->nonce = str_pad(
             ParagonIE_Sodium_Core_Util::substr($newKeyAndNonce, 32),
@@ -119,8 +117,10 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @param string $str
      * @return self
      */
-    public function xorNonce($str)
-    {
+    public function xorNonce(
+        #[\SensitiveParameter]
+        string $str
+    ): self {
         $this->nonce = ParagonIE_Sodium_Core_Util::xorStrings(
             $this->getNonce(),
             str_pad(
@@ -137,8 +137,10 @@ class ParagonIE_Sodium_Core_SecretStream_State
      * @param string $string
      * @return self
      */
-    public static function fromString($string)
-    {
+    public static function fromString(
+        #[\SensitiveParameter]
+        string $string
+    ): self {
         $state = new ParagonIE_Sodium_Core_SecretStream_State(
             ParagonIE_Sodium_Core_Util::substr($string, 0, 32)
         );
@@ -153,7 +155,7 @@ class ParagonIE_Sodium_Core_SecretStream_State
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->key .
             $this->getCounter() .

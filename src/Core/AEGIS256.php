@@ -18,8 +18,14 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @return string
      * @throws SodiumException
      */
-    public static function decrypt($ct, $tag, $ad, $key, $nonce)
-    {
+    public static function decrypt(
+        string $ct,
+        string $tag,
+        string $ad,
+        #[\SensitiveParameter]
+        string $key,
+        string $nonce
+    ): string {
         $state = self::init($key, $nonce);
 
         // ad_blocks = Split(ZeroPad(ad, 128), 128)
@@ -72,8 +78,14 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @return array
      * @throws SodiumException
      */
-    public static function encrypt($msg, $ad, $key, $nonce)
-    {
+    public static function encrypt(
+        #[\SensitiveParameter]
+        string $msg,
+        string $ad,
+        #[\SensitiveParameter]
+        string $key,
+        string $nonce
+    ): array {
         $state = self::init($key, $nonce);
         $ad_len = self::strlen($ad);
         $msg_len = self::strlen($msg);
@@ -111,8 +123,11 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @param string $nonce
      * @return ParagonIE_Sodium_Core_AEGIS_State256
      */
-    public static function init($key, $nonce)
-    {
+    public static function init(
+        #[\SensitiveParameter]
+        string $key,
+        string $nonce
+    ): ParagonIE_Sodium_Core_AEGIS_State256 {
         return ParagonIE_Sodium_Core_AEGIS_State256::init($key, $nonce);
     }
 }

@@ -25,8 +25,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box(string $inputFile, string $outputFile, string $nonce, string $keyPair): bool
-    {
+    public static function box(
+        string $inputFile,
+        string $outputFile,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $keyPair
+    ): bool {
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_BOX_NONCEBYTES bytes');
         }
@@ -76,8 +81,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_open(string $inputFile, string $outputFile, string $nonce, string $keypair): bool
-    {
+    public static function box_open(
+        string $inputFile,
+        string $outputFile,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $keypair
+    ): bool {
         /* Input validation: */
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES) {
             throw new TypeError('Argument 4 must be CRYPTO_BOX_NONCEBYTES bytes');
@@ -132,8 +142,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_seal(string $inputFile, string $outputFile, string $publicKey): bool
-    {
+    public static function box_seal(
+        string $inputFile,
+        string $outputFile,
+        string $publicKey
+    ): bool {
         /* Input validation: */
         if (self::strlen($publicKey) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_PUBLICKEYBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_BOX_PUBLICKEYBYTES bytes');
@@ -158,19 +171,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Could not open output file for writing');
         }
 
-        /** @var string $ephKeypair */
         $ephKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
-
-        /** @var string $msgKeypair */
         $msgKeypair = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
             ParagonIE_Sodium_Compat::crypto_box_secretkey($ephKeypair),
             $publicKey
         );
-
-        /** @var string $ephemeralPK */
         $ephemeralPK = ParagonIE_Sodium_Compat::crypto_box_publickey($ephKeypair);
-
-        /** @var string $nonce */
         $nonce = ParagonIE_Sodium_Compat::crypto_generichash(
             $ephemeralPK . $publicKey,
             '',
@@ -225,19 +231,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_seal_open($inputFile, $outputFile, $ecdhKeypair)
-    {
-        /* Type checks: */
-        if (!is_string($inputFile)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($inputFile) . ' given.');
-        }
-        if (!is_string($outputFile)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($outputFile) . ' given.');
-        }
-        if (!is_string($ecdhKeypair)) {
-            throw new TypeError('Argument 3 must be a string, ' . gettype($ecdhKeypair) . ' given.');
-        }
-
+    public static function box_seal_open(
+        string $inputFile,
+        string $outputFile,
+        #[\SensitiveParameter]
+        string $ecdhKeypair
+    ): bool {
         /* Input validation: */
         if (self::strlen($ecdhKeypair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
@@ -310,24 +309,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws TypeError
      * @psalm-suppress FailedTypeResolution
      */
-    public static function generichash($filePath, $key = '', $outputLength = 32)
-    {
-        /* Type checks: */
-        if (!is_string($filePath)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($filePath) . ' given.');
-        }
-        if (!is_string($key)) {
-            if (is_null($key)) {
-                $key = '';
-            } else {
-                throw new TypeError('Argument 2 must be a string, ' . gettype($key) . ' given.');
-            }
-        }
-        if (!is_int($outputLength)) {
-            if (!is_numeric($outputLength)) {
-                throw new TypeError('Argument 3 must be an integer, ' . gettype($outputLength) . ' given.');
-            }
-            $outputLength = (int) $outputLength;
+    public static function generichash(
+        string $filePath,
+        #[\SensitiveParameter]
+        ?string $key = '',
+        int $outputLength = 32
+    ): string {
+        if (is_null($key)) {
+            $key = '';
         }
 
         /* Input validation: */
@@ -388,25 +377,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox($inputFile, $outputFile, $nonce, $key)
-    {
-        /* Type checks: */
-        if (!is_string($inputFile)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($inputFile) . ' given..');
-        }
-        if (!is_string($outputFile)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($outputFile) . ' given.');
-        }
-        if (!is_string($nonce)) {
-            throw new TypeError('Argument 3 must be a string, ' . gettype($nonce) . ' given.');
-        }
-
+    public static function secretbox(
+        string $inputFile,
+        string $outputFile,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): bool {
         /* Input validation: */
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES) {
             throw new TypeError('Argument 3 must be CRYPTO_SECRETBOX_NONCEBYTES bytes');
-        }
-        if (!is_string($key)) {
-            throw new TypeError('Argument 4 must be a string, ' . gettype($key) . ' given.');
         }
         if (self::strlen($key) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES) {
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_KEYBYTES bytes');
@@ -436,6 +416,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         fclose($ofp);
         return $res;
     }
+
     /**
      * Seal a file (rather than a string). Uses less memory than
      * ParagonIE_Sodium_Compat::crypto_secretbox_open(), but produces
@@ -453,22 +434,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox_open($inputFile, $outputFile, $nonce, $key)
-    {
-        /* Type checks: */
-        if (!is_string($inputFile)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($inputFile) . ' given.');
-        }
-        if (!is_string($outputFile)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($outputFile) . ' given.');
-        }
-        if (!is_string($nonce)) {
-            throw new TypeError('Argument 3 must be a string, ' . gettype($nonce) . ' given.');
-        }
-        if (!is_string($key)) {
-            throw new TypeError('Argument 4 must be a string, ' . gettype($key) . ' given.');
-        }
-
+    public static function secretbox_open(
+        string $inputFile,
+        string $outputFile,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): bool {
         /* Input validation: */
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES) {
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_NONCEBYTES bytes');
@@ -520,16 +492,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sign($filePath, $secretKey)
-    {
-        /* Type checks: */
-        if (!is_string($filePath)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($filePath) . ' given.');
-        }
-        if (!is_string($secretKey)) {
-            throw new TypeError('Argument 2 must be a string, ' . gettype($secretKey) . ' given.');
-        }
-
+    public static function sign(
+        string $filePath,
+        #[\SensitiveParameter]
+        string $secretKey
+    ): string {
         /* Input validation: */
         if (self::strlen($secretKey) !== ParagonIE_Sodium_Compat::CRYPTO_SIGN_SECRETKEYBYTES) {
             throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
@@ -707,8 +674,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function box_encrypt($ifp, $ofp, int $mlen, string $nonce, string $boxKeypair): bool
-    {
+    protected static function box_encrypt(
+        $ifp,
+        $ofp,
+        int $mlen,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $boxKeypair
+    ): bool {
         return self::secretbox_encrypt(
             $ifp,
             $ofp,
@@ -732,8 +705,14 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function box_decrypt($ifp, $ofp, int $mlen, string $nonce, string $boxKeypair): bool
-    {
+    protected static function box_decrypt(
+        $ifp,
+        $ofp,
+        int $mlen,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $boxKeypair
+    ): bool {
         return self::secretbox_decrypt(
             $ifp,
             $ofp,
@@ -758,24 +737,25 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function secretbox_encrypt($ifp, $ofp, int $mlen, string $nonce, string $key): bool
-    {
+    protected static function secretbox_encrypt(
+        $ifp,
+        $ofp,
+        int $mlen,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): bool {
         $plaintext = fread($ifp, 32);
         if (!is_string($plaintext)) {
             throw new SodiumException('Could not read input file');
         }
         $first32 = self::ftell($ifp);
 
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
-
-        /** @var string $realNonce */
         $realNonce = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
-
-        /** @var string $block0 */
         $block0 = str_repeat("\x00", 32);
 
-        /** @var int $mlen - Length of the plaintext message */
+        /* Length of the plaintext message */
         $mlen0 = $mlen;
         if ($mlen0 > 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES) {
             $mlen0 = 64 - ParagonIE_Sodium_Crypto::secretbox_xsalsa20poly1305_ZEROBYTES;
@@ -810,12 +790,8 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         fwrite($ofp, $cBlock);
         $mlen -= 32;
 
-        /** @var int $iter */
         $iter = 1;
-
-        /** @var int $incr */
         $incr = self::BUFFER_SIZE >> 6;
-
         /*
          * Set the cursor to the end of the first half-block. All future bytes will
          * generated from salsa20_xor_ic, starting from 1 (second block).
@@ -875,20 +851,21 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function secretbox_decrypt($ifp, $ofp, int $mlen, string $nonce, string $key): bool
-    {
+    protected static function secretbox_decrypt(
+        $ifp,
+        $ofp,
+        int $mlen,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): bool {
         $tag = fread($ifp, 16);
         if (!is_string($tag)) {
             throw new SodiumException('Could not read input file');
         }
 
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
-
-        /** @var string $realNonce */
         $realNonce = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
-
-        /** @var string $block0 */
         $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20(
             64,
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
@@ -918,11 +895,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             )
         );
         $mlen -= 32;
-
-        /** @var int $iter */
         $iter = 1;
-
-        /** @var int $incr */
         $incr = self::BUFFER_SIZE >> 6;
 
         /* Decrypts ciphertext, writes to output file. */
@@ -962,15 +935,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         string $tag = '',
         int $mlen = 0
     ): bool {
-        /** @var int $pos */
         $pos = self::ftell($ifp);
-
-        /** @var int $iter */
-        $iter = 1;
-
-        /** @var int $incr */
-        $incr = self::BUFFER_SIZE >> 6;
-
         while ($mlen > 0) {
             $blockSize = $mlen > self::BUFFER_SIZE
                 ? self::BUFFER_SIZE
@@ -981,7 +946,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             }
             $state->update($ciphertext);
             $mlen -= $blockSize;
-            $iter += $incr;
         }
         $res = ParagonIE_Sodium_Core_Util::verify_16($tag, $state->finish());
 
@@ -1010,11 +974,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (!is_resource($fp)) {
             throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');
         }
-        if (!is_int($size)) {
-            throw new TypeError('Argument 3 must be an integer, ' . gettype($size) . ' given.');
-        }
-
-        /** @var int $originalPosition */
         $originalPosition = self::ftell($fp);
 
         // Move file pointer to beginning of file

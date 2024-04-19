@@ -12,7 +12,7 @@ class ParagonIE_Sodium_Core_ChaCha20_Ctx extends ParagonIE_Sodium_Core_Util impl
     /**
      * @var SplFixedArray internally, <int, int>
      */
-    protected $container;
+    protected SplFixedArray $container;
 
     /**
      * ParagonIE_Sodium_Core_ChaCha20_Ctx constructor.
@@ -26,8 +26,12 @@ class ParagonIE_Sodium_Core_ChaCha20_Ctx extends ParagonIE_Sodium_Core_Util impl
      * @throws InvalidArgumentException
      * @throws TypeError
      */
-    public function __construct($key = '', $iv = '', $counter = '')
-    {
+    public function __construct(
+        #[\SensitiveParameter]
+        string $key = '',
+        string $iv = '',
+        string $counter = ''
+    ) {
         if (self::strlen($key) !== 32) {
             throw new InvalidArgumentException('ChaCha20 expects a 256-bit key.');
         }

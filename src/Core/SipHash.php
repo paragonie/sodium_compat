@@ -112,7 +112,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @param int $c
      * @return array<int, mixed>
      */
-    public static function rotl_64($int0, $int1, $c)
+    public static function rotl_64(int $int0, int $int1, int $c): array
     {
         $int0 &= 0xffffffff;
         $int1 &= 0xffffffff;
@@ -160,8 +160,12 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sipHash24($in, $key)
-    {
+    public static function sipHash24(
+        #[\SensitiveParameter]
+        string $in,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         $inlen = self::strlen($in);
 
         # /* "somepseudorandomlygeneratedbytes" */

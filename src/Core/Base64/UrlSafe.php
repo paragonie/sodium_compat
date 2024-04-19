@@ -18,8 +18,10 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @return string
      * @throws TypeError
      */
-    public static function encode($src)
-    {
+    public static function encode(
+        #[\SensitiveParameter]
+        string $src
+    ): string {
         return self::doEncode($src, true);
     }
 
@@ -32,8 +34,10 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @return string
      * @throws TypeError
      */
-    public static function encodeUnpadded($src)
-    {
+    public static function encodeUnpadded(
+        #[\SensitiveParameter]
+        string $src
+    ): string {
         return self::doEncode($src, false);
     }
 
@@ -43,8 +47,11 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @return string
      * @throws TypeError
      */
-    protected static function doEncode($src, $pad = true)
-    {
+    protected static function doEncode(
+        #[\SensitiveParameter]
+        string $src,
+        bool $pad = true
+    ): string {
         $dest = '';
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
         // Main loop (no padding):
@@ -99,8 +106,11 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @throws TypeError
      * @psalm-suppress RedundantCondition
      */
-    public static function decode($src, $strictPadding = false)
-    {
+    public static function decode(
+        #[\SensitiveParameter]
+        string $src,
+        bool $strictPadding = false
+    ): string {
         // Remove padding
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
         if ($srcLen === 0) {
@@ -197,8 +207,10 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @param int $src
      * @return int
      */
-    protected static function decode6Bits($src)
-    {
+    protected static function decode6Bits(
+        #[\SensitiveParameter]
+        int $src
+    ): int {
         $ret = -1;
 
         // if ($src > 0x40 && $src < 0x5b) $ret += $src - 0x41 + 1; // -64
@@ -226,8 +238,9 @@ class ParagonIE_Sodium_Core_Base64_UrlSafe
      * @param int $src
      * @return string
      */
-    protected static function encode6Bits($src)
-    {
+    protected static function encode6Bits(
+        int $src
+    ): string {
         $diff = 0x41;
 
         // if ($src > 25) $diff += 0x61 - 0x41 - 26; // 6

@@ -69,31 +69,32 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_chacha20poly1305_decrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
-        /** @var int $len - Length of message (ciphertext + MAC) */
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
+        /* Length of message (ciphertext + MAC) */
         $len = ParagonIE_Sodium_Core_Util::strlen($message);
 
-        /** @var int  $clen - Length of ciphertext */
+        /* Length of ciphertext */
         $clen = $len - self::aead_chacha20poly1305_ABYTES;
 
-        /** @var int $adlen - Length of associated data */
+        /* Length of associated data */
         $adlen = ParagonIE_Sodium_Core_Util::strlen($ad);
 
-        /** @var string $mac - Message authentication code */
+        /* Message authentication code */
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $message,
             $clen,
             self::aead_chacha20poly1305_ABYTES
         );
 
-        /** @var string $ciphertext - The encrypted message (sans MAC) */
+        /* The encrypted message (sans MAC) */
         $ciphertext = ParagonIE_Sodium_Core_Util::substr($message, 0, $clen);
 
-        /** @var string The first block of the chacha20 keystream, used as a poly1305 key */
+        /* The first block of the chacha20 keystream, used as a poly1305 key */
         $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
             32,
             $nonce,
@@ -141,18 +142,20 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_chacha20poly1305_encrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
-        /** @var int $len - Length of the plaintext message */
+        #[\SensitiveParameter]
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
+        /* Length of the plaintext message */
         $len = ParagonIE_Sodium_Core_Util::strlen($message);
 
-        /** @var int $adlen - Length of the associated data */
+        /* Length of the associated data */
         $adlen = ParagonIE_Sodium_Core_Util::strlen($ad);
 
-        /** @var string The first block of the chacha20 keystream, used as a poly1305 key */
+        /* The first block of the chacha20 keystream, used as a poly1305 key */
         $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
             32,
             $nonce,
@@ -194,21 +197,22 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_chacha20poly1305_ietf_decrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
-        /** @var int $adlen - Length of associated data */
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
+        /* Length of associated data */
         $adlen = ParagonIE_Sodium_Core_Util::strlen($ad);
 
-        /** @var int $len - Length of message (ciphertext + MAC) */
+        /* Length of message (ciphertext + MAC) */
         $len = ParagonIE_Sodium_Core_Util::strlen($message);
 
-        /** @var int  $clen - Length of ciphertext */
+        /* Length of ciphertext */
         $clen = $len - self::aead_chacha20poly1305_IETF_ABYTES;
 
-        /** @var string The first block of the chacha20 keystream, used as a poly1305 key */
+        /* The first block of the chacha20 keystream, used as a poly1305 key */
         $block0 = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
             32,
             $nonce,
@@ -272,18 +276,20 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_chacha20poly1305_ietf_encrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
-        /** @var int $len - Length of the plaintext message */
+        #[\SensitiveParameter]
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
+        /* Length of the plaintext message */
         $len = ParagonIE_Sodium_Core_Util::strlen($message);
 
-        /** @var int $adlen - Length of the associated data */
+        /* Length of the associated data */
         $adlen = ParagonIE_Sodium_Core_Util::strlen($ad);
 
-        /** @var string The first block of the chacha20 keystream, used as a poly1305 key */
+        /* The first block of the chacha20 keystream, used as a poly1305 key */
         $block0 = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
             32,
             $nonce,
@@ -327,11 +333,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_xchacha20poly1305_ietf_decrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
         $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
             ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
             $key
@@ -356,11 +363,13 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function aead_xchacha20poly1305_ietf_encrypt(
-        $message = '',
-        $ad = '',
-        $nonce = '',
-        $key = ''
-    ) {
+        #[\SensitiveParameter]
+        string $message = '',
+        string $ad = '',
+        string $nonce = '',
+        #[\SensitiveParameter]
+        string $key = ''
+    ): string {
         $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
             ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
             $key
@@ -381,8 +390,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @return string
      * @throws TypeError
      */
-    public static function auth($message, $key)
-    {
+    public static function auth(
+        string $message,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return ParagonIE_Sodium_Core_Util::substr(
             hash_hmac('sha512', $message, $key, true),
             0,
@@ -402,8 +414,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function auth_verify($mac, $message, $key)
-    {
+    public static function auth_verify(
+        string $mac,
+        string $message,
+        #[\SensitiveParameter]
+        string $key
+    ): bool {
         return ParagonIE_Sodium_Core_Util::hashEquals(
             $mac,
             self::auth($message, $key)
@@ -422,9 +438,14 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box($plaintext, $nonce, $keypair)
-    {
-        $c = self::secretbox(
+    public static function box(
+        #[\SensitiveParameter]
+        string $plaintext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $keypair
+    ): string {
+        return self::secretbox(
             $plaintext,
             $nonce,
             self::box_beforenm(
@@ -432,7 +453,6 @@ abstract class ParagonIE_Sodium_Crypto
                 self::box_publickey($keypair)
             )
         );
-        return $c;
     }
 
     /**
@@ -446,8 +466,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_seal($message, $publicKey)
-    {
+    public static function box_seal(
+        #[\SensitiveParameter]
+        string $message,
+        string $publicKey
+    ): string {
         /** @var string $ephemeralKeypair */
         $ephemeralKeypair = self::box_keypair();
 
@@ -492,8 +515,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_seal_open($message, $keypair)
-    {
+    public static function box_seal_open(
+        string $message,
+        #[\SensitiveParameter]
+        string $keypair
+    ): string {
         /** @var string $ephemeralPK */
         $ephemeralPK = ParagonIE_Sodium_Core_Util::substr($message, 0, 32);
 
@@ -541,7 +567,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_beforenm($sk, $pk)
+    public static function box_beforenm(
+        #[\SensitiveParameter]
+        string $sk,
+        string $pk
+    ): string
     {
         return ParagonIE_Sodium_Core_HSalsa20::hsalsa20(
             str_repeat("\x00", 16),
@@ -557,7 +587,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_keypair()
+    public static function box_keypair(): string
     {
         $sKey = random_bytes(32);
         $pKey = self::scalarmult_base($sKey);
@@ -570,7 +600,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_seed_keypair($seed)
+    public static function box_seed_keypair(
+        #[\SensitiveParameter]
+        string $seed
+    ): string
     {
         $sKey = ParagonIE_Sodium_Core_Util::substr(
             hash('sha512', $seed, true),
@@ -589,8 +622,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @return string
      * @throws TypeError
      */
-    public static function box_keypair_from_secretkey_and_publickey($sKey, $pKey)
-    {
+    public static function box_keypair_from_secretkey_and_publickey(
+        #[\SensitiveParameter]
+        string $sKey,
+        string $pKey
+    ): string {
         return ParagonIE_Sodium_Core_Util::substr($sKey, 0, 32) .
             ParagonIE_Sodium_Core_Util::substr($pKey, 0, 32);
     }
@@ -603,8 +639,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws RangeException
      * @throws TypeError
      */
-    public static function box_secretkey($keypair)
-    {
+    public static function box_secretkey(
+        #[\SensitiveParameter]
+        string $keypair
+    ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== 64) {
             throw new RangeException(
                 'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.'
@@ -621,8 +659,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws RangeException
      * @throws TypeError
      */
-    public static function box_publickey($keypair)
-    {
+    public static function box_publickey(
+        #[\SensitiveParameter]
+        string $keypair
+    ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($keypair) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES) {
             throw new RangeException(
                 'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_KEYPAIRBYTES bytes long.'
@@ -640,8 +680,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_publickey_from_secretkey($sKey)
-    {
+    public static function box_publickey_from_secretkey(
+        #[\SensitiveParameter]
+        string $sKey
+    ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($sKey) !== ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES) {
             throw new RangeException(
                 'Must be ParagonIE_Sodium_Compat::CRYPTO_BOX_SECRETKEYBYTES bytes long.'
@@ -662,8 +704,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function box_open($ciphertext, $nonce, $keypair)
-    {
+    public static function box_open(
+        string $ciphertext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $keypair
+    ): string {
         return self::secretbox_open(
             $ciphertext,
             $nonce,
@@ -687,8 +733,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function generichash($message, $key = '', $outlen = 32)
-    {
+    public static function generichash(
+        string $message,
+        #[\SensitiveParameter]
+        ?string $key = '',
+        int $outlen = 32
+    ): string {
         // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
 
@@ -728,7 +778,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function generichash_final($ctx, $outlen = 32)
+    public static function generichash_final(string $ctx, int $outlen = 32): string
     {
         if (!is_string($ctx)) {
             throw new TypeError('Context must be a string');
@@ -758,8 +808,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function generichash_init($key = '', $outputLength = 32)
-    {
+    public static function generichash_init(
+        #[\SensitiveParameter]
+        string $key = '',
+        int $outputLength = 32
+    ): string {
         // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
 
@@ -792,11 +845,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws TypeError
      */
     public static function generichash_init_salt_personal(
-        $key = '',
-        $outputLength = 32,
-        $salt = '',
-        $personal = ''
-    ) {
+        #[\SensitiveParameter]
+        string $key = '',
+        int $outputLength = 32,
+        string $salt = '',
+        string $personal = ''
+    ): string {
         // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
 
@@ -835,7 +889,7 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function generichash_update($ctx, $message)
+    public static function generichash_update(string $ctx, string $message): string
     {
         // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
@@ -864,8 +918,13 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function keyExchange($my_sk, $their_pk, $client_pk, $server_pk)
-    {
+    public static function keyExchange(
+        #[\SensitiveParameter]
+        string $my_sk,
+        string $their_pk,
+        string $client_pk,
+        string $server_pk
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_generichash(
             ParagonIE_Sodium_Compat::crypto_scalarmult($my_sk, $their_pk) .
             $client_pk .
@@ -885,8 +944,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function scalarmult($sKey, $pKey)
-    {
+    public static function scalarmult(
+        #[\SensitiveParameter]
+        string $sKey,
+        string $pKey
+    ): string {
         $q = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10($sKey, $pKey);
         self::scalarmult_throw_if_zero($q);
         return $q;
@@ -902,8 +964,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function scalarmult_base($secret)
-    {
+    public static function scalarmult_base(
+        #[\SensitiveParameter]
+        string $secret
+    ): string {
         $q = ParagonIE_Sodium_Core_X25519::crypto_scalarmult_curve25519_ref10_base($secret);
         self::scalarmult_throw_if_zero($q);
         return $q;
@@ -917,8 +981,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function scalarmult_throw_if_zero($q)
-    {
+    protected static function scalarmult_throw_if_zero(
+        #[\SensitiveParameter]
+        string $q
+    ): void {
         $d = 0;
         for ($i = 0; $i < self::box_curve25519xsalsa20poly1305_SECRETKEYBYTES; ++$i) {
             $d |= ParagonIE_Sodium_Core_Util::chrToInt($q[$i]);
@@ -942,8 +1008,13 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox($plaintext, $nonce, $key)
-    {
+    public static function secretbox(
+        #[\SensitiveParameter]
+        string $plaintext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
 
@@ -1017,8 +1088,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox_open($ciphertext, $nonce, $key)
-    {
+    public static function secretbox_open(
+        string $ciphertext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         /** @var string $mac */
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
@@ -1090,8 +1165,13 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox_xchacha20poly1305($plaintext, $nonce, $key)
-    {
+    public static function secretbox_xchacha20poly1305(
+        #[\SensitiveParameter]
+        string $plaintext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
             ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
@@ -1169,8 +1249,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function secretbox_xchacha20poly1305_open($ciphertext, $nonce, $key)
-    {
+    public static function secretbox_xchacha20poly1305_open(
+        string $ciphertext,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         /** @var string $mac */
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
@@ -1238,8 +1322,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws Exception
      * @throws SodiumException
      */
-    public static function secretstream_xchacha20poly1305_init_push($key)
-    {
+    public static function secretstream_xchacha20poly1305_init_push(
+        #[\SensitiveParameter]
+        string $key
+    ): array {
         # randombytes_buf(out, crypto_secretstream_xchacha20poly1305_HEADERBYTES);
         $out = random_bytes(24);
 
@@ -1268,8 +1354,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @return string Returns a state.
      * @throws Exception
      */
-    public static function secretstream_xchacha20poly1305_init_pull($key, $header)
-    {
+    public static function secretstream_xchacha20poly1305_init_pull(
+        #[\SensitiveParameter]
+        string $key,
+        string $header
+    ): string {
         # crypto_core_hchacha20(state->k, in, k, NULL);
         $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
             ParagonIE_Sodium_Core_Util::substr($header, 0, 16),
@@ -1295,8 +1384,14 @@ abstract class ParagonIE_Sodium_Crypto
      * @return string
      * @throws SodiumException
      */
-    public static function secretstream_xchacha20poly1305_push(&$state, $msg, $aad = '', $tag = 0)
-    {
+    public static function secretstream_xchacha20poly1305_push(
+        #[\SensitiveParameter]
+        string &$state,
+        #[\SensitiveParameter]
+        string $msg,
+        string $aad = '',
+        int $tag = 0
+    ): string {
         $st = ParagonIE_Sodium_Core_SecretStream_State::fromString($state);
         # crypto_onetimeauth_poly1305_state poly1305_state;
         # unsigned char                     block[64U];
@@ -1424,8 +1519,12 @@ abstract class ParagonIE_Sodium_Crypto
      * @return bool|array{0: string, 1: int}
      * @throws SodiumException
      */
-    public static function secretstream_xchacha20poly1305_pull(&$state, $cipher, $aad = '')
-    {
+    public static function secretstream_xchacha20poly1305_pull(
+        #[\SensitiveParameter]
+        string &$state,
+        string $cipher,
+        string $aad = ''
+    ) {
         $st = ParagonIE_Sodium_Core_SecretStream_State::fromString($state);
 
         $cipherlen = ParagonIE_Sodium_Core_Util::strlen($cipher);
@@ -1547,8 +1646,10 @@ abstract class ParagonIE_Sodium_Crypto
      * @return void
      * @throws SodiumException
      */
-    public static function secretstream_xchacha20poly1305_rekey(&$state)
-    {
+    public static function secretstream_xchacha20poly1305_rekey(
+        #[\SensitiveParameter]
+        string &$state
+    ): void {
         $st = ParagonIE_Sodium_Core_SecretStream_State::fromString($state);
         # unsigned char new_key_and_inonce[crypto_stream_chacha20_ietf_KEYBYTES +
         # crypto_secretstream_xchacha20poly1305_INONCEBYTES];
@@ -1599,8 +1700,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sign_detached($message, $sk)
-    {
+    public static function sign_detached(
+        string $message,
+        #[\SensitiveParameter]
+        string $sk
+    ): string {
         return ParagonIE_Sodium_Core_Ed25519::sign_detached($message, $sk);
     }
 
@@ -1615,8 +1719,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sign($message, $sk)
-    {
+    public static function sign(
+        string $message,
+        #[\SensitiveParameter]
+        string $sk
+    ): string {
         return ParagonIE_Sodium_Core_Ed25519::sign($message, $sk);
     }
 
@@ -1631,8 +1738,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sign_open($signedMessage, $pk)
-    {
+    public static function sign_open(
+        string $signedMessage,
+        #[\SensitiveParameter]
+        string $pk
+    ): string {
         return ParagonIE_Sodium_Core_Ed25519::sign_open($signedMessage, $pk);
     }
 
@@ -1648,8 +1758,11 @@ abstract class ParagonIE_Sodium_Crypto
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function sign_verify_detached($signature, $message, $pk)
-    {
+    public static function sign_verify_detached(
+        string $signature,
+        string $message,
+        string $pk
+    ): bool {
         return ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $pk);
     }
 }

@@ -23,8 +23,8 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     public static function fe_cswap(
         ParagonIE_Sodium_Core_Curve25519_Fe $f,
         ParagonIE_Sodium_Core_Curve25519_Fe $g,
-        $b = 0
-    ) {
+        int $b = 0
+    ): void {
         $f0 = (int) $f[0];
         $f1 = (int) $f[1];
         $f2 = (int) $f[2];
@@ -84,7 +84,7 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @param ParagonIE_Sodium_Core_Curve25519_Fe $f
      * @return ParagonIE_Sodium_Core_Curve25519_Fe
      */
-    public static function fe_mul121666(ParagonIE_Sodium_Core_Curve25519_Fe $f)
+    public static function fe_mul121666(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $h = array(
             self::mul((int) $f[0], 121666, 17),
@@ -158,8 +158,12 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function crypto_scalarmult_curve25519_ref10($n, $p)
-    {
+    public static function crypto_scalarmult_curve25519_ref10(
+        #[\SensitiveParameter]
+        string $n,
+        #[\SensitiveParameter]
+        string $p
+    ): string {
         # for (i = 0;i < 32;++i) e[i] = n[i];
         $e = '' . $n;
         # e[0] &= 248;
@@ -282,7 +286,7 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
     public static function edwards_to_montgomery(
         ParagonIE_Sodium_Core_Curve25519_Fe $edwardsY,
         ParagonIE_Sodium_Core_Curve25519_Fe $edwardsZ
-    ) {
+    ): ParagonIE_Sodium_Core_Curve25519_Fe {
         $tempX = self::fe_add($edwardsZ, $edwardsY);
         $tempZ = self::fe_sub($edwardsZ, $edwardsY);
         $tempZ = self::fe_invert($tempZ);
@@ -297,8 +301,10 @@ abstract class ParagonIE_Sodium_Core_X25519 extends ParagonIE_Sodium_Core_Curve2
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function crypto_scalarmult_curve25519_ref10_base($n)
-    {
+    public static function crypto_scalarmult_curve25519_ref10_base(
+        #[\SensitiveParameter]
+        string $n
+    ): string {
         # for (i = 0;i < 32;++i) e[i] = n[i];
         $e = '' . $n;
 
