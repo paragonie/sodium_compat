@@ -6,7 +6,7 @@ class XChaCha20Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -16,7 +16,7 @@ class XChaCha20Test extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testVectors()
+    public function testVectors(): void
     {
         $tv = array(
             array("79c99798ac67300bbb2704c95c341e3245f3dcb21761b98e52ff45b24f304fc4", "b33ffd3096479bcfbc9aee49417688a0a2554f8d95389419", "c6e9758160083ac604ef90e712ce6e75d7797590744e0cf060f013739c"),
@@ -52,7 +52,7 @@ class XChaCha20Test extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSecretbox()
+    public function testSecretbox(): void
     {
         $testVectors = array(
             array("065ff46a9dddb1ab047ee5914d6d575a828b8cc1f454b24e8cd0f57efdc49a34", "f83262646ce01293b9923a65a073df78c54b2e799cd6c4e5", "", "4c72340416339dcdea01b760db5adaf7"),
@@ -88,7 +88,7 @@ class XChaCha20Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testLibsodiumVectors()
+    public function testLibsodiumVectors(): void
     {
         $testVectors = array(
             array("79c99798ac67300bbb2704c95c341e3245f3dcb21761b98e52ff45b24f304fc4", "b33ffd3096479bcfbc9aee49417688a0a2554f8d95389419", "c6e9758160083ac604ef90e712ce6e75d7797590744e0cf060f013739c"),
@@ -126,7 +126,7 @@ class XChaCha20Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testXchacha20Ic()
+    public function testXchacha20Ic(): void
     {
         $key = random_bytes(32);
         $nonce = random_bytes(24);

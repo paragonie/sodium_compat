@@ -9,7 +9,7 @@ class AESTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -103,7 +103,7 @@ class AESTest extends TestCase
         return $return;
     }
 
-    public function testSboxKnownGood()
+    public function testSboxKnownGood(): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
             0x00010203,
@@ -124,7 +124,7 @@ class AESTest extends TestCase
     /**
      * @dataProvider sboxProvider
      */
-    public function testSBox($input, $expected)
+    public function testSBox($input, $expected): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::init();
         for ($i = 0; $i < 8; ++$i) {
@@ -165,7 +165,7 @@ class AESTest extends TestCase
     /**
      * @dataProvider orthoProvider
      */
-    public function testOrtho(array $input, array $expected)
+    public function testOrtho(array $input, array $expected): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray($input);
         $q->orthogonalize();
@@ -177,7 +177,7 @@ class AESTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_AES::addRoundKey
      */
-    public function testAddRoundKey()
+    public function testAddRoundKey(): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(1, 2, 3, 4, 5, 6, 7, 8));
         $schedule = ParagonIE_Sodium_Core_AES::keySchedule('sodiumcompat1.21');
@@ -191,7 +191,7 @@ class AESTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_AES_Block::shiftRows
      */
-    public function testShiftRows()
+    public function testShiftRows(): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
             0x11111111, 0x22222222, 0x33333333, 0x44444444,
@@ -208,12 +208,12 @@ class AESTest extends TestCase
         }
     }
 
-    public function testSubWord()
+    public function testSubWord(): void
     {
         $this->assertSame(0xfe76abd7, ParagonIE_Sodium_Core_AES::subWord(0x0c0f0e0d));
     }
 
-    public function testMixColumns()
+    public function testMixColumns(): void
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
             0xf8be2b17, 0xcaba63cb, 0x67b2a090, 0x8988c2d4, 0x1a70b1e8, 0xcabf96eb, 0x7ae7f79b, 0x615d60d8
@@ -241,7 +241,7 @@ class AESTest extends TestCase
         $this->assertSame(0x615d60d8, $q[7]);
     }
 
-    public function testKeySchedule()
+    public function testKeySchedule(): void
     {
         $ks = ParagonIE_Sodium_Core_AES::keySchedule(sodium_hex2bin("000102030405060708090a0b0c0d0e0f"));
         $expect = array(
@@ -290,7 +290,7 @@ class AESTest extends TestCase
         }
     }
 
-    public function testSkeyExpand()
+    public function testSkeyExpand(): void
     {
         // "000102030405060708090a0b0c0d0e0f"
         $ks = new ParagonIE_Sodium_Core_AES_KeySchedule(array(
@@ -320,7 +320,7 @@ class AESTest extends TestCase
         }
     }
 
-    public function testAesRound()
+    public function testAesRound(): void
     {
         $in = ParagonIE_Sodium_Core_Util::hex2bin('000102030405060708090a0b0c0d0e0f');
         $rk = ParagonIE_Sodium_Core_Util::hex2bin('101112131415161718191a1b1c1d1e1f');
@@ -332,7 +332,7 @@ class AESTest extends TestCase
         );
     }
 
-    public function testAesDoubleRound()
+    public function testAesDoubleRound(): void
     {
         $in = ParagonIE_Sodium_Core_Util::hex2bin('000102030405060708090a0b0c0d0e0f');
         $rk = ParagonIE_Sodium_Core_Util::hex2bin('101112131415161718191a1b1c1d1e1f');
@@ -366,7 +366,7 @@ class AESTest extends TestCase
      * @dataProvider aes128ecbProvider
      * @covers ParagonIE_Sodium_Core_AES::encryptBlockECB
      */
-    public function testEncryptBlock128ECB($key_hex, $pt_hex, $ct_hex)
+    public function testEncryptBlock128ECB($key_hex, $pt_hex, $ct_hex): void
     {
         $key = ParagonIE_Sodium_Core_Util::hex2bin($key_hex);
 
@@ -383,7 +383,7 @@ class AESTest extends TestCase
      * @dataProvider aes192ecbProvider
      * @covers ParagonIE_Sodium_Core_AES::encryptBlockECB
      */
-    public function testEncryptBlock192ECB($key_hex, $pt_hex, $ct_hex)
+    public function testEncryptBlock192ECB($key_hex, $pt_hex, $ct_hex): void
     {
         $key = ParagonIE_Sodium_Core_Util::hex2bin($key_hex);
 
@@ -401,7 +401,7 @@ class AESTest extends TestCase
      * @dataProvider aes256ecbProvider
      * @covers ParagonIE_Sodium_Core_AES::encryptBlockECB
      */
-    public function testEncryptBlock256ECB($key_hex, $pt_hex, $ct_hex)
+    public function testEncryptBlock256ECB($key_hex, $pt_hex, $ct_hex): void
     {
         $key = ParagonIE_Sodium_Core_Util::hex2bin($key_hex);
 

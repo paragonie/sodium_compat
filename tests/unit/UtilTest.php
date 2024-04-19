@@ -6,12 +6,12 @@ class UtilTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testAndString()
+    public function testAndString(): void
     {
         $x = "\x01\x02\x03\x04";
         $y = "\xff\xff\xff\xff";
@@ -28,7 +28,7 @@ class UtilTest extends TestCase
         );
     }
 
-    public function testAbs()
+    public function testAbs(): void
     {
         $this->assertEquals(0, ParagonIE_Sodium_Core_Util::abs(0));
         $this->assertEquals(1, ParagonIE_Sodium_Core_Util::abs(1));
@@ -48,7 +48,7 @@ class UtilTest extends TestCase
      * @throws TypeError
      * @throws Exception
      */
-    public function testBase64()
+    public function testBase64(): void
     {
         for ($i = 0; $i < 100; $i++) {
             $bin = $i === 0 ? '' : random_bytes($i);
@@ -75,7 +75,7 @@ class UtilTest extends TestCase
      * @throws TypeError
      * @throws Exception
      */
-    public function testBin2hex()
+    public function testBin2hex(): void
     {
         $data = random_bytes(32);
         $this->assertSame(
@@ -105,7 +105,7 @@ class UtilTest extends TestCase
      * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
      * @throws TypeError
      */
-    public function testRandombytes()
+    public function testRandombytes(): void
     {
         $random = ParagonIE_Sodium_Compat::randombytes_buf(32);
         $this->assertSame(32, ParagonIE_Sodium_Core_Util::strlen($random));
@@ -127,7 +127,7 @@ class UtilTest extends TestCase
      * @covers ParagonIE_Sodium_Core_Util::stringToIntArray()
      * @throws TypeError
      */
-    public function testConversion()
+    public function testConversion(): void
     {
         $sample = array(80, 97, 114, 97, 103, 111, 110);
 
@@ -147,7 +147,7 @@ class UtilTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testHashEquals()
+    public function testHashEquals(): void
     {
         if (PHP_VERSION_ID < 50600) {
             for ($i = 0; $i < 65536; ++$i) {
@@ -167,7 +167,7 @@ class UtilTest extends TestCase
      * @covers ParagonIE_Sodium_Core_Util::load_3()
      * @throws TypeError
      */
-    public function testLoad3()
+    public function testLoad3(): void
     {
         $this->assertSame(
             8451279,
@@ -190,7 +190,7 @@ class UtilTest extends TestCase
      * @covers ParagonIE_Sodium_Core_Util::load_4()
      * @throws TypeError
      */
-    public function testLoad4()
+    public function testLoad4(): void
     {
         $this->assertSame(
             8451279,
@@ -209,7 +209,7 @@ class UtilTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testLoad64()
+    public function testLoad64(): void
     {
         if (PHP_INT_SIZE < 8) {
             $this->markTestSkipped('Public utility test for load64_le()');
@@ -229,7 +229,7 @@ class UtilTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::strlen()
      */
-    public function testStrlen()
+    public function testStrlen(): void
     {
         $this->assertSame(4, ParagonIE_Sodium_Core_Util::strlen("\xF0\x9D\x92\xB3"));
     }
@@ -237,7 +237,7 @@ class UtilTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::strlen()
      */
-    public function testSubstr()
+    public function testSubstr(): void
     {
         $string = str_repeat("\xF0\x9D\x92\xB3", 4);
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 1), "\xF0");
@@ -250,7 +250,7 @@ class UtilTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::store64_le()
      */
-    public function testStore64()
+    public function testStore64(): void
     {
         if (PHP_INT_SIZE < 8) {
             $this->markTestSkipped('Public utility test for load64_le()');
@@ -271,7 +271,7 @@ class UtilTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::mul()
      */
-    public function testMul()
+    public function testMul(): void
     {
         $arguments = array(
             array(1, 1),

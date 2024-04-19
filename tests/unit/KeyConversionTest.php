@@ -9,7 +9,7 @@ class KeyConversionTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -18,7 +18,7 @@ class KeyConversionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testPublicKeyConversion()
+    public function testPublicKeyConversion(): void
     {
         $sign_keypair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
         $sign_secret  = ParagonIE_Sodium_Compat::crypto_sign_secretkey($sign_keypair);

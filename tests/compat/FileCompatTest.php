@@ -17,7 +17,7 @@ class FileCompatTest extends TestCase
     /**
      * Ensure
      */
-    public function testCompat()
+    public function testCompat(): void
     {
         $keypair = hex2bin(
             '5f2e1b83a832f890fc463fb3ff1cdf672e474eb07d26944d4c4bf5d385f49835' .

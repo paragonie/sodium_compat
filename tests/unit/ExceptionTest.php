@@ -11,7 +11,7 @@ class ExceptionTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -24,7 +24,7 @@ class ExceptionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoAeadChapoly()
+    public function testCryptoAeadChapoly(): void
     {
         $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -245,7 +245,7 @@ class ExceptionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoAeadXChapolyIetf()
+    public function testCryptoAeadXChapolyIetf(): void
     {
         $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -390,7 +390,7 @@ class ExceptionTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      */
-    public function testCryptoAuth()
+    public function testCryptoAuth(): void
     {
         $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -425,7 +425,7 @@ class ExceptionTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth_verify()
      */
-    public function testCryptoAuthVerify()
+    public function testCryptoAuthVerify(): void
     {
         $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -481,7 +481,7 @@ class ExceptionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoBox()
+    public function testCryptoBox(): void
     {
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -559,7 +559,7 @@ class ExceptionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoSecretbox()
+    public function testCryptoSecretbox(): void
     {
         $message = str_repeat("\x00", 128);
         $nonce = str_repeat("\x00", 24);
@@ -676,7 +676,7 @@ class ExceptionTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoSignVerifyDetached()
+    public function testCryptoSignVerifyDetached(): void
     {
         $secretKey = str_repeat("\x00", 64);
         $publicKey = ParagonIE_Sodium_Compat::crypto_sign_publickey_from_secretkey($secretKey);

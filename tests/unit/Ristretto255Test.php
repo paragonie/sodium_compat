@@ -10,12 +10,12 @@ class Ristretto255Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testBadEncodings()
+    public function testBadEncodings(): void
     {
         $badHex = array(
 
@@ -68,7 +68,7 @@ class Ristretto255Test extends TestCase
         }
     }
 
-    public function testFromHash()
+    public function testFromHash(): void
     {
         $inputHashes = array(
             "5d1be09e3d0c82fc538112490e35701979d99e06ca3e2b5b54bffe8b4dc772c1" .
@@ -114,7 +114,7 @@ class Ristretto255Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testScalarMult()
+    public function testScalarMult(): void
     {
         $expected = array(
             '0000000000000000000000000000000000000000000000000000000000000000',
@@ -159,7 +159,7 @@ class Ristretto255Test extends TestCase
         }
     }
 
-    public function testScalarOpMul()
+    public function testScalarOpMul(): void
     {
         $x = sodium_hex2bin('5698f8e0556275ac6725829dcc8505a23349c49994db45b126e4234e8e081908');
         $y = sodium_hex2bin('bf33fc4ef227d64aa6e257e544bad16b52a3185a38baa56ce21de8af97aa2606');
@@ -185,7 +185,7 @@ class Ristretto255Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testScalarMultTestVectors()
+    public function testScalarMultTestVectors(): void
     {
         $k = sodium_hex2bin('40a47d219ac550a3dcd7993356cfe639ff0e0cebbce2c82dd8010597db7d305d');
         $a = sodium_hex2bin('9015dc069ae1fde7a640c8df344ae3753e691305a8e05199485c515f34d9bf13');

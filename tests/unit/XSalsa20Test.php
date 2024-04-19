@@ -8,7 +8,7 @@ class XSalsa20Test extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testVectors()
+    public function testVectors(): void
     {
 
         $key = "\x80" . str_repeat("\x00", 31);

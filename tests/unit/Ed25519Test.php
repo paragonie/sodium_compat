@@ -6,7 +6,7 @@ class Ed25519Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -18,7 +18,7 @@ class Ed25519Test extends TestCase
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      */
-    public function testVectorsRFC8032()
+    public function testVectorsRFC8032(): void
     {
         // TEST 1
         $secretKey = ParagonIE_Sodium_Core_Util::hex2bin(
@@ -176,7 +176,7 @@ class Ed25519Test extends TestCase
         );
     }
     
-    public function testConstant()
+    public function testConstant(): void
     {
         $this->assertSame(
             'edd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010',
@@ -189,7 +189,7 @@ class Ed25519Test extends TestCase
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      * @covers ParagonIE_Sodium_Core_Ed25519::verify_detached()
      */
-    public function testVectors()
+    public function testVectors(): void
     {
         $secretKey = ParagonIE_Sodium_Core_Util::hex2bin(
             'c4ffb94f252886b1378589af0d7d2004d9564b971ac73f09da827b80a5e39cd5' .

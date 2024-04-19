@@ -157,7 +157,7 @@ class PedanticTest extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt()
      * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt()
      */
-    public function testCryptoAeadChapoly()
+    public function testCryptoAeadChapoly(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -188,7 +188,7 @@ class PedanticTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_auth()
      */
-    public function testCryptoAuth()
+    public function testCryptoAuth(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -213,7 +213,7 @@ class PedanticTest extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */
-    public function testCryptoBox()
+    public function testCryptoBox(): void
     {
         $secretKeys = $this->getCryptoBoxKeys();
         $publicKeys = array();
@@ -254,7 +254,7 @@ class PedanticTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_generichash()
      */
-    public function testGenerichash()
+    public function testGenerichash(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -286,7 +286,7 @@ class PedanticTest extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
      */
-    public function testCryptoSecretbox()
+    public function testCryptoSecretbox(): void
     {
         $keys = $this->getInteresting32ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -312,7 +312,7 @@ class PedanticTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_shorthash()
      */
-    public function testShorthash()
+    public function testShorthash(): void
     {
         $keys = $this->getInteresting16ByteStrings();
         $plaintexts = $this->getInterestingStringsVaryingLength();
@@ -334,7 +334,7 @@ class PedanticTest extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
      */
-    public function testCryptoSign()
+    public function testCryptoSign(): void
     {
         $seeds = $this->getCryptoBoxKeys();
         $secretKeys = array();

@@ -6,7 +6,7 @@ class ChaCha20Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -15,7 +15,7 @@ class ChaCha20Test extends TestCase
      * @covers ParagonIE_Sodium_Core_ChaCha20::stream()
      * @covers ParagonIE_Sodium_Core_ChaCha20::streamXorIc()
      */
-    public function testVectors()
+    public function testVectors(): void
     {
         $key = str_repeat("\x00", 32);
         $nonce = str_repeat("\x00", 8);

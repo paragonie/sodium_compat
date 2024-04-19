@@ -9,7 +9,7 @@ class SecretStreamTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testStateSerialization()
+    public function testStateSerialization(): void
     {
         $key = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_keygen();
         $nonce = random_bytes(12);
@@ -34,7 +34,7 @@ class SecretStreamTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testSecretStreamMain()
+    public function testSecretStreamMain(): void
     {
         $key = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_keygen();
         list($pushState, $header) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);

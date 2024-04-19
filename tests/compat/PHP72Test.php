@@ -9,7 +9,7 @@ class PHP72Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (PHP_VERSION_ID < 70200) {
             $this->markTestSkipped('PHP < 7.2.0; skipping PHP 7.2 compatibility test suite.');
@@ -20,7 +20,7 @@ class PHP72Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $a = "\x12\x34\x56\x78";
         $b = "\x01\x00\x00\x00";
@@ -42,7 +42,7 @@ class PHP72Test extends TestCase
      * @ref https://github.com/paragonie/sodium_compat/issues/125
      * @throws SodiumException
      */
-    public function testAeadXChaCha20EmptyAad()
+    public function testAeadXChaCha20EmptyAad(): void
     {
         $key = sodium_crypto_aead_xchacha20poly1305_ietf_keygen();
         $nonce = random_bytes(24);
@@ -77,7 +77,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::compare()
      */
-    public function testCompare()
+    public function testCompare(): void
     {
         $a = pack('H*', '589a84d7ec2db8f982841cedca674ec1');
         $b = $a;
@@ -102,7 +102,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::bin2hex()
      */
-    public function testBin2hex()
+    public function testBin2hex(): void
     {
         $str = random_bytes(random_int(1, 63));
         $this->assertSame(
@@ -114,7 +114,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Util::hex2bin()
      */
-    public function testHex2bin()
+    public function testHex2bin(): void
     {
         $str = bin2hex(random_bytes(random_int(1, 63)));
         $this->assertSame(
@@ -126,7 +126,7 @@ class PHP72Test extends TestCase
     /**
      *
      */
-    public function testAeadChapoly()
+    public function testAeadChapoly(): void
     {
         $message = str_repeat("\x00", 128);
         $key = str_repeat("\x00", 32);
@@ -190,7 +190,7 @@ class PHP72Test extends TestCase
     /**
      *
      */
-    public function testAeadChapolyIetf()
+    public function testAeadChapolyIetf(): void
     {
         $message = str_repeat("\x00", 128);
         $key = str_repeat("\x00", 32);
@@ -254,7 +254,7 @@ class PHP72Test extends TestCase
     /**
      *
      */
-    public function testCryptoAuth()
+    public function testCryptoAuth(): void
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         $key = random_bytes(32);
@@ -273,7 +273,7 @@ class PHP72Test extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_box()
      * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      */
-    public function testCryptoBox()
+    public function testCryptoBox(): void
     {
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -332,7 +332,7 @@ class PHP72Test extends TestCase
         );
     }
 
-    public function testCryptoBoxSeal()
+    public function testCryptoBoxSeal(): void
     {
         $msg = ParagonIE_Sodium_Core_Util::hex2bin(
             '7375f4094f1151640bd853cb13dbc1a0ee9e13b0287a89d34fa2f6732be9de13f88457553d'.
@@ -431,7 +431,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_generichash()
      */
-    public function testCryptoGenerichash()
+    public function testCryptoGenerichash(): void
     {
         $this->assertSame(
             bin2hex(sodium_crypto_generichash('apple')),
@@ -463,7 +463,7 @@ class PHP72Test extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_generichash_update()
      * @covers ParagonIE_Sodium_Compat::crypto_generichash_final()
      */
-    public function testCryptoGenerichashStream()
+    public function testCryptoGenerichashStream(): void
     {
         $key =  "\x1c" . str_repeat("\x80", 30) . "\xaf";
         $ctx = sodium_crypto_generichash_init($key);
@@ -487,7 +487,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_sign_seed_keypair()
      */
-    public function testSignKeypair()
+    public function testSignKeypair(): void
     {
         $seed = random_bytes(32);
         $kp = sodium_crypto_sign_seed_keypair($seed);
@@ -535,7 +535,7 @@ class PHP72Test extends TestCase
         }
     }
 
-    public function testSignKeypair2()
+    public function testSignKeypair2(): void
     {
         $keypair = sodium_crypto_sign_keypair();
         $secret = sodium_crypto_sign_secretkey($keypair);
@@ -556,7 +556,7 @@ class PHP72Test extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
      * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
      */
-    public function testCryptoSign()
+    public function testCryptoSign(): void
     {
         $keypair = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
@@ -636,7 +636,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      */
-    public function testCryptoSecretBox()
+    public function testCryptoSecretBox(): void
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
@@ -706,7 +706,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_scalarmult_base()
      */
-    public function testCryptoScalarmultBase()
+    public function testCryptoScalarmultBase(): void
     {
         $keypair = sodium_crypto_box_keypair();
         $secret = sodium_crypto_box_secretkey($keypair);
@@ -720,7 +720,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_scalarmult()
      */
-    public function testCryptoScalarmult()
+    public function testCryptoScalarmult(): void
     {
         $alice_box_kp = sodium_crypto_box_keypair();
         $alice_box_secretkey = sodium_crypto_box_secretkey($alice_box_kp);
@@ -745,7 +745,7 @@ class PHP72Test extends TestCase
      * @covers ParagonIE_Sodium_Compat::crypto_box_secretkey()
      * @covers ParagonIE_Sodium_Compat::crypto_box_publickey()
      */
-    public function testCryptoBoxKeypairs()
+    public function testCryptoBoxKeypairs(): void
     {
         $keypair = sodium_crypto_box_keypair();
         $secret = sodium_crypto_box_secretkey($keypair);
@@ -764,7 +764,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_stream()
      */
-    public function testCryptoStream()
+    public function testCryptoStream(): void
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
@@ -789,7 +789,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_stream_xor()
      */
-    public function testCryptoStreamXor()
+    public function testCryptoStreamXor(): void
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);
@@ -818,7 +818,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_kx()
      */
-    public function testCryptoKx()
+    public function testCryptoKx(): void
     {
         if (!is_callable('sodium_crypto_kx')) {
             $this->markTestSkipped('sodium_crypto_kx not defined');
@@ -855,7 +855,7 @@ class PHP72Test extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoPwhash()
+    public function testCryptoPwhash(): void
     {
         if (!\extension_loaded('sodium')) {
             $this->markTestSkipped('Libsodium not loaded');
@@ -892,7 +892,7 @@ class PHP72Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
      */
-    public function testKdf()
+    public function testKdf(): void
     {
         $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();
         $subkey_id = random_int(1, PHP_INT_MAX);
@@ -909,7 +909,7 @@ class PHP72Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testPwhashNeedsRehash()
+    public function testPwhashNeedsRehash(): void
     {
         if (!\extension_loaded('sodium')) {
             $this->markTestSkipped('Libsodium not loaded');
@@ -939,7 +939,7 @@ class PHP72Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testCryptoShorthash()
+    public function testCryptoShorthash(): void
     {
         $message = str_repeat("\x00", 8);
         $key = str_repeat("\x00", 16);
@@ -972,7 +972,7 @@ class PHP72Test extends TestCase
      * @throws SodiumException
      * @throws Exception
      */
-    public function testSecretStreamStates()
+    public function testSecretStreamStates(): void
     {
         $key = str_repeat("A", 32);
         list($stateA, $header) = sodium_crypto_secretstream_xchacha20poly1305_init_push($key);
@@ -1002,7 +1002,7 @@ class PHP72Test extends TestCase
         $this->assertEquals(bin2hex($stateC), bin2hex($stateD));
     }
 
-    public function testSecretStream()
+    public function testSecretStream(): void
     {
         $key = str_repeat("A", 32);
         // list($state, $header) = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_init_push($key);
@@ -1045,7 +1045,7 @@ class PHP72Test extends TestCase
      * @throws SodiumException
      * @throws Exception
      */
-    public function testSodiumPad()
+    public function testSodiumPad(): void
     {
         for ($i = 0; $i < 100; ++$i) {
             $block = random_int(16, 256);
@@ -1070,7 +1070,7 @@ class PHP72Test extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testKeyExchange()
+    public function testKeyExchange(): void
     {
         $alice = ParagonIE_Sodium_Compat::crypto_kx_keypair();
         $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice);

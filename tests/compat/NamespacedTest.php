@@ -21,7 +21,7 @@ class NamespacedTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
      */
-    public function testCryptoSecretBox()
+    public function testCryptoSecretBox(): void
     {
         $key = str_repeat("\x80", 32);
         $nonce = str_repeat("\x00", 24);

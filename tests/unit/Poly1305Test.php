@@ -6,7 +6,7 @@ class Poly1305Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -15,7 +15,7 @@ class Poly1305Test extends TestCase
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      * @ref https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#page-12
      */
-    public function testVectorA()
+    public function testVectorA(): void
     {
         $msg = ParagonIE_Sodium_Core_Util::hex2bin('0000000000000000000000000000000000000000000000000000000000000000');
         $key = ParagonIE_Sodium_Core_Util::hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
@@ -32,7 +32,7 @@ class Poly1305Test extends TestCase
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      * @ref https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#page-12
      */
-    public function testVectorB()
+    public function testVectorB(): void
     {
         $msg = ParagonIE_Sodium_Core_Util::hex2bin('48656c6c6f20776f726c6421');
         $key = ParagonIE_Sodium_Core_Util::hex2bin('746869732069732033322d62797465206b657920666f7220506f6c7931333035');
@@ -52,7 +52,7 @@ class Poly1305Test extends TestCase
      *
      * @ref https://github.com/jedisct1/libsodium/blob/master/test/default/onetimeauth2.c
      */
-    public function testVectorC()
+    public function testVectorC(): void
     {
         $msg = ParagonIE_Sodium_Core_Util::intArrayToString(
             array(
@@ -100,7 +100,7 @@ class Poly1305Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      */
-    public function testOdd()
+    public function testOdd(): void
     {
         $msg = str_repeat('a', 29);
         $key = ParagonIE_Sodium_Core_Util::hex2bin('69d5eae6e17623da87404bc791a408dfb1be300f43e10b96876134d5537dfcff');
@@ -116,7 +116,7 @@ class Poly1305Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      */
-    public function testEmpty()
+    public function testEmpty(): void
     {
 
         $msg = ParagonIE_Sodium_Core_Util::hex2bin('00');
@@ -169,7 +169,7 @@ class Poly1305Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify()
      */
-    public function testRandomVerify()
+    public function testRandomVerify(): void
     {
         $msg = random_bytes(random_int(1, 1000));
         $key = random_bytes(32);

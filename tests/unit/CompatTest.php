@@ -6,12 +6,12 @@ class CompatTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testIncrement()
+    public function testIncrement(): void
     {
         $string = "\x00\x00\x00\x00\x00\x00\x00\x00";
 
@@ -26,7 +26,7 @@ class CompatTest extends TestCase
         $this->assertSame("00000220", ParagonIE_Sodium_Core_Util::bin2hex($string));
     }
 
-    public function testRuntimeSpeed()
+    public function testRuntimeSpeed(): void
     {
         if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
             $this->markTestSkipped('Polyfill is fast, no need to test this.');
@@ -39,7 +39,7 @@ class CompatTest extends TestCase
      * @throws SodiumException
      * @throws Exception
      */
-    public function testKeyExchange()
+    public function testKeyExchange(): void
     {
         $alice = ParagonIE_Sodium_Compat::crypto_kx_keypair();
         $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice);
@@ -56,7 +56,7 @@ class CompatTest extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testSodiumPad()
+    public function testSodiumPad(): void
     {
         for ($i = 0; $i < 100; ++$i) {
             $block = random_int(16, 256);
@@ -76,7 +76,7 @@ class CompatTest extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testEd25519Keypairs()
+    public function testEd25519Keypairs(): void
     {
         $keypair = ParagonIE_Sodium_Core_Util::hex2bin(
             '73eda3c0594270f19fbed39440c15453c647987b5fd3a38164c383adfa638ebe' .

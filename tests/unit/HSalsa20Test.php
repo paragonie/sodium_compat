@@ -6,7 +6,7 @@ class HSalsa20Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Hsalsa20::hsalsa20()
      */
-    public function testVector()
+    public function testVector(): void
     {
         $key = str_repeat("\x00", 32);
         $iv = str_repeat("\x00", 16);

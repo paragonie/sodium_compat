@@ -6,7 +6,7 @@ class SipHashTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -14,7 +14,7 @@ class SipHashTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_SipHash::add()
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $vectors = array(
             array(
@@ -64,7 +64,7 @@ class SipHashTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_SipHash::rotl_64()
      */
-    public function testRotl64()
+    public function testRotl64(): void
     {
         $this->assertSame(
             array(0x00010000, 0x00000000),
@@ -108,7 +108,7 @@ class SipHashTest extends TestCase
         );
     }
 
-    public function testSipRound()
+    public function testSipRound(): void
     {
         $v = array(
             0x736f6d65, // 0
@@ -154,7 +154,7 @@ class SipHashTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_SipHash::sipHash24()
      */
-    public function testEvenBlock()
+    public function testEvenBlock(): void
     {
         $message = str_repeat("\xff", 32);
         $key = "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10";
@@ -170,7 +170,7 @@ class SipHashTest extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_SipHash::sipHash24()
      */
-    public function testCryptoShorthash()
+    public function testCryptoShorthash(): void
     {
         $message = 'this is just a test message';
         $key = str_repeat("\x80", 16);

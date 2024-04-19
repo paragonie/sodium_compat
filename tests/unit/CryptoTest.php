@@ -6,7 +6,7 @@ class CryptoTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -17,7 +17,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoAuth()
+    public function testCryptoAuth(): void
     {
         $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -39,7 +39,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testChapoly()
+    public function testChapoly(): void
     {
         $message = str_repeat("\x00", 128);
         $key = str_repeat("\x00", 32);
@@ -69,7 +69,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testChapolyIetf()
+    public function testChapolyIetf(): void
     {
         $preTest = ParagonIE_Sodium_Core_ChaCha20::ietfStream(
             32,
@@ -190,7 +190,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testXChapoly()
+    public function testXChapoly(): void
     {
         $message = str_repeat("\x00", 128);
         $key = str_repeat("\x00", 32);
@@ -235,7 +235,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testCryptoBox()
+    public function testCryptoBox(): void
     {
         $nonce = str_repeat("\x00", 24);
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -268,7 +268,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testBoxSeal()
+    public function testBoxSeal(): void
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
@@ -294,7 +294,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testBoxSeed()
+    public function testBoxSeed(): void
     {
         $seed = "\x77\x07\x6d\x0a\x73\x18\xa5\x7d\x3c\x16\xc1\x72\x51\xb2\x66\x45" .
                 "\xdf\x4c\x2f\x87\xeb\xc0\x99\x2a\xb1\x77\xfb\xa5\x1d\xb9\x2c\x2a";
@@ -312,7 +312,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testKeypairs()
+    public function testKeypairs(): void
     {
         $box_keypair = ParagonIE_Sodium_Compat::crypto_box_keypair();
         $box_public = ParagonIE_Sodium_Compat::crypto_box_publickey($box_keypair);
@@ -355,7 +355,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScalarmultBase()
+    public function testScalarmultBase(): void
     {
         $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
         $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
@@ -371,7 +371,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testScalarmult()
+    public function testScalarmult(): void
     {
         $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
         $alice_public = ParagonIE_Sodium_Core_Util::hex2bin('ac3a70ba35df3c3fae427a7c72021d68f2c1e044040b75f17313c0c8b5d4241d');
@@ -389,7 +389,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSignDetached()
+    public function testSignDetached(): void
     {
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
@@ -416,7 +416,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSign()
+    public function testSign(): void
     {
         $secret = ParagonIE_Sodium_Core_Util::hex2bin(
             'fcdf31aae72e280cc760186d83e41be216fe1f2c7407dd393ad3a45a2fa501a4' .
@@ -451,7 +451,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSecretbox()
+    public function testSecretbox(): void
     {
         $secret = random_bytes(32);
         $nonce = random_bytes(24);
@@ -471,7 +471,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSecretboxXChaCha20Poly1205()
+    public function testSecretboxXChaCha20Poly1205(): void
     {
         $secret = random_bytes(32);
         $nonce = random_bytes(24);
@@ -490,7 +490,7 @@ class CryptoTest extends TestCase
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testVerifyDetached()
+    public function testVerifyDetached(): void
     {
         $public = ParagonIE_Sodium_Core_Util::hex2bin('ee00f800ae9e986b994ec0af67fe6b017eb78704e81639eee7efa3d3a831d1bc');
 

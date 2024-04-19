@@ -18,7 +18,7 @@ class HexTest extends TestCase
     /**
      * @dataProvider hexProvider
      */
-    public function testHex2Bin($hex, $ignore, $binary, $fail)
+    public function testHex2Bin($hex, $ignore, $binary, $fail): void
     {
         try {
             $decoded = ParagonIE_Sodium_Compat::hex2bin($hex, $ignore);

@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
  */
 class KeygenTest extends TestCase
 {
-    public function testVectors()
+    public function testVectors(): void
     {
         $this->assertSame(
             ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES,

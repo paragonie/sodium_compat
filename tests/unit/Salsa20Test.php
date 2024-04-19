@@ -6,7 +6,7 @@ class Salsa20Test extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -14,7 +14,7 @@ class Salsa20Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Salsa20::rotate()
      */
-    public function testRotate()
+    public function testRotate(): void
     {
         $this->assertEquals(
             0x00001000,
@@ -77,7 +77,7 @@ class Salsa20Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Salsa20::salsa20()
      */
-    public function testVectors()
+    public function testVectors(): void
     {
         $key = "\x80" . str_repeat("\x00", 31);
         $iv = str_repeat("\x00", 8);
@@ -114,7 +114,7 @@ class Salsa20Test extends TestCase
     /**
      * @covers ParagonIE_Sodium_Core_Salsa20::core_salsa20()
      */
-    public function testCoreSalsa20()
+    public function testCoreSalsa20(): void
     {
         $key = random_bytes(32);
         $iv = random_bytes(8);

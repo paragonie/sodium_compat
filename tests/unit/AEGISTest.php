@@ -7,12 +7,12 @@ class AEGISTest extends TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    public function testAegis128lUpdate()
+    public function testAegis128lUpdate(): void
     {
         $state = ParagonIE_Sodium_Core_AEGIS_State128L::initForUnitTests(array(
             ParagonIE_Sodium_Core_Util::hex2bin('9b7e60b24cc873ea894ecc07911049a3'),
@@ -41,7 +41,7 @@ class AEGISTest extends TestCase
         $this->assertSame($s, $expected);
     }
 
-    public function testAegis256lUpdate()
+    public function testAegis256lUpdate(): void
     {
         $state = ParagonIE_Sodium_Core_AEGIS_State256::initForUnitTests(array(
             ParagonIE_Sodium_Core_Util::hex2bin('1fa1207ed76c86f2c4bb40e8b395b43e'),
@@ -288,7 +288,7 @@ class AEGISTest extends TestCase
         $msg_hex = '',
         $ad_hex = '',
         $expect_fail = false
-    ) {
+    ): void {
         $key = ParagonIE_Sodium_Core_Util::hex2bin($key_hex);
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin($nonce_hex);
         $expTag = ParagonIE_Sodium_Core_Util::hex2bin($expected_tag_hex);
@@ -349,7 +349,7 @@ class AEGISTest extends TestCase
         $msg_hex = '',
         $ad_hex = '',
         $expect_fail = false
-    ) {
+    ): void {
         $key = ParagonIE_Sodium_Core_Util::hex2bin($key_hex);
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin($nonce_hex);
         $expTag = ParagonIE_Sodium_Core_Util::hex2bin($expected_tag_hex);
@@ -389,7 +389,7 @@ class AEGISTest extends TestCase
         $this->assertSame($got_pt, $msg, $name);
     }
 
-    public function testPublicAegis128l()
+    public function testPublicAegis128l(): void
     {
         $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
         $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_NPUBBYTES);
@@ -400,7 +400,7 @@ class AEGISTest extends TestCase
         $this->assertSame($msg, $msg2);
     }
 
-    public function testPublicAegis256()
+    public function testPublicAegis256(): void
     {
         $msg = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::randombytes_uniform(999) + 1);
         $nonce = ParagonIE_Sodium_Compat::randombytes_buf(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_NPUBBYTES);
