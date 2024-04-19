@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/autoload.php';
+require_once dirname(__DIR__) . '/autoload.php';
 
 /**
  * This file will monkey patch the pure-PHP implementation in place of the

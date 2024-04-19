@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 require_once dirname(dirname(__FILE__)) . '/autoload.php';
 
@@ -34,8 +35,13 @@ if (!is_callable('sodium_crypto_aead_aegis128l_decrypt')) {
      * @return string
      * @throws SodiumException
      */
-    function sodium_crypto_aead_aegis128l_decrypt($ciphertext, $additional_data, $nonce, $key)
-    {
+    function sodium_crypto_aead_aegis128l_decrypt(
+        string $ciphertext,
+        string $additional_data,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt(
             $ciphertext,
             $additional_data,
@@ -55,8 +61,14 @@ if (!is_callable('sodium_crypto_aead_aegis128l_encrypt')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_crypto_aead_aegis128l_encrypt($message, $additional_data, $nonce, $key)
-    {
+    function sodium_crypto_aead_aegis128l_encrypt(
+        #[\SensitiveParameter]
+        string $message,
+        string $additional_data,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt(
             $message,
             $additional_data,
@@ -75,8 +87,13 @@ if (!is_callable('sodium_crypto_aead_aegis256_decrypt')) {
      * @return string
      * @throws SodiumException
      */
-    function sodium_crypto_aead_aegis256_decrypt($ciphertext, $additional_data, $nonce, $key)
-    {
+    function sodium_crypto_aead_aegis256_decrypt(
+        string $ciphertext,
+        string $additional_data,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt(
             $ciphertext,
             $additional_data,
@@ -96,8 +113,14 @@ if (!is_callable('sodium_crypto_aead_aegis256_encrypt')) {
      * @throws SodiumException
      * @throws TypeError
      */
-    function sodium_crypto_aead_aegis256_encrypt($message, $additional_data, $nonce, $key)
-    {
+    function sodium_crypto_aead_aegis256_encrypt(
+        #[\SensitiveParameter]
+        string $message,
+        string $additional_data,
+        string $nonce,
+        #[\SensitiveParameter]
+        string $key
+    ): string {
         return ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt(
             $message,
             $additional_data,
