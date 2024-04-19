@@ -160,32 +160,6 @@ if (sodium_crypto_sign_verify_detached($signature, $message, $alice_pk)) {
 }
 ```
 
-## Polyfill For the Old PECL Extension API
-
-If you're using PHP 5.3.0 or newer and do not have the PECL extension installed,
-you can just use the [standard ext/sodium API features as-is](https://paragonie.com/book/pecl-libsodium)
-and the polyfill will work its magic.
-
-```php
-<?php
-require_once "/path/to/sodium_compat/autoload.php";
-
-$alice_kp = \Sodium\crypto_sign_keypair();
-$alice_sk = \Sodium\crypto_sign_secretkey($alice_kp);
-$alice_pk = \Sodium\crypto_sign_publickey($alice_kp);
-
-$message = 'This is a test message.';
-$signature = \Sodium\crypto_sign_detached($message, $alice_sk);
-if (\Sodium\crypto_sign_verify_detached($signature, $message, $alice_pk)) {
-    echo 'OK', PHP_EOL;
-} else {
-    throw new Exception('Invalid signature');
-}
-```
-
-The polyfill does not expose this API on PHP < 5.3, or if you have the PHP
-extension installed already.
-
 ## General-Use Polyfill
 
 If your users are on PHP < 5.3, or you want to write code that will work
@@ -211,7 +185,7 @@ if (ParagonIE_Sodium_Compat::crypto_sign_verify_detached($signature, $message, $
 }
 ```
 
-Generally: If you replace `\Sodium\ ` with `ParagonIE_Sodium_Compat::`, any
+Generally: If you replace `sodium_` with `ParagonIE_Sodium_Compat::`, any
 code already written for the libsodium PHP extension should work with our
 polyfill without additional code changes.
 
@@ -252,26 +226,6 @@ if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
     $process->enqueue();
 }
 ```
-
-### Help, my PHP only has 32-Bit Integers! It's super slow!
-
-If the `PHP_INT_SIZE` constant equals `4` instead of `8` (PHP 5 on Windows,
-Linux on i386, etc.), you will run into **significant performance issues**.
-
-In particular: public-key cryptography (encryption and signatures)
-is affected. There is nothing we can do about that.
-
-The root cause of these performance issues has to do with implementing cryptography
-algorithms in constant-time using 16-bit limbs (to avoid overflow) in pure PHP.
-
-To mitigate these performance issues, simply install PHP 7.2 or newer and enable
-the `sodium` extension.
-
-Affected users are encouraged to install the sodium extension (or libsodium from
-older version of PHP).
-
-Windows users on PHP 5 may be able to simply upgrade to PHP 7 and the slowdown
-will be greatly reduced.
 
 ## Documentation
 
