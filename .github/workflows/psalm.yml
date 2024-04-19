@@ -26,8 +26,5 @@ jobs:
         with:
           composer-options: --no-dev
 
-      - name: Put Psalm config in place
-        run: cp psalm-above-3.xml psalm.xml
-
       - name: Static Analysis
         run: psalm

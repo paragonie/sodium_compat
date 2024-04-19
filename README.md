@@ -2,7 +2,6 @@
 
 [![Build Status](https://github.com/paragonie/sodium_compat/actions/workflows/ci.yml/badge.svg)](https://github.com/paragonie/sodium_compat/actions)
 [![Psalm Status](https://github.com/paragonie/sodium_compat/actions/workflows/psalm.yml/badge.svg)](https://github.com/paragonie/sodium_compat/actions)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/itcx1vgmfqiawgbe?svg=true)](https://ci.appveyor.com/project/paragonie-scott/sodium-compat)
 [![Latest Stable Version](https://poser.pugx.org/paragonie/sodium_compat/v/stable)](https://packagist.org/packages/paragonie/sodium_compat)
 [![Latest Unstable Version](https://poser.pugx.org/paragonie/sodium_compat/v/unstable)](https://packagist.org/packages/paragonie/sodium_compat)
 [![License](https://poser.pugx.org/paragonie/sodium_compat/license)](https://packagist.org/packages/paragonie/sodium_compat)

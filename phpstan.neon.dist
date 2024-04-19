@@ -1,8 +1,6 @@
 parameters:
     autoload_files:
         - %rootDir%/../../../autoload-fast.php
-        - %rootDir%/../../../src/Core32/ChaCha20/Ctx.php
-        - %rootDir%/../../../src/Core32/ChaCha20/IetfCtx.php
     level: max
     paths:
         - %currentWorkingDirectory%/src/

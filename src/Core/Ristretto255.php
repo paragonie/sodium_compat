@@ -430,29 +430,29 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
 
         if ($ctx_len > 0xff) {
             $st = hash_init('sha256');
-            self::hash_update($st, "H2C-OVERSIZE-DST-");
-            self::hash_update($st, $ctx);
+            hash_update($st, "H2C-OVERSIZE-DST-");
+            hash_update($st, $ctx);
             $ctx = hash_final($st, true);
             $ctx_len = 32;
         }
         $t = array(0, $hLen, 0);
         $ux = str_repeat("\0", 64);
         $st = hash_init('sha256');
-        self::hash_update($st, $ux);
-        self::hash_update($st, $msg);
-        self::hash_update($st, self::intArrayToString($t));
-        self::hash_update($st, $ctx);
-        self::hash_update($st, self::intToChr($ctx_len));
+        hash_update($st, $ux);
+        hash_update($st, $msg);
+        hash_update($st, self::intArrayToString($t));
+        hash_update($st, $ctx);
+        hash_update($st, self::intToChr($ctx_len));
         $u0 = hash_final($st, true);
 
         for ($i = 0; $i < $hLen; $i += 64) {
             $ux = self::xorStrings($ux, $u0);
             ++$t[2];
             $st = hash_init('sha256');
-            self::hash_update($st, $ux);
-            self::hash_update($st, self::intToChr($t[2]));
-            self::hash_update($st, $ctx);
-            self::hash_update($st, self::intToChr($ctx_len));
+            hash_update($st, $ux);
+            hash_update($st, self::intToChr($t[2]));
+            hash_update($st, $ctx);
+            hash_update($st, self::intToChr($ctx_len));
             $ux = hash_final($st, true);
             $amount = min($hLen - $i, 64);
             for ($j = 0; $j < $amount; ++$j) {
@@ -480,29 +480,29 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
 
         if ($ctx_len > 0xff) {
             $st = hash_init('sha256');
-            self::hash_update($st, "H2C-OVERSIZE-DST-");
-            self::hash_update($st, $ctx);
+            hash_update($st, "H2C-OVERSIZE-DST-");
+            hash_update($st, $ctx);
             $ctx = hash_final($st, true);
             $ctx_len = 32;
         }
         $t = array(0, $hLen, 0);
         $ux = str_repeat("\0", 128);
         $st = hash_init('sha512');
-        self::hash_update($st, $ux);
-        self::hash_update($st, $msg);
-        self::hash_update($st, self::intArrayToString($t));
-        self::hash_update($st, $ctx);
-        self::hash_update($st, self::intToChr($ctx_len));
+        hash_update($st, $ux);
+        hash_update($st, $msg);
+        hash_update($st, self::intArrayToString($t));
+        hash_update($st, $ctx);
+        hash_update($st, self::intToChr($ctx_len));
         $u0 = hash_final($st, true);
 
         for ($i = 0; $i < $hLen; $i += 128) {
             $ux = self::xorStrings($ux, $u0);
             ++$t[2];
             $st = hash_init('sha512');
-            self::hash_update($st, $ux);
-            self::hash_update($st, self::intToChr($t[2]));
-            self::hash_update($st, $ctx);
-            self::hash_update($st, self::intToChr($ctx_len));
+            hash_update($st, $ux);
+            hash_update($st, self::intToChr($t[2]));
+            hash_update($st, $ctx);
+            hash_update($st, self::intToChr($ctx_len));
             $ux = hash_final($st, true);
             $amount = min($hLen - $i, 128);
             for ($j = 0; $j < $amount; ++$j) {

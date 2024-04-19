@@ -21,9 +21,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             '49ec78090e481ec6c26b33b91ccc0307',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'crypto_onetimeauth is broken'
         );
@@ -40,9 +38,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             'a6f745008f81c916a20dcc74eef2b2f0',
             ParagonIE_Sodium_Core_Util::bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'crypto_onetimeauth is broken'
         );
@@ -90,16 +86,12 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             bin2hex($tag),
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'crypto_onetimeauth is broken -- IETF test vector'
         );
         $this->assertTrue(
-            PHP_INT_SIZE === 4
-                ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth_verify($tag, $msg, $key)
-                : ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($tag, $msg, $key),
+            ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($tag, $msg, $key),
             'crypto_onetimeauth_verify is broken -- IETF test vector'
         );
     }
@@ -114,9 +106,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             '1e57d95d70615c7a83a02e1156ef217c',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'Weird message length'
         );
@@ -133,9 +123,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             '6bd9e189698fdb93509f9ea633aba49a',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'null byte message'
         );
@@ -145,9 +133,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             '6b657920666f7220506f6c7931333035',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'Empty message'
         );
@@ -156,9 +142,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             '6bd9e189698fdb93509f9ea633aba49a',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'null byte message'
         );
@@ -167,9 +151,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             'e865ed88cf729289c36f9cab5e35a8a9',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             'double null byte message'
         );
@@ -177,9 +159,7 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $this->assertSame(
             'fc27bd24ceb202210cee247cc704af35',
             bin2hex(
-                PHP_INT_SIZE === 4
-                    ? ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key)
-                    : ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
+                ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key)
             ),
             '16 null byte message'
         );
@@ -193,18 +173,10 @@ class Poly1305Test extends PHPUnit_Framework_TestCase
         $msg = random_bytes(random_int(1, 1000));
         $key = random_bytes(32);
 
-        if (PHP_INT_SIZE === 4) {
-            $mac = ParagonIE_Sodium_Core32_Poly1305::onetimeauth($msg, $key);
-            $this->assertTrue(
-                ParagonIE_Sodium_Core32_Poly1305::onetimeauth_verify($mac, $msg, $key),
-                'crypto_onetimeauth_verify is broken'
-            );
-        } else {
-            $mac = ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key);
-            $this->assertTrue(
-                ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $msg, $key),
-                'crypto_onetimeauth_verify is broken'
-            );
-        }
+        $mac = ParagonIE_Sodium_Core_Poly1305::onetimeauth($msg, $key);
+        $this->assertTrue(
+            ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $msg, $key),
+            'crypto_onetimeauth_verify is broken'
+        );
     }
 }
