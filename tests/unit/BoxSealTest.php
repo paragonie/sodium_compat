@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class BoxSealTest extends PHPUnit_Framework_TestCase
+class BoxSealTest extends TestCase
 {
     /**
      * @before

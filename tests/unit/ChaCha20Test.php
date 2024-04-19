@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class ChaCha20Test extends PHPUnit_Framework_TestCase
+class ChaCha20Test extends TestCase
 {
     /**
      * @before

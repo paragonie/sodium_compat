@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers ParagonIE_Sodium_Core_AES
  */
-class AESTest extends PHPUnit_Framework_TestCase
+class AESTest extends TestCase
 {
     /**
      * @before

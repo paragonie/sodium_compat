@@ -1,6 +1,8 @@
 <?php
 
-class AEGISTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AEGISTest extends TestCase
 {
     /**
      * @before

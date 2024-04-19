@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class StreamTest
  */
-class StreamTest extends PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
     /**
      * @before

@@ -1,9 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class X25519Test
  */
-class X25519Test extends PHPUnit_Framework_TestCase
+class X25519Test extends TestCase
 {
     /**
      * @before

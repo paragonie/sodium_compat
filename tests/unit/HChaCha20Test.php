@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class HChaCha20Test extends PHPUnit_Framework_TestCase
+class HChaCha20Test extends TestCase
 {
     /**
      * @covers ParagonIE_Sodium_Core_HChaCha20::hChaCha20()

@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class CryptoTest extends PHPUnit_Framework_TestCase
+class CryptoTest extends TestCase
 {
     /**
      * @before

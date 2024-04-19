@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class Poly1305Test extends PHPUnit_Framework_TestCase
+class Poly1305Test extends TestCase
 {
     /**
      * @before

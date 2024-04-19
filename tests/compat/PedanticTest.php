@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PedanticTest
@@ -7,7 +8,7 @@
  *
  * To include this in the test suite: vendor/bin/phpunit --bootstrap=autoload-pedantic.php
  */
-class PedanticTest extends PHPUnit_Framework_TestCase
+class PedanticTest extends TestCase
 {
     const DEFAULT_MAX_LENGTH = 32;
 
@@ -16,7 +17,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (!extension_loaded('libsodium')) {
             $this->markTestSkipped('Libsodium is not installed; skipping the compatibility test suite.');
@@ -37,7 +38,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @after
      */
-    public function after()
+    public function after(): void
     {
         ParagonIE_Sodium_Compat::$fastMult = $this->oldFastMult;
     }
@@ -45,7 +46,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
     /**
      * @return array<int, int>
      */
-    public function getInteresting32BitInts()
+    public function getInteresting32BitInts(): array
     {
         return array(
             0x00000000, 0x01234567,
@@ -72,7 +73,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @return array<int, string>
      * @throws TypeError
      */
-    public function getInteresting16ByteStrings()
+    public function getInteresting16ByteStrings(): array
     {
         $strings = array();
         foreach ($this->getInteresting32BitInts() as $i => $int) {
@@ -86,7 +87,7 @@ class PedanticTest extends PHPUnit_Framework_TestCase
      * @return array<int, string>
      * @throws TypeError
      */
-    public function getInteresting32ByteStrings()
+    public function getInteresting32ByteStrings(): array
     {
         $strings = array();
         foreach ($this->getInteresting32BitInts() as $i => $int) {

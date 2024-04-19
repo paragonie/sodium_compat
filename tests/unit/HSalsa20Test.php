@@ -1,6 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class HSalsa20Test extends PHPUnit_Framework_TestCase
+class HSalsa20Test extends TestCase
 {
     /**
      * @covers ParagonIE_Sodium_Core_Hsalsa20::hsalsa20()

@@ -1,6 +1,7 @@
 <?php
 
-class PHP84Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+class PHP84Test extends TestCase
 {
     /**
      * @before

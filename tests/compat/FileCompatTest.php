@@ -1,11 +1,12 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
-class FileCompatTest extends PHPUnit_Framework_TestCase
+class FileCompatTest extends TestCase
 {
     /**
      * @before
      */
-    public function before()
+    public function before(): void
     {
         if (PHP_VERSION_ID < 70200) {
             $this->markTestSkipped('PHP < 7.2.0; skipping PHP 7.2 File compatibility test suite.');
