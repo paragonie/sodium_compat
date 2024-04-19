@@ -253,38 +253,21 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
                 $hbufStr . $hbufStr
             );
 
-            if (PHP_INT_SIZE === 4) {
-                $exp = ParagonIE_Sodium_Core32_BLAKE2b::init();
-                ParagonIE_Sodium_Core32_BLAKE2b::update($exp, $hbuf, (1 << $h));
-                ParagonIE_Sodium_Core32_BLAKE2b::update($exp, $hbuf, (1 << $h));
+            $exp = ParagonIE_Sodium_Core_BLAKE2b::init();
+            ParagonIE_Sodium_Core_BLAKE2b::update($exp, $hbuf, (1 << $h));
+            ParagonIE_Sodium_Core_BLAKE2b::update($exp, $hbuf, (1 << $h));
 
-                $ctx = ParagonIE_Sodium_Core32_BLAKE2b::init();
-                ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $buf, (1 << ($h + 1)));
-            } else {
-                $exp = ParagonIE_Sodium_Core_BLAKE2b::init();
-                ParagonIE_Sodium_Core_BLAKE2b::update($exp, $hbuf, (1 << $h));
-                ParagonIE_Sodium_Core_BLAKE2b::update($exp, $hbuf, (1 << $h));
-
-                $ctx = ParagonIE_Sodium_Core_BLAKE2b::init();
-                ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $buf, (1 << ($h + 1)));
-            }
+            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init();
+            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $buf, (1 << ($h + 1)));
             for ($j = 0; $j < 5; ++$j) {
                 $this->assertEquals($exp[$j], $ctx[$j], 'element ' . $j);
             }
 
-            if (PHP_INT_SIZE === 4) {
-                $this->assertSame(
-                    bin2hex(ParagonIE_Sodium_Core32_BLAKE2b::contextToString($exp)),
-                    bin2hex(ParagonIE_Sodium_Core32_BLAKE2b::contextToString($ctx)),
-                    'h = ' . $h
-                );
-            } else {
-                $this->assertSame(
-                    bin2hex(ParagonIE_Sodium_Core_BLAKE2b::contextToString($exp)),
-                    bin2hex(ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx)),
-                    'h = ' . $h
-                );
-            }
+            $this->assertSame(
+                bin2hex(ParagonIE_Sodium_Core_BLAKE2b::contextToString($exp)),
+                bin2hex(ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx)),
+                'h = ' . $h
+            );
         }
     }
 
@@ -293,9 +276,6 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      */
     public function testCounter()
     {
-        if (PHP_INT_SIZE === 4) {
-            $this->markTestSkipped("Ignored in 32-bit");
-        }
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
 
         ParagonIE_Sodium_Core_BLAKE2b::increment_counter($ctx, 1);
@@ -318,38 +298,6 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core32_BLAKE2b::increment_counter()
-     */
-    public function testCounter32()
-    {
-        if (PHP_INT_SIZE === 8) {
-            $this->markTestSkipped("32-bit only");
-        }
-        $ctx = ParagonIE_Sodium_Core32_BLAKE2b::init(null, 32);
-
-        ParagonIE_Sodium_Core32_BLAKE2b::increment_counter($ctx, 1);
-        $this->assertEquals(1, $ctx[1][0]->toInt());
-        $this->assertEquals(0, $ctx[1][1]->toInt());
-
-        ParagonIE_Sodium_Core32_BLAKE2b::increment_counter($ctx, 1);
-        $this->assertEquals(2, $ctx[1][0]->toInt());
-        $this->assertEquals(0, $ctx[1][1]->toInt());
-
-        ParagonIE_Sodium_Core32_BLAKE2b::increment_counter($ctx, 1024);
-        $this->assertEquals(1026, $ctx[1][0]->toInt());
-        $this->assertEquals(0, $ctx[1][1]->toInt());
-
-        for ($i = 0; $i < 4; ++$i) {
-            ParagonIE_Sodium_Core32_BLAKE2b::increment_counter($ctx, 1 << 30);
-        }
-
-        /** @var ParagonIE_Sodium_Core32_Int64 $c */
-        $c = $ctx[1][0]->toArray();
-        $this->assertEquals(1026, $c[1]);
-        $this->assertEquals(1, $c[0]);
-    }
-
-    /**
      * Make sure our 'context' string is consistent.
      *
      * @covers ParagonIE_Sodium_Core_BLAKE2b::init()
@@ -361,11 +309,7 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
     {
         $ctxA = ParagonIE_Sodium_Compat::crypto_generichash_init();
 
-        if (PHP_INT_SIZE === 4) {
-            $ctxB = ParagonIE_Sodium_Core32_BLAKE2b::init(null, 32);
-        } else {
-            $ctxB = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
-        }
+        $ctxB = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
 
         $chunks = array(
             'Paragon Initiative ',
@@ -381,27 +325,14 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
         );
         foreach ($chunks as $i => $chk) {
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctxA, $chk);
-            if (PHP_INT_SIZE === 4) {
-                $chunk = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($chk);
-                ParagonIE_Sodium_Core32_BLAKE2b::update(
-                    $ctxB,
-                    $chunk,
-                    $chunk->count()
-                );
-            } else {
-                $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);
-                ParagonIE_Sodium_Core_BLAKE2b::update(
-                    $ctxB,
-                    $chunk,
-                    $chunk->count()
-                );
-            }
+            $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);
+            ParagonIE_Sodium_Core_BLAKE2b::update(
+                $ctxB,
+                $chunk,
+                $chunk->count()
+            );
             /** @var string $ctxStrB */
-            if (PHP_INT_SIZE === 4) {
-                $ctxStrB = ParagonIE_Sodium_Core32_BLAKE2b::contextToString($ctxB);
-            } else {
-                $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
-            }
+            $ctxStrB = ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctxB);
 
             $this->assertEquals(
                 ParagonIE_Sodium_Core_Util::bin2hex(
@@ -475,23 +406,13 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
             // Hash 3
             $out = new SplFixedArray(32);
-            if (PHP_INT_SIZE === 4) {
-                $d1s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data);
-                $d2s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data2);
-                $ctx = ParagonIE_Sodium_Core32_BLAKE2b::init(null, 32);
-                ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d1s, $d1s->count());
-                ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d2s, $d2s->count());
-                ParagonIE_Sodium_Core32_BLAKE2b::finish($ctx, $out);
-                $hash3 = ParagonIE_Sodium_Core32_BLAKE2b::SplFixedArrayToString($out);
-            } else {
-                $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
-                $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
-                $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
-                ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
-                ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
-                ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
-                $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
-            }
+            $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
+            $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
+            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
+            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
+            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
+            ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+            $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
 
             $this->assertSame(bin2hex($hash), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') a');
             $this->assertSame(bin2hex($hash2), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') b');
@@ -513,25 +434,14 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
 
         // Hash 3
         $out = new SplFixedArray(32);
-        if (PHP_INT_SIZE === 4) {
-            $d1s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data);
-            $d2s = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($data2);
-            $key = ParagonIE_Sodium_Core32_BLAKE2b::stringToSplFixedArray($k);
-            $ctx = ParagonIE_Sodium_Core32_BLAKE2b::init($key, 32);
-            ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d1s, $d1s->count());
-            ParagonIE_Sodium_Core32_BLAKE2b::update($ctx, $d2s, $d2s->count());
-            ParagonIE_Sodium_Core32_BLAKE2b::finish($ctx, $out);
-            $hash3 = ParagonIE_Sodium_Core32_BLAKE2b::SplFixedArrayToString($out);
-        } else {
-            $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
-            $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
-            $key = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($k);
-            $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($key, 32);
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
-            ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
-            ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
-            $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
-        }
+        $d1s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data);
+        $d2s = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($data2);
+        $key = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($k);
+        $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($key, 32);
+        ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d1s, $d1s->count());
+        ParagonIE_Sodium_Core_BLAKE2b::update($ctx, $d2s, $d2s->count());
+        ParagonIE_Sodium_Core_BLAKE2b::finish($ctx, $out);
+        $hash3 = ParagonIE_Sodium_Core_BLAKE2b::SplFixedArrayToString($out);
 
         $this->assertSame(bin2hex($hash), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') a');
         $this->assertSame(bin2hex($hash2), bin2hex($hash3), 'Generichash streaming is failing (' . $i . ') b');
@@ -545,32 +455,17 @@ class Blake2bTest extends PHPUnit_Framework_TestCase
      */
     public function testRotate()
     {
-        if (PHP_INT_SIZE === 4) {
-            $int = ParagonIE_Sodium_Core32_BLAKE2b::new64(0x7f000000, 0x3ffffff0);
-            $expected = ParagonIE_Sodium_Core32_BLAKE2b::new64(0x3f800000, 0x1ffffff8);
-            $calc = ParagonIE_Sodium_Core32_BLAKE2b::rotr64($int, 1);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
+        $int = ParagonIE_Sodium_Core_BLAKE2b::new64(0x7f000000, 0x3ffffff0);
+        $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0x3f800000, 0x1ffffff8);
+        $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 1);
+        $this->assertEquals($expected->toArray(), $calc->toArray());
 
-            $expected = ParagonIE_Sodium_Core32_BLAKE2b::new64(0xfff07f00, 0x00003fff);
-            $calc = ParagonIE_Sodium_Core32_BLAKE2b::rotr64($int, 16);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
+        $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0xfff07f00, 0x00003fff);
+        $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 16);
+        $this->assertEquals($expected->toArray(), $calc->toArray());
 
-            $expected = ParagonIE_Sodium_Core32_BLAKE2b::new64(0x3ffffff0, 0x7f000000);
-            $calc = ParagonIE_Sodium_Core32_BLAKE2b::rotr64($int, 32);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
-        } else {
-            $int = ParagonIE_Sodium_Core_BLAKE2b::new64(0x7f000000, 0x3ffffff0);
-            $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0x3f800000, 0x1ffffff8);
-            $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 1);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
-
-            $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0xfff07f00, 0x00003fff);
-            $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 16);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
-
-            $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0x3ffffff0, 0x7f000000);
-            $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 32);
-            $this->assertEquals($expected->toArray(), $calc->toArray());
-        }
+        $expected = ParagonIE_Sodium_Core_BLAKE2b::new64(0x3ffffff0, 0x7f000000);
+        $calc = ParagonIE_Sodium_Core_BLAKE2b::rotr64($int, 32);
+        $this->assertEquals($expected->toArray(), $calc->toArray());
     }
 }

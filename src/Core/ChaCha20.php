@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_ChaCha20', false)) {
     return;
@@ -18,11 +19,11 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @param int $n
      * @return int
      */
-    public static function rotate($v, $n)
+    public static function rotate(int $v, int $n): int
     {
         $v &= 0xffffffff;
         $n &= 31;
-        return (int) (
+        return (
             0xffffffff & (
                 ($v << $n)
                     |
@@ -42,7 +43,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @param int $d
      * @return array<int, int>
      */
-    protected static function quarterRound($a, $b, $c, $d)
+    protected static function quarterRound(int $a, int $b, int $c, int $d): array
     {
         # a = PLUS(a,b); d = ROTATE(XOR(d,a),16);
         /** @var int $a */
@@ -63,7 +64,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
         /** @var int $c */
         $c = ($c + $d) & 0xffffffff;
         $b = self::rotate($b ^ $c, 7);
-        return array((int) $a, (int) $b, (int) $c, (int) $d);
+        return array($a, $b, $c, $d);
     }
 
     /**
@@ -78,8 +79,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      */
     public static function encryptBytes(
         ParagonIE_Sodium_Core_ChaCha20_Ctx $ctx,
-        $message = ''
-    ) {
+        #[SensitiveParameter]
+        string $message = ''
+    ): string {
         $bytes = self::strlen($message);
 
         /*
@@ -123,22 +125,22 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
                 $message .= str_repeat("\x00", 64 - $bytes);
             }
 
-            $x0 =  (int) $j0;
-            $x1 =  (int) $j1;
-            $x2 =  (int) $j2;
-            $x3 =  (int) $j3;
-            $x4 =  (int) $j4;
-            $x5 =  (int) $j5;
-            $x6 =  (int) $j6;
-            $x7 =  (int) $j7;
-            $x8 =  (int) $j8;
-            $x9 =  (int) $j9;
-            $x10 = (int) $j10;
-            $x11 = (int) $j11;
-            $x12 = (int) $j12;
-            $x13 = (int) $j13;
-            $x14 = (int) $j14;
-            $x15 = (int) $j15;
+            $x0 =  $j0;
+            $x1 =  $j1;
+            $x2 =  $j2;
+            $x3 =  $j3;
+            $x4 =  $j4;
+            $x5 =  $j5;
+            $x6 =  $j6;
+            $x7 =  $j7;
+            $x8 =  $j8;
+            $x9 =  $j9;
+            $x10 = $j10;
+            $x11 = $j11;
+            $x12 = $j12;
+            $x13 = $j13;
+            $x14 = $j14;
+            $x15 = $j15;
 
             # for (i = 20; i > 0; i -= 2) {
             for ($i = 20; $i > 0; $i -= 2) {
@@ -184,37 +186,21 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
             x14 = PLUS(x14, j14);
             x15 = PLUS(x15, j15);
             */
-            /** @var int $x0 */
             $x0  = ($x0 & 0xffffffff) + $j0;
-            /** @var int $x1 */
             $x1  = ($x1 & 0xffffffff) + $j1;
-            /** @var int $x2 */
             $x2  = ($x2 & 0xffffffff) + $j2;
-            /** @var int $x3 */
             $x3  = ($x3 & 0xffffffff) + $j3;
-            /** @var int $x4 */
             $x4  = ($x4 & 0xffffffff) + $j4;
-            /** @var int $x5 */
             $x5  = ($x5 & 0xffffffff) + $j5;
-            /** @var int $x6 */
             $x6  = ($x6 & 0xffffffff) + $j6;
-            /** @var int $x7 */
             $x7  = ($x7 & 0xffffffff) + $j7;
-            /** @var int $x8 */
             $x8  = ($x8 & 0xffffffff) + $j8;
-            /** @var int $x9 */
             $x9  = ($x9 & 0xffffffff) + $j9;
-            /** @var int $x10 */
             $x10 = ($x10 & 0xffffffff) + $j10;
-            /** @var int $x11 */
             $x11 = ($x11 & 0xffffffff) + $j11;
-            /** @var int $x12 */
             $x12 = ($x12 & 0xffffffff) + $j12;
-            /** @var int $x13 */
             $x13 = ($x13 & 0xffffffff) + $j13;
-            /** @var int $x14 */
             $x14 = ($x14 & 0xffffffff) + $j14;
-            /** @var int $x15 */
             $x15 = ($x15 & 0xffffffff) + $j15;
 
             /*
@@ -281,22 +267,22 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
             STORE32_LE(c + 56, x14);
             STORE32_LE(c + 60, x15);
             */
-            $block = self::store32_le((int) ($x0  & 0xffffffff)) .
-                 self::store32_le((int) ($x1  & 0xffffffff)) .
-                 self::store32_le((int) ($x2  & 0xffffffff)) .
-                 self::store32_le((int) ($x3  & 0xffffffff)) .
-                 self::store32_le((int) ($x4  & 0xffffffff)) .
-                 self::store32_le((int) ($x5  & 0xffffffff)) .
-                 self::store32_le((int) ($x6  & 0xffffffff)) .
-                 self::store32_le((int) ($x7  & 0xffffffff)) .
-                 self::store32_le((int) ($x8  & 0xffffffff)) .
-                 self::store32_le((int) ($x9  & 0xffffffff)) .
-                 self::store32_le((int) ($x10 & 0xffffffff)) .
-                 self::store32_le((int) ($x11 & 0xffffffff)) .
-                 self::store32_le((int) ($x12 & 0xffffffff)) .
-                 self::store32_le((int) ($x13 & 0xffffffff)) .
-                 self::store32_le((int) ($x14 & 0xffffffff)) .
-                 self::store32_le((int) ($x15 & 0xffffffff));
+            $block = self::store32_le(($x0  & 0xffffffff)) .
+                 self::store32_le(($x1  & 0xffffffff)) .
+                 self::store32_le(($x2  & 0xffffffff)) .
+                 self::store32_le(($x3  & 0xffffffff)) .
+                 self::store32_le(($x4  & 0xffffffff)) .
+                 self::store32_le(($x5  & 0xffffffff)) .
+                 self::store32_le(($x6  & 0xffffffff)) .
+                 self::store32_le(($x7  & 0xffffffff)) .
+                 self::store32_le(($x8  & 0xffffffff)) .
+                 self::store32_le(($x9  & 0xffffffff)) .
+                 self::store32_le(($x10 & 0xffffffff)) .
+                 self::store32_le(($x11 & 0xffffffff)) .
+                 self::store32_le(($x12 & 0xffffffff)) .
+                 self::store32_le(($x13 & 0xffffffff)) .
+                 self::store32_le(($x14 & 0xffffffff)) .
+                 self::store32_le(($x15 & 0xffffffff));
 
             /* Partial block */
             if ($bytes < 64) {
@@ -329,8 +315,12 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function stream($len = 64, $nonce = '', $key = '')
-    {
+    public static function stream(
+        int $len = 64,
+        string $nonce = '',
+        #[SensitiveParameter]
+        string $key = ''
+    ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_Ctx($key, $nonce),
             str_repeat("\x00", $len)
@@ -347,8 +337,12 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ietfStream($len, $nonce = '', $key = '')
-    {
+    public static function ietfStream(
+        int $len,
+        string $nonce = '',
+        #[SensitiveParameter]
+        string $key = ''
+    ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce),
             str_repeat("\x00", $len)
@@ -366,8 +360,14 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function ietfStreamXorIc($message, $nonce = '', $key = '', $ic = '')
-    {
+    public static function ietfStreamXorIc(
+        #[SensitiveParameter]
+        string $message,
+        string $nonce = '',
+        #[SensitiveParameter]
+        string $key = '',
+        string $ic = ''
+    ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce, $ic),
             $message
@@ -385,8 +385,14 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    public static function streamXorIc($message, $nonce = '', $key = '', $ic = '')
-    {
+    public static function streamXorIc(
+        #[SensitiveParameter]
+        string $message,
+        string $nonce = '',
+        #[SensitiveParameter]
+        string $key = '',
+        string $ic = ''
+    ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_Ctx($key, $nonce, $ic),
             $message

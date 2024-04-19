@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_HChaCha20', false)) {
     return;
@@ -16,8 +17,12 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
      * @return string
      * @throws TypeError
      */
-    public static function hChaCha20($in = '', $key = '', $c = null)
-    {
+    public static function hChaCha20(
+        string $in = '',
+        #[SensitiveParameter]
+        string $key = '',
+        ?string $c = null
+    ): string {
         $ctx = array();
 
         if ($c === null) {
@@ -51,7 +56,7 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
      * @return string
      * @throws TypeError
      */
-    protected static function hChaCha20Bytes(array $ctx)
+    protected static function hChaCha20Bytes(array $ctx): string
     {
         $x0  = (int) $ctx[0];
         $x1  = (int) $ctx[1];
@@ -96,13 +101,13 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
             list($x3, $x4, $x9, $x14) = self::quarterRound($x3, $x4, $x9, $x14);
         }
 
-        return self::store32_le((int) ($x0  & 0xffffffff)) .
-            self::store32_le((int) ($x1  & 0xffffffff)) .
-            self::store32_le((int) ($x2  & 0xffffffff)) .
-            self::store32_le((int) ($x3  & 0xffffffff)) .
-            self::store32_le((int) ($x12 & 0xffffffff)) .
-            self::store32_le((int) ($x13 & 0xffffffff)) .
-            self::store32_le((int) ($x14 & 0xffffffff)) .
-            self::store32_le((int) ($x15 & 0xffffffff));
+        return self::store32_le(($x0  & 0xffffffff)) .
+            self::store32_le(($x1  & 0xffffffff)) .
+            self::store32_le(($x2  & 0xffffffff)) .
+            self::store32_le(($x3  & 0xffffffff)) .
+            self::store32_le(($x12 & 0xffffffff)) .
+            self::store32_le(($x13 & 0xffffffff)) .
+            self::store32_le(($x14 & 0xffffffff)) .
+            self::store32_le(($x15 & 0xffffffff));
     }
 }

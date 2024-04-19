@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (!defined('SODIUM_COMPAT_AEGIS_C0')) {
     define('SODIUM_COMPAT_AEGIS_C0', "\x00\x01\x01\x02\x03\x05\x08\x0d\x15\x22\x37\x59\x90\xe9\x79\x62");
@@ -18,8 +19,14 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @return string
      * @throws SodiumException
      */
-    public static function decrypt($ct, $tag, $ad, $key, $nonce)
-    {
+    public static function decrypt(
+        string $ct,
+        string $tag,
+        string $ad,
+        #[SensitiveParameter]
+        string $key,
+        string $nonce
+    ): string {
         $state = self::init($key, $nonce);
 
         // ad_blocks = Split(ZeroPad(ad, 128), 128)
@@ -29,7 +36,7 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
         for ($i = 0; $i < $ad_blocks; ++$i) {
             $ai = self::substr($ad, $i << 4, 16);
             if (self::strlen($ai) < 16) {
-                $ai = str_pad($ai, 16, "\0", STR_PAD_RIGHT);
+                $ai = str_pad($ai, 16, "\0");
             }
             $state->absorb($ai);
         }
@@ -56,7 +63,7 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
             try {
                 // The RFC says to erase msg, so we shall try:
                 ParagonIE_Sodium_Compat::memzero($msg);
-            } catch (SodiumException $ex) {
+            } catch (SodiumException) {
                 // Do nothing if we cannot memzero
             }
             throw new SodiumException('verification failed');
@@ -72,8 +79,14 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @return array
      * @throws SodiumException
      */
-    public static function encrypt($msg, $ad, $key, $nonce)
-    {
+    public static function encrypt(
+        #[SensitiveParameter]
+        string $msg,
+        string $ad,
+        #[SensitiveParameter]
+        string $key,
+        string $nonce
+    ): array {
         $state = self::init($key, $nonce);
         $ad_len = self::strlen($ad);
         $msg_len = self::strlen($msg);
@@ -81,7 +94,7 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
         for ($i = 0; $i < $ad_blocks; ++$i) {
             $ai = self::substr($ad, $i << 4, 16);
             if (self::strlen($ai) < 16) {
-                $ai = str_pad($ai, 16, "\0", STR_PAD_RIGHT);
+                $ai = str_pad($ai, 16, "\0");
             }
             $state->absorb($ai);
         }
@@ -91,7 +104,7 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
         for ($i = 0; $i < $msg_blocks; ++$i) {
             $xi = self::substr($msg, $i << 4, 16);
             if (self::strlen($xi) < 16) {
-                $xi = str_pad($xi, 16, "\0", STR_PAD_RIGHT);
+                $xi = str_pad($xi, 16, "\0");
             }
             $ct .= $state->enc($xi);
         }
@@ -111,8 +124,11 @@ class ParagonIE_Sodium_Core_AEGIS256 extends ParagonIE_Sodium_Core_AES
      * @param string $nonce
      * @return ParagonIE_Sodium_Core_AEGIS_State256
      */
-    public static function init($key, $nonce)
-    {
+    public static function init(
+        #[SensitiveParameter]
+        string $key,
+        string $nonce
+    ): ParagonIE_Sodium_Core_AEGIS_State256 {
         return ParagonIE_Sodium_Core_AEGIS_State256::init($key, $nonce);
     }
 }

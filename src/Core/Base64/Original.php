@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Class ParagonIE_Sodium_Core_Base64
@@ -18,9 +19,11 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    public static function encode($src)
-    {
-        return self::doEncode($src, true);
+    public static function encode(
+        #[SensitiveParameter]
+        string $src
+    ): string {
+        return self::doEncode($src);
     }
 
     /**
@@ -32,8 +35,10 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    public static function encodeUnpadded($src)
-    {
+    public static function encodeUnpadded(
+        #[SensitiveParameter]
+        string $src
+    ): string {
         return self::doEncode($src, false);
     }
 
@@ -43,8 +48,11 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws TypeError
      */
-    protected static function doEncode($src, $pad = true)
-    {
+    protected static function doEncode(
+        #[SensitiveParameter]
+        string $src,
+        bool $pad = true
+    ): string {
         $dest = '';
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
         // Main loop (no padding):
@@ -97,10 +105,12 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws RangeException
      * @throws TypeError
-     * @psalm-suppress RedundantCondition
      */
-    public static function decode($src, $strictPadding = false)
-    {
+    public static function decode(
+        #[SensitiveParameter]
+        string $src,
+        bool $strictPadding = false
+    ): string {
         // Remove padding
         $srcLen = ParagonIE_Sodium_Core_Util::strlen($src);
         if ($srcLen === 0) {
@@ -172,11 +182,8 @@ class ParagonIE_Sodium_Core_Base64_Original
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
-            } elseif ($i < $srcLen && $strictPadding) {
-                $err |= 1;
             }
         }
-        /** @var bool $check */
         $check = ($err === 0);
         if (!$check) {
             throw new RangeException(
@@ -198,8 +205,10 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @param int $src
      * @return int
      */
-    protected static function decode6Bits($src)
-    {
+    protected static function decode6Bits(
+        #[SensitiveParameter]
+        int $src
+    ): int {
         $ret = -1;
 
         // if ($src > 0x40 && $src < 0x5b) $ret += $src - 0x41 + 1; // -64
@@ -227,8 +236,10 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @param int $src
      * @return string
      */
-    protected static function encode6Bits($src)
-    {
+    protected static function encode6Bits(
+        #[SensitiveParameter]
+        int $src
+    ): string {
         $diff = 0x41;
 
         // if ($src > 25) $diff += 0x61 - 0x41 - 26; // 6

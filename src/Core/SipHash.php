@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_SipHash', false)) {
     return;
@@ -18,7 +19,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @return int[]
      *
      */
-    public static function sipRound(array $v)
+    public static function sipRound(array $v): array
     {
         # v0 += v1;
         list($v[0], $v[1]) = self::add(
@@ -27,56 +28,56 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         );
 
         #  v1=ROTL(v1,13);
-        list($v[2], $v[3]) = self::rotl_64((int) $v[2], (int) $v[3], 13);
+        list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 13);
 
         #  v1 ^= v0;
-        $v[2] = (int) $v[2] ^ (int) $v[0];
-        $v[3] = (int) $v[3] ^ (int) $v[1];
+        $v[2] = $v[2] ^ $v[0];
+        $v[3] = $v[3] ^ $v[1];
 
         #  v0=ROTL(v0,32);
-        list($v[0], $v[1]) = self::rotl_64((int) $v[0], (int) $v[1], 32);
+        list($v[0], $v[1]) = self::rotl_64($v[0], $v[1], 32);
 
         # v2 += v3;
         list($v[4], $v[5]) = self::add(
-            array((int) $v[4], (int) $v[5]),
-            array((int) $v[6], (int) $v[7])
+            array($v[4], $v[5]),
+            array($v[6], $v[7])
         );
 
         # v3=ROTL(v3,16);
-        list($v[6], $v[7]) = self::rotl_64((int) $v[6], (int) $v[7], 16);
+        list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 16);
 
         #  v3 ^= v2;
-        $v[6] = (int) $v[6] ^ (int) $v[4];
-        $v[7] = (int) $v[7] ^ (int) $v[5];
+        $v[6] = $v[6] ^ $v[4];
+        $v[7] = $v[7] ^ $v[5];
 
         # v0 += v3;
         list($v[0], $v[1]) = self::add(
-            array((int) $v[0], (int) $v[1]),
-            array((int) $v[6], (int) $v[7])
+            array($v[0], $v[1]),
+            array($v[6], $v[7])
         );
 
         # v3=ROTL(v3,21);
-        list($v[6], $v[7]) = self::rotl_64((int) $v[6], (int) $v[7], 21);
+        list($v[6], $v[7]) = self::rotl_64($v[6], $v[7], 21);
 
         # v3 ^= v0;
-        $v[6] = (int) $v[6] ^ (int) $v[0];
-        $v[7] = (int) $v[7] ^ (int) $v[1];
+        $v[6] = $v[6] ^ $v[0];
+        $v[7] = $v[7] ^ $v[1];
 
         # v2 += v1;
         list($v[4], $v[5]) = self::add(
-            array((int) $v[4], (int) $v[5]),
-            array((int) $v[2], (int) $v[3])
+            array($v[4], $v[5]),
+            array($v[2], $v[3])
         );
 
         # v1=ROTL(v1,17);
-        list($v[2], $v[3]) = self::rotl_64((int) $v[2], (int) $v[3], 17);
+        list($v[2], $v[3]) = self::rotl_64($v[2], $v[3], 17);
 
         #  v1 ^= v2;;
-        $v[2] = (int) $v[2] ^ (int) $v[4];
-        $v[3] = (int) $v[3] ^ (int) $v[5];
+        $v[2] = $v[2] ^ $v[4];
+        $v[3] = $v[3] ^ $v[5];
 
         # v2=ROTL(v2,32)
-        list($v[4], $v[5]) = self::rotl_64((int) $v[4], (int) $v[5], 32);
+        list($v[4], $v[5]) = self::rotl_64($v[4], $v[5], 32);
 
         return $v;
     }
@@ -90,7 +91,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @param int[] $b
      * @return array<int, mixed>
      */
-    public static function add(array $a, array $b)
+    public static function add(array $a, array $b): array
     {
         /** @var int $x1 */
         $x1 = $a[1] + $b[1];
@@ -112,7 +113,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @param int $c
      * @return array<int, mixed>
      */
-    public static function rotl_64($int0, $int1, $c)
+    public static function rotl_64(int $int0, int $int1, int $c): array
     {
         $int0 &= 0xffffffff;
         $int1 &= 0xffffffff;
@@ -159,9 +160,15 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
      * @return string
      * @throws SodiumException
      * @throws TypeError
+     *
+     * @psalm-suppress PossiblyUndefinedArrayOffset
      */
-    public static function sipHash24($in, $key)
-    {
+    public static function sipHash24(
+        #[SensitiveParameter]
+        string $in,
+        #[SensitiveParameter]
+        string $key
+    ): string {
         $inlen = self::strlen($in);
 
         # /* "somepseudorandomlygeneratedbytes" */

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_AEGIS_State256', false)) {
     return;
@@ -14,7 +15,8 @@ if (!defined('SODIUM_COMPAT_AEGIS_C1')) {
 class ParagonIE_Sodium_Core_AEGIS_State256
 {
     /** @var array<int, string> $state */
-    protected $state;
+    protected array $state;
+
     public function __construct()
     {
         $this->state = array_fill(0, 6, '');
@@ -24,7 +26,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @internal Only use this for unit tests!
      * @return string[]
      */
-    public function getState()
+    public function getState(): array
     {
         return array_values($this->state);
     }
@@ -36,7 +38,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      *
      * @internal Only for unit tests
      */
-    public static function initForUnitTests(array $input)
+    public static function initForUnitTests(array $input): self
     {
         if (count($input) < 6) {
             throw new SodiumException('invalid input');
@@ -53,8 +55,11 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @param string $nonce
      * @return self
      */
-    public static function init($key, $nonce)
-    {
+    public static function init(
+        #[SensitiveParameter]
+        string $key,
+        string $nonce
+    ): self {
         $state = new self();
         $k0 = ParagonIE_Sodium_Core_Util::substr($key, 0, 16);
         $k1 = ParagonIE_Sodium_Core_Util::substr($key, 16, 16);
@@ -93,10 +98,10 @@ class ParagonIE_Sodium_Core_AEGIS_State256
 
     /**
      * @param string $ai
-     * @return self
+     * @return static
      * @throws SodiumException
      */
-    public function absorb($ai)
+    public function absorb(string $ai): static
     {
         if (ParagonIE_Sodium_Core_Util::strlen($ai) !== 16) {
             throw new SodiumException('Input must be an AES block in size');
@@ -109,7 +114,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @return string
      * @throws SodiumException
      */
-    public function dec($ci)
+    public function dec(string $ci): string
     {
         if (ParagonIE_Sodium_Core_Util::strlen($ci) !== 16) {
             throw new SodiumException('Input must be an AES block in size');
@@ -127,8 +132,10 @@ class ParagonIE_Sodium_Core_AEGIS_State256
     /**
      * @param string $cn
      * @return string
+     *
+     * @throws SodiumException
      */
-    public function decPartial($cn)
+    public function decPartial(string $cn): string
     {
         $len = ParagonIE_Sodium_Core_Util::strlen($cn);
         // z = S1 ^ S4 ^ S5 ^ (S2 & S3)
@@ -138,7 +145,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
             ^ ParagonIE_Sodium_Core_Util::andStrings($this->state[2], $this->state[3]);
 
         // t = ZeroPad(cn, 128)
-        $t = str_pad($cn, 16, "\0", STR_PAD_RIGHT);
+        $t = str_pad($cn, 16, "\0");
 
         // out = t ^ z
         $out = $t ^ $z;
@@ -147,7 +154,7 @@ class ParagonIE_Sodium_Core_AEGIS_State256
         $xn = ParagonIE_Sodium_Core_Util::substr($out, 0, $len);
 
         // v = ZeroPad(xn, 128)
-        $v = str_pad($xn, 16, "\0", STR_PAD_RIGHT);
+        $v = str_pad($xn, 16, "\0");
         // Update(v)
         $this->update($v);
 
@@ -160,8 +167,10 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @return string
      * @throws SodiumException
      */
-    public function enc($xi)
-    {
+    public function enc(
+        #[SensitiveParameter]
+        string $xi
+    ): string {
         if (ParagonIE_Sodium_Core_Util::strlen($xi) !== 16) {
             throw new SodiumException('Input must be an AES block in size');
         }
@@ -179,8 +188,10 @@ class ParagonIE_Sodium_Core_AEGIS_State256
      * @param int $msg_len_bits
      * @return string
      */
-    public function finalize($ad_len_bits, $msg_len_bits)
-    {
+    public function finalize(
+        int $ad_len_bits,
+        int $msg_len_bits
+    ): string {
         $encoded = ParagonIE_Sodium_Core_Util::store64_le($ad_len_bits) .
             ParagonIE_Sodium_Core_Util::store64_le($msg_len_bits);
         $t = $this->state[3] ^ $encoded;
@@ -195,9 +206,9 @@ class ParagonIE_Sodium_Core_AEGIS_State256
 
     /**
      * @param string $m
-     * @return self
+     * @return static
      */
-    public function update($m)
+    public function update(string $m): static
     {
         /*
             S'0 = AESRound(S5, S0 ^ M)

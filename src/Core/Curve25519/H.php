@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 if (class_exists('ParagonIE_Sodium_Core_Curve25519_H', false)) {
     return;
@@ -16,7 +17,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      *
      * @var array<int, array<int, array<int, array<int, int>>>> Basically, int[32][8][3][10]
      */
-    protected static $base = array(
+    protected const BASE = array(
         array(
             array(
                 array(25967493, -14356035, 29566456, 3660896, -12694345, 4014787, 27544626, -11754271, -6079156, 2047605),
@@ -1368,7 +1369,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      *
      * @var array basically int[8][3]
      */
-    protected static $base2 = array(
+    protected const BASE2 = array(
         array(
             array(25967493, -14356035, 29566456, 3660896, -12694345, 4014787, 27544626, -11754271, -6079156, 2047605),
             array(-12545711, 934262, -2722910, 3049990, -727428, 9406986, 12720692, 5043384, 19500929, -15469378),
@@ -1413,10 +1414,8 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
 
     /**
      * 37095705934669439343138083508754565189542113879843219016388785533085940283555
-     *
-     * @var array<int, int>
      */
-    protected static $d = array(
+    protected const D = array(
         -10913610,
         13857413,
         -15372611,
@@ -1431,10 +1430,8 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
 
     /**
      * 2 * d = 16295367250680780974490674513165176452449235426866156013048779062215315747161
-     *
-     * @var array<int, int>
      */
-    protected static $d2 = array(
+    protected const D2 = array(
         -21827239,
         -5839606,
         -30745221,
@@ -1449,10 +1446,8 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
 
     /**
      * sqrt(-1)
-     *
-     * @var array<int, int>
      */
-    protected static $sqrtm1 = array(
+    protected const SQRTM1 = array(
         -32595792,
         -7943725,
         9377950,
@@ -1470,7 +1465,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      *
      * @var array<int, int>
      */
-    protected static $invsqrtamd = array(
+    protected const INVSQRTAMD = array(
         6111485,
         4156064,
         -27798727,
@@ -1488,7 +1483,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      *
      * @var array<int, int>
      */
-    protected static $sqrtadm1 = array(
+    protected const SQRTADM1 = array(
         24849947,
         -153582,
         -23613485,
@@ -1506,7 +1501,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      *
      * @var array<int, int>
      */
-    protected static $onemsqd = array(
+    protected const ONEMSQD = array(
         6275446,
         -16617371,
         -22938544,
@@ -1523,7 +1518,7 @@ class ParagonIE_Sodium_Core_Curve25519_H extends ParagonIE_Sodium_Core_Util
      * (d - 1) ^ 2
      * @var array<int, int>
      */
-    protected static $sqdmone = array(
+    protected const SQDMONE = array(
         15551795,
         -11097455,
         -13425098,

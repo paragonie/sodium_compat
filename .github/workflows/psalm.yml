@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         operating-system: ['ubuntu-latest']
-        php-versions: ['7.4']
+        php-versions: ['8.3']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,9 +25,6 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           composer-options: --no-dev
-
-      - name: Put Psalm config in place
-        run: cp psalm-above-3.xml psalm.xml
 
       - name: Static Analysis
         run: psalm
