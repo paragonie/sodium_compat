@@ -780,18 +780,9 @@ abstract class ParagonIE_Sodium_Crypto
      */
     public static function generichash_final(string $ctx, int $outlen = 32): string
     {
-        if (!is_string($ctx)) {
-            throw new TypeError('Context must be a string');
-        }
         $out = new SplFixedArray($outlen);
-
-        /** @var SplFixedArray $context */
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
-
-        /** @var SplFixedArray $out */
         $out = ParagonIE_Sodium_Core_BLAKE2b::finish($context, $out);
-
-        /** @var array<int, int> */
         $outArray = $out->toArray();
         return ParagonIE_Sodium_Core_Util::intArrayToString($outArray);
     }
@@ -871,10 +862,7 @@ abstract class ParagonIE_Sodium_Crypto
         } else {
             $p = null;
         }
-
-        /** @var SplFixedArray $ctx */
         $ctx = ParagonIE_Sodium_Core_BLAKE2b::init($k, $outputLength, $s, $p);
-
         return ParagonIE_Sodium_Core_BLAKE2b::contextToString($ctx);
     }
 
@@ -893,15 +881,9 @@ abstract class ParagonIE_Sodium_Crypto
     {
         // This ensures that ParagonIE_Sodium_Core_BLAKE2b::$iv is initialized
         ParagonIE_Sodium_Core_BLAKE2b::pseudoConstructor();
-
-        /** @var SplFixedArray $context */
         $context = ParagonIE_Sodium_Core_BLAKE2b::stringToContext($ctx);
-
-        /** @var SplFixedArray $in */
         $in = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($message);
-
         ParagonIE_Sodium_Core_BLAKE2b::update($context, $in, $in->count());
-
         return ParagonIE_Sodium_Core_BLAKE2b::contextToString($context);
     }
 
@@ -1015,18 +997,12 @@ abstract class ParagonIE_Sodium_Crypto
         #[\SensitiveParameter]
         string $key
     ): string {
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
-
-        /** @var string $block0 */
         $block0 = str_repeat("\x00", 32);
 
-        /** @var int $mlen - Length of the plaintext message */
+        /* Length of the plaintext message */
         $mlen = ParagonIE_Sodium_Core_Util::strlen($plaintext);
-        $mlen0 = $mlen;
-        if ($mlen0 > 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES) {
-            $mlen0 = 64 - self::secretbox_xsalsa20poly1305_ZEROBYTES;
-        }
+        $mlen0 = min($mlen,  64 - self::secretbox_xsalsa20poly1305_ZEROBYTES);
         $block0 .= ParagonIE_Sodium_Core_Util::substr($plaintext, 0, $mlen0);
 
         /** @var string $block0 */
@@ -1094,26 +1070,21 @@ abstract class ParagonIE_Sodium_Crypto
         #[\SensitiveParameter]
         string $key
     ): string {
-        /** @var string $mac */
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
             0,
             self::secretbox_xsalsa20poly1305_MACBYTES
         );
 
-        /** @var string $c */
         $c = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
             self::secretbox_xsalsa20poly1305_MACBYTES
         );
 
-        /** @var int $clen */
         $clen = ParagonIE_Sodium_Core_Util::strlen($c);
 
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HSalsa20::hsalsa20($nonce, $key);
 
-        /** @var string $block0 */
         $block0 = ParagonIE_Sodium_Core_Salsa20::salsa20(
             64,
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
@@ -1133,7 +1104,7 @@ abstract class ParagonIE_Sodium_Crypto
             throw new SodiumException('Invalid MAC');
         }
 
-        /** @var string $m - Decrypted message */
+        /* Decrypted message */
         $m = ParagonIE_Sodium_Core_Util::xorStrings(
             ParagonIE_Sodium_Core_Util::substr($block0, self::secretbox_xsalsa20poly1305_ZEROBYTES),
             ParagonIE_Sodium_Core_Util::substr($c, 0, self::secretbox_xsalsa20poly1305_ZEROBYTES)
@@ -1147,7 +1118,7 @@ abstract class ParagonIE_Sodium_Crypto
                 ),
                 ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
                 1,
-                (string) $subkey
+                $subkey
             );
         }
         return $m;
@@ -1172,17 +1143,14 @@ abstract class ParagonIE_Sodium_Crypto
         #[\SensitiveParameter]
         string $key
     ): string {
-        /** @var string $subkey */
         $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
             ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
             $key
         );
         $nonceLast = ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8);
-
-        /** @var string $block0 */
         $block0 = str_repeat("\x00", 32);
 
-        /** @var int $mlen - Length of the plaintext message */
+        /*Length of the plaintext message */
         $mlen = ParagonIE_Sodium_Core_Util::strlen($plaintext);
         $mlen0 = $mlen;
         if ($mlen0 > 64 - self::secretbox_xchacha20poly1305_ZEROBYTES) {
@@ -1295,7 +1263,7 @@ abstract class ParagonIE_Sodium_Crypto
             throw new SodiumException('Invalid MAC');
         }
 
-        /** @var string $m - Decrypted message */
+        /* Decrypted message */
         $m = ParagonIE_Sodium_Core_Util::xorStrings(
             ParagonIE_Sodium_Core_Util::substr($block0, self::secretbox_xchacha20poly1305_ZEROBYTES),
             ParagonIE_Sodium_Core_Util::substr($c, 0, self::secretbox_xchacha20poly1305_ZEROBYTES)
@@ -1309,7 +1277,7 @@ abstract class ParagonIE_Sodium_Crypto
                     self::secretbox_xchacha20poly1305_ZEROBYTES
                 ),
                 ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
-                (string) $subkey,
+                $subkey,
                 ParagonIE_Sodium_Core_Util::store64_le(1)
             );
         }
@@ -1524,7 +1492,7 @@ abstract class ParagonIE_Sodium_Crypto
         string &$state,
         string $cipher,
         string $aad = ''
-    ) {
+    ): bool|array {
         $st = ParagonIE_Sodium_Core_SecretStream_State::fromString($state);
 
         $cipherlen = ParagonIE_Sodium_Core_Util::strlen($cipher);

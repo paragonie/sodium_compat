@@ -438,7 +438,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @param string $msg
      * @return string
      * @throws SodiumException
-     * @psalm-suppress PossiblyInvalidArgument hash API
      */
     protected static function h2c_string_to_hash_sha256(
         int $hLen,
@@ -448,7 +447,10 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         string $msg
     ): string {
         $h = array_fill(0, $hLen, 0);
-        $ctx_len = !is_null($ctx) ? self::strlen($ctx) : 0;
+        if (is_null($ctx)) {
+            $ctx = '';
+        }
+        $ctx_len = self::strlen($ctx);
         if ($hLen > 0xff) {
             throw new SodiumException('Hash must be less than 256 bytes');
         }
@@ -493,7 +495,6 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
      * @param string $msg
      * @return string
      * @throws SodiumException
-     * @psalm-suppress PossiblyInvalidArgument hash API
      */
     protected static function h2c_string_to_hash_sha512(
         int $hLen,
@@ -503,7 +504,10 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         string $msg
     ): string {
         $h = array_fill(0, $hLen, 0);
-        $ctx_len = !is_null($ctx) ? self::strlen($ctx) : 0;
+        if (is_null($ctx)) {
+            $ctx = '';
+        }
+        $ctx_len = self::strlen($ctx);
         if ($hLen > 0xff) {
             throw new SodiumException('Hash must be less than 256 bytes');
         }

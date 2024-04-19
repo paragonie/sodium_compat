@@ -39,19 +39,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -96,19 +93,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -152,19 +146,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 3 must be CRYPTO_BOX_PUBLICKEYBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -183,7 +174,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             24
         );
 
-        /** @var int $firstWrite */
         $firstWrite = fwrite(
             $ofp,
             $ephemeralPK,
@@ -244,19 +234,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($ecdhKeypair);
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -307,7 +294,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @return string                   BLAKE2b hash
      * @throws SodiumException
      * @throws TypeError
-     * @psalm-suppress FailedTypeResolution
      */
     public static function generichash(
         string $filePath,
@@ -335,22 +321,18 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Argument 3 must be at least CRYPTO_GENERICHASH_BYTES_MAX');
         }
 
-        /** @var int $size */
         $size = filesize($filePath);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new SodiumException('Could not open input file for reading');
         }
         $ctx = ParagonIE_Sodium_Compat::crypto_generichash_init($key, $outputLength);
         while ($size > 0) {
-            $blockSize = $size > 64
-                ? 64
-                : $size;
+            $blockSize = min($size, 64);
             $read = fread($fp, $blockSize);
             if (!is_string($read)) {
                 throw new SodiumException('Could not read input file');
@@ -392,19 +374,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_KEYBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -449,19 +428,16 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_SECRETBOXBOX_KEYBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $ifp */
         $ifp = fopen($inputFile, 'rb');
         if (!is_resource($ifp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var resource $ofp */
         $ofp = fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
@@ -502,13 +478,11 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES bytes');
         }
 
-        /** @var int $size */
         $size = filesize($filePath);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new SodiumException('Could not open input file for reading');
@@ -614,25 +588,22 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('All zero public key');
         }
 
-        /** @var int $size */
         $size = filesize($filePath);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
 
-        /** @var resource $fp */
         $fp = fopen($filePath, 'rb');
         if (!is_resource($fp)) {
             throw new SodiumException('Could not open input file for reading');
         }
 
-        /** @var bool The original value of ParagonIE_Sodium_Compat::$fastMult */
+        /* The original value of ParagonIE_Sodium_Compat::$fastMult */
         $orig = ParagonIE_Sodium_Compat::$fastMult;
 
         // Set ParagonIE_Sodium_Compat::$fastMult to true to speed up verification.
         ParagonIE_Sodium_Compat::$fastMult = true;
 
-        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A */
         $A = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($publicKey);
 
         $hs = hash_init('sha512');
@@ -640,13 +611,8 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         hash_update($hs, self::substr($publicKey, 0, 32));
 
         $hs = self::updateHashWithFile($hs, $fp, $size);
-        /** @var string $hDigest */
         $hDigest = hash_final($hs, true);
-
-        /** @var string $h */
         $h = ParagonIE_Sodium_Core_Ed25519::sc_reduce($hDigest) . self::substr($hDigest, 32);
-
-        /** @var ParagonIE_Sodium_Core_Curve25519_Ge_P2 $R */
         $R = ParagonIE_Sodium_Core_Ed25519::ge_double_scalarmult_vartime(
             $h,
             $A,
@@ -799,9 +765,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         fseek($ifp, $first32, SEEK_SET);
 
         while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
+            $blockSize = min($mlen, self::BUFFER_SIZE);
             $plaintext = fread($ifp, $blockSize);
             if (!is_string($plaintext)) {
                 throw new SodiumException('Could not read input file');
@@ -900,9 +864,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 
         /* Decrypts ciphertext, writes to output file. */
         while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
+            $blockSize = min($mlen, self::BUFFER_SIZE);
             $ciphertext = fread($ifp, $blockSize);
             if (!is_string($ciphertext)) {
                 throw new SodiumException('Could not read input file');
@@ -937,9 +899,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     ): bool {
         $pos = self::ftell($ifp);
         while ($mlen > 0) {
-            $blockSize = $mlen > self::BUFFER_SIZE
-                ? self::BUFFER_SIZE
-                : $mlen;
+            $blockSize = min($mlen, self::BUFFER_SIZE);
             $ciphertext = fread($ifp, $blockSize);
             if (!is_string($ciphertext)) {
                 throw new SodiumException('Could not read input file');
@@ -963,14 +923,13 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
      * @return HashContext Resource on PHP < 7.2, HashContext object on PHP >= 7.2
      * @throws SodiumException
      * @throws TypeError
-     * @psalm-suppress PossiblyInvalidArgument
-     *                 PHP 7.2 changes from a resource to an object,
-     *                 which causes Psalm to complain about an error.
-     * @psalm-suppress TypeCoercion
-     *                 Ditto.
      */
     public static function updateHashWithFile(HashContext $hash, $fp, int $size = 0): HashContext
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         * We can't statically type resources.
+         */
         if (!is_resource($fp)) {
             throw new TypeError('Argument 2 must be a resource, ' . gettype($fp) . ' given.');
         }
@@ -989,8 +948,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             if (!is_string($message)) {
                 throw new SodiumException('Unexpected error reading from file.');
             }
-            /** @var string $message */
-            /** @psalm-suppress InvalidArgument */
             hash_update($hash, $message);
         }
         // Reset file pointer's position
@@ -1009,6 +966,6 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         if (!is_int($return)) {
             throw new SodiumException('ftell() returned false');
         }
-        return (int) $return;
+        return $return;
     }
 }

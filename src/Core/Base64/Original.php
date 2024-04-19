@@ -104,7 +104,6 @@ class ParagonIE_Sodium_Core_Base64_Original
      * @return string
      * @throws RangeException
      * @throws TypeError
-     * @psalm-suppress RedundantCondition
      */
     public static function decode(
         #[\SensitiveParameter]

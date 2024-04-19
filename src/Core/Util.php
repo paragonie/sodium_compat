@@ -242,7 +242,6 @@ abstract class ParagonIE_Sodium_Core_Util
                 if (!is_string($mixedVar)) {
                     throw new TypeError('Argument ' . $argumentIndex . ' must be a string, ' . $realType . ' given.');
                 }
-                $mixedVar = (string) $mixedVar;
                 break;
             case 'decimal':
             case 'double':
@@ -402,11 +401,6 @@ abstract class ParagonIE_Sodium_Core_Util
         #[\SensitiveParameter]
         string $string
     ): int {
-        /* Type checks: */
-        if (!is_string($string)) {
-            throw new TypeError('Argument 1 must be a string, ' . gettype($string) . ' given.');
-        }
-
         /* Input validation: */
         if (self::strlen($string) < 3) {
             throw new RangeException(
@@ -440,7 +434,7 @@ abstract class ParagonIE_Sodium_Core_Util
         }
         /** @var array<int, int> $unpacked */
         $unpacked = unpack('V', $string);
-        return (int) $unpacked[1];
+        return $unpacked[1];
     }
 
     /**
@@ -450,6 +444,7 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @param string $string
      * @return int
+     *
      * @throws RangeException
      * @throws SodiumException
      * @throws TypeError
@@ -518,13 +513,10 @@ abstract class ParagonIE_Sodium_Core_Util
         }
 
         static $defaultSize = null;
-        /** @var int $defaultSize */
         if (!$defaultSize) {
-            /** @var int $defaultSize */
             $defaultSize = (PHP_INT_SIZE << 3) - 1;
         }
         if ($size < 1) {
-            /** @var int $size */
             $size = $defaultSize;
         }
         /** @var int $size */
@@ -536,10 +528,8 @@ abstract class ParagonIE_Sodium_Core_Util
          *
          * -1 in binary looks like 0x1111 ... 1111
          *  0 in binary looks like 0x0000 ... 0000
-         *
-         * @var int
          */
-        $mask = -(($b >> ((int) $defaultSize)) & 1);
+        $mask = -(($b >> ($defaultSize)) & 1);
 
         /**
          * Ensure $b is a positive integer, without creating
@@ -556,7 +546,7 @@ abstract class ParagonIE_Sodium_Core_Util
          * This loop always runs 64 times when PHP_INT_SIZE is 8.
          */
         for ($i = $size; $i >= 0; --$i) {
-            $c += (int) ($a & -($b & 1));
+            $c += ($a & -($b & 1));
             $a <<= 1;
             $b >>= 1;
         }
@@ -571,7 +561,7 @@ abstract class ParagonIE_Sodium_Core_Util
          *
          * The end result is what we'd expect from integer multiplication.
          */
-        return (int) (($c & ~$mask) | ($mask & -$c));
+        return (($c & ~$mask) | ($mask & -$c));
     }
 
     /**
@@ -601,7 +591,11 @@ abstract class ParagonIE_Sodium_Core_Util
                 $high = ~~((+(ceil(($num - (+((~~($num)))))/4294967296))));
             }
         }
-        return array((int) $high, (int) $low);
+        /**
+         * @var int $high
+         * @var int $low
+         */
+        return array($high, $low);
     }
 
     /**
@@ -676,7 +670,7 @@ abstract class ParagonIE_Sodium_Core_Util
         #[\SensitiveParameter]
         string $str
     ): int {
-        return (int) (
+        return (
         self::isMbStringOverride()
             ? mb_strlen($str, '8bit')
             : strlen($str)
@@ -726,11 +720,11 @@ abstract class ParagonIE_Sodium_Core_Util
             if (PHP_VERSION_ID < 50400 && $length === null) {
                 $length = self::strlen($str);
             }
-            $sub = (string) mb_substr($str, $start, $length, '8bit');
+            $sub = mb_substr($str, $start, $length, '8bit');
         } elseif ($length === null) {
-            $sub = (string) substr($str, $start);
+            $sub = substr($str, $start);
         } else {
-            $sub = (string) substr($str, $start, $length);
+            $sub = substr($str, $start, $length);
         }
         if ($sub !== '') {
             return $sub;
@@ -769,6 +763,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $a
      * @param string $b
      * @return bool
+     *
      * @throws SodiumException
      * @throws TypeError
      */
@@ -800,7 +795,7 @@ abstract class ParagonIE_Sodium_Core_Util
         #[\SensitiveParameter]
         string $b
     ): string {
-        return (string) ($a ^ $b);
+        return $a ^ $b;
     }
 
     /**

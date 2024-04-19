@@ -57,11 +57,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
         /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
         $this->r = array(
-            (int) ((self::load_4(self::substr($key, 0, 4))) & 0x3ffffff),
-            (int) ((self::load_4(self::substr($key, 3, 4)) >> 2) & 0x3ffff03),
-            (int) ((self::load_4(self::substr($key, 6, 4)) >> 4) & 0x3ffc0ff),
-            (int) ((self::load_4(self::substr($key, 9, 4)) >> 6) & 0x3f03fff),
-            (int) ((self::load_4(self::substr($key, 12, 4)) >> 8) & 0x00fffff)
+            ((self::load_4(self::substr($key, 0, 4))) & 0x3ffffff),
+            ((self::load_4(self::substr($key, 3, 4)) >> 2) & 0x3ffff03),
+            ((self::load_4(self::substr($key, 6, 4)) >> 4) & 0x3ffc0ff),
+            ((self::load_4(self::substr($key, 9, 4)) >> 6) & 0x3f03fff),
+            ((self::load_4(self::substr($key, 12, 4)) >> 8) & 0x00fffff)
         );
 
         /* h = 0 */
@@ -163,7 +163,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
                 $mi = self::chrToInt($message[$i]);
                 $this->buffer[$this->leftover + $i] = $mi;
             }
-            $this->leftover = (int) $this->leftover + $bytes;
+            $this->leftover = $this->leftover + $bytes;
         }
         return $this;
     }
@@ -183,11 +183,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
         /** @var int $hibit */
         $hibit = $this->final ? 0 : 1 << 24; /* 1 << 128 */
-        $r0 = (int) $this->r[0];
-        $r1 = (int) $this->r[1];
-        $r2 = (int) $this->r[2];
-        $r3 = (int) $this->r[3];
-        $r4 = (int) $this->r[4];
+        $r0 = $this->r[0];
+        $r1 = $this->r[1];
+        $r2 = $this->r[2];
+        $r3 = $this->r[3];
+        $r4 = $this->r[4];
 
         $s1 = self::mul($r1, 5, 3);
         $s2 = self::mul($r2, 5, 3);
@@ -278,7 +278,7 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
             $c = $d4 >> 26;
             /** @var int $h4 */
             $h4 = $d4 & 0x3ffffff;
-            $h0 += (int) self::mul($c, 5, 3);
+            $h0 += self::mul($c, 5, 3);
 
             /** @var int $c */
             $c = $h0 >> 26;
@@ -295,11 +295,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         }
 
         $this->h = array(
-            (int) ($h0 & 0xffffffff),
-            (int) ($h1 & 0xffffffff),
-            (int) ($h2 & 0xffffffff),
-            (int) ($h3 & 0xffffffff),
-            (int) ($h4 & 0xffffffff)
+            ($h0 & 0xffffffff),
+            ($h1 & 0xffffffff),
+            ($h2 & 0xffffffff),
+            ($h3 & 0xffffffff),
+            ($h4 & 0xffffffff)
         );
         return $this;
     }
@@ -330,11 +330,11 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
             );
         }
 
-        $h0 = (int) $this->h[0];
-        $h1 = (int) $this->h[1];
-        $h2 = (int) $this->h[2];
-        $h3 = (int) $this->h[3];
-        $h4 = (int) $this->h[4];
+        $h0 = $this->h[0];
+        $h1 = $this->h[1];
+        $h2 = $this->h[2];
+        $h3 = $this->h[3];
+        $h4 = $this->h[4];
 
         /** @var int $c */
         $c = $h1 >> 26;
@@ -428,14 +428,14 @@ class ParagonIE_Sodium_Core_Poly1305_State extends ParagonIE_Sodium_Core_Util
         $h3 = (($h3 >> 18) | ($h4 <<  8)) & 0xffffffff;
 
         /* mac = (h + pad) % (2^128) */
-        $f = (int) ($h0 + $this->pad[0]);
-        $h0 = (int) $f;
-        $f = (int) ($h1 + $this->pad[1] + ($f >> 32));
-        $h1 = (int) $f;
-        $f = (int) ($h2 + $this->pad[2] + ($f >> 32));
-        $h2 = (int) $f;
-        $f = (int) ($h3 + $this->pad[3] + ($f >> 32));
-        $h3 = (int) $f;
+        $f = ($h0 + $this->pad[0]);
+        $h0 = $f;
+        $f = ($h1 + $this->pad[1] + ($f >> 32));
+        $h1 = $f;
+        $f = ($h2 + $this->pad[2] + ($f >> 32));
+        $h2 = $f;
+        $f = ($h3 + $this->pad[3] + ($f >> 32));
+        $h3 = $f;
 
         return self::store32_le($h0 & 0xffffffff) .
             self::store32_le($h1 & 0xffffffff) .

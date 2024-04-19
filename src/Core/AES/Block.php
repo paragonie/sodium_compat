@@ -85,9 +85,6 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
     #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
-        if (!is_int($value)) {
-            throw new InvalidArgumentException('Expected an integer');
-        }
         if (is_null($offset)) {
             $this->values[] = $value;
         } else {
@@ -140,7 +137,7 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
         if (!isset($this->values[$offset])) {
             $this->values[$offset] = 0;
         }
-        return (int) ($this->values[$offset]);
+        return $this->values[$offset];
     }
 
     /**

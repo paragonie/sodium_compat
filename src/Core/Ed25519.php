@@ -497,7 +497,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         for ($i = 0; $i < $countBlocklist; ++$i) {
             $c = 0;
             for ($j = 0; $j < 32; ++$j) {
-                $c |= self::chrToInt($R[$j]) ^ (int) $blocklist[$i][$j];
+                $c |= self::chrToInt($R[$j]) ^ $blocklist[$i][$j];
             }
             if ($c === 0) {
                 return true;

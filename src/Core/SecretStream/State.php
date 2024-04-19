@@ -60,9 +60,6 @@ class ParagonIE_Sodium_Core_SecretStream_State
      */
     public function getNonce(): string
     {
-        if (!is_string($this->nonce)) {
-            $this->nonce = str_repeat("\0", 12);
-        }
         if (ParagonIE_Sodium_Core_Util::strlen($this->nonce) !== 12) {
             $this->nonce = str_pad($this->nonce, 12, "\0", STR_PAD_RIGHT);
         }
