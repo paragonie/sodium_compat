@@ -266,6 +266,10 @@ insightful technical information you may find helpful.
     * `crypto_sign()`
     * `crypto_sign_open()`
 * PECL Libsodium Features
+    * `crypto_aead_aegis128l_encrypt()`
+    * `crypto_aead_aegis128l_decrypt()`
+    * `crypto_aead_aegis256_encrypt()`
+    * `crypto_aead_aegis256_decrypt()`
     * `crypto_aead_aes256gcm_encrypt()`
     * `crypto_aead_aes256gcm_decrypt()`
     * `crypto_aead_chacha20poly1305_encrypt()`
