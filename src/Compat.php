@@ -1863,7 +1863,7 @@ class ParagonIE_Sodium_Compat
         string $salt,
         int $opslimit,
         int $memlimit,
-        int $alg = null
+        ?int $alg = null
     ): string {
         if (self::useNewSodiumAPI()) {
             if (!is_null($alg)) {
