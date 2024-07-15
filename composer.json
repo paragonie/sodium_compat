@@ -57,6 +57,11 @@
     "phpunit/phpunit": "^7|^8|^9",
     "vimeo/psalm": "^4|^5"
   },
+  "extra": {
+      "branch-alias": {
+          "dev-master": "2.0.x-dev"
+      }
+  },
   "scripts": {
     "test": "phpunit"
   },
