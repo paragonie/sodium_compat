@@ -104,7 +104,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): int
     {
         if (!isset($this->container[$offset])) {
             $this->container[$offset] = 0;

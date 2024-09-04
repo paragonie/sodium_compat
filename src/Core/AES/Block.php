@@ -25,7 +25,7 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
     /**
      * @param int $size
      */
-    public function __construct($size = 8)
+    public function __construct(int $size = 8)
     {
         parent::__construct($size);
         $this->size = $size;
@@ -50,7 +50,7 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      * @psalm-suppress MethodSignatureMismatch
      */
     #[ReturnTypeWillChange]
-    public static function fromArray($array, $save_indexes = null)
+    public static function fromArray($array, ?bool $save_indexes = null)
     {
         $count = count($array);
         if ($save_indexes) {
