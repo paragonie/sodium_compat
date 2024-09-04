@@ -542,7 +542,6 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         #[SensitiveParameter]
         string $y
     ): string {
-        $yn = self::scalar_negate($y);
-        return self::scalar_add($x, $yn);
+        return self::scalar_add($x, self::scalar_negate($y));
     }
 }

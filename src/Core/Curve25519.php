@@ -314,139 +314,119 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         // Ensure limbs aren't oversized.
         $f = self::fe_normalize($f);
         $g = self::fe_normalize($g);
-        $f0 = $f[0];
-        $f1 = $f[1];
-        $f2 = $f[2];
-        $f3 = $f[3];
-        $f4 = $f[4];
-        $f5 = $f[5];
-        $f6 = $f[6];
-        $f7 = $f[7];
-        $f8 = $f[8];
-        $f9 = $f[9];
-        $g0 = $g[0];
-        $g1 = $g[1];
-        $g2 = $g[2];
-        $g3 = $g[3];
-        $g4 = $g[4];
-        $g5 = $g[5];
-        $g6 = $g[6];
-        $g7 = $g[7];
-        $g8 = $g[8];
-        $g9 = $g[9];
-        $g1_19 = self::mul($g1, 19, 5);
-        $g2_19 = self::mul($g2, 19, 5);
-        $g3_19 = self::mul($g3, 19, 5);
-        $g4_19 = self::mul($g4, 19, 5);
-        $g5_19 = self::mul($g5, 19, 5);
-        $g6_19 = self::mul($g6, 19, 5);
-        $g7_19 = self::mul($g7, 19, 5);
-        $g8_19 = self::mul($g8, 19, 5);
-        $g9_19 = self::mul($g9, 19, 5);
-        $f1_2 = $f1 << 1;
-        $f3_2 = $f3 << 1;
-        $f5_2 = $f5 << 1;
-        $f7_2 = $f7 << 1;
-        $f9_2 = $f9 << 1;
-        $f0g0    = self::mul($f0,    $g0, 26);
-        $f0g1    = self::mul($f0,    $g1, 25);
-        $f0g2    = self::mul($f0,    $g2, 26);
-        $f0g3    = self::mul($f0,    $g3, 25);
-        $f0g4    = self::mul($f0,    $g4, 26);
-        $f0g5    = self::mul($f0,    $g5, 25);
-        $f0g6    = self::mul($f0,    $g6, 26);
-        $f0g7    = self::mul($f0,    $g7, 25);
-        $f0g8    = self::mul($f0,    $g8, 26);
-        $f0g9    = self::mul($f0,    $g9, 26);
-        $f1g0    = self::mul($f1,    $g0, 26);
-        $f1g1_2  = self::mul($f1_2,  $g1, 25);
-        $f1g2    = self::mul($f1,    $g2, 26);
-        $f1g3_2  = self::mul($f1_2,  $g3, 25);
-        $f1g4    = self::mul($f1,    $g4, 26);
-        $f1g5_2  = self::mul($f1_2,  $g5, 25);
-        $f1g6    = self::mul($f1,    $g6, 26);
-        $f1g7_2  = self::mul($f1_2,  $g7, 25);
-        $f1g8    = self::mul($f1,    $g8, 26);
+        $g1_19 = self::mul($g[1], 19, 5);
+        $g2_19 = self::mul($g[2], 19, 5);
+        $g3_19 = self::mul($g[3], 19, 5);
+        $g4_19 = self::mul($g[4], 19, 5);
+        $g5_19 = self::mul($g[5], 19, 5);
+        $g6_19 = self::mul($g[6], 19, 5);
+        $g7_19 = self::mul($g[7], 19, 5);
+        $g8_19 = self::mul($g[8], 19, 5);
+        $g9_19 = self::mul($g[9], 19, 5);
+        $f1_2 = $f[1] << 1;
+        $f3_2 = $f[3] << 1;
+        $f5_2 = $f[5] << 1;
+        $f7_2 = $f[7] << 1;
+        $f9_2 = $f[9] << 1;
+        $f0g0    = self::mul($f[0],  $g[0], 26);
+        $f0g1    = self::mul($f[0],  $g[1], 25);
+        $f0g2    = self::mul($f[0],  $g[2], 26);
+        $f0g3    = self::mul($f[0],  $g[3], 25);
+        $f0g4    = self::mul($f[0],  $g[4], 26);
+        $f0g5    = self::mul($f[0],  $g[5], 25);
+        $f0g6    = self::mul($f[0],  $g[6], 26);
+        $f0g7    = self::mul($f[0],  $g[7], 25);
+        $f0g8    = self::mul($f[0],  $g[8], 26);
+        $f0g9    = self::mul($f[0],  $g[9], 26);
+        $f1g0    = self::mul($f[1],  $g[0], 26);
+        $f1g1_2  = self::mul($f1_2,  $g[1], 25);
+        $f1g2    = self::mul($f[1],  $g[2], 26);
+        $f1g3_2  = self::mul($f1_2,  $g[3], 25);
+        $f1g4    = self::mul($f[1],  $g[4], 26);
+        $f1g5_2  = self::mul($f1_2,  $g[5], 25);
+        $f1g6    = self::mul($f[1],  $g[6], 26);
+        $f1g7_2  = self::mul($f1_2,  $g[7], 25);
+        $f1g8    = self::mul($f[1],  $g[8], 26);
         $f1g9_38 = self::mul($g9_19, $f1_2, 26);
-        $f2g0    = self::mul($f2,    $g0, 26);
-        $f2g1    = self::mul($f2,    $g1, 25);
-        $f2g2    = self::mul($f2,    $g2, 26);
-        $f2g3    = self::mul($f2,    $g3, 25);
-        $f2g4    = self::mul($f2,    $g4, 26);
-        $f2g5    = self::mul($f2,    $g5, 25);
-        $f2g6    = self::mul($f2,    $g6, 26);
-        $f2g7    = self::mul($f2,    $g7, 25);
-        $f2g8_19 = self::mul($g8_19, $f2, 26);
-        $f2g9_19 = self::mul($g9_19, $f2, 26);
-        $f3g0    = self::mul($f3,    $g0, 26);
-        $f3g1_2  = self::mul($f3_2,  $g1, 25);
-        $f3g2    = self::mul($f3,    $g2, 26);
-        $f3g3_2  = self::mul($f3_2,  $g3, 25);
-        $f3g4    = self::mul($f3,    $g4, 26);
-        $f3g5_2  = self::mul($f3_2,  $g5, 25);
-        $f3g6    = self::mul($f3,    $g6, 26);
+        $f2g0    = self::mul($f[2],  $g[0], 26);
+        $f2g1    = self::mul($f[2],  $g[1], 25);
+        $f2g2    = self::mul($f[2],  $g[2], 26);
+        $f2g3    = self::mul($f[2],  $g[3], 25);
+        $f2g4    = self::mul($f[2],  $g[4], 26);
+        $f2g5    = self::mul($f[2],  $g[5], 25);
+        $f2g6    = self::mul($f[2],  $g[6], 26);
+        $f2g7    = self::mul($f[2],  $g[7], 25);
+        $f2g8_19 = self::mul($g8_19, $f[2], 26);
+        $f2g9_19 = self::mul($g9_19, $f[2], 26);
+        $f3g0    = self::mul($f[3],  $g[0], 26);
+        $f3g1_2  = self::mul($f3_2,  $g[1], 25);
+        $f3g2    = self::mul($f[3],  $g[2], 26);
+        $f3g3_2  = self::mul($f3_2,  $g[3], 25);
+        $f3g4    = self::mul($f[3],  $g[4], 26);
+        $f3g5_2  = self::mul($f3_2,  $g[5], 25);
+        $f3g6    = self::mul($f[3],  $g[6], 26);
         $f3g7_38 = self::mul($g7_19, $f3_2, 26);
-        $f3g8_19 = self::mul($g8_19, $f3, 25);
+        $f3g8_19 = self::mul($g8_19, $f[3], 25);
         $f3g9_38 = self::mul($g9_19, $f3_2, 26);
-        $f4g0    = self::mul($f4,    $g0, 26);
-        $f4g1    = self::mul($f4,    $g1, 25);
-        $f4g2    = self::mul($f4,    $g2, 26);
-        $f4g3    = self::mul($f4,    $g3, 25);
-        $f4g4    = self::mul($f4,    $g4, 26);
-        $f4g5    = self::mul($f4,    $g5, 25);
-        $f4g6_19 = self::mul($g6_19, $f4, 26);
-        $f4g7_19 = self::mul($g7_19, $f4, 26);
-        $f4g8_19 = self::mul($g8_19, $f4, 26);
-        $f4g9_19 = self::mul($g9_19, $f4, 26);
-        $f5g0    = self::mul($f5,    $g0, 26);
-        $f5g1_2  = self::mul($f5_2,  $g1, 25);
-        $f5g2    = self::mul($f5,    $g2, 26);
-        $f5g3_2  = self::mul($f5_2,  $g3, 25);
-        $f5g4    = self::mul($f5,    $g4, 26);
+        $f4g0    = self::mul($f[4],  $g[0], 26);
+        $f4g1    = self::mul($f[4],  $g[1], 25);
+        $f4g2    = self::mul($f[4],  $g[2], 26);
+        $f4g3    = self::mul($f[4],  $g[3], 25);
+        $f4g4    = self::mul($f[4],  $g[4], 26);
+        $f4g5    = self::mul($f[4],  $g[5], 25);
+        $f4g6_19 = self::mul($g6_19, $f[4], 26);
+        $f4g7_19 = self::mul($g7_19, $f[4], 26);
+        $f4g8_19 = self::mul($g8_19, $f[4], 26);
+        $f4g9_19 = self::mul($g9_19, $f[4], 26);
+        $f5g0    = self::mul($f[5],  $g[0], 26);
+        $f5g1_2  = self::mul($f5_2,  $g[1], 25);
+        $f5g2    = self::mul($f[5],  $g[2], 26);
+        $f5g3_2  = self::mul($f5_2,  $g[3], 25);
+        $f5g4    = self::mul($f[5],  $g[4], 26);
         $f5g5_38 = self::mul($g5_19, $f5_2, 26);
-        $f5g6_19 = self::mul($g6_19, $f5, 25);
+        $f5g6_19 = self::mul($g6_19, $f[5], 25);
         $f5g7_38 = self::mul($g7_19, $f5_2, 26);
-        $f5g8_19 = self::mul($g8_19, $f5, 25);
+        $f5g8_19 = self::mul($g8_19, $f[5], 25);
         $f5g9_38 = self::mul($g9_19, $f5_2, 26);
-        $f6g0    = self::mul($f6,    $g0, 26);
-        $f6g1    = self::mul($f6,    $g1, 25);
-        $f6g2    = self::mul($f6,    $g2, 26);
-        $f6g3    = self::mul($f6,    $g3, 25);
-        $f6g4_19 = self::mul($g4_19, $f6, 26);
-        $f6g5_19 = self::mul($g5_19, $f6, 26);
-        $f6g6_19 = self::mul($g6_19, $f6, 26);
-        $f6g7_19 = self::mul($g7_19, $f6, 26);
-        $f6g8_19 = self::mul($g8_19, $f6, 26);
-        $f6g9_19 = self::mul($g9_19, $f6, 26);
-        $f7g0    = self::mul($f7,    $g0, 26);
-        $f7g1_2  = self::mul($f7_2,  $g1, 25);
-        $f7g2    = self::mul($f7,    $g2, 26);
+        $f6g0    = self::mul($f[6],  $g[0], 26);
+        $f6g1    = self::mul($f[6],  $g[1], 25);
+        $f6g2    = self::mul($f[6],  $g[2], 26);
+        $f6g3    = self::mul($f[6],  $g[3], 25);
+        $f6g4_19 = self::mul($g4_19, $f[6], 26);
+        $f6g5_19 = self::mul($g5_19, $f[6], 26);
+        $f6g6_19 = self::mul($g6_19, $f[6], 26);
+        $f6g7_19 = self::mul($g7_19, $f[6], 26);
+        $f6g8_19 = self::mul($g8_19, $f[6], 26);
+        $f6g9_19 = self::mul($g9_19, $f[6], 26);
+        $f7g0    = self::mul($f[7],  $g[0], 26);
+        $f7g1_2  = self::mul($f7_2,  $g[1], 25);
+        $f7g2    = self::mul($f[7],  $g[2], 26);
         $f7g3_38 = self::mul($g3_19, $f7_2, 26);
-        $f7g4_19 = self::mul($g4_19, $f7, 26);
+        $f7g4_19 = self::mul($g4_19, $f[7], 26);
         $f7g5_38 = self::mul($g5_19, $f7_2, 26);
-        $f7g6_19 = self::mul($g6_19, $f7, 25);
+        $f7g6_19 = self::mul($g6_19, $f[7], 25);
         $f7g7_38 = self::mul($g7_19, $f7_2, 26);
-        $f7g8_19 = self::mul($g8_19, $f7, 25);
+        $f7g8_19 = self::mul($g8_19, $f[7], 25);
         $f7g9_38 = self::mul($g9_19,$f7_2, 26);
-        $f8g0    = self::mul($f8,    $g0, 26);
-        $f8g1    = self::mul($f8,    $g1, 25);
-        $f8g2_19 = self::mul($g2_19, $f8, 26);
-        $f8g3_19 = self::mul($g3_19, $f8, 26);
-        $f8g4_19 = self::mul($g4_19, $f8, 26);
-        $f8g5_19 = self::mul($g5_19, $f8, 26);
-        $f8g6_19 = self::mul($g6_19, $f8, 26);
-        $f8g7_19 = self::mul($g7_19, $f8, 26);
-        $f8g8_19 = self::mul($g8_19, $f8, 26);
-        $f8g9_19 = self::mul($g9_19, $f8, 26);
-        $f9g0    = self::mul($f9,    $g0, 26);
+        $f8g0    = self::mul($f[8],  $g[0], 26);
+        $f8g1    = self::mul($f[8],  $g[1], 25);
+        $f8g2_19 = self::mul($g2_19, $f[8], 26);
+        $f8g3_19 = self::mul($g3_19, $f[8], 26);
+        $f8g4_19 = self::mul($g4_19, $f[8], 26);
+        $f8g5_19 = self::mul($g5_19, $f[8], 26);
+        $f8g6_19 = self::mul($g6_19, $f[8], 26);
+        $f8g7_19 = self::mul($g7_19, $f[8], 26);
+        $f8g8_19 = self::mul($g8_19, $f[8], 26);
+        $f8g9_19 = self::mul($g9_19, $f[8], 26);
+        $f9g0    = self::mul($f[9],  $g[0], 26);
         $f9g1_38 = self::mul($g1_19, $f9_2, 26);
-        $f9g2_19 = self::mul($g2_19, $f9, 25);
+        $f9g2_19 = self::mul($g2_19, $f[9], 25);
         $f9g3_38 = self::mul($g3_19, $f9_2, 26);
-        $f9g4_19 = self::mul($g4_19, $f9, 25);
+        $f9g4_19 = self::mul($g4_19, $f[9], 25);
         $f9g5_38 = self::mul($g5_19, $f9_2, 26);
-        $f9g6_19 = self::mul($g6_19, $f9, 25);
+        $f9g6_19 = self::mul($g6_19, $f[9], 25);
         $f9g7_38 = self::mul($g7_19, $f9_2, 26);
-        $f9g8_19 = self::mul($g8_19, $f9, 25);
+        $f9g8_19 = self::mul($g8_19, $f[9], 25);
         $f9g9_38 = self::mul($g9_19, $f9_2, 26);
 
         $h0 = $f0g0 + $f1g9_38 + $f2g8_19 + $f3g7_38 + $f4g6_19 + $f5g5_38 + $f6g4_19 + $f7g3_38 + $f8g2_19 + $f9g1_38;
@@ -543,85 +523,74 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Fe $f
     ): ParagonIE_Sodium_Core_Curve25519_Fe {
         $f = self::fe_normalize($f);
-        $f0 = $f[0];
-        $f1 = $f[1];
-        $f2 = $f[2];
-        $f3 = $f[3];
-        $f4 = $f[4];
-        $f5 = $f[5];
-        $f6 = $f[6];
-        $f7 = $f[7];
-        $f8 = $f[8];
-        $f9 = $f[9];
-
-        $f0_2 = $f0 << 1;
-        $f1_2 = $f1 << 1;
-        $f2_2 = $f2 << 1;
-        $f3_2 = $f3 << 1;
-        $f4_2 = $f4 << 1;
-        $f5_2 = $f5 << 1;
-        $f6_2 = $f6 << 1;
-        $f7_2 = $f7 << 1;
-        $f5_38 = self::mul($f5, 38, 6);
-        $f6_19 = self::mul($f6, 19, 5);
-        $f7_38 = self::mul($f7, 38, 6);
-        $f8_19 = self::mul($f8, 19, 5);
-        $f9_38 = self::mul($f9, 38, 6);
-        $f0f0    = self::mul($f0,    $f0,    26);
-        $f0f1_2  = self::mul($f0_2,  $f1,    26);
-        $f0f2_2  = self::mul($f0_2,  $f2,    26);
-        $f0f3_2  = self::mul($f0_2,  $f3,    26);
-        $f0f4_2  = self::mul($f0_2,  $f4,    26);
-        $f0f5_2  = self::mul($f0_2,  $f5,    26);
-        $f0f6_2  = self::mul($f0_2,  $f6,    26);
-        $f0f7_2  = self::mul($f0_2,  $f7,    26);
-        $f0f8_2  = self::mul($f0_2,  $f8,    26);
-        $f0f9_2  = self::mul($f0_2,  $f9,    26);
-        $f1f1_2  = self::mul($f1_2,  $f1,    26);
-        $f1f2_2  = self::mul($f1_2,  $f2,    26);
+        $f0_2 = $f[0] << 1;
+        $f1_2 = $f[1] << 1;
+        $f2_2 = $f[2] << 1;
+        $f3_2 = $f[3] << 1;
+        $f4_2 = $f[4] << 1;
+        $f5_2 = $f[5] << 1;
+        $f6_2 = $f[6] << 1;
+        $f7_2 = $f[7] << 1;
+        $f5_38 = self::mul($f[5], 38, 6);
+        $f6_19 = self::mul($f[6], 19, 5);
+        $f7_38 = self::mul($f[7], 38, 6);
+        $f8_19 = self::mul($f[8], 19, 5);
+        $f9_38 = self::mul($f[9], 38, 6);
+        $f0f0    = self::mul($f[0],  $f[0],  26);
+        $f0f1_2  = self::mul($f0_2,  $f[1],  26);
+        $f0f2_2  = self::mul($f0_2,  $f[2],  26);
+        $f0f3_2  = self::mul($f0_2,  $f[3],  26);
+        $f0f4_2  = self::mul($f0_2,  $f[4],  26);
+        $f0f5_2  = self::mul($f0_2,  $f[5],  26);
+        $f0f6_2  = self::mul($f0_2,  $f[6],  26);
+        $f0f7_2  = self::mul($f0_2,  $f[7],  26);
+        $f0f8_2  = self::mul($f0_2,  $f[8],  26);
+        $f0f9_2  = self::mul($f0_2,  $f[9],  26);
+        $f1f1_2  = self::mul($f1_2,  $f[1],  26);
+        $f1f2_2  = self::mul($f1_2,  $f[2],  26);
         $f1f3_4  = self::mul($f1_2,  $f3_2,  26);
-        $f1f4_2  = self::mul($f1_2,  $f4,    26);
+        $f1f4_2  = self::mul($f1_2,  $f[4],  26);
         $f1f5_4  = self::mul($f1_2,  $f5_2,  26);
-        $f1f6_2  = self::mul($f1_2,  $f6,    26);
+        $f1f6_2  = self::mul($f1_2,  $f[6],  26);
         $f1f7_4  = self::mul($f1_2,  $f7_2,  26);
-        $f1f8_2  = self::mul($f1_2,  $f8,    26);
+        $f1f8_2  = self::mul($f1_2,  $f[8],  26);
         $f1f9_76 = self::mul($f9_38, $f1_2,  27);
-        $f2f2    = self::mul($f2,    $f2,    27);
-        $f2f3_2  = self::mul($f2_2,  $f3,    27);
-        $f2f4_2  = self::mul($f2_2,  $f4,    27);
-        $f2f5_2  = self::mul($f2_2,  $f5,    27);
-        $f2f6_2  = self::mul($f2_2,  $f6,    27);
-        $f2f7_2  = self::mul($f2_2,  $f7,    27);
+        $f2f2    = self::mul($f[2],  $f[2],  27);
+        $f2f3_2  = self::mul($f2_2,  $f[3],  27);
+        $f2f4_2  = self::mul($f2_2,  $f[4],  27);
+        $f2f5_2  = self::mul($f2_2,  $f[5],  27);
+        $f2f6_2  = self::mul($f2_2,  $f[6],  27);
+        $f2f7_2  = self::mul($f2_2,  $f[7],  27);
         $f2f8_38 = self::mul($f8_19, $f2_2,  27);
-        $f2f9_38 = self::mul($f9_38, $f2,    26);
-        $f3f3_2  = self::mul($f3_2,  $f3,    26);
-        $f3f4_2  = self::mul($f3_2,  $f4,    26);
+        $f2f9_38 = self::mul($f9_38, $f[2],  26);
+        $f3f3_2  = self::mul($f3_2,  $f[3],  26);
+        $f3f4_2  = self::mul($f3_2,  $f[4],  26);
         $f3f5_4  = self::mul($f3_2,  $f5_2,  26);
-        $f3f6_2  = self::mul($f3_2,  $f6,    26);
+        $f3f6_2  = self::mul($f3_2,  $f[6],    26);
         $f3f7_76 = self::mul($f7_38, $f3_2,  26);
         $f3f8_38 = self::mul($f8_19, $f3_2,  26);
         $f3f9_76 = self::mul($f9_38, $f3_2,  26);
-        $f4f4    = self::mul($f4,    $f4,    26);
-        $f4f5_2  = self::mul($f4_2,  $f5,    26);
+        $f4f4    = self::mul($f[4],  $f[4],  26);
+        $f4f5_2  = self::mul($f4_2,  $f[5],  26);
         $f4f6_38 = self::mul($f6_19, $f4_2,  27);
-        $f4f7_38 = self::mul($f7_38, $f4,    26);
+        $f4f7_38 = self::mul($f7_38, $f[4],  26);
         $f4f8_38 = self::mul($f8_19, $f4_2,  27);
-        $f4f9_38 = self::mul($f9_38, $f4,    26);
-        $f5f5_38 = self::mul($f5_38, $f5,    26);
+        $f4f9_38 = self::mul($f9_38, $f[4],  26);
+        $f5f5_38 = self::mul($f5_38, $f[5],  26);
         $f5f6_38 = self::mul($f6_19, $f5_2,  26);
         $f5f7_76 = self::mul($f7_38, $f5_2,  26);
         $f5f8_38 = self::mul($f8_19, $f5_2,  26);
         $f5f9_76 = self::mul($f9_38, $f5_2,  26);
-        $f6f6_19 = self::mul($f6_19, $f6,    26);
-        $f6f7_38 = self::mul($f7_38, $f6,    26);
+        $f6f6_19 = self::mul($f6_19, $f[6],  26);
+        $f6f7_38 = self::mul($f7_38, $f[6],  26);
         $f6f8_38 = self::mul($f8_19, $f6_2,  27);
-        $f6f9_38 = self::mul($f9_38, $f6,    26);
-        $f7f7_38 = self::mul($f7_38, $f7,    26);
+        $f6f9_38 = self::mul($f9_38, $f[6],  26);
+        $f7f7_38 = self::mul($f7_38, $f[7],  26);
         $f7f8_38 = self::mul($f8_19, $f7_2,  26);
         $f7f9_76 = self::mul($f9_38, $f7_2,  26);
-        $f8f8_19 = self::mul($f8_19, $f8,    26);
-        $f8f9_38 = self::mul($f9_38, $f8,    26);
-        $f9f9_38 = self::mul($f9_38, $f9,    26);
+        $f8f8_19 = self::mul($f8_19, $f[8],  26);
+        $f8f9_38 = self::mul($f9_38, $f[8],  26);
+        $f9f9_38 = self::mul($f9_38, $f[9],  26);
         $h0 = $f0f0   + $f1f9_76 + $f2f8_38 + $f3f7_76 + $f4f6_38 + $f5f5_38;
         $h1 = $f0f1_2 + $f2f9_38 + $f3f8_38 + $f4f7_38 + $f5f6_38;
         $h2 = $f0f2_2 + $f1f1_2  + $f3f9_76 + $f4f8_38 + $f5f7_76 + $f6f6_19;
@@ -697,85 +666,74 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function fe_sq2(ParagonIE_Sodium_Core_Curve25519_Fe $f): ParagonIE_Sodium_Core_Curve25519_Fe
     {
         $f = self::fe_normalize($f);
-        $f0 = $f[0];
-        $f1 = $f[1];
-        $f2 = $f[2];
-        $f3 = $f[3];
-        $f4 = $f[4];
-        $f5 = $f[5];
-        $f6 = $f[6];
-        $f7 = $f[7];
-        $f8 = $f[8];
-        $f9 = $f[9];
-
-        $f0_2 = $f0 << 1;
-        $f1_2 = $f1 << 1;
-        $f2_2 = $f2 << 1;
-        $f3_2 = $f3 << 1;
-        $f4_2 = $f4 << 1;
-        $f5_2 = $f5 << 1;
-        $f6_2 = $f6 << 1;
-        $f7_2 = $f7 << 1;
-        $f5_38 = self::mul($f5, 38, 6); /* 1.959375*2^30 */
-        $f6_19 = self::mul($f6, 19, 5); /* 1.959375*2^30 */
-        $f7_38 = self::mul($f7, 38, 6); /* 1.959375*2^30 */
-        $f8_19 = self::mul($f8, 19, 5); /* 1.959375*2^30 */
-        $f9_38 = self::mul($f9, 38, 6); /* 1.959375*2^30 */
-        $f0f0 = self::mul($f0, $f0, 24);
-        $f0f1_2 = self::mul($f0_2, $f1, 24);
-        $f0f2_2 = self::mul($f0_2, $f2, 24);
-        $f0f3_2 = self::mul($f0_2, $f3, 24);
-        $f0f4_2 = self::mul($f0_2, $f4, 24);
-        $f0f5_2 = self::mul($f0_2, $f5, 24);
-        $f0f6_2 = self::mul($f0_2, $f6, 24);
-        $f0f7_2 = self::mul($f0_2, $f7, 24);
-        $f0f8_2 = self::mul($f0_2, $f8, 24);
-        $f0f9_2 = self::mul($f0_2, $f9, 24);
-        $f1f1_2 = self::mul($f1_2,  $f1, 24);
-        $f1f2_2 = self::mul($f1_2,  $f2, 24);
+        $f0_2 = $f[0] << 1;
+        $f1_2 = $f[1] << 1;
+        $f2_2 = $f[2] << 1;
+        $f3_2 = $f[3] << 1;
+        $f4_2 = $f[4] << 1;
+        $f5_2 = $f[5] << 1;
+        $f6_2 = $f[6] << 1;
+        $f7_2 = $f[7] << 1;
+        $f5_38 = self::mul($f[5], 38, 6); /* 1.959375*2^30 */
+        $f6_19 = self::mul($f[6], 19, 5); /* 1.959375*2^30 */
+        $f7_38 = self::mul($f[7], 38, 6); /* 1.959375*2^30 */
+        $f8_19 = self::mul($f[8], 19, 5); /* 1.959375*2^30 */
+        $f9_38 = self::mul($f[9], 38, 6); /* 1.959375*2^30 */
+        $f0f0 = self::mul($f[0], $f[0], 24);
+        $f0f1_2 = self::mul($f0_2, $f[1], 24);
+        $f0f2_2 = self::mul($f0_2, $f[2], 24);
+        $f0f3_2 = self::mul($f0_2, $f[3], 24);
+        $f0f4_2 = self::mul($f0_2, $f[4], 24);
+        $f0f5_2 = self::mul($f0_2, $f[5], 24);
+        $f0f6_2 = self::mul($f0_2, $f[6], 24);
+        $f0f7_2 = self::mul($f0_2, $f[7], 24);
+        $f0f8_2 = self::mul($f0_2, $f[8], 24);
+        $f0f9_2 = self::mul($f0_2, $f[9], 24);
+        $f1f1_2 = self::mul($f1_2,  $f[1], 24);
+        $f1f2_2 = self::mul($f1_2,  $f[2], 24);
         $f1f3_4 = self::mul($f1_2,  $f3_2, 24);
-        $f1f4_2 = self::mul($f1_2,  $f4, 24);
+        $f1f4_2 = self::mul($f1_2,  $f[4], 24);
         $f1f5_4 = self::mul($f1_2,  $f5_2, 24);
-        $f1f6_2 = self::mul($f1_2,  $f6, 24);
+        $f1f6_2 = self::mul($f1_2,  $f[6], 24);
         $f1f7_4 = self::mul($f1_2,  $f7_2, 24);
-        $f1f8_2 = self::mul($f1_2,  $f8, 24);
+        $f1f8_2 = self::mul($f1_2,  $f[8], 24);
         $f1f9_76 = self::mul($f9_38, $f1_2, 24);
-        $f2f2 = self::mul($f2,  $f2, 24);
-        $f2f3_2 = self::mul($f2_2,  $f3, 24);
-        $f2f4_2 = self::mul($f2_2,  $f4, 24);
-        $f2f5_2 = self::mul($f2_2,  $f5, 24);
-        $f2f6_2 = self::mul($f2_2,  $f6, 24);
-        $f2f7_2 = self::mul($f2_2,  $f7, 24);
+        $f2f2 = self::mul($f[2],  $f[2], 24);
+        $f2f3_2 = self::mul($f2_2,  $f[3], 24);
+        $f2f4_2 = self::mul($f2_2,  $f[4], 24);
+        $f2f5_2 = self::mul($f2_2,  $f[5], 24);
+        $f2f6_2 = self::mul($f2_2,  $f[6], 24);
+        $f2f7_2 = self::mul($f2_2,  $f[7], 24);
         $f2f8_38 = self::mul($f8_19, $f2_2, 25);
-        $f2f9_38 = self::mul($f9_38, $f2, 24);
-        $f3f3_2 = self::mul($f3_2,  $f3, 24);
-        $f3f4_2 = self::mul($f3_2,  $f4, 24);
+        $f2f9_38 = self::mul($f9_38, $f[2], 24);
+        $f3f3_2 = self::mul($f3_2,  $f[3], 24);
+        $f3f4_2 = self::mul($f3_2,  $f[4], 24);
         $f3f5_4 = self::mul($f3_2,  $f5_2, 24);
-        $f3f6_2 = self::mul($f3_2,  $f6, 24);
+        $f3f6_2 = self::mul($f3_2,  $f[6], 24);
         $f3f7_76 = self::mul($f7_38, $f3_2, 24);
         $f3f8_38 = self::mul($f8_19, $f3_2, 24);
         $f3f9_76 = self::mul($f9_38, $f3_2, 24);
-        $f4f4 = self::mul($f4,  $f4, 24);
-        $f4f5_2 = self::mul($f4_2,  $f5, 24);
+        $f4f4 = self::mul($f[4],  $f[4], 24);
+        $f4f5_2 = self::mul($f4_2,  $f[5], 24);
         $f4f6_38 = self::mul($f6_19, $f4_2, 25);
-        $f4f7_38 = self::mul($f7_38, $f4, 24);
+        $f4f7_38 = self::mul($f7_38, $f[4], 24);
         $f4f8_38 = self::mul($f8_19, $f4_2, 25);
-        $f4f9_38 = self::mul($f9_38, $f4, 24);
-        $f5f5_38 = self::mul($f5_38, $f5, 24);
+        $f4f9_38 = self::mul($f9_38, $f[4], 24);
+        $f5f5_38 = self::mul($f5_38, $f[5], 24);
         $f5f6_38 = self::mul($f6_19, $f5_2, 24);
         $f5f7_76 = self::mul($f7_38, $f5_2, 24);
         $f5f8_38 = self::mul($f8_19, $f5_2, 24);
         $f5f9_76 = self::mul($f9_38, $f5_2, 24);
-        $f6f6_19 = self::mul($f6_19, $f6, 24);
-        $f6f7_38 = self::mul($f7_38, $f6, 24);
+        $f6f6_19 = self::mul($f6_19, $f[6], 24);
+        $f6f7_38 = self::mul($f7_38, $f[6], 24);
         $f6f8_38 = self::mul($f8_19, $f6_2, 25);
-        $f6f9_38 = self::mul($f9_38, $f6, 24);
-        $f7f7_38 = self::mul($f7_38, $f7, 24);
+        $f6f9_38 = self::mul($f9_38, $f[6], 24);
+        $f7f7_38 = self::mul($f7_38, $f[7], 24);
         $f7f8_38 = self::mul($f8_19, $f7_2, 24);
         $f7f9_76 = self::mul($f9_38, $f7_2, 24);
-        $f8f8_19 = self::mul($f8_19, $f8, 24);
-        $f8f9_38 = self::mul($f9_38, $f8, 24);
-        $f9f9_38 = self::mul($f9_38, $f9, 24);
+        $f8f8_19 = self::mul($f8_19, $f[8], 24);
+        $f8f9_38 = self::mul($f9_38, $f[8], 24);
+        $f9f9_38 = self::mul($f9_38, $f[9], 24);
 
         $h0 = ($f0f0 + $f1f9_76 + $f2f8_38 + $f3f7_76 + $f4f6_38 + $f5f5_38) << 1;
         $h1 = ($f0f1_2 + $f2f9_38 + $f3f8_38 + $f4f7_38 + $f5f6_38) << 1;
@@ -847,11 +805,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function fe_invert(
         ParagonIE_Sodium_Core_Curve25519_Fe $Z
     ): ParagonIE_Sodium_Core_Curve25519_Fe {
-        $z = clone $Z;
-        $t0 = self::fe_sq($z);
+        $t0 = self::fe_sq($Z);
         $t1 = self::fe_sq($t0);
         $t1 = self::fe_sq($t1);
-        $t1 = self::fe_mul($z, $t1);
+        $t1 = self::fe_mul($Z, $t1);
         $t0 = self::fe_mul($t0, $t1);
         $t2 = self::fe_sq($t0);
         $t1 = self::fe_mul($t1, $t2);
@@ -1329,9 +1286,9 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
     ): ParagonIE_Sodium_Core_Curve25519_Ge_P2 {
         return new ParagonIE_Sodium_Core_Curve25519_Ge_P2(
-            clone $p->X,
-            clone $p->Y,
-            clone $p->Z
+            $p->X,
+            $p->Y,
+            $p->Z
         );
     }
 
@@ -1365,8 +1322,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function ge_p3_dbl(
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $p
     ): ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 {
-        $q = self::ge_p3_to_p2($p);
-        return self::ge_p2_dbl($q);
+        return self::ge_p2_dbl(self::ge_p3_to_p2($p));
     }
 
     /**
@@ -1466,8 +1422,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         #[SensitiveParameter]
         int $b
     ): ParagonIE_Sodium_Core_Curve25519_Ge_Cached {
-        $bnegative = self::negative($b);
-        $babs = $b - (((-$bnegative) & $b) << 1);
+        $bNegative = self::negative($b);
+        $babs = $b - (((-$bNegative) & $b) << 1);
 
         $t = new ParagonIE_Sodium_Core_Curve25519_Ge_Cached(
             self::fe_1(),
@@ -1481,12 +1437,12 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         }
 
         $minust = new ParagonIE_Sodium_Core_Curve25519_Ge_Cached(
-            clone $t->YminusX,
-            clone $t->YplusX,
-            clone $t->Z,
+            $t->YminusX,
+            $t->YplusX,
+            $t->Z,
             self::fe_neg($t->T2d)
         );
-        return self::ge_cmov_cached($t, $minust, $bnegative);
+        return self::ge_cmov_cached($t, $minust, $bNegative);
     }
 
     /**
@@ -1531,8 +1487,8 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             );
         }
         $minusT = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
-            clone $t->yminusx,
-            clone $t->yplusx,
+            $t->yminusx,
+            $t->yplusx,
             self::fe_neg($t->xy2d)
         );
         return self::cmov($t, $minusT, $bnegative);
@@ -3183,7 +3139,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     ): ParagonIE_Sodium_Core_Curve25519_Fe {
         $x = (PHP_INT_SIZE << 3) - 1; // 31 or 63
 
-        $g = clone $f;
+        $g = $f;
         for ($i = 0; $i < 10; ++$i) {
             $mask = -(($g[$i] >> $x) & 1);
 
