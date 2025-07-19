@@ -33,7 +33,6 @@ if (!class_exists('SodiumException', false)) {
     require_once dirname(__FILE__) . '/src/SodiumException.php';
 }
 
-require_once dirname(__FILE__) . '/lib/namespaced.php';
 if (!defined('SODIUM_CRYPTO_AEAD_AEGIS128L_KEYBYTES')) {
     require_once dirname(__FILE__) . '/lib/php84compat_const.php';
 }
