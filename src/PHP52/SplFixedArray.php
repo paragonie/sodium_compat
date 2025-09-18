@@ -179,11 +179,31 @@ class SplFixedArray implements Iterator, ArrayAccess, Countable
         return $result;
     }
 
+    public function __sleep(): array
+    {
+        return $this->internalArray;
+    }
+
     /**
      * Do nothing.
      */
     public function __wakeup()
     {
         // NOP
+    }
+
+    public function __serialize()
+    {
+        return array_values($this->internalArray);
+    }
+
+    public function __unserialize(array $data)
+    {
+        $length = count($data);
+        $values = array_values($data);
+        for ($i = 0; $i < $length; ++$i) {
+            $this->internalArray[$i] = $values[$i];
+        }
+        $this->size = $length;
     }
 }
