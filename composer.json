@@ -74,6 +74,7 @@
     "ext-sodium": "Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
   },
   "config": {
+    "process-timeout": 0,
     "allow-plugins": {
       "infection/extension-installer": true
     }
