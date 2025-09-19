@@ -23,9 +23,6 @@ jobs:
           ini-values: max_execution_time=600, memory_limit=256M, error_reporting=-1, display_errors=On
           coverage: none
 
-      - name: Use Composer 1.x
-        run: composer self-update --1
-
       - name: Install Composer dependencies
         run: composer update
 
