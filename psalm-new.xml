@@ -15,8 +15,11 @@
         -->
         <InvalidOperand errorLevel="info" />
         <MissingOverrideAttribute errorLevel="info" />
+        <PossiblyFalseArgument errorLevel="info" />
+        <PossiblyInvalidArrayAccess errorLevel="info" />
         <PossiblyUnusedMethod errorLevel="info" />
         <PossiblyUnusedProperty errorLevel="info" />
+        <PossiblyUnusedReturnValue errorLevel="info"  />
         <RedundantCast errorLevel="info" />
         <UnnecessaryVarAnnotation errorLevel="info" />
         <UnusedClass errorLevel="info" />
