@@ -612,6 +612,9 @@ class ParagonIE_Sodium_Compat
             $authTag,
             $assocData
         );
+        if (!is_string($ciphertext)) {
+            throw new SodiumException('sodium_compat - openssl_encrypt() failed somehow)');
+        }
         return $ciphertext . $authTag;
     }
 

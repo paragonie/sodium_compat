@@ -14,6 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Rename psalm.xml to psalm-old.xml
+        run: mv psalm.xml psalm-old.xml
+
+      - name: Rename psalm-new.xml to psalm.xml
+        run: mv psalm-new.xml psalm.xml
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
