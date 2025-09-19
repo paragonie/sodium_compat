@@ -171,17 +171,17 @@ class UtilTest extends TestCase
     {
         $this->assertSame(
             8451279,
-            ParagonIE_Sodium_Core_Curve25519::load_3("\xcf\xf4\x80"),
+            ParagonIE_Sodium_Core_Util::load_3("\xcf\xf4\x80"),
             'Unexpected result from load_3'
         );
         $this->assertSame(
             8516815,
-            ParagonIE_Sodium_Core_Curve25519::load_3("\xcf\xf4\x81"),
+            ParagonIE_Sodium_Core_Util::load_3("\xcf\xf4\x81"),
             'Verify endianness is correct'
         );
         $this->assertSame(
             8451280,
-            ParagonIE_Sodium_Core_Curve25519::load_3("\xd0\xf4\x80"),
+            ParagonIE_Sodium_Core_Util::load_3("\xd0\xf4\x80"),
             'Verify endianness is correct'
         );
     }
