@@ -1,10 +1,13 @@
-name: Psalm
+name: Mutation Testing
 
-on: [push]
+on:
+  create:
+    tags:
+      - v*
 
 jobs:
   psalm:
-    name: Psalm on PHP ${{ matrix.php-versions }}
+    name: Infection on PHP ${{ matrix.php-versions }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -19,12 +22,13 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: psalm:4
-          coverage: none
+          coverage: pcov
+
+      - name: Ensure PCOV is installed
+        run: pecl install pcov
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --no-dev
 
-      - name: Static Analysis
-        run: psalm
+      - name: Mutation Tests
+        run: composer infection
