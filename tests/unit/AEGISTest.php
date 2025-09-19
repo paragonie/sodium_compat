@@ -410,4 +410,13 @@ class AEGISTest extends TestCase
         $msg2 = ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($ciphertext, $ad, $nonce, $key);
         $this->assertSame($msg, $msg2);
     }
+
+    public function testEmptyState(): void
+    {
+        $state = (new ParagonIE_Sodium_Core_AEGIS_State128L())->getState();
+        $this->assertSame($state, ['', '', '', '', '', '', '', '']);
+        $state = (new ParagonIE_Sodium_Core_AEGIS_State256())->getState();
+        $this->assertSame($state, ['', '', '', '', '', '']);
+
+    }
 }

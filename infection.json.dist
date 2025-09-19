@@ -4,6 +4,7 @@
             "src"
         ]
     },
+    "threads": "max",
     "phpUnit": {
         "configDir": "."
     },
