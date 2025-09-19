@@ -321,4 +321,16 @@ class UtilTest extends TestCase
             );
         }
     }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::compare()
+     */
+    public function testCompare(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Core_Util::compare('abcd', 'abcd'));
+        $this->assertSame(-1, ParagonIE_Sodium_Core_Util::compare('abcc', 'abcd'));
+        $this->assertSame(1, ParagonIE_Sodium_Core_Util::compare('abdd', 'abcd'));
+        $this->assertSame(-1, ParagonIE_Sodium_Core_Util::compare('abcd', 'abce'));
+        $this->assertSame(1, ParagonIE_Sodium_Core_Util::compare('abcd', 'abcc'));
+    }
 }
