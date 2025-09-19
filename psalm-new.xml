@@ -20,6 +20,6 @@
         <RedundantCast errorLevel="info" />
         <UnnecessaryVarAnnotation errorLevel="info" />
         <UnusedClass errorLevel="info" />
-        <UnusedVariable errorLevel="infp" />
+        <UnusedVariable errorLevel="info" />
     </issueHandlers>
 </psalm>
