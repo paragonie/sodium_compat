@@ -185,8 +185,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_decrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_encrypt()
      * @throws SodiumException
      * @throws TypeError
      */
