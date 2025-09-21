@@ -419,4 +419,71 @@ class AEGISTest extends TestCase
         $this->assertSame($state, ['', '', '', '', '', '']);
 
     }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testAegisInvalidInputs(): void
+    {
+        // AEGIS-128L
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_keygen();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_NPUBBYTES);
+        $msg = 'test';
+        $ad = 'test';
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt($msg, $ad, substr($nonce, 1), $key);
+            $this->fail('Invalid nonce length');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt($msg, $ad, $nonce, substr($key, 1));
+            $this->fail('Invalid key length');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $ciphertext = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt($msg, $ad, $nonce, $key);
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt(substr($ciphertext, 1), $ad, $nonce, $key);
+            $this->fail('Ciphertext too short');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        // AEGIS-256
+        $key256 = ParagonIE_Sodium_Compat::crypto_aead_aegis256_keygen();
+        $nonce256 = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_NPUBBYTES);
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt($msg, $ad, substr($nonce256, 1), $key256);
+            $this->fail('Invalid nonce length');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt($msg, $ad, $nonce256, substr($key256, 1));
+            $this->fail('Invalid key length');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $ciphertext256 = ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt($msg, $ad, $nonce256, $key256);
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt(substr($ciphertext256, 1), $ad, $nonce256, $key256);
+            $this->fail('Ciphertext too short');
+        } catch (\Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_KEYBYTES,
+            strlen($key)
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_KEYBYTES,
+            strlen($key256)
+        );
+    }
 }

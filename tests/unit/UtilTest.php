@@ -390,6 +390,19 @@ class UtilTest extends TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
+     */
+    public function testRandombytesUniformEdgeCases(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Compat::randombytes_uniform(1));
+        for ($i = 0; $i < 128; ++$i) {
+            $val = ParagonIE_Sodium_Compat::randombytes_uniform(2);
+            $this->assertGreaterThan(-1, $val);
+            $this->assertLessThan(2, $val);
+        }
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::verify_16()
      */
     public function testVerify16(): void

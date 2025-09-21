@@ -228,4 +228,23 @@ class Ristretto255Test extends TestCase
             sodium_bin2hex($r2)
         );
     }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testRistretto255Operations(): void
+    {
+        $p = ParagonIE_Sodium_Compat::ristretto255_random();
+        $q = ParagonIE_Sodium_Compat::ristretto255_random();
+        $s = ParagonIE_Sodium_Compat::ristretto255_scalar_random();
+        $t = ParagonIE_Sodium_Compat::ristretto255_scalar_random();
+
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_add($p, $q));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_sub($p, $q));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_add($s, $t));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_sub($s, $t));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_negate($s));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_complement($s));
+        $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_invert($s));
+    }
 }
