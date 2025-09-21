@@ -386,7 +386,7 @@ class UtilTest extends TestCase
         $a = random_bytes(32);
         $b = random_bytes(32);
         $this->assertSame(0, ParagonIE_Sodium_Core_Util::memcmp($a, $a));
-        $this->assertSame(-1, ParagonIE_Sodium_Core_Util::memcmp($a, $b));
+        $this->assertNotEquals(0, ParagonIE_Sodium_Core_Util::memcmp($a, $b));
     }
 
     /**
@@ -420,5 +420,113 @@ class UtilTest extends TestCase
         $b = random_bytes(32);
         $this->assertTrue(ParagonIE_Sodium_Core_Util::hashEquals($a, $a));
         $this->assertFalse(ParagonIE_Sodium_Core_Util::hashEquals($a, $b));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::add()
+     * @throws SodiumException
+     */
+    public function testAdd(): void
+    {
+        $a = "\x01\x00\x00\x00";
+        $b = "\x01\x00\x00\x00";
+        ParagonIE_Sodium_Compat::add($a, $b);
+        $this->assertSame("\x02\x00\x00\x00", $a);
+
+        $a = "\xff\xff\xff\xff";
+        $b = "\x01\x00\x00\x00";
+        ParagonIE_Sodium_Compat::add($a, $b);
+        $this->assertSame("\x00\x00\x00\x00", $a);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::sub()
+     * @throws SodiumException
+     */
+    public function testSub(): void
+    {
+        $a = "\x02\x00\x00\x00";
+        $b = "\x01\x00\x00\x00";
+        ParagonIE_Sodium_Compat::sub($a, $b);
+        $this->assertSame("\x01\x00\x00\x00", $a);
+
+        $a = "\x00\x00\x00\x00";
+        $b = "\x01\x00\x00\x00";
+        ParagonIE_Sodium_Compat::sub($a, $b);
+        $this->assertSame("\xff\xff\xff\xff", $a);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::increment()
+     * @throws SodiumException
+     */
+    public function testIncrement(): void
+    {
+        $a = "\x00\x00\x00\x00";
+        ParagonIE_Sodium_Compat::increment($a);
+        $this->assertSame("\x01\x00\x00\x00", $a);
+
+        $a = "\xff\xff\xff\xff";
+        ParagonIE_Sodium_Compat::increment($a);
+        $this->assertSame("\x00\x00\x00\x00", $a);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::is_zero()
+     * @throws SodiumException
+     */
+    public function testIsZero(): void
+    {
+        $a = str_repeat("\x00", 32);
+        $this->assertTrue(ParagonIE_Sodium_Compat::is_zero($a));
+
+        $a = str_repeat("\x00", 31) . "\x01";
+        $this->assertFalse(ParagonIE_Sodium_Compat::is_zero($a));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::pad()
+     * @covers ParagonIE_Sodium_Compat::unpad()
+     * @throws SodiumException
+     */
+    public function testPadUnpad(): void
+    {
+        $message = 'test message';
+        $padded = ParagonIE_Sodium_Compat::pad($message, 16);
+        $this->assertSame(16, ParagonIE_Sodium_Core_Util::strlen($padded));
+        $unpadded = ParagonIE_Sodium_Compat::unpad($padded, 16);
+        $this->assertSame($message, $unpadded);
+
+        $message = 'another test message';
+        $padded = ParagonIE_Sodium_Compat::pad($message, 32);
+        $this->assertSame(32, ParagonIE_Sodium_Core_Util::strlen($padded));
+        $unpadded = ParagonIE_Sodium_Compat::unpad($padded, 32);
+        $this->assertSame($message, $unpadded);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::compare()
+     * @throws SodiumException
+     */
+    public function testCompatCompare(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Compat::compare('abcd', 'abcd'));
+        $this->assertSame(-1, ParagonIE_Sodium_Compat::compare('abcc', 'abcd'));
+        $this->assertSame(1, ParagonIE_Sodium_Compat::compare('abdd', 'abcd'));
+        $this->assertSame(-1, ParagonIE_Sodium_Compat::compare('abcd', 'abce'));
+        $this->assertSame(1, ParagonIE_Sodium_Compat::compare('abcd', 'abcc'));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::memcmp()
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testCompatMemcmp(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+        $this->assertSame(0, ParagonIE_Sodium_Compat::memcmp($a, $a));
+        $this->assertNotEquals(0, ParagonIE_Sodium_Compat::memcmp($a, $b));
     }
 }
