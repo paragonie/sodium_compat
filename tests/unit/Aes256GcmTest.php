@@ -33,7 +33,6 @@ class Aes256GcmTest extends TestCase
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
-            return;
         }
         $testCases = array(
             array(
@@ -175,7 +174,6 @@ class Aes256GcmTest extends TestCase
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
-            return;
         }
 
         $key = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_keygen();

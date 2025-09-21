@@ -30,7 +30,6 @@ class CompatTest extends TestCase
     {
         if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
             $this->markTestSkipped('Polyfill is fast, no need to test this.');
-            return;
         }
         $this->assertTrue(ParagonIE_Sodium_Compat::runtime_speed_test(100, 10));
     }
