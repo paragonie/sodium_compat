@@ -24,9 +24,6 @@ jobs:
           tools: psalm:4
           coverage: pcov
 
-      - name: Ensure PCOV is installed
-        run: sudo pecl install pcov
-
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
 
