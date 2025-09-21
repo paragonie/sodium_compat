@@ -225,4 +225,27 @@ class FileTest extends TestCase
         $this->assertTrue(ParagonIE_Sodium_File::verify($signed, 'random.data', $sign_pk));
         unlink('random.data');
     }
+
+    /**
+     * @covers ParagonIE_Sodium_File::updateHashWithFile()
+     * @throws SodiumException
+     */
+    public function testUpdateHashWithFile(): void
+    {
+        $file = 'test.txt';
+        $data = 'abcdefghij';
+        file_put_contents($file, $data);
+
+        $fp = fopen($file, 'rb');
+        $hash = hash_init('sha256');
+        ParagonIE_Sodium_File::updateHashWithFile($hash, $fp, 10);
+        $fromFunc = hash_final($hash);
+        fclose($fp);
+
+        $read = file_get_contents($file);
+        $fromFile = hash('sha256', substr($read, 0, 10));
+
+        $this->assertSame($fromFile, $fromFunc);
+        unlink($file);
+    }
 }

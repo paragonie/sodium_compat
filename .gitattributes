@@ -1,6 +1,8 @@
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /.github export-ignore
+/infection.json.dist export-ignore
+/fuzzing export-ignore
 /phpunit.xml.dist export-ignore
 /phpstan.neon.dist export-ignore
 /psalm.xml export-ignore

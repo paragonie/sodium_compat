@@ -30,7 +30,6 @@ class CompatTest extends TestCase
     {
         if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
             $this->markTestSkipped('Polyfill is fast, no need to test this.');
-            return;
         }
         $this->assertTrue(ParagonIE_Sodium_Compat::runtime_speed_test(100, 10));
     }
@@ -107,5 +106,131 @@ class CompatTest extends TestCase
                 $ex->getMessage()
             );
         }
+    }
+    /**
+     * @covers ParagonIE_Sodium_Compat::base642bin()
+     * @covers ParagonIE_Sodium_Compat::bin2base64()
+     * @throws TypeError
+     * @throws Exception
+     */
+    public function testBase64(): void
+    {
+        for ($i = 0; $i < 100; $i++) {
+            $bin = $i === 0 ? '' : random_bytes($i);
+            $b64 = base64_encode($bin);
+            $b64_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_ORIGINAL);
+            $this->assertEquals($b64, $b64_);
+            $bin_ = ParagonIE_Sodium_Compat::base642bin($b64, SODIUM_BASE64_VARIANT_ORIGINAL);
+            $this->assertEquals($bin, $bin_);
+
+            $b64u = strtr(base64_encode($bin), '+/', '-_');
+            $b64u_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_URLSAFE);
+            $this->assertEquals($b64u, $b64u_);
+            $binu_ = ParagonIE_Sodium_Compat::base642bin($b64u, SODIUM_BASE64_VARIANT_URLSAFE);
+            $this->assertEquals($bin, $binu_);
+        }
+
+        $random = random_bytes(100);
+        $x = chunk_split(base64_encode($random));
+        $got = ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
+        $this->assertSame($random, $got);
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::compare()
+     * @covers ParagonIE_Sodium_Compat::memcmp()
+     */
+    public function testCompareAndMemcmp(): void
+    {
+        $a = 'abcdef';
+        $b = 'abcdef';
+        $c = 'abcdeg';
+        $d = 'abcdefg';
+        $e = 'abcde';
+
+        $this->assertSame(0, ParagonIE_Sodium_Compat::memcmp($a, $b));
+        $this->assertNotSame(0, ParagonIE_Sodium_Compat::memcmp($a, $c));
+        $this->assertNotSame(0, ParagonIE_Sodium_Compat::memcmp($a, $d));
+        $this->assertNotSame(0, ParagonIE_Sodium_Compat::memcmp($a, $e));
+
+        $this->assertSame(0, ParagonIE_Sodium_Compat::compare($a, $b));
+        $this->assertSame(-1, ParagonIE_Sodium_Compat::compare($a, $c));
+        $this->assertSame(1, ParagonIE_Sodium_Compat::compare($c, $a));
+        $this->assertSame(-1, ParagonIE_Sodium_Compat::compare($a, $d));
+        $this->assertSame(1, ParagonIE_Sodium_Compat::compare($d, $a));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Compat::base642bin()
+     * @covers ParagonIE_Sodium_Compat::bin2base64()
+     * @throws SodiumException
+     */
+    public function testBase64Variants(): void
+    {
+        $bin = 'This is a test.';
+        $orig = 'VGhpcyBpcyBhIHRlc3Qu';
+        $origPad = 'VGhpcyBpcyBhIHRlc3Qu';
+        $url = 'VGhpcyBpcyBhIHRlc3Qu';
+        $urlPad = 'VGhpcyBpcyBhIHRlc3Qu';
+
+        $this->assertSame(
+            $orig,
+            ParagonIE_Sodium_Compat::bin2base64($bin, ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL_NO_PADDING)
+        );
+        $this->assertSame(
+            $origPad,
+            ParagonIE_Sodium_Compat::bin2base64($bin, ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL)
+        );
+        $this->assertSame(
+            $url,
+            ParagonIE_Sodium_Compat::bin2base64($bin, ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE_NO_PADDING)
+        );
+        $this->assertSame(
+            $urlPad,
+            ParagonIE_Sodium_Compat::bin2base64($bin, ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE)
+        );
+
+        $this->assertSame(
+            $bin,
+            ParagonIE_Sodium_Compat::base642bin($orig, ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL_NO_PADDING)
+        );
+        $this->assertSame(
+            $bin,
+            ParagonIE_Sodium_Compat::base642bin($origPad, ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL)
+        );
+        $this->assertSame(
+            $bin,
+            ParagonIE_Sodium_Compat::base642bin($url, ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE_NO_PADDING)
+        );
+        $this->assertSame(
+            $bin,
+            ParagonIE_Sodium_Compat::base642bin($urlPad, ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE)
+        );
+
+        try {
+            ParagonIE_Sodium_Compat::base642bin('a', -1);
+            $this->fail('invalid variant');
+        } catch (SodiumException $ex) {
+        }
+        try {
+            ParagonIE_Sodium_Compat::bin2base64('a', -1);
+            $this->fail('invalid variant');
+        } catch (SodiumException $ex) {
+        }
+
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::base642bin('', ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::bin2base64('', ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL)
+        );
+
+        $b64 = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_ORIGINAL);
+        $this->assertSame(
+            $bin,
+            ParagonIE_Sodium_Compat::base642bin($b64, SODIUM_BASE64_VARIANT_ORIGINAL, ' ')
+        );
     }
 }

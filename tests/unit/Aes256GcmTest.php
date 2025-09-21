@@ -33,7 +33,6 @@ class Aes256GcmTest extends TestCase
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
-            return;
         }
         $testCases = array(
             array(
@@ -165,5 +164,38 @@ class Aes256GcmTest extends TestCase
 
             }
         }
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws Exception
+     */
+    public function testAes256GcmInvalidInputs(): void
+    {
+        if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
+            $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
+        }
+
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_keygen();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AES256GCM_NPUBBYTES);
+        $msg = 'test';
+        $ad = 'test';
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt($msg, $ad, substr($nonce, 1), $key);
+            $this->fail('Invalid nonce length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt($msg, $ad, $nonce, substr($key, 1));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $ciphertext = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt($msg, $ad, $nonce, $key);
+        $decrypted = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt(substr($ciphertext, 1), $ad, $nonce, $key);
+        $this->assertFalse($decrypted, 'Ciphertext too short');
     }
 }

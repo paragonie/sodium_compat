@@ -1,10 +1,13 @@
-name: Psalm
+name: Mutation Testing
 
-on: [push]
+on:
+  create:
+    tags:
+      - v*
 
 jobs:
   psalm:
-    name: Psalm on PHP ${{ matrix.php-versions }}
+    name: PHP-Fuzzer on PHP ${{ matrix.php-versions }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -14,23 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rename psalm.xml to psalm-old.xml
-        run: mv psalm.xml psalm-old.xml
-
-      - name: Rename psalm-new.xml to psalm.xml
-        run: mv psalm-new.xml psalm.xml
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: psalm:6
+          tools: psalm:4
           coverage: none
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --no-dev
 
-      - name: Static Analysis
-        run: psalm
+      - name: Fuzz Tests
+        run: vendor/bin/php-fuzzer --max-runs 1000 fuzz fuzzing/FuzzSodiumCompat.php

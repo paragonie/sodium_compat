@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<psalm
+    useDocblockTypes="true"
+>
+    <projectFiles>
+        <directory name="src" />
+        <directory name="lib" />
+    </projectFiles>
+    <issueHandlers>
+        <ClassMustBeFinal errorLevel="info" />
+        <DuplicateClass errorLevel="info" />
+        <!--
+            Psalm isn't correctly identifying the guard conditions that return
+            early if a class already exists.
+        -->
+        <InvalidOperand errorLevel="info" />
+        <MissingOverrideAttribute errorLevel="info" />
+        <PossiblyFalseArgument errorLevel="info" />
+        <PossiblyInvalidArrayAccess errorLevel="info" />
+        <PossiblyUnusedMethod errorLevel="info" />
+        <PossiblyUnusedProperty errorLevel="info" />
+        <PossiblyUnusedReturnValue errorLevel="info"  />
+        <RedundantCast errorLevel="info" />
+        <UnnecessaryVarAnnotation errorLevel="info" />
+        <UnusedClass errorLevel="info" />
+        <UnusedVariable errorLevel="info" />
+    </issueHandlers>
+</psalm>

@@ -185,8 +185,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_decrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_encrypt()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -297,7 +295,7 @@ class CryptoTest extends TestCase
     public function testBoxSeed(): void
     {
         $seed = "\x77\x07\x6d\x0a\x73\x18\xa5\x7d\x3c\x16\xc1\x72\x51\xb2\x66\x45" .
-                "\xdf\x4c\x2f\x87\xeb\xc0\x99\x2a\xb1\x77\xfb\xa5\x1d\xb9\x2c\x2a";
+            "\xdf\x4c\x2f\x87\xeb\xc0\x99\x2a\xb1\x77\xfb\xa5\x1d\xb9\x2c\x2a";
 
         $keypair = ParagonIE_Sodium_Crypto::box_seed_keypair($seed);
         $this->assertSame(
@@ -503,5 +501,130 @@ class CryptoTest extends TestCase
             ParagonIE_Sodium_Crypto::sign_verify_detached($sig, $message, $public),
             'Invalid signature verification checking'
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAeadChaCha20Poly1305InvalidInputs(): void
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_keygen();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_CHACHA20POLY1305_NPUBBYTES);
+        $msg = 'test';
+        $ad = 'test';
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt($msg, $ad, substr($nonce, 1), $key);
+            $this->fail('Invalid nonce length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt($msg, $ad, $nonce, substr($key, 1));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $key_ietf = ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_keygen();
+        $nonce_ietf = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($msg, $ad, substr($nonce_ietf, 1), $key_ietf);
+            $this->fail('Invalid nonce length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt($msg, $ad, $nonce_ietf, substr($key_ietf, 1));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        $key_x = ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_keygen();
+        $nonce_x = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES);
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($msg, $ad, substr($nonce_x, 1), $key_x);
+            $this->fail('Invalid nonce length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt($msg, $ad, $nonce_x, substr($key_x, 1));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+    }
+
+    public function testInvalidInputs(): void
+    {
+        // crypto_auth
+        try {
+            ParagonIE_Sodium_Compat::crypto_auth('test', 'short');
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_auth_verify('short', 'test', str_repeat("\x00", 32));
+            $this->fail('Invalid mac length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_auth_verify(str_repeat("\x00", 32), 'test', 'short');
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+
+        // crypto_generichash
+        try {
+            ParagonIE_Sodium_Compat::crypto_generichash('test', str_repeat("\x00", 15));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_generichash('test', str_repeat("\x00", 65));
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        // crypto_sign
+        try {
+            ParagonIE_Sodium_Compat::crypto_sign_detached('test', 'short');
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_sign_verify_detached('short', 'test', str_repeat("\x00", 32));
+            $this->fail('Invalid sig length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+        try {
+            ParagonIE_Sodium_Compat::crypto_sign_verify_detached(str_repeat("\x00", 64), 'test', 'short');
+            $this->fail('Invalid key length');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        // crypto_scalarmult
+        try {
+            ParagonIE_Sodium_Compat::crypto_scalarmult(
+                str_repeat("\x00", 32),
+                str_repeat("\x00", 32)
+            );
+            $this->fail('All-zero public key accepted');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
     }
 }

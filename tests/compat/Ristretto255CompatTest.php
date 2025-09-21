@@ -144,7 +144,7 @@ class Ristretto255CompatTest extends TestCase
      *
      * @return string[][]
      */
-    public function brokenPHP81TestProvider()
+    public static function brokenPHP81TestProvider()
     {
         return array(
             array(

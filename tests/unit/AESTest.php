@@ -19,7 +19,7 @@ class AESTest extends TestCase
      * @link https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/aes/AESAVS.pdf
      * @link https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_Core128.pdf
      */
-    public function aes128ecbProvider()
+    public static function aes128ecbProvider(): array
     {
         // key, plaintext, ciphertext
         return array(
@@ -43,7 +43,7 @@ class AESTest extends TestCase
     /**
      * @link https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_Core192.pdf
      */
-    public function aes192ecbProvider()
+    public static function aes192ecbProvider(): array
     {
         // key, plaintext, ciphertext
         return array(
@@ -58,7 +58,7 @@ class AESTest extends TestCase
     /**
      * @link https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_Core256.pdf
      */
-    public function aes256ecbProvider()
+    public static function aes256ecbProvider(): array
     {
         // key, plaintext, ciphertext
         return array(
@@ -70,7 +70,7 @@ class AESTest extends TestCase
         );
     }
 
-    public function sboxProvider()
+    public static function sboxProvider(): array
     {
         $lut = array(
             0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B,
@@ -148,7 +148,7 @@ class AESTest extends TestCase
         }
     }
 
-    public function orthoProvider()
+    public static function orthoProvider(): array
     {
         return array(
             array(
