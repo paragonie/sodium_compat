@@ -131,7 +131,9 @@ class CompatTest extends TestCase
             $this->assertEquals($bin, $binu_);
         }
 
-        $x = chunk_split(base64_encode(random_bytes(100)));
-        ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
+        $random = random_bytes(100);
+        $x = chunk_split(base64_encode($random));
+        $got = ParagonIE_Sodium_Compat::base642bin($x, SODIUM_BASE64_VARIANT_ORIGINAL, "\r\n");
+        $this->assertSame($random, $got);
     }
 }
