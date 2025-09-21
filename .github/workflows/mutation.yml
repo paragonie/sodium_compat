@@ -24,11 +24,8 @@ jobs:
           tools: psalm:4
           coverage: pcov
 
-      - name: Ensure PCOV is installed
-        run: pecl install pcov
-
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
 
       - name: Mutation Tests
-        run: composer infection
+        run: composer mutation-test
