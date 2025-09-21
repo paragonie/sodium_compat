@@ -1,4 +1,4 @@
-name: Mutation Testing
+name: Fuzz Testing
 
 on:
   create:
