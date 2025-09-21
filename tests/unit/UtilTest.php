@@ -333,4 +333,92 @@ class UtilTest extends TestCase
         $this->assertSame(-1, ParagonIE_Sodium_Core_Util::compare('abcd', 'abce'));
         $this->assertSame(1, ParagonIE_Sodium_Core_Util::compare('abcd', 'abcc'));
     }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::chrToInt()
+     */
+    public function testChrToInt(): void
+    {
+        $this->assertSame(65, ParagonIE_Sodium_Core_Util::chrToInt('A'));
+        $this->assertSame(97, ParagonIE_Sodium_Core_Util::chrToInt('a'));
+
+        try {
+            ParagonIE_Sodium_Core_Util::chrToInt('ab');
+            $this->fail('Should have thrown an exception');
+        } catch (SodiumException $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::intToChr()
+     */
+    public function testIntToChr(): void
+    {
+        $this->assertSame('A', ParagonIE_Sodium_Core_Util::intToChr(65));
+        $this->assertSame('a', ParagonIE_Sodium_Core_Util::intToChr(97));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::store32_le()
+     */
+    public function testStore32_le(): void
+    {
+        $this->assertSame(pack('V', 1), ParagonIE_Sodium_Core_Util::store32_le(1));
+        $this->assertSame(pack('V', -1), ParagonIE_Sodium_Core_Util::store32_le(-1));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::xorStrings()
+     */
+    public function testXorStrings(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+        $this->assertSame($a ^ $b, ParagonIE_Sodium_Core_Util::xorStrings($a, $b));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::memcmp()
+     */
+    public function testMemcmp(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+        $this->assertSame(0, ParagonIE_Sodium_Core_Util::memcmp($a, $a));
+        $this->assertSame(-1, ParagonIE_Sodium_Core_Util::memcmp($a, $b));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::verify_16()
+     */
+    public function testVerify16(): void
+    {
+        $a = random_bytes(16);
+        $b = random_bytes(16);
+        $this->assertTrue(ParagonIE_Sodium_Core_Util::verify_16($a, $a));
+        $this->assertFalse(ParagonIE_Sodium_Core_Util::verify_16($a, $b));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::verify_32()
+     */
+    public function testVerify32(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+        $this->assertTrue(ParagonIE_Sodium_Core_Util::verify_32($a, $a));
+        $this->assertFalse(ParagonIE_Sodium_Core_Util::verify_32($a, $b));
+    }
+
+    /**
+     * @covers ParagonIE_Sodium_Core_Util::hashEquals()
+     */
+    public function testHashEqualsCoverage(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+        $this->assertTrue(ParagonIE_Sodium_Core_Util::hashEquals($a, $a));
+        $this->assertFalse(ParagonIE_Sodium_Core_Util::hashEquals($a, $b));
+    }
 }

@@ -3,7 +3,7 @@ use PHPUnit\Framework\TestCase;
 
 class HexTest extends TestCase
 {
-    public function hexProvider()
+    public static function hexProvider(): array
     {
         return array(
             array('DEADBEEF', '', "\xde\xad\xbe\xef", false),
