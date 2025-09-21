@@ -27,5 +27,5 @@ jobs:
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
 
-      - name: Mutation Tests
-        run: composer infection
+      - name: Fuzz Tests
+        run: vendor/bin/php-fuzzer --max-runs 1000 fuzz fuzzing/FuzzSodiumCompat.php
