@@ -314,8 +314,13 @@ class UtilTest extends TestCase
         }
 
         foreach ($arguments as $arg) {
+            $product = $arg[0] * $arg[1];
+            if (is_float($product)) {
+                // Int-to-float is deprecated as of 8.1; this test case is bogus
+                continue;
+            }
             $this->assertSame(
-                (int) ($arg[0] * $arg[1]),
+                (int) $product,
                 ParagonIE_Sodium_Core_Util::mul($arg[0], $arg[1]),
                 'Multiplying ' . $arg[0] . ' by ' . $arg[1] . ' failed.'
             );
