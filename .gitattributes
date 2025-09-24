@@ -5,7 +5,7 @@
 /fuzzing export-ignore
 /phpunit.xml.dist export-ignore
 /phpstan.neon.dist export-ignore
-/psalm.xml export-ignore
+/psalm* export-ignore
 /tests export-ignore
 /build-phar.sh export-ignore
 /appveyor.yml export-ignore
