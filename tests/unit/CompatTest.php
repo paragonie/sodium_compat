@@ -123,11 +123,10 @@ class CompatTest extends TestCase
             $bin_ = ParagonIE_Sodium_Compat::base642bin($b64, SODIUM_BASE64_VARIANT_ORIGINAL);
             $this->assertEquals($bin, $bin_);
 
-
-            $b64_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
-            $this->assertEquals($b64, $b64_);
-            $bin_ = ParagonIE_Sodium_Compat::base642bin($b64, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
-            $this->assertEquals($bin, $bin_);
+            $b64np = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
+            $this->assertEquals(rtrim($b64, '='), $b64np);
+            $binnp = ParagonIE_Sodium_Compat::base642bin($b64np, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
+            $this->assertEquals($bin, $binnp);
 
             $b64u = strtr(base64_encode($bin), '+/', '-_');
             $b64u_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_URLSAFE);
@@ -135,10 +134,10 @@ class CompatTest extends TestCase
             $binu_ = ParagonIE_Sodium_Compat::base642bin($b64u, SODIUM_BASE64_VARIANT_URLSAFE);
             $this->assertEquals($bin, $binu_);
 
-            $b64u_ = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
-            $this->assertEquals($b64u, $b64u_);
-            $binu_ = ParagonIE_Sodium_Compat::base642bin($b64u, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
-            $this->assertEquals($bin, $binu_);
+            $b64np = ParagonIE_Sodium_Compat::bin2base64($bin, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+            $this->assertEquals(rtrim($b64u, '='), $b64np);
+            $binnp = ParagonIE_Sodium_Compat::base642bin($b64np, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+            $this->assertEquals($bin, $binnp);
         }
 
         $random = random_bytes(100);
@@ -154,18 +153,18 @@ class CompatTest extends TestCase
             // Expected
         }
 
-        $x = random_bytes(7);
-        $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_ORIGINAL);
+        $x = random_bytes(11);
+        $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         try {
-            ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING, '');
+            ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_ORIGINAL);
             $this->fail('Should have thrown an exception for invalid base64 characters.');
         } catch (SodiumException $ex) {
             // Expected
         }
 
-        $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE);
+        $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
         try {
-            ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING, '');
+            ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_URLSAFE);
             $this->fail('Should have thrown an exception for invalid base64 characters.');
         } catch (SodiumException $ex) {
             // Expected
