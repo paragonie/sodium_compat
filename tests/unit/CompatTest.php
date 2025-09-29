@@ -153,8 +153,10 @@ class CompatTest extends TestCase
             // Expected
         }
 
-        $x = random_bytes(127);
-        $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        do {
+            $x = random_bytes(127);
+            $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        } while (!str_contains($x64p, '-') && !str_contains($x64p, '_'));
         try {
             ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_ORIGINAL);
             $this->fail('Should have thrown an exception for invalid base64 characters.');
