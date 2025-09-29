@@ -24,5 +24,8 @@ jobs:
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
 
+      - name: Make Pedantic
+        run: echo 'define('DO_PEDANTIC_TEST', true);' >> autoload-phpunit.php
+
       - name: Mutation Tests
         run: composer mutation-test
