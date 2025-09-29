@@ -153,7 +153,7 @@ class CompatTest extends TestCase
             // Expected
         }
 
-        $x = random_bytes(11);
+        $x = random_bytes(127);
         $x64p = ParagonIE_Sodium_Compat::bin2base64($x, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         try {
             ParagonIE_Sodium_Compat::base642bin($x64p, SODIUM_BASE64_VARIANT_ORIGINAL);
