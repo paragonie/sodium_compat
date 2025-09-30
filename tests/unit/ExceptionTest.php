@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
  *
  * This tests failure conditions.
  */
-#[CoversClass(SodiumException::class)]
 class ExceptionTest extends TestCase
 {
     /**
