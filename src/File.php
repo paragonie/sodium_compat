@@ -10,7 +10,7 @@ if (class_exists('ParagonIE_Sodium_File', false)) {
 class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
 {
     /* PHP's default buffer size is 8192 for fread()/fwrite(). */
-    const BUFFER_SIZE = 8192;
+    const int BUFFER_SIZE = 8192;
 
     /**
      * Box a file (rather than a string). Uses less memory than
@@ -40,7 +40,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new TypeError('Argument 4 must be CRYPTO_BOX_KEYPAIRBYTES bytes');
         }
 
-        $size = filesize($inputFile);
+        $size = @filesize($inputFile);
         if (!is_int($size)) {
             throw new SodiumException('Could not obtain the file size');
         }
@@ -50,7 +50,7 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
             throw new SodiumException('Could not open input file for reading');
         }
 
-        $ofp = fopen($outputFile, 'wb');
+        $ofp = @fopen($outputFile, 'wb');
         if (!is_resource($ofp)) {
             fclose($ifp);
             throw new SodiumException('Could not open output file for writing');
