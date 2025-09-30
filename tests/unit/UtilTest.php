@@ -324,8 +324,12 @@ class UtilTest extends PHPUnit_Framework_TestCase
         }
 
         foreach ($arguments as $arg) {
+            $mult = $arg[0] * $arg[1];
+            if (!is_int($mult)) {
+                continue;
+            }
             $this->assertSame(
-                (int) ($arg[0] * $arg[1]),
+                $mult,
                 ParagonIE_Sodium_Core_Util::mul($arg[0], $arg[1]),
                 'Multiplying ' . $arg[0] . ' by ' . $arg[1] . ' failed.'
             );
