@@ -27,6 +27,10 @@ class CompatTest extends TestCase
         $string = "\xff\xff\x01\x20";
         ParagonIE_Sodium_Compat::increment($string);
         $this->assertSame("00000220", ParagonIE_Sodium_Core_Util::bin2hex($string));
+
+        $string = "\xff\xff\xff\xff";
+        ParagonIE_Sodium_Compat::increment($string);
+        $this->assertSame("00000000", ParagonIE_Sodium_Core_Util::bin2hex($string));
     }
 
     public function testRuntimeSpeed(): void
@@ -269,6 +273,25 @@ class CompatTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::base642bin('!@#$%', ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL);
             $this->fail('invalid base64');
+        } catch (SodiumException $ex) {
+            // Expected
+        }
+    }
+
+    public function testSub(): void
+    {
+        $a = random_bytes(32);
+        $b = random_bytes(32);
+
+        $sum = $a;
+        ParagonIE_Sodium_Compat::add($sum, $b);
+        ParagonIE_Sodium_Compat::sub($sum, $a);
+        $this->assertSame($b, $sum);
+
+        try {
+            $c = random_bytes(32);
+            ParagonIE_Sodium_Compat::sub($c, random_bytes(31));
+            $this->fail('Mismatched lengths should throw an exception.');
         } catch (SodiumException $ex) {
             // Expected
         }
