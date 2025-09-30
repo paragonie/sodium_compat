@@ -1,15 +1,20 @@
 <?php
 
-use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ParagonIE_Sodium_Core_AEGIS128L::class)]
+#[CoversClass(ParagonIE_Sodium_Core_AEGIS256::class)]
+#[CoversClass(ParagonIE_Sodium_Core_AEGIS_State128L::class)]
+#[CoversClass(ParagonIE_Sodium_Core_AEGIS_State256::class)]
 class AEGISTest extends TestCase
 {
     /**
      * @before
      */
-    #[BeforeClass]
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
@@ -174,7 +179,7 @@ class AEGISTest extends TestCase
      *
      * name, key, nonce, tag, ciphertext, plaintext, aad, expect_fail?
      */
-    public static function aegis256Vectors()
+    public static function aegis256Vectors(): array
     {
         return array(
             array(
@@ -272,14 +277,6 @@ class AEGISTest extends TestCase
 
     /**
      * @dataProvider aegis128lVectors
-     * @param string $key_hex
-     * @param string $nonce_hex
-     * @param string $expected_tag_hex
-     * @param string $expected_ct_hex
-     * @param string $msg_hex
-     * @param string $ad_hex
-     * @param bool $expect_fail
-     * @return void
      * @throws SodiumException
      */
     #[DataProvider("aegis128lVectors")]
@@ -334,14 +331,6 @@ class AEGISTest extends TestCase
 
     /**
      * @dataProvider aegis256Vectors
-     * @param string $key_hex
-     * @param string $nonce_hex
-     * @param string $expected_tag_hex
-     * @param string $expected_ct_hex
-     * @param string $msg_hex
-     * @param string $ad_hex
-     * @param bool $expect_fail
-     * @return void
      * @throws SodiumException
      */
     #[DataProvider("aegis256Vectors")]

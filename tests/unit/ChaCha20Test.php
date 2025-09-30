@@ -1,18 +1,24 @@
 <?php
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\BeforeClass;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_ChaCha20::class)]
 class ChaCha20Test extends TestCase
 {
     /**
      * @before
      */
-    #[BeforeClass]
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testVectors(): void
     {
         $key = str_repeat("\x00", 32);
@@ -184,6 +190,9 @@ class ChaCha20Test extends TestCase
         );
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testIetfCtx(): void
     {
         $key = random_bytes(32);
@@ -197,6 +206,9 @@ class ChaCha20Test extends TestCase
         $this->assertInstanceOf(ParagonIE_Sodium_Core_ChaCha20_IetfCtx::class, $ctxWithCounter);
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testIetfCtxInvalidNonce(): void
     {
         $key = random_bytes(32);

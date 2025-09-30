@@ -1,6 +1,6 @@
 <?php
 
-use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -10,7 +10,7 @@ class Base64Test extends TestCase
     /**
      * @before
      */
-    #[BeforeClass]
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;

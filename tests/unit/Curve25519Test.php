@@ -1,22 +1,26 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class Curve25519Test
  */
+#[CoversClass(ParagonIE_Sodium_Core_Curve25519::class)]
+#[CoversClass(ParagonIE_Sodium_Core_Curve25519_Fe::class)]
 class Curve25519Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_0()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testFe0(): void
@@ -41,7 +45,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_1()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -67,9 +70,7 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_add()
      * @throws Exception
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testFeAdd(): void
@@ -115,8 +116,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_sq()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testFeSq(): void
@@ -160,8 +159,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_sq2()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testFeSqDouble(): void
@@ -205,8 +202,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_sub()
-     * @throws SodiumException
      * @throws Exception
      * @throws TypeError
      */
@@ -253,8 +248,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::sc_reduce()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testReduce(): void
@@ -283,8 +276,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::sc_muladd()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testScMulAdd(): void
@@ -307,7 +298,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_select()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -330,9 +320,6 @@ class Curve25519Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_mul()
-     */
     public function testFeMul(): void
     {
         $f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
@@ -488,9 +475,6 @@ class Curve25519Test extends TestCase
         $this->assertEquals($expected, $h);
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_madd()
-     */
     public function testGeMAdd(): void
     {
         $p = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
@@ -641,9 +625,6 @@ class Curve25519Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_scalarmult_base()
-     */
     public function testGeScalarmultBase(): void
     {
         $nonce = ParagonIE_Sodium_Core_Util::hex2bin(
@@ -770,8 +751,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_double_scalarmult_vartime()
-     *
      * @throws SodiumException
      * @throws TypeError
      */
@@ -853,8 +832,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_p3_dbl()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testGeP3Double(): void
@@ -894,7 +871,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::ge_p3_tobytes()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -959,8 +935,6 @@ class Curve25519Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_mul()
-     * @throws SodiumException
      * @throws TypeError
      */
     public function testFromBytes(): void
@@ -980,9 +954,6 @@ class Curve25519Test extends TestCase
         $this->assertSame('d94eda00', bin2hex(ParagonIE_Sodium_Core_Util::store32_le($a[9])));
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Curve25519::fe_mul()
-     */
     public function test121666Mul(): void
     {
         $f = array(

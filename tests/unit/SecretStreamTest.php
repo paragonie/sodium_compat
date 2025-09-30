@@ -1,9 +1,11 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class SecretStreamTest
  */
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class SecretStreamTest extends TestCase
 {
     /**

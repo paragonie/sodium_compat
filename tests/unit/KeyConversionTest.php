@@ -1,14 +1,19 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class KeyConversionTest
  */
+#[CoversClass(KeyConversionTest::class)]
 class KeyConversionTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;

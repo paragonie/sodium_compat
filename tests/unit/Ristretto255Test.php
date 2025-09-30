@@ -1,15 +1,20 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class Ristretto255Test
  * @package unit
  */
+#[CoversClass(ParagonIE_Sodium_Core_Ristretto255::class)]
 class Ristretto255Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;

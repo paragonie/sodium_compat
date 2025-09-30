@@ -1,19 +1,22 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Crypto::class)]
 class CryptoTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_auth()
-     * @covers ParagonIE_Sodium_Compat::crypto_auth_verify()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -34,8 +37,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -64,8 +65,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_encrypt()
-     * @covers ParagonIE_Sodium_Crypto::aead_chacha20poly1305_ietf_decrypt()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -228,8 +227,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -261,8 +258,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box_seal()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_seal_open()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -288,7 +283,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box_seed_keypair()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -349,7 +343,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::scalarmult_base()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -365,7 +358,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::scalarmult()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -383,7 +375,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::sign_detached()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -409,8 +400,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::sign()
-     * @covers ParagonIE_Sodium_Crypto::sign_open()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -444,8 +433,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -464,8 +451,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305()
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -484,7 +469,6 @@ class CryptoTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::sign_verify_detached()
      * @throws SodiumException
      * @throws TypeError
      */

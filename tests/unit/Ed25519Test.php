@@ -1,11 +1,16 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_Ed25519::class)]
 class Ed25519Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
@@ -15,8 +20,6 @@ class Ed25519Test extends TestCase
      * From RFC 8032 section 7.1
      *
      * @ref https://www.rfc-editor.org/rfc/rfc8032.txt
-     * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
-     * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      */
     public function testVectorsRFC8032(): void
     {
@@ -175,19 +178,17 @@ class Ed25519Test extends TestCase
             'RFC 8032 - Test 1024 - Signature'
         );
     }
-    
+
     public function testConstant(): void
     {
         $this->assertSame(
             'edd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010',
-            ParagonIE_Sodium_Core_Util::bin2hex(ParagonIE_Sodium_Core_Ed25519::L)
+            ParagonIE_Sodium_Core_Util::bin2hex(ParagonIE_Sodium_Core_Curve25519_H::L)
         );
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
-     * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
-     * @covers ParagonIE_Sodium_Core_Ed25519::verify_detached()
+     * @throws SodiumException
      */
     public function testVectors(): void
     {

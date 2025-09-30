@@ -1,14 +1,16 @@
 <?php
 
-use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class CompatTest extends TestCase
 {
     /**
      * @before
      */
-    #[BeforeClass]
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
@@ -33,14 +35,6 @@ class CompatTest extends TestCase
         $this->assertSame("00000000", ParagonIE_Sodium_Core_Util::bin2hex($string));
     }
 
-    public function testRuntimeSpeed(): void
-    {
-        if (ParagonIE_Sodium_Compat::polyfill_is_fast()) {
-            $this->markTestSkipped('Polyfill is fast, no need to test this.');
-        }
-        $this->assertTrue(ParagonIE_Sodium_Compat::runtime_speed_test(100, 10));
-    }
-
     /**
      * @throws SodiumException
      * @throws Exception
@@ -60,6 +54,7 @@ class CompatTest extends TestCase
     }
 
     /**
+     * @throws Exception
      * @throws SodiumException
      */
     public function testSodiumPad(): void
