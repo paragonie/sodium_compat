@@ -25,6 +25,9 @@ if (class_exists('ParagonIE_Sodium_Compat', false)) {
     return;
 }
 
+/**
+ * @api
+ */
 class ParagonIE_Sodium_Compat
 {
     /**
@@ -218,11 +221,11 @@ class ParagonIE_Sodium_Compat
                 case self::BASE64_VARIANT_ORIGINAL:
                     return ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true);
                 case self::BASE64_VARIANT_ORIGINAL_NO_PADDING:
-                    return ParagonIE_Sodium_Core_Base64_Original::decode($encoded, false);
+                    return ParagonIE_Sodium_Core_Base64_Original::decodeNoPadding($encoded);
                 case self::BASE64_VARIANT_URLSAFE:
                     return ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true);
                 case self::BASE64_VARIANT_URLSAFE_NO_PADDING:
-                    return ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, false);
+                    return ParagonIE_Sodium_Core_Base64_UrlSafe::decodeNoPadding($encoded);
                 default:
                     throw new SodiumException('invalid base64 variant identifier');
             }
