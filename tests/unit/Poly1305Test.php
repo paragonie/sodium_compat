@@ -1,4 +1,6 @@
 <?php
+
+use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\TestCase;
 
 class Poly1305Test extends TestCase
@@ -6,13 +8,13 @@ class Poly1305Test extends TestCase
     /**
      * @before
      */
+    #[BeforeClass]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      * @ref https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#page-12
      */
     public function testVectorA(): void
@@ -29,7 +31,6 @@ class Poly1305Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
      * @ref https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#page-12
      */
     public function testVectorB(): void
@@ -46,8 +47,6 @@ class Poly1305Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
-     *
      * A large message test vector.
      *
      * @ref https://github.com/jedisct1/libsodium/blob/master/test/default/onetimeauth2.c
@@ -97,9 +96,6 @@ class Poly1305Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
-     */
     public function testOdd(): void
     {
         $msg = str_repeat('a', 29);
@@ -113,9 +109,6 @@ class Poly1305Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth()
-     */
     public function testEmpty(): void
     {
 
@@ -167,7 +160,7 @@ class Poly1305Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify()
+     * @throws SodiumException
      */
     public function testRandomVerify(): void
     {
@@ -179,5 +172,26 @@ class Poly1305Test extends TestCase
             ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, $msg, $key),
             'crypto_onetimeauth_verify is broken'
         );
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testOneTimeAuthInvalidKey(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Key must be 32 bytes long.');
+        ParagonIE_Sodium_Core_Poly1305::onetimeauth('test message', 'short key');
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testOneTimeAuthVerifyInvalidKey(): void
+    {
+        $mac = random_bytes(16);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Key must be 32 bytes long.');
+        ParagonIE_Sodium_Core_Poly1305::onetimeauth_verify($mac, 'test message', 'short key');
     }
 }

@@ -1,18 +1,23 @@
 <?php
+
+use ParagonIE\Sodium\Core\XChaCha20;
+use PHPUnit\Framework\Attributes\BeforeClass;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(XChaCha20::class)]
 class XChaCha20Test extends TestCase
 {
     /**
      * @before
      */
+    #[BeforeClass]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_XChaCha20::stream()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -48,7 +53,6 @@ class XChaCha20Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Crypto::secretbox_xchacha20poly1305()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -144,5 +148,83 @@ class XChaCha20Test extends TestCase
             ParagonIE_Sodium_Core_Util::bin2hex($stream7_concat),
             "XChaCha20 initial counter failed"
         );
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testStream(): void
+    {
+        $key = ParagonIE_Sodium_Core_Util::hex2bin("79c99798ac67300bbb2704c95c341e3245f3dcb21761b98e52ff45b24f304fc4");
+        $nonce = ParagonIE_Sodium_Core_Util::hex2bin("b33ffd3096479bcfbc9aee49417688a0a2554f8d95389419");
+        $expected = ParagonIE_Sodium_Core_Util::hex2bin("c6e9758160083ac604ef90e712ce6e75d7797590744e0cf060f013739c");
+
+        $stream = ParagonIE_Sodium_Core_XChaCha20::stream(strlen($expected), $nonce, $key);
+        $this->assertSame(bin2hex($expected), bin2hex($stream));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testIetfStream(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+        $stream = ParagonIE_Sodium_Core_XChaCha20::ietfStream(64, $nonce, $key);
+        $this->assertSame(64, strlen($stream));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testStreamXorIc(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+        $message = random_bytes(128);
+
+        $encrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($message, $nonce, $key, str_repeat("\0", 8));
+        $this->assertNotSame($message, $encrypted);
+
+        $decrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($encrypted, $nonce, $key, str_repeat("\0", 8));
+        $this->assertSame($message, $decrypted);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInvalidNonceForAllMethods(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(16); // Invalid
+        $message = "test message";
+
+        try {
+            ParagonIE_Sodium_Core_XChaCha20::stream(64, $nonce, $key);
+            $this->fail('Expected SodiumException for stream');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Nonce must be 24 bytes long', $ex->getMessage());
+        }
+
+        try {
+            ParagonIE_Sodium_Core_XChaCha20::ietfStream(64, $nonce, $key);
+            $this->fail('Expected SodiumException for ietfStream');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Nonce must be 24 bytes long', $ex->getMessage());
+        }
+
+        try {
+            ParagonIE_Sodium_Core_XChaCha20::streamXorIc($message, $nonce, $key);
+            $this->fail('Expected SodiumException for streamXorIc');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Nonce must be 24 bytes long', $ex->getMessage());
+        }
+
+        try {
+            ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($message, $nonce, $key);
+            $this->fail('Expected SodiumException for ietfStreamXorIc');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Nonce must be 24 bytes long', $ex->getMessage());
+        }
     }
 }
