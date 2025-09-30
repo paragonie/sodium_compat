@@ -135,8 +135,7 @@ abstract class ParagonIE_Sodium_Core_Util
             $len = max($leftLen, $rightLen);
             $left = str_pad($left, $len, "\x00");
             $right = str_pad($right, $len, "\x00");
-        }
-        if ($leftLen !== $rightLen) {
+        } elseif ($leftLen !== $rightLen) {
             throw new SodiumException("Argument #1 and argument #2 must have the same length");
         }
 
