@@ -1,13 +1,18 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class WycheproofTest extends TestCase
 {
-    private $dir;
+    private string $dir;
 
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;

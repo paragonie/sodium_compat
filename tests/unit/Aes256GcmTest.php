@@ -1,20 +1,21 @@
 <?php
 
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class Aes256GcmTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()
-     */
     public function testIsAvailable(): void
     {
         $this->assertTrue(
@@ -25,10 +26,6 @@ class Aes256GcmTest extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt()
-     */
     public function testAes256Gcm(): void
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {

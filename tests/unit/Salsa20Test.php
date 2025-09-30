@@ -1,19 +1,20 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ParagonIE_Sodium_Core_Salsa20::class)]
 class Salsa20Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Salsa20::rotate()
-     */
     public function testRotate(): void
     {
         $this->assertEquals(
@@ -74,9 +75,6 @@ class Salsa20Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Salsa20::salsa20()
-     */
     public function testVectors(): void
     {
         $key = "\x80" . str_repeat("\x00", 31);
@@ -112,7 +110,8 @@ class Salsa20Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Salsa20::core_salsa20()
+     * @throws Exception
+     * @throws SodiumException
      */
     public function testCoreSalsa20(): void
     {

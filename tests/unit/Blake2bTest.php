@@ -1,19 +1,22 @@
 <?php
+
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ParagonIE_Sodium_Core_BLAKE2b::class)]
 class Blake2bTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash()
-     *
      * @throws SodiumException
      * @throws TypeError
      */
@@ -92,8 +95,6 @@ class Blake2bTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash()
-     *
      * @throws SodiumException
      * @throws TypeError
      */
@@ -232,7 +233,6 @@ class Blake2bTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -273,7 +273,7 @@ class Blake2bTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::increment_counter()
+     * @throws SodiumException
      */
     public function testCounter(): void
     {
@@ -301,10 +301,7 @@ class Blake2bTest extends TestCase
     /**
      * Make sure our 'context' string is consistent.
      *
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::init()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::contextToString()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray()
+     * @throws SodiumException
      */
     public function testContext(): void
     {
@@ -366,13 +363,6 @@ class Blake2bTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_init()
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_update()
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_final()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::init()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::update()
-     * @covers ParagonIE_Sodium_Core_BLAKE2b::finish()
-     *
      * @throws SodiumException
      * @throws Exception
      */
@@ -450,7 +440,6 @@ class Blake2bTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_BLAKE2b
      * @throws SodiumException
      * @throws TypeError
      */

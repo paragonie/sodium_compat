@@ -1,11 +1,11 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_HChaCha20::class)]
 class HChaCha20Test extends TestCase
 {
-    /**
-     * @covers ParagonIE_Sodium_Core_HChaCha20::hChaCha20()
-     */
     public function testVector(): void
     {
         $key = str_repeat("\x00", 32);

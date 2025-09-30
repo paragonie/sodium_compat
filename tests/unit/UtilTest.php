@@ -1,11 +1,16 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_Util::class)]
 class UtilTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
@@ -43,8 +48,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::base642bin()
-     * @covers ParagonIE_Sodium_Compat::bin2base64()
      * @throws TypeError
      * @throws Exception
      */
@@ -70,8 +73,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::bin2hex()
-     * @covers ParagonIE_Sodium_Core_Util::hex2bin()
      * @throws TypeError
      * @throws Exception
      */
@@ -100,10 +101,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::randombytes_buf()
-     * @covers ParagonIE_Sodium_Compat::randombytes_random16()
-     * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
-     * @throws TypeError
+     * @throws Exception
      */
     public function testRandombytes(): void
     {
@@ -123,8 +121,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::intArrayToString()
-     * @covers ParagonIE_Sodium_Core_Util::stringToIntArray()
      * @throws TypeError
      */
     public function testConversion(): void
@@ -143,9 +139,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::hashEquals()
-     * @throws SodiumException
-     * @throws TypeError
+     * @throws Exception
      */
     public function testHashEquals(): void
     {
@@ -164,7 +158,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::load_3()
      * @throws TypeError
      */
     public function testLoad3(): void
@@ -187,7 +180,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::load_4()
      * @throws TypeError
      */
     public function testLoad4(): void
@@ -205,7 +197,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::load64_le()
      * @throws SodiumException
      * @throws TypeError
      */
@@ -226,17 +217,11 @@ class UtilTest extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::strlen()
-     */
     public function testStrlen(): void
     {
         $this->assertSame(4, ParagonIE_Sodium_Core_Util::strlen("\xF0\x9D\x92\xB3"));
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::strlen()
-     */
     public function testSubstr(): void
     {
         $string = str_repeat("\xF0\x9D\x92\xB3", 4);
@@ -247,9 +232,7 @@ class UtilTest extends TestCase
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
         $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
     }
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::store64_le()
-     */
+
     public function testStore64(): void
     {
         if (PHP_INT_SIZE < 8) {
@@ -269,7 +252,7 @@ class UtilTest extends TestCase
 
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::mul()
+     * @throws Exception
      */
     public function testMul(): void
     {
@@ -327,9 +310,6 @@ class UtilTest extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::compare()
-     */
     public function testCompare(): void
     {
         $this->assertSame(0, ParagonIE_Sodium_Core_Util::compare('abcd', 'abcd'));
@@ -339,9 +319,6 @@ class UtilTest extends TestCase
         $this->assertSame(1, ParagonIE_Sodium_Core_Util::compare('abcd', 'abcc'));
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::chrToInt()
-     */
     public function testChrToInt(): void
     {
         $this->assertSame(65, ParagonIE_Sodium_Core_Util::chrToInt('A'));
@@ -355,18 +332,12 @@ class UtilTest extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::intToChr()
-     */
     public function testIntToChr(): void
     {
         $this->assertSame('A', ParagonIE_Sodium_Core_Util::intToChr(65));
         $this->assertSame('a', ParagonIE_Sodium_Core_Util::intToChr(97));
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::store32_le()
-     */
     public function testStore32_le(): void
     {
         $this->assertSame(pack('V', 1), ParagonIE_Sodium_Core_Util::store32_le(1));
@@ -374,7 +345,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::xorStrings()
+     * @throws Exception
      */
     public function testXorStrings(): void
     {
@@ -384,7 +355,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::memcmp()
+     * @throws Exception
      */
     public function testMemcmp(): void
     {
@@ -394,9 +365,6 @@ class UtilTest extends TestCase
         $this->assertNotEquals(0, ParagonIE_Sodium_Core_Util::memcmp($a, $b));
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::randombytes_uniform()
-     */
     public function testRandombytesUniformEdgeCases(): void
     {
         $this->assertSame(0, ParagonIE_Sodium_Compat::randombytes_uniform(1));
@@ -408,7 +376,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::verify_16()
+     * @throws Exception
      */
     public function testVerify16(): void
     {
@@ -419,7 +387,8 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::verify_32()
+     * @throws Exception
+     * @throws SodiumException
      */
     public function testVerify32(): void
     {
@@ -430,7 +399,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_Util::hashEquals()
+     * @throws Exception
      */
     public function testHashEqualsCoverage(): void
     {
@@ -441,7 +410,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::add()
      * @throws SodiumException
      */
     public function testAdd(): void
@@ -452,13 +420,11 @@ class UtilTest extends TestCase
         $this->assertSame("\x02\x00\x00\x00", $a);
 
         $a = "\xff\xff\xff\xff";
-        $b = "\x01\x00\x00\x00";
         ParagonIE_Sodium_Compat::add($a, $b);
         $this->assertSame("\x00\x00\x00\x00", $a);
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::sub()
      * @throws SodiumException
      */
     public function testSub(): void
@@ -469,13 +435,11 @@ class UtilTest extends TestCase
         $this->assertSame("\x01\x00\x00\x00", $a);
 
         $a = "\x00\x00\x00\x00";
-        $b = "\x01\x00\x00\x00";
         ParagonIE_Sodium_Compat::sub($a, $b);
         $this->assertSame("\xff\xff\xff\xff", $a);
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::increment()
      * @throws SodiumException
      */
     public function testIncrement(): void
@@ -490,7 +454,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::is_zero()
      * @throws SodiumException
      */
     public function testIsZero(): void
@@ -503,8 +466,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::pad()
-     * @covers ParagonIE_Sodium_Compat::unpad()
      * @throws SodiumException
      */
     public function testPadUnpad(): void
@@ -523,7 +484,6 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::compare()
      * @throws SodiumException
      */
     public function testCompatCompare(): void
@@ -536,7 +496,7 @@ class UtilTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::memcmp()
+     * @throws Exception
      * @throws SodiumException
      * @throws TypeError
      */

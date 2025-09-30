@@ -1,6 +1,10 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class HexTest extends TestCase
 {
     public static function hexProvider(): array
@@ -18,15 +22,14 @@ class HexTest extends TestCase
     /**
      * @dataProvider hexProvider
      */
+    #[DataProvider("hexProvider")]
     public function testHex2Bin($hex, $ignore, $binary, $fail): void
     {
         try {
             $decoded = ParagonIE_Sodium_Compat::hex2bin($hex, $ignore);
             $this->assertFalse($fail, 'This should have failed but did not!');
             $this->assertSame($binary, $decoded, 'Binary mismatch');
-        } catch (RangeException $ex) {
-            $this->assertTrue($fail, 'An unexpected hex2bin failure occurred');
-        } catch (SodiumException $ex) {
+        } catch (RangeException|SodiumException $ex) {
             $this->assertTrue($fail, 'An unexpected hex2bin failure occurred');
         }
     }

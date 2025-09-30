@@ -1,10 +1,12 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_XSalsa20::class)]
 class XSalsa20Test extends TestCase
 {
     /**
-     * @covers ParagonIE_Sodium_Core_XSalsa20::xsalsa20()
      * @throws SodiumException
      * @throws TypeError
      */

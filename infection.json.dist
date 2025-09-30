@@ -10,7 +10,33 @@
         "configDir": "."
     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "PublicVisibility": {
+            "ignore": [
+                "ParagonIE_Sodium_Compat::crypto_aead_aegis128l_keygen",
+                "ParagonIE_Sodium_Compat::crypto_aead_aegis256_keygen",
+                "ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available",
+                "ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_keygen",
+                "ParagonIE_Sodium_Compat::crypto_auth_keygen",
+                "ParagonIE_Sodium_Compat::crypto_generichash_keygen",
+                "ParagonIE_Sodium_Compat::crypto_kdf_keygen",
+                "ParagonIE_Sodium_Compat::crypto_secretbox_keygen",
+                "ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_keygen",
+                "ParagonIE_Sodium_Compat::crypto_shorthash_keygen",
+                "ParagonIE_Sodium_Compat::crypto_stream_keygen",
+                "ParagonIE_Sodium_Core_AES::bitsliceDecryptBlock",
+                "ParagonIE_Sodium_Core_AES::bitsliceEncryptBlock",
+                "ParagonIE_Sodium_Core_AES::rotr16",
+                "ParagonIE_Sodium_Core_AES_Block::swap2",
+                "ParagonIE_Sodium_Core_AES_Block::swap4",
+                "ParagonIE_Sodium_Core_AES_Block::swap8",
+                "ParagonIE_Sodium_Core_AES_Block::swapN",
+                "ParagonIE_Sodium_Core_AEGIS128L::init",
+                "ParagonIE_Sodium_Core_AEGIS256::init",
+                "ParagonIE_Sodium_Core_Ristretto255::scalarmult_ristretto255",
+                "ParagonIE_Sodium_Core_Ristretto255::scalarmult_ristretto255_base"
+            ]
+        }
     },
     "logs": {
         "text": "infection.log"

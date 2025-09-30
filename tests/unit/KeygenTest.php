@@ -1,11 +1,16 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class KeygenTest
  */
+#[CoversClass(ParagonIE_Sodium_Compat::class)]
 class KeygenTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testVectors(): void
     {
         $this->assertSame(

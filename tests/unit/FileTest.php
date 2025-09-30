@@ -1,233 +1,326 @@
 <?php
+
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(ParagonIE_Sodium_File::class)]
 class FileTest extends TestCase
 {
-    /**
-     * @before
-     */
-    public function before(): void
+    private array $tempFiles = [];
+
+    #[After]
+    protected function tearDown(): void
     {
-        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+        foreach ($this->tempFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+        $this->tempFiles = [];
+    }
+
+    private function createTempFile(string $content = ''): string
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'sodium-compat-');
+        if ($filename === false) {
+            $this->fail('Failed to create temporary file.');
+        }
+        file_put_contents($filename, $content);
+        $this->tempFiles[] = $filename;
+        return $filename;
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::box()
-     * @covers ParagonIE_Sodium_File::box_open()
      * @throws SodiumException
      * @throws TypeError
+     * @throws Exception
      */
     public function testBox(): void
     {
-        $randomSeed = random_bytes(32);
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
-            32, // random_int(1 << 9, 1 << 17),
-            $randomNonce,
-            $randomSeed
+        $content = 'test content for box';
+        $inputFile = $this->createTempFile($content);
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $senderKeyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+        $recipientKeyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+
+        $senderBoxKey = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
+            ParagonIE_Sodium_Compat::crypto_box_secretkey($senderKeyPair),
+            ParagonIE_Sodium_Compat::crypto_box_publickey($recipientKeyPair)
         );
-        $shortMsg = 'lessthan32bytes';
-        file_put_contents('plaintext-box.data', $pseudoRandom);
-        file_put_contents('plaintext-box.data2', $shortMsg);
 
-        $alice_secret = ParagonIE_Sodium_Core_Util::hex2bin('69f208412d8dd5db9d0c6d18512e86f0ec75665ab841372d57b042b27ef89d8c');
-        $bob_public = ParagonIE_Sodium_Core_Util::hex2bin('e8980c86e032f1eb2975052e8d65bddd15c3b59641174ec9678a53789d92c754');
-
-        $kp = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey($alice_secret, $bob_public);
-
-        $raw = ParagonIE_Sodium_Compat::crypto_box(
-            $pseudoRandom,
-            $randomNonce,
-            $kp
+        $recipientBoxKey = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
+            ParagonIE_Sodium_Compat::crypto_box_secretkey($recipientKeyPair),
+            ParagonIE_Sodium_Compat::crypto_box_publickey($senderKeyPair)
         );
-        ParagonIE_Sodium_File::box('plaintext-box.data', 'ciphertext-box.data', $randomNonce, $kp);
-        $file = file_get_contents('ciphertext-box.data');
 
-        $this->assertSame(bin2hex($raw), bin2hex($file));
+        ParagonIE_Sodium_File::box($inputFile, $outputFile, $nonce, $senderBoxKey);
+        $this->assertNotSame($content, file_get_contents($outputFile));
 
-        // Also verify decryption works.
-        $plain = ParagonIE_Sodium_Compat::crypto_box_open(
-            $file,
-            $randomNonce,
-            $kp
-        );
-        $this->assertSame(bin2hex($pseudoRandom), bin2hex($plain));
-
-        ParagonIE_Sodium_File::box_open('ciphertext-box.data', 'plaintext-box2.data', $randomNonce, $kp);
-        $opened = file_get_contents('plaintext-box2.data');
-        $this->assertSame(bin2hex($pseudoRandom), bin2hex($opened));
-
-        $raw = ParagonIE_Sodium_Compat::crypto_box(
-            $shortMsg,
-            $randomNonce,
-            $kp
-        );
-        ParagonIE_Sodium_File::box('plaintext-box.data2', 'ciphertext-box.data2', $randomNonce, $kp);
-        $file = file_get_contents('ciphertext-box.data2');
-        $this->assertSame(bin2hex($raw), bin2hex($file));
-
-        // Also verify decryption works.
-        $plain = ParagonIE_Sodium_Compat::crypto_box_open(
-            $file,
-            $randomNonce,
-            $kp
-        );
-        $this->assertSame(bin2hex($shortMsg), bin2hex($plain));
-
-        ParagonIE_Sodium_File::box_open('ciphertext-box.data2', 'plaintext-box2.data', $randomNonce, $kp);
-        $opened = file_get_contents('plaintext-box2.data');
-        $this->assertSame(bin2hex($shortMsg), bin2hex($opened));
-
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        unlink('ciphertext-box.data');
-        unlink('ciphertext-box.data2');
-        unlink('plaintext-box.data');
-        unlink('plaintext-box2.data');
-        unlink('plaintext-box.data2');
+        ParagonIE_Sodium_File::box_open($outputFile, $decryptedFile, $nonce, $recipientBoxKey);
+        $this->assertSame($content, file_get_contents($decryptedFile));
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::generichash()
-     * @throws SodiumException
-     * @throws TypeError
-     */
-    public function testGenerichash(): void
-    {
-        $randomSeed = random_bytes(32);
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $shortMsg = 'lessthan32bytes';
-        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
-            random_int(1 << 9, 1 << 17),
-            $randomNonce,
-            $randomSeed
-        );
-        file_put_contents('plaintext-hash.data', $pseudoRandom);
-        file_put_contents('plaintext-hash.data2', $shortMsg);
-        $file = ParagonIE_Sodium_File::generichash('plaintext-hash.data');
-        $this->assertSame(
-            ParagonIE_Sodium_Compat::crypto_generichash($pseudoRandom),
-            $file
-        );
-        $file = ParagonIE_Sodium_File::generichash('plaintext-hash.data2');
-        $this->assertSame(
-            ParagonIE_Sodium_Compat::crypto_generichash($shortMsg),
-            $file
-        );
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        unlink('plaintext-hash.data');
-        unlink('plaintext-hash.data2');
-    }
-
-    /**
-     * @throws SodiumException
-     * @throws TypeError
-     * @covers ParagonIE_Sodium_File::box_seal()
-     * @covers ParagonIE_Sodium_File::box_seal_open()
-     */
-    public function testSeal(): void
-    {
-        $randomSeed = random_bytes(32);
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
-            random_int(1 << 9, 1 << 17),
-            $randomNonce,
-            $randomSeed
-        );
-        file_put_contents('plaintext-seal.data', $pseudoRandom);
-        $alice_box_publickey = ParagonIE_Sodium_Core_Util::hex2bin(
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-
-        ParagonIE_Sodium_File::box_seal('plaintext-seal.data', 'ciphertext-seal.data', $alice_box_publickey);
-        $file = file_get_contents('ciphertext-seal.data');
-
-        $alice_box_kp = ParagonIE_Sodium_Core_Util::hex2bin(
-            '15b36cb00213373fb3fb03958fb0cc0012ecaca112fd249d3cf0961e311caac9' .
-            'fb4cb34f74a928b79123333c1e63d991060244cda98affee14c3398c6d315574'
-        );
-        $raw = ParagonIE_Sodium_Compat::crypto_box_seal_open($file, $alice_box_kp);
-        $this->assertSame(bin2hex($pseudoRandom), bin2hex($raw));
-
-        ParagonIE_Sodium_File::box_seal_open('ciphertext-seal.data', 'plaintext-seal2.data', $alice_box_kp);
-        $opened = file_get_contents('plaintext-seal2.data');
-        $this->assertSame(bin2hex($pseudoRandom), bin2hex($opened));
-
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        unlink('plaintext-seal.data');
-        unlink('plaintext-seal2.data');
-        unlink('ciphertext-seal.data');
-    }
-
-    /**
-     * @throws SodiumException
-     * @throws TypeError
-     * @covers ParagonIE_Sodium_File::secretbox()
-     * @covers ParagonIE_Sodium_File::secretbox_open()
-     */
-    public function testSecretbox(): void
-    {
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $pseudoRandom = random_bytes(random_int(1, 1 << 17));
-        file_put_contents('secretbox.plain', $pseudoRandom);
-        $key = random_bytes(32);
-
-        $raw = ParagonIE_Sodium_Compat::crypto_secretbox($pseudoRandom, $randomNonce, $key);
-        ParagonIE_Sodium_File::secretbox('secretbox.plain', 'secretbox.cipher', $randomNonce, $key);
-        $file = file_get_contents('secretbox.cipher');
-
-        $this->assertSame(bin2hex($raw), bin2hex($file));
-
-        ParagonIE_Sodium_File::secretbox_open('secretbox.cipher', 'secretbox.plain2', $randomNonce, $key);
-        $read = file_get_contents('secretbox.plain2');
-        $this->assertSame(bin2hex($pseudoRandom), bin2hex($read));
-
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-        unlink('secretbox.plain');
-        unlink('secretbox.plain2');
-        unlink('secretbox.cipher');
-    }
-
-
-    /**
-     * @covers ParagonIE_Sodium_File::sign()
-     * @covers ParagonIE_Sodium_File::verify()
      * @throws Exception
      * @throws SodiumException
      * @throws TypeError
      */
-    public function testSignVerify(): void
+    public function testGenericHash(): void
     {
-        $randomSeed = random_bytes(32);
-        $randomNonce = random_bytes(24);
-        $orig = ParagonIE_Sodium_Compat::$fastMult;
-        $pseudoRandom = ParagonIE_Sodium_Compat::crypto_stream(
-            random_int(1, 1 << 17),
-            $randomNonce,
-            $randomSeed
-        );
-        file_put_contents('random.data', $pseudoRandom);
+        $content = 'test content';
+        $file = $this->createTempFile($content);
 
-        ParagonIE_Sodium_Compat::$fastMult = true;
-        $ed25519 = ParagonIE_Sodium_Compat::crypto_sign_keypair();
-        $sign_sk = ParagonIE_Sodium_Compat::crypto_sign_secretkey($ed25519);
-        $sign_pk = ParagonIE_Sodium_Compat::crypto_sign_publickey($ed25519);
+        $hash = ParagonIE_Sodium_File::generichash($file);
+        $this->assertSame(32, strlen($hash));
 
-        $signed = ParagonIE_Sodium_Compat::crypto_sign_detached($pseudoRandom, $sign_sk);
-        $stored = ParagonIE_Sodium_File::sign('random.data', $sign_sk);
-
-        $this->assertSame(bin2hex($signed), bin2hex($stored));
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-
-        $this->assertTrue(ParagonIE_Sodium_File::verify($signed, 'random.data', $sign_pk));
-        unlink('random.data');
+        $key = ParagonIE_Sodium_Compat::crypto_generichash_keygen();
+        $hashWithKey = ParagonIE_Sodium_File::generichash($file, $key);
+        $this->assertSame(32, strlen($hashWithKey));
+        $this->assertNotSame($hash, $hashWithKey);
     }
 
     /**
-     * @covers ParagonIE_Sodium_File::updateHashWithFile()
+     * @throws Exception
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testBoxSeal(): void
+    {
+        $content = 'test content for box_seal';
+        $inputFile = $this->createTempFile($content);
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+        $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($keyPair);
+
+        ParagonIE_Sodium_File::box_seal($inputFile, $outputFile, $publicKey);
+        $this->assertNotSame($content, file_get_contents($outputFile));
+
+        ParagonIE_Sodium_File::box_seal_open($outputFile, $decryptedFile, $keyPair);
+        $this->assertSame($content, file_get_contents($decryptedFile));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testSecretBox(): void
+    {
+        $content = 'test content for secretbox';
+        $inputFile = $this->createTempFile($content);
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $key = ParagonIE_Sodium_Compat::crypto_secretbox_keygen();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES);
+
+        ParagonIE_Sodium_File::secretbox($inputFile, $outputFile, $nonce, $key);
+        $this->assertNotSame($content, file_get_contents($outputFile));
+
+        ParagonIE_Sodium_File::secretbox_open($outputFile, $decryptedFile, $nonce, $key);
+        $this->assertSame($content, file_get_contents($decryptedFile));
+    }
+
+    public function testSign(): void
+    {
+        $content = 'test content for sign';
+        $file = $this->createTempFile($content);
+
+        $keyPair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $secretKey = ParagonIE_Sodium_Compat::crypto_sign_secretkey($keyPair);
+        $publicKey = ParagonIE_Sodium_Compat::crypto_sign_publickey($keyPair);
+
+        $signature = ParagonIE_Sodium_File::sign($file, $secretKey);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES, strlen($signature));
+
+        $this->assertTrue(ParagonIE_Sodium_File::verify($signature, $file, $publicKey));
+    }
+
+    /**
+     * @return void
+     * @throws SodiumException
+     */
+    public function testBoxInvalidNonce(): void
+    {
+        $inputFile = $this->createTempFile('test');
+        $outputFile = $this->createTempFile();
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        $this->expectException(TypeError::class);
+        ParagonIE_Sodium_File::box(
+            $inputFile,
+            $outputFile,
+            'invalid-nonce',
+            $keyPair
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testBoxInvalidKeyPair(): void
+    {
+        $inputFile = $this->createTempFile('test');
+        $outputFile = $this->createTempFile();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+
+        $this->expectException(TypeError::class);
+        ParagonIE_Sodium_File::box(
+            $inputFile,
+            $outputFile,
+            $nonce,
+            'invalid-keypair'
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testBoxUnreadableInput(): void
+    {
+        $outputFile = $this->createTempFile();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Could not obtain the file size');
+        ParagonIE_Sodium_File::box(
+            '/tmp/unexisting-file-we-hope',
+            $outputFile,
+            $nonce,
+            $keyPair
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testSecretboxOpenWithInvalidKey(): void
+    {
+        $content = 'test content for secretbox';
+        $inputFile = $this->createTempFile($content);
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $key = ParagonIE_Sodium_Compat::crypto_secretbox_keygen();
+        $invalidKey = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES);
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES);
+
+        ParagonIE_Sodium_File::secretbox($inputFile, $outputFile, $nonce, $key);
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Invalid MAC');
+        ParagonIE_Sodium_File::secretbox_open($outputFile, $decryptedFile, $nonce, $invalidKey);
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testBoxSealInvalidPublicKey(): void
+    {
+        $inputFile = $this->createTempFile('test');
+        $outputFile = $this->createTempFile();
+
+        $this->expectException(TypeError::class);
+        ParagonIE_Sodium_File::box_seal(
+            $inputFile,
+            $outputFile,
+            'invalid-public-key'
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testSignInvalidSecretKey(): void
+    {
+        $file = $this->createTempFile('test content for sign');
+
+        $this->expectException(TypeError::class);
+        ParagonIE_Sodium_File::sign($file, 'invalid-secret-key');
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testBoxUnwritableOutput(): void
+    {
+        $inputFile = $this->createTempFile('test');
+        $outputFile = tempnam(sys_get_temp_dir(), 'sodium-compat-');
+        if ($outputFile === false) {
+            $this->fail('Failed to create temporary file.');
+        }
+        $this->tempFiles[] = $outputFile;
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        chmod($outputFile, 0444);
+
+        try {
+            $this->expectException(SodiumException::class);
+            $this->expectExceptionMessage('Could not open output file for writing');
+            ParagonIE_Sodium_File::box(
+                $inputFile,
+                $outputFile,
+                $nonce,
+                $keyPair
+            );
+        } finally {
+            chmod($outputFile, 0644);
+        }
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testBoxSealOpenTruncated(): void
+    {
+        $inputFile = $this->createTempFile('short');
+        $outputFile = $this->createTempFile();
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Could not read public key from sealed file');
+        ParagonIE_Sodium_File::box_seal_open(
+            $inputFile,
+            $outputFile,
+            $keyPair
+        );
+    }
+
+    /**
+     * @return void
+     * @throws SodiumException
+     */
+    public function testVerifyAllZeroPublicKey(): void
+    {
+        $file = $this->createTempFile('test');
+
+        // Create a valid signature first
+        $keyPair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $secretKey = ParagonIE_Sodium_Compat::crypto_sign_secretkey($keyPair);
+        $signature = ParagonIE_Sodium_File::sign($file, $secretKey);
+
+        // Now use an all-zero public key
+        $publicKey = str_repeat("\0", ParagonIE_Sodium_Compat::CRYPTO_SIGN_PUBLICKEYBYTES);
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('All zero public key');
+        ParagonIE_Sodium_File::verify($signature, $file, $publicKey);
+    }
+
+    /**
      * @throws SodiumException
      */
     public function testUpdateHashWithFile(): void

@@ -1,19 +1,21 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_SipHash::class)]
 class SipHashTest extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_SipHash::add()
-     */
     public function testAdd(): void
     {
         $vectors = array(
@@ -61,9 +63,6 @@ class SipHashTest extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_SipHash::rotl_64()
-     */
     public function testRotl64(): void
     {
         $this->assertSame(
@@ -151,9 +150,6 @@ class SipHashTest extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_SipHash::sipHash24()
-     */
     public function testEvenBlock(): void
     {
         $message = str_repeat("\xff", 32);
@@ -167,9 +163,6 @@ class SipHashTest extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_SipHash::sipHash24()
-     */
     public function testCryptoShorthash(): void
     {
         $message = 'this is just a test message';

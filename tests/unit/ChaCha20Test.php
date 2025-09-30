@@ -1,19 +1,23 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(ParagonIE_Sodium_Core_ChaCha20::class)]
 class ChaCha20Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
     /**
-     * @covers ParagonIE_Sodium_Core_ChaCha20::stream()
-     * @covers ParagonIE_Sodium_Core_ChaCha20::streamXorIc()
+     * @throws SodiumException
      */
     public function testVectors(): void
     {
@@ -184,5 +188,34 @@ class ChaCha20Test extends TestCase
             ParagonIE_Sodium_Core_Util::bin2hex($ietfBlock),
             'Test Vector #9 for ChaCha20 failed (long text) -- unknown issue'
         );
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testIetfCtx(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(12);
+        $ctx = new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce);
+        $this->assertInstanceOf(ParagonIE_Sodium_Core_ChaCha20_IetfCtx::class, $ctx);
+
+        // Also test with a counter
+        $counter = random_bytes(8);
+        $ctxWithCounter = new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce, $counter);
+        $this->assertInstanceOf(ParagonIE_Sodium_Core_ChaCha20_IetfCtx::class, $ctxWithCounter);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testIetfCtxInvalidNonce(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(8); // Invalid nonce size
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('ChaCha20 expects a 96-bit nonce in IETF mode.');
+        new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce);
     }
 }

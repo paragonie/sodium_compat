@@ -1,11 +1,10 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
+#[CoversClass(ParagonIE_Sodium_Core_HSalsa20::class)]
 class HSalsa20Test extends TestCase
 {
-    /**
-     * @covers ParagonIE_Sodium_Core_Hsalsa20::hsalsa20()
-     */
     public function testVector(): void
     {
         $key = str_repeat("\x00", 32);
@@ -39,5 +38,21 @@ class HSalsa20Test extends TestCase
             ),
             'hsalsa20 with one key bitflip'
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testWithConstant(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(16);
+        $constant = random_bytes(16);
+
+        $output1 = ParagonIE_Sodium_Core_Hsalsa20::hsalsa20($nonce, $key);
+        $output2 = ParagonIE_Sodium_Core_Hsalsa20::hsalsa20($nonce, $key, $constant);
+
+        $this->assertNotSame($output1, $output2);
+        $this->assertSame(32, ParagonIE_Sodium_Core_Util::strlen($output2));
     }
 }
