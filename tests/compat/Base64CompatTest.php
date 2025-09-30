@@ -5,7 +5,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ParagonIE_Sodium_Compat::class)]
-class Base64Test extends TestCase
+class Base64CompatTest extends TestCase
 {
     /**
      * @before
@@ -13,6 +13,9 @@ class Base64Test extends TestCase
     #[BeforeClass]
     public function before(): void
     {
+        if (PHP_VERSION_ID < 70200) {
+            $this->markTestSkipped('PHP < 7.2.0; skipping PHP 7.2 File compatibility test suite.');
+        }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
 
@@ -23,33 +26,33 @@ class Base64Test extends TestCase
     {
         $this->assertSame(
             'foo',
-            ParagonIE_Sodium_Compat::base642bin('Zm9v', SODIUM_BASE64_VARIANT_ORIGINAL)
+            sodium_base642bin('Zm9v', SODIUM_BASE64_VARIANT_ORIGINAL)
         );
         $this->assertSame(
             'foo',
-            ParagonIE_Sodium_Compat::base642bin('Zm9v', SODIUM_BASE64_VARIANT_URLSAFE)
+            sodium_base642bin('Zm9v', SODIUM_BASE64_VARIANT_URLSAFE)
         );
 
         // Standard
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9v-', SODIUM_BASE64_VARIANT_ORIGINAL);
+            sodium_base642bin('Zm9v-', SODIUM_BASE64_VARIANT_ORIGINAL);
             $this->fail('Invalid character for variant');
         } catch (SodiumException $ex) {
         }
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9v_', SODIUM_BASE64_VARIANT_ORIGINAL);
+            sodium_base642bin('Zm9v_', SODIUM_BASE64_VARIANT_ORIGINAL);
             $this->fail('Invalid character for variant');
         } catch (SodiumException $ex) {
         }
 
         // URL-safe
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9v+', SODIUM_BASE64_VARIANT_URLSAFE);
+            sodium_base642bin('Zm9v+', SODIUM_BASE64_VARIANT_URLSAFE);
             $this->fail('Invalid character for variant');
         } catch (SodiumException $ex) {
         }
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9v/', SODIUM_BASE64_VARIANT_URLSAFE);
+            sodium_base642bin('Zm9v/', SODIUM_BASE64_VARIANT_URLSAFE);
             $this->fail('Invalid character for variant');
         } catch (SodiumException $ex) {
         }
@@ -57,20 +60,20 @@ class Base64Test extends TestCase
         // No padding
         $this->assertSame(
             'foob',
-            ParagonIE_Sodium_Compat::base642bin('Zm9vYg', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING)
+            sodium_base642bin('Zm9vYg', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING)
         );
         $this->assertSame(
             'foob',
-            ParagonIE_Sodium_Compat::base642bin('Zm9vYg', SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING)
+            sodium_base642bin('Zm9vYg', SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING)
         );
 
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
+            sodium_base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
             $this->fail('Should not have padding');
         } catch (SodiumException $ex) {
         }
         try {
-            ParagonIE_Sodium_Compat::base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+            sodium_base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
             $this->fail('Should not have padding');
         } catch (SodiumException $ex) {
         }
@@ -83,11 +86,11 @@ class Base64Test extends TestCase
     {
         $this->assertSame(
             'foob',
-            ParagonIE_Sodium_Compat::base642bin('Zm9?vYg==', SODIUM_BASE64_VARIANT_ORIGINAL, '?')
+            sodium_base642bin('Zm9?vYg==', SODIUM_BASE64_VARIANT_ORIGINAL, '?')
         );
         $this->assertSame(
             'foob',
-            ParagonIE_Sodium_Compat::base642bin('Zm9?vYg', SODIUM_BASE64_VARIANT_ORIGINAL, '?')
+            sodium_base642bin('Zm9?vYg', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING, '?')
         );
     }
 
@@ -98,19 +101,19 @@ class Base64Test extends TestCase
     {
         $this->assertSame(
             'Zm9v',
-            ParagonIE_Sodium_Compat::bin2base64('foo', SODIUM_BASE64_VARIANT_ORIGINAL)
+            sodium_bin2base64('foo', SODIUM_BASE64_VARIANT_ORIGINAL)
         );
         $this->assertSame(
             'Zm9v',
-            ParagonIE_Sodium_Compat::bin2base64('foo', SODIUM_BASE64_VARIANT_URLSAFE)
+            sodium_bin2base64('foo', SODIUM_BASE64_VARIANT_URLSAFE)
         );
         $this->assertSame(
             'Zm9vYg==',
-            ParagonIE_Sodium_Compat::bin2base64('foob', SODIUM_BASE64_VARIANT_ORIGINAL)
+            sodium_bin2base64('foob', SODIUM_BASE64_VARIANT_ORIGINAL)
         );
         $this->assertSame(
             'Zm9vYg',
-            ParagonIE_Sodium_Compat::bin2base64('foob', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING)
+            sodium_bin2base64('foob', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING)
         );
     }
 }
