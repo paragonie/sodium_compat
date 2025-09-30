@@ -13,8 +13,8 @@ class Base64CompatTest extends TestCase
     #[BeforeClass]
     public function before(): void
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->markTestSkipped('PHP < 7.2.0; skipping PHP 7.2 File compatibility test suite.');
+        if (!extension_loaded('sodium')) {
+            $this->markTestSkipped('Compat tests require ext-sodium');
         }
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
     }
@@ -75,6 +75,35 @@ class Base64CompatTest extends TestCase
         try {
             sodium_base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
             $this->fail('Should not have padding');
+        } catch (SodiumException $ex) {
+        }
+        try {
+            sodium_base642bin('Zm9vYg==', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
+            $this->fail('Should not have padding');
+        } catch (SodiumException $ex) {
+        }
+    }
+
+    public function testBadBase64Variants(): void
+    {
+        $this->assertSame('', sodium_base642bin('', SODIUM_BASE64_VARIANT_ORIGINAL));
+        $this->assertSame('', sodium_bin2base64('', SODIUM_BASE64_VARIANT_ORIGINAL));
+
+        try {
+            sodium_base642bin('Zm9v', 12345);
+            $this->fail('Invalid variant should throw an exception');
+        } catch (SodiumException $ex) {
+        }
+
+        try {
+            sodium_bin2base64('foo', 12345);
+            $this->fail('Invalid variant should throw an exception');
+        } catch (SodiumException $ex) {
+        }
+
+        try {
+            sodium_base642bin('Zm9v-', SODIUM_BASE64_VARIANT_ORIGINAL, '');
+            $this->fail('Invalid character for variant');
         } catch (SodiumException $ex) {
         }
     }
