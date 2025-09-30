@@ -28,6 +28,9 @@ spl_autoload_register(function ($class) {
 if (!class_exists('ParagonIE_Sodium_Compat', false)) {
     require_once dirname(__FILE__) . '/src/Compat.php';
 }
+if (!class_exists('ParagonIE_Sodium_File', false)) {
+    require_once dirname(__FILE__) . '/src/File.php';
+}
 
 if (!class_exists('SodiumException', false)) {
     require_once dirname(__FILE__) . '/src/SodiumException.php';
