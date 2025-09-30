@@ -1,4 +1,6 @@
 <?php
+
+use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\TestCase;
 
 class CompatTest extends TestCase
@@ -6,6 +8,7 @@ class CompatTest extends TestCase
     /**
      * @before
      */
+    #[BeforeClass]
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
@@ -107,9 +110,8 @@ class CompatTest extends TestCase
             );
         }
     }
+
     /**
-     * @covers ParagonIE_Sodium_Compat::base642bin()
-     * @covers ParagonIE_Sodium_Compat::bin2base64()
      * @throws TypeError
      * @throws Exception
      */
@@ -173,17 +175,13 @@ class CompatTest extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::compare()
-     * @covers ParagonIE_Sodium_Compat::memcmp()
-     */
     public function testCompareAndMemcmp(): void
     {
-        $a = 'abcdef';
-        $b = 'abcdef';
-        $c = 'abcdeg';
+        $a = "abcdef\0";
+        $b = "abcdef\0";
+        $c = "abcdeg\0";
         $d = 'abcdefg';
-        $e = 'abcde';
+        $e = "abcde\0\0";
 
         $this->assertSame(0, ParagonIE_Sodium_Compat::memcmp($a, $b));
         $this->assertNotSame(0, ParagonIE_Sodium_Compat::memcmp($a, $c));
@@ -198,8 +196,6 @@ class CompatTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::base642bin()
-     * @covers ParagonIE_Sodium_Compat::bin2base64()
      * @throws SodiumException
      */
     public function testBase64Variants(): void
