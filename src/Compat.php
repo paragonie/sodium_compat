@@ -26,6 +26,11 @@ if (class_exists('ParagonIE_Sodium_Compat', false)) {
     return;
 }
 
+/**
+ * @api
+ *
+ * This class cannot be final due to the namespaced API.
+ */
 class ParagonIE_Sodium_Compat
 {
     /**
