@@ -48,9 +48,6 @@
   ],
   "autoload": {
     "files": ["autoload.php"],
-    "psr-0": {
-      "ParagonIE_Sodium_": "src"
-    },
     "psr-4": {
       "ParagonIE\\Sodium\\": "namespaced/"
     }
