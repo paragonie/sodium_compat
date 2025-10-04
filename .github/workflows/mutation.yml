@@ -1,9 +1,10 @@
 name: Mutation Testing
 
-on:
-  create:
-    tags:
-      - v*
+#on:
+#  create:
+#    tags:
+#      - v*
+on: [push]
 
 jobs:
   psalm:
