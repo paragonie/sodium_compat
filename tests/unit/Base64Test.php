@@ -3,6 +3,7 @@
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(ParagonIE_Sodium_Compat::class)]
 class Base64Test extends TestCase
@@ -14,6 +15,60 @@ class Base64Test extends TestCase
     public function before(): void
     {
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
+    }
+
+    public static function variants(): array
+    {
+        return [
+            [SODIUM_BASE64_VARIANT_ORIGINAL],
+            [SODIUM_BASE64_VARIANT_URLSAFE],
+            [SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING],
+            [SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING],
+        ];
+    }
+
+    /**
+     * @dataProvider variants
+     * @throws SodiumException
+     */
+    #[DataProvider("variants")]
+    public function testEmpty(int $variant): void
+    {
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::base642bin('', $variant)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::bin2base64('', $variant)
+        );
+    }
+
+    public function testEncodeInvalidVariant(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::bin2base64('foo', 9999);
+    }
+
+    public function testDecodeInvalidVariant(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::base642bin('foo', 9999);
+    }
+
+    /**
+     * @dataProvider variants
+     * @throws Exception
+     */
+    #[DataProvider("variants")]
+    public function testReversible(int $variant): void
+    {
+        for ($len = 0; $len < 8; ++$len) {
+            $random = random_bytes(8);
+            $encoded = ParagonIE_Sodium_Compat::bin2base64($random, $variant);
+            $decoded = ParagonIE_Sodium_Compat::base642bin($encoded, $variant);
+            $this->assertSame($random, $decoded);
+        }
     }
 
     /**
