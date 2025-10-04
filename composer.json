@@ -79,7 +79,7 @@
     "test": "phpunit",
     "static-analysis": "psalm",
     "fuzz-test": "vendor/bin/php-fuzzer fuzz fuzzing/FuzzSodiumCompat.php",
-    "mutation-test": "infection"
+    "mutation-test": "infection --show-mutations=max"
   },
   "suggest": {
     "ext-sodium": "Better performance, password hashing (Argon2i), secure memory management (memzero), and better security."
