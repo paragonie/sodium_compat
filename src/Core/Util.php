@@ -509,8 +509,6 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @internal You should not use this directly from another application
      *
-     * @ref mbstring.func_overload
-     *
      * @param string $str
      * @return int
      * @throws TypeError
@@ -519,11 +517,7 @@ abstract class ParagonIE_Sodium_Core_Util
         #[SensitiveParameter]
         string $str
     ): int {
-        return (
-        self::isMbStringOverride()
-            ? mb_strlen($str, '8bit')
-            : strlen($str)
-        );
+        return strlen($str);
     }
 
     /**
@@ -547,8 +541,6 @@ abstract class ParagonIE_Sodium_Core_Util
      *
      * @internal You should not use this directly from another application
      *
-     * @ref mbstring.func_overload
-     *
      * @param string $str
      * @param int $start
      * @param ?int $length
@@ -565,20 +557,7 @@ abstract class ParagonIE_Sodium_Core_Util
             return '';
         }
 
-        if (self::isMbStringOverride()) {
-            if (PHP_VERSION_ID < 50400 && $length === null) {
-                $length = self::strlen($str);
-            }
-            $sub = mb_substr($str, $start, $length, '8bit');
-        } elseif ($length === null) {
-            $sub = substr($str, $start);
-        } else {
-            $sub = substr($str, $start, $length);
-        }
-        if ($sub !== '') {
-            return $sub;
-        }
-        return '';
+        return substr($str, $start, $length);
     }
 
     /**
@@ -646,33 +625,4 @@ abstract class ParagonIE_Sodium_Core_Util
         return $a ^ $b;
     }
 
-    /**
-     * Returns whether or not mbstring.func_overload is in effect.
-     *
-     * @internal You should not use this directly from another application
-     *
-     * Note: MB_OVERLOAD_STRING === 2, but we don't reference the constant
-     * (for nuisance-free PHP 8 support)
-     *
-     * @return bool
-     */
-    protected static function isMbStringOverride(): bool
-    {
-        static $mbstring = null;
-
-        if ($mbstring === null) {
-            if (!defined('MB_OVERLOAD_STRING')) {
-                $mbstring = false;
-                return $mbstring;
-            }
-            $mbstring = extension_loaded('mbstring')
-                && defined('MB_OVERLOAD_STRING')
-                &&
-            ((int) (ini_get('mbstring.func_overload')) & 2);
-            // MB_OVERLOAD_STRING === 2
-        }
-        /** @var bool $mbstring */
-
-        return $mbstring;
-    }
 }

@@ -225,12 +225,13 @@ class UtilTest extends TestCase
     public function testSubstr(): void
     {
         $string = str_repeat("\xF0\x9D\x92\xB3", 4);
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 1), "\xF0");
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 1, 1), "\x9D");
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 1), "\x92");
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 3, 1), "\xB3");
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 0, 2), "\xF0\x9D");
-        $this->assertSame(ParagonIE_Sodium_Core_Util::substr($string, 2, 2), "\x92\xB3");
+        $this->assertSame("\xF0", ParagonIE_Sodium_Core_Util::substr($string, 0, 1));
+        $this->assertSame("\x9D", ParagonIE_Sodium_Core_Util::substr($string, 1, 1));
+        $this->assertSame("\x92", ParagonIE_Sodium_Core_Util::substr($string, 2, 1));
+        $this->assertSame("\xB3", ParagonIE_Sodium_Core_Util::substr($string, 3, 1));
+        $this->assertSame("\xF0\x9D", ParagonIE_Sodium_Core_Util::substr($string, 0, 2));
+        $this->assertSame("\x92\xB3", ParagonIE_Sodium_Core_Util::substr($string, 2, 2));
+        $this->assertSame("\x9D\x92\xB3", ParagonIE_Sodium_Core_Util::substr($string, 13));
     }
 
     public function testStore64(): void
