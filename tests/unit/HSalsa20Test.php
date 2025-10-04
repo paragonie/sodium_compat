@@ -1,10 +1,23 @@
 <?php
+
+use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ParagonIE_Sodium_Core_HSalsa20::class)]
 class HSalsa20Test extends TestCase
 {
+    #[BeforeClass]
+    public function before(): void
+    {
+        if (!class_exists(ParagonIE_Sodium_Core_HSalsa20::class)) {
+            require_once dirname(__DIR__, 2) . '/autoload.php';
+            if (!class_exists(ParagonIE_Sodium_Core_HSalsa20::class, false)) {
+                require_once dirname(__DIR__, 2) . '/src/Core/HSalsa20.php';
+            }
+        }
+    }
+
     public function testVector(): void
     {
         $key = str_repeat("\x00", 32);
