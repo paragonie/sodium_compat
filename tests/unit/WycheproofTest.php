@@ -67,6 +67,20 @@ class WycheproofTest extends TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testEd25519(): void
+    {
+        if (!defined('DO_PEDANTIC_TEST')) {
+            $this->markTestSkipped('Skipping Wycheproof Tests. Use DO_PEDANTIC_TEST to enable.');
+        }
+        if (empty($this->dir)) {
+            $this->before();
+        }
+        $this->mainTestingLoop('ed25519_test.json', 'doEd25519Test', false);
+    }
+
+    /**
      * @param $filename
      * @param $method
      *
@@ -85,12 +99,18 @@ class WycheproofTest extends TestCase
                 $testCount = count($testGroup['tests']);
                 $testId = 1;
             }
+            // Inject testGroup data
+            $extra = [];
+            if (array_key_exists('publicKey', $testGroup)) {
+                $extra['publicKey'] = $testGroup['publicKey']['pk'];
+            }
             foreach ($testGroup['tests'] as $test) {
                 ++$total;
                 if ($progress) {
                     echo "[Group {$groupId} : Test {$testId}]", PHP_EOL;
                 }
                 $message = "{$document['algorithm']} :: #{$test['tcId']} - {$test['comment']}";
+                $test = $test + $extra;
                 try {
                     $result = call_user_func_array(array($this, $method), array($test));
                     $expected = ($test['result'] === 'valid');
@@ -190,6 +210,20 @@ class WycheproofTest extends TestCase
             echo '+ ', ParagonIE_Sodium_Core_Util::bin2hex($scalarmult), PHP_EOL;
         }
         return ParagonIE_Sodium_Core_Util::hashEquals($shared, $scalarmult);
+    }
+
+    /**
+     * @param array $test
+     * @param bool $verbose
+     * @return bool
+     * @throws SodiumException
+     */
+    public function doEd25519Test(array $test, $verbose = false)
+    {
+        $msg = ParagonIE_Sodium_Compat::hex2bin($test['msg']);
+        $sig = ParagonIE_Sodium_Compat::hex2bin($test['sig']);
+        $pk = ParagonIE_Sodium_Compat::hex2bin($test['publicKey']);
+        return ParagonIE_Sodium_Compat::crypto_sign_verify_detached($sig, $msg, $pk);
     }
 
     /**
