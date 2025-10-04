@@ -44,4 +44,18 @@ class XSalsa20Test extends TestCase
             'Test vector #1 failed!'
         );
     }
+
+    public function testEmpty(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XSalsa20::xsalsa20(0, $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XSalsa20::xsalsa20_xor('', $nonce, $key)
+        );
+    }
 }

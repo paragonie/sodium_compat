@@ -411,7 +411,40 @@ class AEGISTest extends TestCase
         $this->assertSame($state, ['', '', '', '', '', '', '', '']);
         $state = (new ParagonIE_Sodium_Core_AEGIS_State256())->getState();
         $this->assertSame($state, ['', '', '', '', '', '']);
+    }
 
+    /**
+     * @return void
+     * @throws SodiumException
+     */
+    public function testEmptyInputsAegis128l(): void
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_keygen();
+        $nonce = str_repeat("\0",ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS128L_NPUBBYTES);
+        $ad = '';
+        $encrypted = ParagonIE_Sodium_Compat::crypto_aead_aegis128l_encrypt('', $ad, $nonce, $key);
+        $this->assertNotSame('', $encrypted, 'Authentication tag expected');
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt($encrypted, $ad, $nonce, $key)
+        );
+    }
+
+    /**
+     * @return void
+     * @throws SodiumException
+     */
+    public function testEmptyInputsAegis256(): void
+    {
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aegis256_keygen();
+        $nonce = str_repeat("\0",ParagonIE_Sodium_Compat::CRYPTO_AEAD_AEGIS256_NPUBBYTES);
+        $ad = '';
+        $encrypted = ParagonIE_Sodium_Compat::crypto_aead_aegis256_encrypt('', $ad, $nonce, $key);
+        $this->assertNotSame('', $encrypted, 'Authentication tag expected');
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($encrypted, $ad, $nonce, $key)
+        );
     }
 
     /**

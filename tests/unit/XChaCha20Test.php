@@ -137,9 +137,9 @@ class XChaCha20Test extends TestCase
 
         $left  = str_repeat("\x01", 64);
         $right = str_repeat("\xfe", 64);
-        $stream7_unified = sodium_crypto_stream_xchacha20_xor($left . $right, $nonce, $key);
-        $stream7_left  = sodium_crypto_stream_xchacha20_xor_ic($left, $nonce, 0, $key);
-        $stream7_right = sodium_crypto_stream_xchacha20_xor_ic($right, $nonce, 1, $key);
+        $stream7_unified = ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor($left . $right, $nonce, $key);
+        $stream7_left  = ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor_ic($left, $nonce, 0, $key);
+        $stream7_right = ParagonIE_Sodium_Compat::crypto_stream_xchacha20_xor_ic($right, $nonce, 1, $key);
         $stream7_concat = $stream7_left . $stream7_right;
 
         $this->assertSame(128, ParagonIE_Sodium_Core_Util::strlen($stream7_concat));
@@ -188,6 +188,64 @@ class XChaCha20Test extends TestCase
 
         $decrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($encrypted, $nonce, $key, str_repeat("\0", 8));
         $this->assertSame($message, $decrypted);
+
+        $encrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($message, $nonce, $key, str_repeat("\xff", 8));
+        $this->assertNotSame($message, $encrypted);
+
+        $decrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($encrypted, $nonce, $key, str_repeat("\xff", 8));
+        $this->assertSame($message, $decrypted);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testIetfStreamXorIc(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+        $message = random_bytes(128);
+
+        $encrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($message, $nonce, $key, str_repeat("\0", 8));
+        $this->assertNotSame($message, $encrypted);
+
+        $decrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($encrypted, $nonce, $key, str_repeat("\0", 8));
+        $this->assertSame($message, $decrypted);
+
+        $encrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($message, $nonce, $key, str_repeat("\xff", 8));
+        $this->assertNotSame($message, $encrypted);
+
+        $decrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($encrypted, $nonce, $key, str_repeat("\xff", 8));
+        $this->assertSame($message, $decrypted);
+    }
+
+    public function testEmpty(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(24);
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::stream(0, $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::ietfStream(0, $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::streamXorIc('', $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc('', $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::streamXorIc('', $nonce, $key, "\x01")
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc('', $nonce, $key, "\x01")
+        );
     }
 
     /**

@@ -146,4 +146,22 @@ class Salsa20Test extends TestCase
             bin2hex($outD)
         );
     }
+
+    public function testEmpty(): void
+    {
+        $key = random_bytes(32);
+        $nonce = random_bytes(8);
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Salsa20::salsa20(0, $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Salsa20::salsa20_xor('', $nonce, $key)
+        );
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Salsa20::salsa20_xor_ic('', $nonce, 2, $key)
+        );
+    }
 }
