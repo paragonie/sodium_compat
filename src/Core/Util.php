@@ -178,7 +178,7 @@ abstract class ParagonIE_Sodium_Core_Util
      * @param string $ignore
      * @param bool $strictPadding
      * @return string (raw binary)
-     * @throws RangeException
+     * @throws SodiumException
      * @throws TypeError
      */
     public static function hex2bin(
@@ -192,17 +192,6 @@ abstract class ParagonIE_Sodium_Core_Util
         $c_acc = 0;
         $hex_len = self::strlen($hexString);
         $state = 0;
-        if (($hex_len & 1) !== 0) {
-            if ($strictPadding) {
-                throw new RangeException(
-                    'Expected an even number of hexadecimal characters'
-                );
-            } else {
-                $hexString = '0' . $hexString;
-                ++$hex_len;
-            }
-        }
-
         $chunk = unpack('C*', $hexString);
         while ($hex_pos < $hex_len) {
             ++$hex_pos;
@@ -216,7 +205,7 @@ abstract class ParagonIE_Sodium_Core_Util
                 if ($ignore && $state === 0 && str_contains($ignore, self::intToChr($c))) {
                     continue;
                 }
-                throw new RangeException(
+                throw new SodiumException(
                     'hex2bin() only expects hexadecimal characters'
                 );
             }
@@ -227,6 +216,11 @@ abstract class ParagonIE_Sodium_Core_Util
                 $bin .= pack('C', $c_acc | $c_val);
             }
             $state ^= 1;
+        }
+        if ($strictPadding && $state !== 0) {
+            throw new SodiumException(
+                'Expected an even number of hexadecimal characters'
+            );
         }
         return $bin;
     }

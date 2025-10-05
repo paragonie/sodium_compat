@@ -3043,7 +3043,7 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('hex2bin')) {
             return (string) call_user_func('\\Sodium\\hex2bin', $string, $ignore);
         }
-        return ParagonIE_Sodium_Core_Util::hex2bin($string, $ignore);
+        return ParagonIE_Sodium_Core_Util::hex2bin($string, $ignore, true);
     }
 
     /**
