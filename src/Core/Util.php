@@ -349,10 +349,8 @@ abstract class ParagonIE_Sodium_Core_Util
         #[SensitiveParameter]
         string $right
     ): int {
-        if (self::hashEquals($left, $right)) {
-            return 0;
-        }
-        return -1;
+        $e = (int) !self::hashEquals($left, $right);
+        return 0 - $e;
     }
 
     /**
