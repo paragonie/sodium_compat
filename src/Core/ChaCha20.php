@@ -224,10 +224,10 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      * @throws TypeError
      */
     public static function stream(
-        int $len = 64,
-        string $nonce = '',
+        int $len,
+        string $nonce,
         #[SensitiveParameter]
-        string $key = ''
+        string $key
     ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_Ctx($key, $nonce),
@@ -247,9 +247,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
      */
     public static function ietfStream(
         int $len,
-        string $nonce = '',
+        string $nonce,
         #[SensitiveParameter]
-        string $key = ''
+        string $key
     ): string {
         return self::encryptBytes(
             new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce),
@@ -271,9 +271,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     public static function ietfStreamXorIc(
         #[SensitiveParameter]
         string $message,
-        string $nonce = '',
+        string $nonce,
         #[SensitiveParameter]
-        string $key = '',
+        string $key,
         string $ic = ''
     ): string {
         return self::encryptBytes(
@@ -296,9 +296,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
     public static function streamXorIc(
         #[SensitiveParameter]
         string $message,
-        string $nonce = '',
+        string $nonce,
         #[SensitiveParameter]
-        string $key = '',
+        string $key,
         string $ic = ''
     ): string {
         return self::encryptBytes(
