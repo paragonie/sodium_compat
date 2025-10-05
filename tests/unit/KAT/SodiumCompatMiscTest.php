@@ -202,4 +202,282 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
             $this->assertSame($message, $unpadded, 'Block size ' . $i);
         }
     }
+
+    public function testAndStrings(): void
+    {
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Util::andStrings('', '')
+        );
+        $this->assertSame(
+            "\x00\x00\x00\x00",
+            ParagonIE_Sodium_Core_Util::andStrings(
+                "\xde\xad\xbe\xef",
+                "\x00\x00\x00\x00"
+            )
+        );
+        $this->assertSame(
+            "\xde\xad\xbe\xef",
+            ParagonIE_Sodium_Core_Util::andStrings(
+                "\xde\xad\xbe\xef",
+                "\xff\xff\xff\xff"
+            )
+        );
+    }
+
+    public function testAndStringsInvalidLength(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_Util::andStrings('a', 'ab');
+    }
+
+    public function testXorStrings(): void
+    {
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Util::xorStrings('', '')
+        );
+        $this->assertSame(
+            "\xde\xad\xbe\xef",
+            ParagonIE_Sodium_Core_Util::xorStrings(
+                "\xde\xad\xbe\xef",
+                "\x00\x00\x00\x00"
+            )
+        );
+        $this->assertSame(
+            "\x21\x52\x41\x10",
+            ParagonIE_Sodium_Core_Util::xorStrings(
+                "\xde\xad\xbe\xef",
+                "\xff\xff\xff\xff"
+            )
+        );
+        $this->assertSame(
+            "\x03",
+            ParagonIE_Sodium_Core_Util::xorStrings('a', 'b')
+        );
+    }
+
+    public function testBin2Hex(): void
+    {
+        $this->assertSame('', ParagonIE_Sodium_Core_Util::bin2hex(''));
+        $this->assertSame('deadbeef', ParagonIE_Sodium_Core_Util::bin2hex("\xde\xad\xbe\xef"));
+    }
+
+    public function testHex2Bin(): void
+    {
+        $this->assertSame('', ParagonIE_Sodium_Core_Util::hex2bin(''));
+        $this->assertSame("\xde\xad\xbe\xef", ParagonIE_Sodium_Core_Util::hex2bin('deadbeef'));
+        $this->assertSame(
+            "\xde\xad\xbe\xef",
+            ParagonIE_Sodium_Core_Util::hex2bin("de:ad:be:ef", ':')
+        );
+        $this->assertSame('', ParagonIE_Sodium_Core_Util::hex2bin('1'));
+    }
+
+    public function testHex2BinStrictPaddingException(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_Util::hex2bin('1', '', true);
+    }
+
+    public function testHex2BinInvalidCharsException(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_Util::hex2bin('invalid');
+    }
+
+    public function testChrToInt(): void
+    {
+        $this->assertSame(65, ParagonIE_Sodium_Core_Util::chrToInt('A'));
+        $this->assertSame(128, ParagonIE_Sodium_Core_Util::chrToInt("\x80"));
+    }
+
+    public function testChrToIntInvalidLengthException(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_Util::chrToInt('invalid');
+    }
+
+    public function testIntToChr(): void
+    {
+        $this->assertSame('A', ParagonIE_Sodium_Core_Util::intToChr(65));
+        $this->assertSame("\x80", ParagonIE_Sodium_Core_Util::intToChr(128));
+    }
+
+    public function testUtilCompare(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Core_Util::compare('a', 'a'));
+        $this->assertSame(-1, ParagonIE_Sodium_Core_Util::compare('a', 'b'));
+        $this->assertSame(1, ParagonIE_Sodium_Core_Util::compare('b', 'a'));
+    }
+
+    public function testUtilHashEquals(): void
+    {
+        $this->assertTrue(ParagonIE_Sodium_Core_Util::hashEquals('a', 'a'));
+        $this->assertFalse(ParagonIE_Sodium_Core_Util::hashEquals('a', 'b'));
+    }
+
+    public function testUtilMemcmp(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Core_Util::memcmp('a', 'a'));
+        $this->assertNotSame(0, ParagonIE_Sodium_Core_Util::memcmp('a', 'b'));
+    }
+
+    public function testVerify16(): void
+    {
+        $this->assertTrue(
+            ParagonIE_Sodium_Core_Util::verify_16(
+                str_repeat('a', 16),
+                str_repeat('a', 16)
+            )
+        );
+        $this->assertFalse(
+            ParagonIE_Sodium_Core_Util::verify_16(
+                str_repeat('a', 16),
+                str_repeat('b', 16)
+            )
+        );
+        $this->assertTrue(
+            ParagonIE_Sodium_Core_Util::verify_16(
+                str_repeat('a', 32),
+                str_repeat('a', 32)
+            )
+        );
+    }
+
+    public function testVerify32(): void
+    {
+        $this->assertTrue(
+            ParagonIE_Sodium_Core_Util::verify_32(
+                str_repeat('a', 32),
+                str_repeat('a', 32)
+            )
+        );
+        $this->assertFalse(
+            ParagonIE_Sodium_Core_Util::verify_32(
+                str_repeat('a', 32),
+                str_repeat('b', 32)
+            )
+        );
+        $this->assertTrue(
+            ParagonIE_Sodium_Core_Util::verify_32(
+                str_repeat('a', 64),
+                str_repeat('a', 64)
+            )
+        );
+    }
+
+    public function testIntArrayStringConversion(): void
+    {
+        $this->assertSame(
+            '',
+            ParagonIE_Sodium_Core_Util::intArrayToString([])
+        );
+        $this->assertSame(
+            [],
+            ParagonIE_Sodium_Core_Util::stringToIntArray('')
+        );
+        $expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        $this->assertSame(
+            $expected,
+            ParagonIE_Sodium_Core_Util::stringToIntArray(
+                ParagonIE_Sodium_Core_Util::intArrayToString($expected)
+            )
+        );
+        $expected = [255, 128, 0];
+        $this->assertSame(
+            $expected,
+            ParagonIE_Sodium_Core_Util::stringToIntArray(
+                ParagonIE_Sodium_Core_Util::intArrayToString($expected)
+            )
+        );
+    }
+
+    public function testLoad3(): void
+    {
+        $this->assertSame(0x010203, ParagonIE_Sodium_Core_Util::load_3("\x03\x02\x01"));
+    }
+
+    public function testLoad3InvalidLengthException(): void
+    {
+        $this->expectException(RangeException::class);
+        ParagonIE_Sodium_Core_Util::load_3('ab');
+    }
+
+    public function testLoad4(): void
+    {
+        $this->assertSame(0x01020304, ParagonIE_Sodium_Core_Util::load_4("\x04\x03\x02\x01"));
+    }
+
+    public function testLoad4InvalidLengthException(): void
+    {
+        $this->expectException(RangeException::class);
+        ParagonIE_Sodium_Core_Util::load_4('abc');
+    }
+
+    public function testLoadStore64(): void
+    {
+        $stored = ParagonIE_Sodium_Core_Util::store64_le(0x0102030405060708);
+        $this->assertSame(0x0102030405060708, ParagonIE_Sodium_Core_Util::load64_le($stored));
+    }
+
+    public function testStore32(): void
+    {
+        $this->assertSame(
+            "\x04\x03\x02\x01",
+            ParagonIE_Sodium_Core_Util::store32_le(0x01020304)
+        );
+    }
+
+    public static function mulProvider(): array
+    {
+        return [
+            [2, 3, 6],
+            [-2, 3, -6],
+            [2, -3, -6],
+            [-2, -3, 6],
+            [0, 10, 0],
+            [10, 0, 0],
+            [65535, 65535, 4294836225]
+        ];
+    }
+
+    /**
+     * @dataProvider mulProvider
+     */
+    #[DataProvider("mulProvider")]
+    public function testMul(int $a, int $b, int $expected): void
+    {
+        ParagonIE_Sodium_Compat::$fastMult = false;
+        $this->assertSame($expected, ParagonIE_Sodium_Core_Util::mul($a, $b));
+        ParagonIE_Sodium_Compat::$fastMult = true;
+        $this->assertSame($expected, ParagonIE_Sodium_Core_Util::mul($a, $b));
+    }
+
+    public function testNumericTo64BitInteger(): void
+    {
+        $this->assertSame(
+            [0, 1],
+            ParagonIE_Sodium_Core_Util::numericTo64BitInteger(1)
+        );
+        $this->assertSame(
+            [1, 0],
+            ParagonIE_Sodium_Core_Util::numericTo64BitInteger(4294967296)
+        );
+    }
+
+    public function testUtilStrlen(): void
+    {
+        $this->assertSame(0, ParagonIE_Sodium_Core_Util::strlen(''));
+        $this->assertSame(4, ParagonIE_Sodium_Core_Util::strlen('test'));
+        $this->assertSame(4, ParagonIE_Sodium_Core_Util::strlen("t\x00s\x00"));
+    }
+
+    public function testSubstr(): void
+    {
+        $this->assertSame('test', ParagonIE_Sodium_Core_Util::substr('test', 0));
+        $this->assertSame('es', ParagonIE_Sodium_Core_Util::substr('test', 1, 2));
+        $this->assertSame('', ParagonIE_Sodium_Core_Util::substr('test', 1, 0));
+        $this->assertSame('st', ParagonIE_Sodium_Core_Util::substr('test', 2));
+    }
 }
