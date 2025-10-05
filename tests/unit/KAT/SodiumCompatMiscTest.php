@@ -58,7 +58,7 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
 
     public function testMemzero(): void
     {
-        if (!ParagonIE_Sodium_Compat::polyfill_is_fast()) {
+        if (!extension_loaded('sodium')) {
             $this->expectException(SodiumException::class);
             $this->expectExceptionMessage('This is not implemented in sodium_compat, as it is not possible to securely wipe memory from PHP. To fix this error, make sure libsodium is installed and the PHP extension is enabled.');
             $val = 'test';
