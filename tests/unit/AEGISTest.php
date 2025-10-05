@@ -517,7 +517,7 @@ class AEGISTest extends TestCase
     public function testAegis128LDecryptBadNonce(): void
     {
         $this->expectException(SodiumException::class);
-        $this->expectExceptionMessage('Nonce must be CRYPTO_AEAD_AEGIS_128L_NPUBBYTES long');
+        $this->expectExceptionMessage('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
 
         $key = str_repeat("\0", 16);
         $nonce = str_repeat("\0", 15);

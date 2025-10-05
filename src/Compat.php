@@ -326,7 +326,7 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS128L_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS_128L_NPUBBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS128L_KEYBYTES) {
             throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
@@ -374,7 +374,7 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS128L_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS128L_KEYBYTES) {
             throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
@@ -469,10 +469,10 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS256_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS256_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS256_KEYBYTES) {
-            throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS256_KEYBYTES long');
         }
 
         list($ct, $tag) = ParagonIE_Sodium_Core_AEGIS256::encrypt($plaintext, $assocData, $key, $nonce);
@@ -2243,6 +2243,9 @@ class ParagonIE_Sodium_Compat
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_SECRETBOX_KEYBYTES) {
             throw new SodiumException('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
         }
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_SECRETBOX_MACBYTES) {
+            throw new SodiumException("Ciphertext must be at least CRYPTO_SECRETBOX_MACBYTES long");
+        }
 
         if (self::useNewSodiumAPI()) {
             return sodium_crypto_secretbox_open($ciphertext, $nonce, $key);
@@ -2310,6 +2313,9 @@ class ParagonIE_Sodium_Compat
         string $key
     ): string {
         /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_SECRETBOX_MACBYTES) {
+            throw new SodiumException('Argument 1 must be at least CRYPTO_SECRETBOX_MACBYTES long.');
+        }
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_SECRETBOX_NONCEBYTES) {
             throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
         }

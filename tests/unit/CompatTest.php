@@ -243,11 +243,13 @@ class CompatTest extends TestCase
             ParagonIE_Sodium_Compat::base642bin('a', -1);
             $this->fail('invalid variant');
         } catch (SodiumException $ex) {
+            $this->assertSame('invalid base64 variant identifier', $ex->getMessage());
         }
         try {
             ParagonIE_Sodium_Compat::bin2base64('a', -1);
             $this->fail('invalid variant');
         } catch (SodiumException $ex) {
+            $this->assertSame('invalid base64 variant identifier', $ex->getMessage());
         }
 
         $this->assertSame(

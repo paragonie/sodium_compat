@@ -448,6 +448,15 @@ class CryptoTest extends TestCase
             $message,
             ParagonIE_Sodium_Compat::crypto_secretbox_open($cipher, $nonce, $secret)
         );
+
+        $this->expectException(SodiumException::class);
+        $this->assertFalse(
+            ParagonIE_Sodium_Compat::crypto_secretbox_open(
+                substr($cipher, 0, 8),
+                $nonce,
+                $secret
+            )
+        );
     }
 
     /**
@@ -610,5 +619,19 @@ class CryptoTest extends TestCase
         } catch (Exception $ex) {
             $this->assertInstanceOf(SodiumException::class, $ex);
         }
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testCryptoSecretboxXChaCha20Poly1305OpenShortCiphertext(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Argument 1 must be at least CRYPTO_SECRETBOX_MACBYTES long.');
+        ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open(
+            'short',
+            str_repeat("\0", ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES),
+            str_repeat("\0", ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES)
+        );
     }
 }
