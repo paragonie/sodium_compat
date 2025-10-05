@@ -32,6 +32,25 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
         ];
     }
 
+    public static function absTestCases(): array
+    {
+        return [
+            [123, 123],
+            [-123, 123],
+            [-1, 1],
+            [-65535, 65535],
+        ];
+    }
+
+    /**
+     * @dataProvider absTestCases
+     */
+    #[DataProvider("absTestCases")]
+    public function testAbs(int $before, int $after): void
+    {
+        $this->assertSame($after, ParagonIE_Sodium_Core_Util::abs($before));
+    }
+
     public function testCompare(): void
     {
         $this->assertSame(0, ParagonIE_Sodium_Compat::compare('a', 'a'));
