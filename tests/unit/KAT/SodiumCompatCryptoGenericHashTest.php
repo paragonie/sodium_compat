@@ -57,9 +57,6 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         );
     }
 
-    /**
-     * @dataProvider successfulTestCases
-     */
     public function testInvalidKeyLengths(): void
     {
         $this->expectException(SodiumException::class);
@@ -70,9 +67,6 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         );
     }
 
-    /**
-     * @dataProvider successfulTestCases
-     */
     public function testInvalidKeyLengthsMax(): void
     {
         $this->expectException(SodiumException::class);

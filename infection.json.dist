@@ -254,7 +254,8 @@
         "CloneRemoval": {
             "ignore": [
                 "ParagonIE_Sodium_Core_Curve25519::ge_msub",
-                "ParagonIE_Sodium_Core_Curve25519::ge_sub"
+                "ParagonIE_Sodium_Core_Curve25519::ge_sub",
+                "ParagonIE_Sodium_Crypto::aead_xchacha20poly1305_ietf_decrypt"
             ]
         },
         "IfNegation": {

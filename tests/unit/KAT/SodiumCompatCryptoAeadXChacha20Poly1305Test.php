@@ -107,6 +107,30 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c, $a, str_repeat("\x00", 24), $k);
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
+    #[DataProvider('successfulTestCases')]
+    public function testDecryptFailureTamperedCiphertext(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
+    {
+        $k = $this->hextobin($key);
+        $n = $this->hextobin($nonce);
+        $a = $this->hextobin($ad);
+        $c = $this->hextobin($ciphertext);
+
+        // Tamper with the ciphertext
+        $tampered_c = $c;
+        $last_byte_index = ParagonIE_Sodium_Core_Util::strlen($tampered_c) - 1;
+        if ($last_byte_index < 0) {
+            $this->markTestSkipped('Ciphertext is empty');
+        }
+        $tampered_c[$last_byte_index] = \chr(\ord($tampered_c[$last_byte_index]) ^ 0xff);
+
+        // Mismatched Ciphertext/Tag
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($tampered_c, $a, $n, $k);
+    }
+
     public function testInvalidKeyLengths(): void
     {
         $this->expectException(SodiumException::class);
