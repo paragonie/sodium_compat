@@ -21,6 +21,9 @@ class SodiumCompatCryptoScalarMultTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoScalarMult(string $sk, string $pk, string $expected): void
     {

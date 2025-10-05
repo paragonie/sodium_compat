@@ -21,6 +21,9 @@ class SodiumCompatCryptoSecretboxTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testEncrypt(string $key, string $nonce, string $message, string $ciphertext): void
     {
@@ -35,6 +38,9 @@ class SodiumCompatCryptoSecretboxTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecrypt(string $key, string $nonce, string $message, string $ciphertext): void
     {
@@ -46,6 +52,9 @@ class SodiumCompatCryptoSecretboxTest extends KnownAnswerTestCase
         $this->assertSame($message, $decrypted);
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailureWrongKey(string $key, string $nonce, string $message, string $ciphertext): void
     {
@@ -61,6 +70,9 @@ class SodiumCompatCryptoSecretboxTest extends KnownAnswerTestCase
     }
 
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailureWrongNonce(string $key, string $nonce, string $message, string $ciphertext): void
     {

@@ -20,6 +20,9 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testGenericHash(string $key, string $message, string $hash): void
     {
@@ -33,6 +36,9 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testGenericHashStreaming(string $key, string $message, string $hash): void
     {
@@ -51,6 +57,9 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     public function testInvalidKeyLengths(): void
     {
         $this->expectException(SodiumException::class);
@@ -61,6 +70,9 @@ class SodiumCompatCryptoGenericHashTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     public function testInvalidKeyLengthsMax(): void
     {
         $this->expectException(SodiumException::class);

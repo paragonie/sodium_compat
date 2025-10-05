@@ -25,6 +25,9 @@ class SodiumCompatCryptoBoxTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoBox(string $alice_sk, string $alice_pk, string $bob_sk, string $bob_pk, string $nonce, string $message, string $ciphertext): void
     {
@@ -44,7 +47,10 @@ class SodiumCompatCryptoBoxTest extends KnownAnswerTestCase
 
         $this->assertSame($m, $decrypted);
     }
-    
+
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoBoxSeal(string $alice_sk, string $alice_pk, string $bob_sk, string $bob_pk, string $nonce, string $message, string $ciphertext): void
     {

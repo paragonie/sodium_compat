@@ -23,6 +23,9 @@ class SodiumCompatCryptoKdfTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDeriveFromKey(int $subkey_len, int $subkey_id, string $context, string $key, string $expectedDerivedKey): void
     {

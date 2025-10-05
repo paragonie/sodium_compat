@@ -21,6 +21,9 @@ class SodiumCompatCryptoAuthTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testAuth(string $key, string $message, string $mac): void
     {
@@ -34,6 +37,9 @@ class SodiumCompatCryptoAuthTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testVerify(string $key, string $message, string $mac): void
     {
@@ -46,6 +52,9 @@ class SodiumCompatCryptoAuthTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testVerifyFailures(string $key, string $message, string $mac): void
     {

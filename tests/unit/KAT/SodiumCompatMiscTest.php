@@ -6,6 +6,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(ParagonIE_Sodium_Compat::class)]
 class SodiumCompatMiscTest extends KnownAnswerTestCase
 {
+    /**
+     * @dataProvider sodiumAddTestCases
+     */
     #[DataProvider('sodiumAddTestCases')]
     public function testAdd(string $a, string $b, string $expect, bool $shouldSucceed): void
     {

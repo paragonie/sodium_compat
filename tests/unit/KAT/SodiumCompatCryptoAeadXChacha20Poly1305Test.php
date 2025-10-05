@@ -23,6 +23,9 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testEncrypt(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -38,6 +41,9 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecrypt(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -53,6 +59,9 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailureWrongAAD(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -66,6 +75,9 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c, $c, $n, $k);
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailureWrongKey(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -79,6 +91,9 @@ class SodiumCompatCryptoAeadXChacha20Poly1305Test extends KnownAnswerTestCase
         ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt($c, $a, $n, str_repeat("\x00", 32));
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailureWrongNonce(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {

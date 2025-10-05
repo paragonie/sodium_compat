@@ -21,6 +21,9 @@ class SodiumCompatCryptoShortHashTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testShortHash(string $key, string $message, string $hash): void
     {
@@ -34,6 +37,9 @@ class SodiumCompatCryptoShortHashTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     public function testInvalidKeyLength(): void
     {
         $this->expectException(SodiumException::class);

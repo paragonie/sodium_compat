@@ -21,6 +21,9 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoSign(string $message, string $sk_seed, string $pk, string $signature): void
     {
@@ -34,6 +37,9 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
         $this->assertSame($message, $opened);
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoSignDetached(string $message, string $sk_seed, string $pk, string $signature): void
     {
@@ -48,6 +54,9 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoSignKeyPair(string $message, string $sk_seed, string $pk, string $signature): void
     {
@@ -56,6 +65,9 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
         $this->assertSame(96, strlen($keypair));
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoSignEd25519PkToCurve25519(string $message, string $sk_seed, string $pk, string $signature): void
     {
@@ -64,6 +76,9 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
         $this->assertSame(32, strlen($curve25519_pk));
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoSignEd25519SkToCurve25519(string $message, string $sk_seed, string $pk, string $signature): void
     {

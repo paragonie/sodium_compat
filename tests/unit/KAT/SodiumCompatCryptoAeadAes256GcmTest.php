@@ -22,6 +22,9 @@ class SodiumCompatCryptoAeadAes256GcmTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testEncrypt(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -40,6 +43,9 @@ class SodiumCompatCryptoAeadAes256GcmTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecrypt(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {
@@ -58,6 +64,9 @@ class SodiumCompatCryptoAeadAes256GcmTest extends KnownAnswerTestCase
         );
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testDecryptFailures(string $key, string $nonce, string $ad, string $plaintext, string $ciphertext): void
     {

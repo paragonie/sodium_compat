@@ -22,6 +22,9 @@ class SodiumCompatCryptoStreamTest extends KnownAnswerTestCase
         ];
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoStream(int $length, string $nonce, string $key, string $message): void
     {
@@ -32,6 +35,9 @@ class SodiumCompatCryptoStreamTest extends KnownAnswerTestCase
         $this->assertSame($length, strlen($stream));
     }
 
+    /**
+     * @dataProvider successfulTestCases
+     */
     #[DataProvider('successfulTestCases')]
     public function testCryptoStreamXor(int $length, string $nonce, string $key, string $message): void
     {
