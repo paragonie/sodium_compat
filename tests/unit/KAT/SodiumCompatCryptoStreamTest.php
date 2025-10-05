@@ -49,6 +49,66 @@ class SodiumCompatCryptoStreamTest extends KnownAnswerTestCase
         $this->assertSame($message, $decrypted);
     }
 
+    public static function xsalsa20Successful(): array
+    {
+        return [
+            [
+                65,
+                'ffffffffffffffffffffffffffffffffffffffffffffffff',
+                'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                '24a698344c6131e226e948b69dcd16315b4ea42da447bfb8280fb01a1c3a179f8d8c233f73b4c2fe21565c54ff3709c6d84df149ba8c94bb9b4f4f97ed1b83ca99'
+            ], [
+                128,
+                'ffffffffffffffffffffffffffffffffffffffffffffffff',
+                'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                '24a698344c6131e226e948b69dcd16315b4ea42da447bfb8280fb01a1c3a179f8d8c233f73b4c2fe21565c54ff3709c6d84df149ba8c94bb9b4f4f97ed1b83ca9907a42152dc3557046042151a535593e99bce13adacf37b478dc52830a7c8089ebf849955ae5b0643f73217d08ef3da240d5050c2039f740284459d7cb0768d'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider xsalsa20Successful
+     */
+    #[DataProvider("xsalsa20Successful")]
+    public function testXsalsa20(int $length, string $nonce, string $key, string $expected): void
+    {
+        $n = $this->hextobin($nonce);
+        $k = $this->hextobin($key);
+        $stream = ParagonIE_Sodium_Core_XSalsa20::xsalsa20($length, $n, $k);
+        $e = $this->hextobin($expected);
+        $this->assertSame($e, $stream);
+    }
+
+    public static function xchacha20Successful(): array
+    {
+        return [
+            [
+                65,
+                'ffffffffffffffffffffffffffffffffffffffffffffffff',
+                'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                'f7807febd9f2b91153ef6fa542e4084ceee548a2f9dd029b6ea04c67f5c10a7791beb332d9085a501d3cf7dba81040cfb2556db4796b63fc294fea7cf51654d4eb'
+            ], [
+                128,
+                'ffffffffffffffffffffffffffffffffffffffffffffffff',
+                'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+                'f7807febd9f2b91153ef6fa542e4084ceee548a2f9dd029b6ea04c67f5c10a7791beb332d9085a501d3cf7dba81040cfb2556db4796b63fc294fea7cf51654d4ebbfaa6813681870894d2e99225502d330e2e069489b22cf702b047367766b55a1fbc835b2e321372db05625ab6ffa320b9c6db78114c5d6b72671ad55e642b7'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider xchacha20Successful
+     */
+    #[DataProvider("xchacha20Successful")]
+    public function testXchacha20(int $length, string $nonce, string $key, string $expected): void
+    {
+        $n = $this->hextobin($nonce);
+        $k = $this->hextobin($key);
+        $stream = ParagonIE_Sodium_Core_XChaCha20::stream($length, $n, $k);
+        $e = $this->hextobin($expected);
+        $this->assertSame($e, $stream);
+    }
+
     /**
      * @throws SodiumException
      */
