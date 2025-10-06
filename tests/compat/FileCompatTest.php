@@ -18,7 +18,7 @@ class FileCompatTest extends TestCase
     }
 
     /**
-     * Ensure
+     * @throws SodiumException
      */
     public function testCompat(): void
     {

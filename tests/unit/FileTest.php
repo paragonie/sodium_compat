@@ -863,4 +863,144 @@ class FileTest extends TestCase
 
         fclose($fp);
     }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testBoxOpenTampered(): void
+    {
+        $content = 'test content for box';
+        $inputFile = $this->createTempFile($content);
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $senderKeyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+        $recipientKeyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_BOX_NONCEBYTES);
+
+        $senderBoxKey = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
+            ParagonIE_Sodium_Compat::crypto_box_secretkey($senderKeyPair),
+            ParagonIE_Sodium_Compat::crypto_box_publickey($recipientKeyPair)
+        );
+
+        $recipientBoxKey = ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey(
+            ParagonIE_Sodium_Compat::crypto_box_secretkey($recipientKeyPair),
+            ParagonIE_Sodium_Compat::crypto_box_publickey($senderKeyPair)
+        );
+
+        ParagonIE_Sodium_File::box($inputFile, $outputFile, $nonce, $senderBoxKey);
+
+        // Tamper with the ciphertext
+        $tamperedOutput = file_get_contents($outputFile);
+        $tamperedOutput[0] = ($tamperedOutput[0] === "\0") ? "\1" : "\0";
+        file_put_contents($outputFile, $tamperedOutput);
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Invalid MAC');
+        ParagonIE_Sodium_File::box_open($outputFile, $decryptedFile, $nonce, $recipientBoxKey);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testBoxSealUnwritableOutput(): void
+    {
+        $inputFile = $this->createTempFile('test');
+        $outputFile = tempnam(sys_get_temp_dir(), 'sodium-compat-');
+        if ($outputFile === false) {
+            $this->fail('Failed to create temporary file.');
+        }
+        $this->tempFiles[] = $outputFile;
+        $keyPair = ParagonIE_Sodium_Compat::crypto_box_keypair();
+        $publicKey = ParagonIE_Sodium_Compat::crypto_box_publickey($keyPair);
+
+        chmod($outputFile, 0444);
+
+        try {
+            $this->expectException(SodiumException::class);
+            $this->expectExceptionMessage('Could not open output file for writing');
+            ParagonIE_Sodium_File::box_seal($inputFile, $outputFile, $publicKey);
+        } finally {
+            chmod($outputFile, 0644);
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws SodiumException
+     */
+    public function testSecretboxEmptyFile(): void
+    {
+        $inputFile = $this->createTempFile('');
+        $outputFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile();
+
+        $key = ParagonIE_Sodium_Compat::crypto_secretbox_keygen();
+        $nonce = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES);
+
+        ParagonIE_Sodium_File::secretbox($inputFile, $outputFile, $nonce, $key);
+        $this->assertNotSame('', file_get_contents($outputFile));
+
+        ParagonIE_Sodium_File::secretbox_open($outputFile, $decryptedFile, $nonce, $key);
+        $this->assertSame('', file_get_contents($decryptedFile));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testGenericHashBoundaries(): void
+    {
+        $file = $this->createTempFile('test');
+
+        // Test with minimum key length
+        $keyMin = str_repeat("\x00", ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MIN);
+        $hashMinKey = ParagonIE_Sodium_File::generichash($file, $keyMin);
+        $this->assertSame(32, strlen($hashMinKey));
+
+        // Test with maximum key length
+        $keyMax = str_repeat("\x00", ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES_MAX);
+        $hashMaxKey = ParagonIE_Sodium_File::generichash($file, $keyMax);
+        $this->assertSame(32, strlen($hashMaxKey));
+
+        // Test with minimum output length
+        $hashMinOut = ParagonIE_Sodium_File::generichash($file, '', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MIN);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MIN, strlen($hashMinOut));
+
+        // Test with maximum output length
+        $hashMaxOut = ParagonIE_Sodium_File::generichash($file, '', ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MAX);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_BYTES_MAX, strlen($hashMaxOut));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testSignEmptyFile(): void
+    {
+        $file = $this->createTempFile('');
+
+        $keyPair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $secretKey = ParagonIE_Sodium_Compat::crypto_sign_secretkey($keyPair);
+        $publicKey = ParagonIE_Sodium_Compat::crypto_sign_publickey($keyPair);
+
+        $signature = ParagonIE_Sodium_File::sign($file, $secretKey);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES, strlen($signature));
+
+        $this->assertTrue(ParagonIE_Sodium_File::verify($signature, $file, $publicKey));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testVerifyIncorrectSignatureLength(): void
+    {
+        $file = $this->createTempFile('test');
+        $keyPair = ParagonIE_Sodium_Compat::crypto_sign_keypair();
+        $publicKey = ParagonIE_Sodium_Compat::crypto_sign_publickey($keyPair);
+        $signature = str_repeat("\x00", ParagonIE_Sodium_Compat::CRYPTO_SIGN_BYTES - 1);
+
+        $this->expectException(TypeError::class);
+        ParagonIE_Sodium_File::verify($signature, $file, $publicKey);
+    }
 }

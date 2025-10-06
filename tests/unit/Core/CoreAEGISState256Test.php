@@ -11,6 +11,12 @@ class CoreAEGISState256Test extends TestCase
 
     public function setUp(): void
     {
+        if (!defined('SODIUM_COMPAT_AEGIS_C0')) {
+            define('SODIUM_COMPAT_AEGIS_C0', "\x00\x01\x01\x02\x03\x05\x08\x0d\x15\x22\x37\x59\x90\xe9\x79\x62");
+        }
+        if (!defined('SODIUM_COMPAT_AEGIS_C1')) {
+            define('SODIUM_COMPAT_AEGIS_C1', "\xdb\x3d\x18\x55\x6d\xc2\x2f\xf1\x20\x11\x31\x42\x73\xb5\x28\xdd");
+        }
         $this->state = ParagonIE_Sodium_Core_AEGIS_State256::init(
             str_repeat("\x00", 32),
             str_repeat("\x00", 32)
