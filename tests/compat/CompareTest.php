@@ -19,7 +19,7 @@ class CompareTest extends TestCase
     /**
      * @throws SodiumException
      */
-    public function testCompare()
+    public function testCompare(): void
     {
         $this->assertSame(
             sodium_compare('foo', 'foo'),

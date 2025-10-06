@@ -1,11 +1,14 @@
 <?php
 
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
+
 class PHP84Test extends TestCase
 {
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (PHP_VERSION_ID < 80400 || !extension_loaded('sodium')) {

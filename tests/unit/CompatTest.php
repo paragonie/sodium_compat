@@ -243,11 +243,13 @@ class CompatTest extends TestCase
             ParagonIE_Sodium_Compat::base642bin('a', -1);
             $this->fail('invalid variant');
         } catch (SodiumException $ex) {
+            $this->assertSame('invalid base64 variant identifier', $ex->getMessage());
         }
         try {
             ParagonIE_Sodium_Compat::bin2base64('a', -1);
             $this->fail('invalid variant');
         } catch (SodiumException $ex) {
+            $this->assertSame('invalid base64 variant identifier', $ex->getMessage());
         }
 
         $this->assertSame(
@@ -290,5 +292,212 @@ class CompatTest extends TestCase
         } catch (SodiumException $ex) {
             // Expected
         }
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws Exception
+     */
+    public function testKxFunctions(): void
+    {
+        // Test crypto_kx_seed_keypair
+        $seed = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_KX_SEEDBYTES);
+        $keypair = ParagonIE_Sodium_Compat::crypto_kx_seed_keypair($seed);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_KX_KEYPAIRBYTES, strlen($keypair));
+
+        // Test crypto_kx_secretkey and crypto_kx_publickey
+        $sk = ParagonIE_Sodium_Compat::crypto_kx_secretkey($keypair);
+        $pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($keypair);
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_KX_SECRETKEYBYTES, strlen($sk));
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_KX_PUBLICKEYBYTES, strlen($pk));
+        $this->assertSame($sk . $pk, $keypair);
+
+        // Test crypto_kx
+        $alice_seed = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_KX_SEEDBYTES);
+        $alice_keypair = ParagonIE_Sodium_Compat::crypto_kx_seed_keypair($alice_seed);
+        $alice_sk = ParagonIE_Sodium_Compat::crypto_kx_secretkey($alice_keypair);
+        $alice_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($alice_keypair);
+
+        $bob_seed = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_KX_SEEDBYTES);
+        $bob_keypair = ParagonIE_Sodium_Compat::crypto_kx_seed_keypair($bob_seed);
+        $bob_sk = ParagonIE_Sodium_Compat::crypto_kx_secretkey($bob_keypair);
+        $bob_pk = ParagonIE_Sodium_Compat::crypto_kx_publickey($bob_keypair);
+
+        $server_pk = $bob_pk;
+        $client_pk = $alice_pk;
+
+        $tx = ParagonIE_Sodium_Compat::crypto_kx($alice_sk, $server_pk, $client_pk, $server_pk);
+        $rx = ParagonIE_Sodium_Compat::crypto_kx($bob_sk, $client_pk, $client_pk, $server_pk);
+        $this->assertSame($tx, $rx);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testKxInvalidInputs(): void
+    {
+        $key = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_KX_SECRETKEYBYTES);
+        $pk = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_KX_PUBLICKEYBYTES);
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_kx(substr($key, 1), $pk, $pk, $pk);
+            $this->fail('Invalid my_secret length');
+        } catch (SodiumException $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_kx($key, substr($pk, 1), $pk, $pk);
+            $this->fail('Invalid their_public length');
+        } catch (SodiumException $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_kx($key, $pk, substr($pk, 1), $pk);
+            $this->fail('Invalid client_public length');
+        } catch (SodiumException $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_kx($key, $pk, $pk, substr($pk, 1));
+            $this->fail('Invalid server_public length');
+        } catch (SodiumException $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+        }
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testIsZero(): void
+    {
+        $this->assertTrue(ParagonIE_Sodium_Compat::is_zero(str_repeat("\0", 32)));
+        $this->assertFalse(ParagonIE_Sodium_Compat::is_zero(random_bytes(32)));
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testMemzero(): void
+    {
+        $this->expectException(SodiumException::class);
+        $var = 'test';
+        ParagonIE_Sodium_Compat::memzero($var);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRandombytes(): void
+    {
+        $buf = ParagonIE_Sodium_Compat::randombytes_buf(16);
+        $this->assertSame(16, strlen($buf));
+
+        $uniform = ParagonIE_Sodium_Compat::randombytes_uniform(100);
+        $this->assertIsInt($uniform);
+        $this->assertGreaterThanOrEqual(0, $uniform);
+        $this->assertLessThan(100, $uniform);
+
+        $random16 = ParagonIE_Sodium_Compat::randombytes_random16();
+        $this->assertIsInt($random16);
+        $this->assertGreaterThanOrEqual(0, $random16);
+        $this->assertLessThanOrEqual(65535, $random16);
+    }
+
+    public function testVersionFunctions(): void
+    {
+        $this->assertIsString(ParagonIE_Sodium_Compat::version_string());
+        $this->assertIsInt(ParagonIE_Sodium_Compat::library_version_major());
+        $this->assertIsInt(ParagonIE_Sodium_Compat::library_version_minor());
+    }
+
+    public function testGenericHash(): void
+    {
+        $expected = '22e1d241197a38fba37d57a7aa10d67b';
+        $this->assertSame(
+            $expected,
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                ParagonIE_Sodium_Compat::crypto_generichash(
+                    'Paragon Initiative Enterprises',
+                    '',
+                    16
+                )
+            )
+        );
+    }
+
+    public function testGenericHashShortKey(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_generichash('', 'a');
+    }
+
+    public function testGenericHashLongKey(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_generichash('', str_repeat('a', 65));
+    }
+
+    public function testKDF(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $expected = 'a9071767f30b4b38ed3624603a4fcb5f';
+        $this->assertSame(
+            $expected,
+            ParagonIE_Sodium_Core_Util::bin2hex(
+                ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(16, 1, 'testtest', $ikm)
+            )
+        );
+    }
+
+    public function testKDFShortIKM(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(16, 1, 'testtest', 'a');
+    }
+
+    public function testKDFLongIKM(): void
+    {
+        $this->expectException(SodiumException::class);
+        $long = str_repeat('a', 65);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(16, 1, 'testtest', $long);
+    }
+
+    public function testKDFShortContext(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(16, 1, 'test', $ikm);
+    }
+
+    public function testKDFLongContext(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(16, 1, 'testtesttest', $ikm);
+    }
+
+    public function testKDFShortOutput(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(15, 1, 'testtest', $ikm);
+    }
+
+    public function testKDFLongOutput(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(65, 1, 'testtest', $ikm);
+    }
+
+    public function testKDFNegativeKeyID(): void
+    {
+        $ikm = ParagonIE_Sodium_Compat::crypto_generichash('paragonie/sodium_compat');
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key(32, -1, 'testtest', $ikm);
     }
 }

@@ -1225,26 +1225,24 @@ abstract class ParagonIE_Sodium_Crypto
         #[SensitiveParameter]
         string $key
     ): string {
-        /** @var string $mac */
         $mac = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
             0,
             self::secretbox_xchacha20poly1305_MACBYTES
         );
 
-        /** @var string $c */
         $c = ParagonIE_Sodium_Core_Util::substr(
             $ciphertext,
             self::secretbox_xchacha20poly1305_MACBYTES
         );
 
-        /** @var int $clen */
         $clen = ParagonIE_Sodium_Core_Util::strlen($c);
 
-        /** @var string $subkey */
-        $subkey = ParagonIE_Sodium_Core_HChaCha20::hchacha20($nonce, $key);
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hchacha20(
+            ParagonIE_Sodium_Core_Util::substr($nonce, 0, 16),
+            $key
+        );
 
-        /** @var string $block0 */
         $block0 = ParagonIE_Sodium_Core_ChaCha20::stream(
             64,
             ParagonIE_Sodium_Core_Util::substr($nonce, 16, 8),
@@ -1300,7 +1298,10 @@ abstract class ParagonIE_Sodium_Crypto
         $out = random_bytes(24);
 
         # crypto_core_hchacha20(state->k, out, k, NULL);
-        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20($out, $key);
+        $subkey = ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            ParagonIE_Sodium_Core_Util::substr($out, 0, 16),
+            $key
+        );
         $state = new ParagonIE_Sodium_Core_SecretStream_State(
             $subkey,
             ParagonIE_Sodium_Core_Util::substr($out, 16, 8) . str_repeat("\0", 4)

@@ -1,5 +1,6 @@
 <?php
 
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -10,6 +11,7 @@ class NamespacedTest extends TestCase
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (PHP_VERSION_ID < 50300) {
@@ -19,7 +21,7 @@ class NamespacedTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
+     * @throws SodiumException
      */
     public function testCryptoSecretBox(): void
     {

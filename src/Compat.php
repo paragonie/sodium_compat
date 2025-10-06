@@ -205,10 +205,6 @@ class ParagonIE_Sodium_Compat
         int $variant,
         string $ignore = ''
     ): string {
-        if (ParagonIE_Sodium_Core_Util::strlen($encoded) === 0) {
-            return '';
-        }
-
         // Just strip before decoding
         if (!empty($ignore)) {
             $encoded = str_replace($ignore, '', $encoded);
@@ -216,17 +212,22 @@ class ParagonIE_Sodium_Compat
 
         try {
             return match ($variant) {
-                self::BASE64_VARIANT_ORIGINAL => ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true),
-                self::BASE64_VARIANT_ORIGINAL_NO_PADDING => ParagonIE_Sodium_Core_Base64_Original::decodeNoPadding($encoded),
-                self::BASE64_VARIANT_URLSAFE => ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true),
-                self::BASE64_VARIANT_URLSAFE_NO_PADDING => ParagonIE_Sodium_Core_Base64_UrlSafe::decodeNoPadding($encoded),
-                default => throw new SodiumException('invalid base64 variant identifier'),
+                self::BASE64_VARIANT_ORIGINAL =>
+                    ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true),
+                self::BASE64_VARIANT_ORIGINAL_NO_PADDING =>
+                    ParagonIE_Sodium_Core_Base64_Original::decodeNoPadding($encoded),
+                self::BASE64_VARIANT_URLSAFE =>
+                    ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true),
+                self::BASE64_VARIANT_URLSAFE_NO_PADDING =>
+                    ParagonIE_Sodium_Core_Base64_UrlSafe::decodeNoPadding($encoded),
+                default =>
+                    throw new SodiumException('invalid base64 variant identifier'),
             };
         } catch (Exception $ex) {
             if ($ex instanceof SodiumException) {
                 throw $ex;
             }
-            throw new SodiumException('invalid base64 string');
+            throw new SodiumException('invalid base64 string', 0, $ex);
         }
     }
 
@@ -241,15 +242,15 @@ class ParagonIE_Sodium_Compat
         string $decoded,
         int $variant
     ): string {
-        if (ParagonIE_Sodium_Core_Util::strlen($decoded) === 0) {
-            return '';
-        }
-
         return match ($variant) {
-            self::BASE64_VARIANT_ORIGINAL => ParagonIE_Sodium_Core_Base64_Original::encode($decoded),
-            self::BASE64_VARIANT_ORIGINAL_NO_PADDING => ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded),
-            self::BASE64_VARIANT_URLSAFE => ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded),
-            self::BASE64_VARIANT_URLSAFE_NO_PADDING => ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded),
+            self::BASE64_VARIANT_ORIGINAL =>
+                ParagonIE_Sodium_Core_Base64_Original::encode($decoded),
+            self::BASE64_VARIANT_ORIGINAL_NO_PADDING =>
+                ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded),
+            self::BASE64_VARIANT_URLSAFE =>
+                ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded),
+            self::BASE64_VARIANT_URLSAFE_NO_PADDING =>
+                ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded),
             default => throw new SodiumException('invalid base64 variant identifier'),
         };
     }
@@ -326,7 +327,7 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS128L_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS_128L_NPUBBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS128L_KEYBYTES) {
             throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
@@ -374,7 +375,7 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS128L_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS128L_KEYBYTES) {
             throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
@@ -469,10 +470,10 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_AEGIS256_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_AEGIS256_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_AEGIS256_KEYBYTES) {
-            throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS128L_KEYBYTES long');
+            throw new SodiumException('Key must be CRYPTO_AEAD_AEGIS256_KEYBYTES long');
         }
 
         list($ct, $tag) = ParagonIE_Sodium_Core_AEGIS256::encrypt($plaintext, $assocData, $key, $nonce);
@@ -505,11 +506,14 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_aead_aes256gcm_is_available')) {
             return call_user_func('\\Sodium\\crypto_aead_aes256gcm_is_available');
         }
+        if (!extension_loaded('openssl')) {
+            return false;
+        }
         if (!is_callable('openssl_encrypt') || !is_callable('openssl_decrypt')) {
             // OpenSSL isn't installed
             return false;
         }
-        return in_array('aes-256-gcm', openssl_get_cipher_methods());
+        return in_array('aes-256-gcm', openssl_get_cipher_methods(), true);
     }
 
     /**
@@ -549,6 +553,9 @@ class ParagonIE_Sodium_Compat
         }
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_AES256GCM_ABYTES) {
             throw new SodiumException('Message must be at least CRYPTO_AEAD_AES256GCM_ABYTES long');
+        }
+        if (!extension_loaded('openssl')) {
+            throw new SodiumException('The OpenSSL extension is not installed');
         }
         if (!is_callable('openssl_decrypt')) {
             throw new SodiumException('The OpenSSL extension is not installed, or openssl_decrypt() is not available');
@@ -603,6 +610,9 @@ class ParagonIE_Sodium_Compat
             throw new SodiumException('Key must be CRYPTO_AEAD_AES256GCM_KEYBYTES long');
         }
 
+        if (!extension_loaded('openssl')) {
+            throw new SodiumException('The OpenSSL extension is not installed');
+        }
         if (!is_callable('openssl_encrypt')) {
             throw new SodiumException('The OpenSSL extension is not installed, or openssl_encrypt() is not available');
         }
@@ -991,10 +1001,10 @@ class ParagonIE_Sodium_Compat
     ): string {
         /* Input validation: */
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES) {
-            throw new SodiumException('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_NPUBBYTES long');
+            throw new SodiumException('Nonce must be CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES long');
         }
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES) {
-            throw new SodiumException('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_KEYBYTES long');
+            throw new SodiumException('Key must be CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES long');
         }
         if (self::useNewSodiumAPI() && !$dontFallback) {
             if (is_callable('sodium_crypto_aead_xchacha20poly1305_ietf_encrypt')) {
@@ -2243,6 +2253,9 @@ class ParagonIE_Sodium_Compat
         if (ParagonIE_Sodium_Core_Util::strlen($key) !== self::CRYPTO_SECRETBOX_KEYBYTES) {
             throw new SodiumException('Argument 3 must be CRYPTO_SECRETBOX_KEYBYTES long.');
         }
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_SECRETBOX_MACBYTES) {
+            throw new SodiumException("Ciphertext must be at least CRYPTO_SECRETBOX_MACBYTES long");
+        }
 
         if (self::useNewSodiumAPI()) {
             return sodium_crypto_secretbox_open($ciphertext, $nonce, $key);
@@ -2310,6 +2323,9 @@ class ParagonIE_Sodium_Compat
         string $key
     ): string {
         /* Input validation: */
+        if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_SECRETBOX_MACBYTES) {
+            throw new SodiumException('Argument 1 must be at least CRYPTO_SECRETBOX_MACBYTES long.');
+        }
         if (ParagonIE_Sodium_Core_Util::strlen($nonce) !== self::CRYPTO_SECRETBOX_NONCEBYTES) {
             throw new SodiumException('Argument 2 must be CRYPTO_SECRETBOX_NONCEBYTES long.');
         }
@@ -3037,7 +3053,7 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('hex2bin')) {
             return (string) call_user_func('\\Sodium\\hex2bin', $string, $ignore);
         }
-        return ParagonIE_Sodium_Core_Util::hex2bin($string, $ignore);
+        return ParagonIE_Sodium_Core_Util::hex2bin($string, $ignore, true);
     }
 
     /**
@@ -3064,6 +3080,9 @@ class ParagonIE_Sodium_Compat
         }
 
         $len = ParagonIE_Sodium_Core_Util::strlen($var);
+        if ($len < 1) {
+            throw new SodiumException('Argument 1 cannot be empty');
+        }
         $c = 1;
         $copy = '';
         for ($i = 0; $i < $len; ++$i) {

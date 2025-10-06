@@ -167,5 +167,8 @@ class Base64Test extends TestCase
             'Zm9vYg',
             ParagonIE_Sodium_Compat::bin2base64('foob', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING)
         );
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('invalid base64 variant identifier');
+        ParagonIE_Sodium_Compat::bin2base64('foob', 9999);
     }
 }

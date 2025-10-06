@@ -26,6 +26,15 @@ class Aes256GcmTest extends TestCase
         );
     }
 
+    public function testKeygen(): void
+    {
+        if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
+            $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
+        }
+        $key = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_keygen();
+        $this->assertSame(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AES256GCM_KEYBYTES, strlen($key));
+    }
+
     public function testAes256Gcm(): void
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
@@ -114,6 +123,7 @@ class Aes256GcmTest extends TestCase
                         '8a7a1bd07bbcbd800924da7f91440d9d8c066fe22601e1dbda5f56e5fa31af032d3cd3665632b0a6' .
                         '2cf43fd171e6678ca60b3eff4445a9e68d88440c7b84eed16a76caf2fc4bddfa4f3ea56a87a5a080' .
                         'f0f7f2941dad25afac9d2308f4a39278bab39a83c999f39ddf1c4b53b5c5bfff8f3e96117a5e1b0a' .
+
                         '83f0ac27ebe4ba71332bbadd3c5132f316e6a0b3a438c1cc1b96bf9ff97210106657e35ed7f0e04f' .
                         '1f3fd2b2443e20e42bd4684f6e0da4917153ded48f99f4615a502cd160599cb9173afa5280a60d62' .
                         'fd7131bf667c8c8d9e631de8d29b98ce6b1ea24ff5098597dea729b05ac18f74e2ec34'
@@ -193,6 +203,19 @@ class Aes256GcmTest extends TestCase
 
         $ciphertext = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt($msg, $ad, $nonce, $key);
         $decrypted = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt(substr($ciphertext, 1), $ad, $nonce, $key);
-        $this->assertFalse($decrypted, 'Ciphertext too short');
+        $this->assertFalse($decrypted, 'Tampered ciphertext should fail decryption');
+
+        try {
+            ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt(
+                random_bytes(ParagonIE_Sodium_Compat::CRYPTO_AEAD_AES256GCM_ABYTES - 1),
+                $ad,
+                $nonce,
+                $key
+            );
+            $this->fail('Ciphertext too short');
+        } catch (Exception $ex) {
+            $this->assertInstanceOf(SodiumException::class, $ex);
+            $this->assertSame('Message must be at least CRYPTO_AEAD_AES256GCM_ABYTES long', $ex->getMessage());
+        }
     }
 }

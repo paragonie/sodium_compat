@@ -423,6 +423,21 @@ class UtilTest extends TestCase
         $a = "\xff\xff\xff\xff";
         ParagonIE_Sodium_Compat::add($a, $b);
         $this->assertSame("\x00\x00\x00\x00", $a);
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('values must have the same length');
+        ParagonIE_Sodium_Compat::add($a, 'f');
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testAddBadLength(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('values must have the same length');
+        $str = '';
+        ParagonIE_Sodium_Compat::add($str, 'ffff');
     }
 
     /**

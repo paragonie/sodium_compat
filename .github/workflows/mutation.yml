@@ -32,3 +32,6 @@ jobs:
 
       - name: Mutation Tests
         run: composer mutation-test
+
+      - name: Print the mutation.log file for easy copy/paste from GitHub Actions
+        run: cat infection.log

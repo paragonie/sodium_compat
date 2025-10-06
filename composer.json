@@ -52,6 +52,14 @@
       "ParagonIE\\Sodium\\": "namespaced/"
     }
   },
+  "autoload-dev": {
+    "classmap": [
+      "tests/compat/",
+      "tests/unit/",
+      "tests/unit/Core/",
+      "tests/unit/KAT/"
+    ]
+  },
   "require": {
     "php": "^8.1",
     "php-64bit": "*"

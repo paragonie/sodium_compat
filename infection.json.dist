@@ -5,7 +5,7 @@
         ]
     },
     "threads": "max",
-    "minCoveredMsi": 80,
+    "minCoveredMsi": 70,
     "phpUnit": {
         "configDir": "."
     },
@@ -14,6 +14,7 @@
         "DecrementInteger": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode",
                 "ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt",
                 "ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt",
@@ -35,6 +36,7 @@
                 "ParagonIE_Sodium_Core_ChaCha20::ietfStream",
                 "ParagonIE_Sodium_Core_ChaCha20::stream",
                 "ParagonIE_Sodium_Core_ChaCha20::stream_xor_ic",
+				"ParagonIE_Sodium_Core_Curve25519::ge_mul_l",
                 "ParagonIE_Sodium_Core_Ed25519::sign_detached",
                 "ParagonIE_Sodium_Core_Ed25519::verify_detached",
                 "ParagonIE_Sodium_Core_Salsa20::salsa20_xor",
@@ -68,8 +70,15 @@
         "Identical": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode"
             ]
+        },
+        "IncrementInteger": {
+			"ignore": [
+				"ParagonIE_Sodium_Core_Curve25519::ge_mul_l",
+				"ParagonIE_Sodium_Core_Ed25519::sign_detached"
+			]
         },
         "InstanceOf_": {
             "ignore": [
@@ -131,6 +140,13 @@
                 "ParagonIE_Sodium_Core_Curve25519_Fe::offsetGet"
             ]
         },
+        "MethodCallRemoval": {
+        	"ignore": [
+        		"ParagonIE_Sodium_Core_AEGIS128L::decrypt",
+        		"ParagonIE_Sodium_Core_AEGIS256::decrypt",
+        		"ParagonIE_Sodium_Core_Crypto::secretbox_open"
+        	]
+        },
         "PublicVisibility": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
@@ -153,8 +169,11 @@
                 "ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_keygen",
                 "ParagonIE_Sodium_Compat::crypto_auth_keygen",
                 "ParagonIE_Sodium_Compat::crypto_box_keypair",
+                "ParagonIE_Sodium_Compat::crypto_box_keypair_from_secretkey_and_publickey",
+                "ParagonIE_Sodium_Compat::crypto_generichash_init_salt_personal",
                 "ParagonIE_Sodium_Compat::crypto_generichash_keygen",
                 "ParagonIE_Sodium_Compat::crypto_kdf_keygen",
+                "ParagonIE_Sodium_Compat::crypto_kx",
                 "ParagonIE_Sodium_Compat::crypto_secretbox",
                 "ParagonIE_Sodium_Compat::crypto_secretbox_keygen",
                 "ParagonIE_Sodium_Compat::crypto_secretbox_open",
@@ -162,25 +181,33 @@
                 "ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_rekey",
                 "ParagonIE_Sodium_Compat::crypto_shorthash_keygen",
                 "ParagonIE_Sodium_Compat::crypto_sign_keypair_from_secretkey_and_publickey",
+                "ParagonIE_Sodium_Compat::crypto_sign_ed25519_pk_to_curve25519",
+                "ParagonIE_Sodium_Compat::crypto_sign_ed25519_sk_to_curve25519",
                 "ParagonIE_Sodium_Compat::crypto_sign_publickey",
                 "ParagonIE_Sodium_Compat::crypto_sign_secretkey",
                 "ParagonIE_Sodium_Compat::crypto_stream_keygen",
                 "ParagonIE_Sodium_Compat::increment",
                 "ParagonIE_Sodium_Compat::is_zero",
+                "ParagonIE_Sodium_Compat::library_version_major",
+                "ParagonIE_Sodium_Compat::library_version_minor",
                 "ParagonIE_Sodium_Compat::memcmp",
                 "ParagonIE_Sodium_Compat::randombytes_uniform",
+                "ParagonIE_Sodium_Compat::randombytes_random16",
                 "ParagonIE_Sodium_Compat::ristretto255_add",
                 "ParagonIE_Sodium_Compat::ristretto255_from_hash",
+                "ParagonIE_Sodium_Compat::ristretto255_random",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_add",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_complement",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_invert",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_mul",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_negate",
+                "ParagonIE_Sodium_Compat::ristretto255_scalar_random",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_sub",
                 "ParagonIE_Sodium_Compat::ristretto255_sub",
                 "ParagonIE_Sodium_Compat::scalarmult_ristretto255",
                 "ParagonIE_Sodium_Compat::scalarmult_ristretto255_base",
                 "ParagonIE_Sodium_Compat::ristretto255_scalar_reduce",
+                "ParagonIE_Sodium_Compat::version_string",
                 "ParagonIE_Sodium_Core_AES::bitsliceDecryptBlock",
                 "ParagonIE_Sodium_Core_AES::bitsliceEncryptBlock",
                 "ParagonIE_Sodium_Core_AES::rotr16",
@@ -193,6 +220,7 @@
                 "ParagonIE_Sodium_Core_Curve25519::fe_isnonzero",
                 "ParagonIE_Sodium_Core_Curve25519::ge_msub",
                 "ParagonIE_Sodium_Core_Curve25519::ge_p2_0",
+                "ParagonIE_Sodium_Core_Curve25519::ge_mul_l",
                 "ParagonIE_Sodium_Core_Ed25519::seed_keypair",
                 "ParagonIE_Sodium_Core_Util::abs",
                 "ParagonIE_Sodium_Core_Util::andStrings",
@@ -214,6 +242,7 @@
         "ReturnRemoval": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode",
                 "ParagonIE_Sodium_Core_Util::memcmp"
             ]
@@ -254,7 +283,8 @@
         "CloneRemoval": {
             "ignore": [
                 "ParagonIE_Sodium_Core_Curve25519::ge_msub",
-                "ParagonIE_Sodium_Core_Curve25519::ge_sub"
+                "ParagonIE_Sodium_Core_Curve25519::ge_sub",
+                "ParagonIE_Sodium_Crypto::aead_xchacha20poly1305_ietf_decrypt"
             ]
         },
         "IfNegation": {

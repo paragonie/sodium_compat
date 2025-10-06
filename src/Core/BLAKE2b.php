@@ -62,7 +62,6 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      *
      * @param int $num
      * @return SplFixedArray
-     * @throws SodiumException
      */
     protected static function to64(int $num): SplFixedArray
     {
@@ -79,10 +78,8 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @param SplFixedArray $x
      * @param SplFixedArray $y
      * @return SplFixedArray
-     *
-     * @throws SodiumException
      */
-    protected static function add64(SplFixedArray $x, SplFixedArray $y): SplFixedArray
+    public static function add64(SplFixedArray $x, SplFixedArray $y): SplFixedArray
     {
         $l = ($x[1] + $y[1]) & 0xffffffff;
         return self::new64(
@@ -102,7 +99,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @return SplFixedArray
      * @throws SodiumException
      */
-    protected static function add364(
+    public static function add364(
         SplFixedArray $x,
         SplFixedArray $y,
         SplFixedArray $z
@@ -119,7 +116,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      * @throws SodiumException
      * @throws TypeError
      */
-    protected static function xor64(SplFixedArray $x, SplFixedArray $y): SplFixedArray
+    public static function xor64(SplFixedArray $x, SplFixedArray $y): SplFixedArray
     {
         if (!is_numeric($x[0])) {
             throw new SodiumException('x[0] is not an integer');

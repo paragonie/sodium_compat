@@ -448,6 +448,15 @@ class CryptoTest extends TestCase
             $message,
             ParagonIE_Sodium_Compat::crypto_secretbox_open($cipher, $nonce, $secret)
         );
+
+        $this->expectException(SodiumException::class);
+        $this->assertFalse(
+            ParagonIE_Sodium_Compat::crypto_secretbox_open(
+                substr($cipher, 0, 8),
+                $nonce,
+                $secret
+            )
+        );
     }
 
     /**
@@ -610,5 +619,80 @@ class CryptoTest extends TestCase
         } catch (Exception $ex) {
             $this->assertInstanceOf(SodiumException::class, $ex);
         }
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testCryptoSecretboxXChaCha20Poly1305OpenShortCiphertext(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Argument 1 must be at least CRYPTO_SECRETBOX_MACBYTES long.');
+        ParagonIE_Sodium_Compat::crypto_secretbox_xchacha20poly1305_open(
+            'short',
+            str_repeat("\0", ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES),
+            str_repeat("\0", ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES)
+        );
+    }
+
+    /**
+     * @throws SodiumException
+     * @throws TypeError
+     */
+    public function testCryptoGenericHashStreaming(): void
+    {
+        $message = 'test message';
+        $key = ParagonIE_Sodium_Compat::crypto_generichash_keygen();
+
+        // Test without a key
+        $state = ParagonIE_Sodium_Compat::crypto_generichash_init();
+        ParagonIE_Sodium_Compat::crypto_generichash_update($state, $message);
+        $hash1 = ParagonIE_Sodium_Compat::crypto_generichash_final($state);
+
+        $hash2 = ParagonIE_Sodium_Compat::crypto_generichash($message);
+        $this->assertSame($hash1, $hash2);
+
+        // Test with a key
+        $state = ParagonIE_Sodium_Compat::crypto_generichash_init($key);
+        ParagonIE_Sodium_Compat::crypto_generichash_update($state, $message);
+        $hash1 = ParagonIE_Sodium_Compat::crypto_generichash_final($state);
+
+        $hash2 = ParagonIE_Sodium_Compat::crypto_generichash($message, $key);
+        $this->assertSame($hash1, $hash2);
+
+        // Test with salt and personal
+        $salt = random_bytes(16);
+        $personal = random_bytes(16);
+        $state = ParagonIE_Sodium_Compat::crypto_generichash_init_salt_personal($key, 32, $salt, $personal);
+        ParagonIE_Sodium_Compat::crypto_generichash_update($state, $message);
+        $hash1 = ParagonIE_Sodium_Compat::crypto_generichash_final($state);
+        $this->assertNotEmpty($hash1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testKeygenFunctions(): void
+    {
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_AUTH_KEYBYTES,
+            strlen(ParagonIE_Sodium_Compat::crypto_auth_keygen())
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_GENERICHASH_KEYBYTES,
+            strlen(ParagonIE_Sodium_Compat::crypto_generichash_keygen())
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES,
+            strlen(ParagonIE_Sodium_Compat::crypto_secretbox_keygen())
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_SHORTHASH_KEYBYTES,
+            strlen(ParagonIE_Sodium_Compat::crypto_shorthash_keygen())
+        );
+        $this->assertSame(
+            ParagonIE_Sodium_Compat::CRYPTO_STREAM_KEYBYTES,
+            strlen(ParagonIE_Sodium_Compat::crypto_stream_keygen())
+        );
     }
 }
