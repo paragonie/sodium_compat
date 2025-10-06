@@ -16,5 +16,11 @@
     <testsuite name="Libsodium Compatibility Tests">
       <directory>./tests/compat</directory>
     </testsuite>
+    <testsuite name="Tests for core, internal classes">
+      <directory>./tests/unit/Core</directory>
+    </testsuite>
+    <testsuite name="Known-Answer Tests for the Public API">
+      <directory>./tests/unit/KAT</directory>
+    </testsuite>
   </testsuites>
 </phpunit>
