@@ -14,6 +14,7 @@
         "DecrementInteger": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode",
                 "ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt",
                 "ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt",
@@ -68,6 +69,7 @@
         "Identical": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode"
             ]
         },
@@ -214,6 +216,7 @@
         "ReturnRemoval": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
+                "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode",
                 "ParagonIE_Sodium_Core_Util::memcmp"
             ]
