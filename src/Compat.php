@@ -554,6 +554,9 @@ class ParagonIE_Sodium_Compat
         if (ParagonIE_Sodium_Core_Util::strlen($ciphertext) < self::CRYPTO_AEAD_AES256GCM_ABYTES) {
             throw new SodiumException('Message must be at least CRYPTO_AEAD_AES256GCM_ABYTES long');
         }
+        if (!extension_loaded('openssl')) {
+            throw new SodiumException('The OpenSSL extension is not installed');
+        }
         if (!is_callable('openssl_decrypt')) {
             throw new SodiumException('The OpenSSL extension is not installed, or openssl_decrypt() is not available');
         }
@@ -607,6 +610,9 @@ class ParagonIE_Sodium_Compat
             throw new SodiumException('Key must be CRYPTO_AEAD_AES256GCM_KEYBYTES long');
         }
 
+        if (!extension_loaded('openssl')) {
+            throw new SodiumException('The OpenSSL extension is not installed');
+        }
         if (!is_callable('openssl_encrypt')) {
             throw new SodiumException('The OpenSSL extension is not installed, or openssl_encrypt() is not available');
         }
