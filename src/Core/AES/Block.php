@@ -161,7 +161,7 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
     }
 
     /**
-     * @return array
+     * @return array<int, int>
      */
     public function toArray(): array
     {
