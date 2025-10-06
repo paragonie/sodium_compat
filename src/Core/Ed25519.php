@@ -51,7 +51,7 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         string $seed
     ): string {
         if (self::strlen($seed) !== self::SEED_BYTES) {
-            throw new RangeException('crypto_sign keypair seed must be 32 bytes long');
+            throw new SodiumException('crypto_sign keypair seed must be CRYPTO_SIGN_SEEDBYTES bytes long');
         }
         $pk = self::publickey_from_secretkey($seed);
         $sk = $seed . $pk;
@@ -124,6 +124,9 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
     public static function pk_to_curve25519(
         string $pk
     ): string {
+        if (self::strlen($pk) !== 32) {
+            throw new SodiumException('Argument 1 must be CRYPTO_SIGN_PUBLICKEYBYTES bytes');
+        }
         if (self::small_order($pk)) {
             throw new SodiumException('Public key is on a small order');
         }
@@ -220,6 +223,9 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         #[SensitiveParameter]
         string $sk
     ): string {
+        if (self::strlen($sk) !== 64) {
+            throw new SodiumException('Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES long.');
+        }
         $az =  hash('sha512', self::substr($sk, 0, 32), true);
 
         $az[0] = self::intToChr(self::chrToInt($az[0]) & 248);
@@ -270,8 +276,11 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         string $message,
         string $pk
     ): bool {
-        if (self::strlen($sig) < 64) {
-            throw new SodiumException('Signature is too short');
+        if (self::strlen($sig) !== 64) {
+            throw new SodiumException('Argument 1 must be CRYPTO_SIGN_BYTES long');
+        }
+        if (self::strlen($pk) !== 32) {
+            throw new SodiumException('Argument 3 must be CRYPTO_SIGN_PUBLICKEYBYTES long');
         }
         if ((self::chrToInt($sig[63]) & 240) && self::check_S_lt_L(self::substr($sig, 32, 32))) {
             throw new SodiumException('S < L - Invalid signature');

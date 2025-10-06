@@ -39,4 +39,24 @@ class CoreHChaCha20Test extends TestCase
             )
         );
     }
+
+    public function testInvalidKeyLength(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Argument 2 must be 32 bytes');
+        ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            str_repeat("\x00", 16),
+            str_repeat("\x00", 31)
+        );
+    }
+
+    public function testInvalidNonceLength(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Argument 1 must be 16 bytes');
+        ParagonIE_Sodium_Core_HChaCha20::hChaCha20(
+            str_repeat("\x00", 15),
+            str_repeat("\x00", 32)
+        );
+    }
 }

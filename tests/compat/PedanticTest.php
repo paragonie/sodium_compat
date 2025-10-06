@@ -1,4 +1,7 @@
 <?php
+
+use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +20,7 @@ class PedanticTest extends TestCase
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (!extension_loaded('libsodium')) {
@@ -38,6 +42,7 @@ class PedanticTest extends TestCase
     /**
      * @after
      */
+    #[After]
     public function after(): void
     {
         ParagonIE_Sodium_Compat::$fastMult = $this->oldFastMult;
@@ -103,7 +108,7 @@ class PedanticTest extends TestCase
      * @return array
      * @throws TypeError
      */
-    public function getCryptoBoxKeys()
+    public function getCryptoBoxKeys(): array
     {
         $keys = $this->getInteresting32ByteStrings();
         foreach ($keys as $i => $v) {
@@ -154,8 +159,7 @@ class PedanticTest extends TestCase
 
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt()
-     * @covers ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt()
+     * @throws SodiumException
      */
     public function testCryptoAeadChapoly(): void
     {
@@ -186,7 +190,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_auth()
+     * @throws SodiumException
      */
     public function testCryptoAuth(): void
     {
@@ -210,8 +214,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
+     * @throws SodiumException
      */
     public function testCryptoBox(): void
     {
@@ -252,7 +255,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash()
+     * @throws SodiumException
      */
     public function testGenerichash(): void
     {
@@ -283,8 +286,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox_open()
+     * @throws SodiumException
      */
     public function testCryptoSecretbox(): void
     {
@@ -310,7 +312,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_shorthash()
+     * @throws SodiumException
      */
     public function testShorthash(): void
     {
@@ -329,10 +331,7 @@ class PedanticTest extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_sign()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_open()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
+     * @throws SodiumException
      */
     public function testCryptoSign(): void
     {

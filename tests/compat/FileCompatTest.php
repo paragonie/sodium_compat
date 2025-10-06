@@ -1,4 +1,6 @@
 <?php
+
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 class FileCompatTest extends TestCase
@@ -6,6 +8,7 @@ class FileCompatTest extends TestCase
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (PHP_VERSION_ID < 70200) {

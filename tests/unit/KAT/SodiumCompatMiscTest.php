@@ -67,6 +67,14 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
         $val = str_repeat("\xff", 4);
         ParagonIE_Sodium_Compat::increment($val);
         $this->assertSame("\x00\x00\x00\x00", $val);
+
+        try {
+            $val = '';
+            ParagonIE_Sodium_Compat::increment($val);
+            $this->fail('Empty string should not be allowed');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Argument 1 cannot be empty', $ex->getMessage());
+        }
     }
 
     public function testMemcmp(): void
@@ -104,6 +112,19 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
         $padded = 'test' . "\x80\x00\x00\x00";
         $unpadded = ParagonIE_Sodium_Compat::unpad($padded, 8);
         $this->assertSame('test', $unpadded);
+
+        try {
+            ParagonIE_Sodium_Compat::unpad("\x00", 8);
+            $this->fail('Invalid padding should not be accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame('invalid padding', $ex->getMessage());
+        }
+        try {
+            ParagonIE_Sodium_Compat::unpad("test\x00\x00\x00\x00", 8);
+            $this->fail('Invalid padding should not be accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame('invalid padding', $ex->getMessage());
+        }
     }
 
     /**

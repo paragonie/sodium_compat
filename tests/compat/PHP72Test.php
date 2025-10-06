@@ -1,4 +1,6 @@
 <?php
+
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -9,6 +11,7 @@ class PHP72Test extends TestCase
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (PHP_VERSION_ID < 70200) {
@@ -74,9 +77,6 @@ class PHP72Test extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::compare()
-     */
     public function testCompare(): void
     {
         $a = pack('H*', '589a84d7ec2db8f982841cedca674ec1');
@@ -99,9 +99,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::bin2hex()
-     */
     public function testBin2hex(): void
     {
         $str = random_bytes(random_int(1, 63));
@@ -111,9 +108,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Core_Util::hex2bin()
-     */
     public function testHex2bin(): void
     {
         $str = bin2hex(random_bytes(random_int(1, 63)));
@@ -124,7 +118,7 @@ class PHP72Test extends TestCase
     }
 
     /**
-     *
+     * @throws SodiumException
      */
     public function testAeadChapoly(): void
     {
@@ -269,10 +263,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_open()
-     */
     public function testCryptoBox(): void
     {
         $nonce = str_repeat("\x00", 24);
@@ -428,9 +418,6 @@ class PHP72Test extends TestCase
         }
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash()
-     */
     public function testCryptoGenerichash(): void
     {
         $this->assertSame(
@@ -458,11 +445,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_init()
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_update()
-     * @covers ParagonIE_Sodium_Compat::crypto_generichash_final()
-     */
     public function testCryptoGenerichashStream(): void
     {
         $key =  "\x1c" . str_repeat("\x80", 30) . "\xaf";
@@ -484,9 +466,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_seed_keypair()
-     */
     public function testSignKeypair(): void
     {
         $seed = random_bytes(32);
@@ -550,12 +529,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_sign()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_open()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_detached()
-     * @covers ParagonIE_Sodium_Compat::crypto_sign_verify_detached()
-     */
     public function testCryptoSign(): void
     {
         $keypair = ParagonIE_Sodium_Core_Util::hex2bin(
@@ -633,9 +606,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_secretbox()
-     */
     public function testCryptoSecretBox(): void
     {
         $key = str_repeat("\x80", 32);
@@ -703,9 +673,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_scalarmult_base()
-     */
     public function testCryptoScalarmultBase(): void
     {
         $keypair = sodium_crypto_box_keypair();
@@ -717,9 +684,7 @@ class PHP72Test extends TestCase
             ParagonIE_Sodium_Compat::crypto_scalarmult_base($secret)
         );
     }
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_scalarmult()
-     */
+
     public function testCryptoScalarmult(): void
     {
         $alice_box_kp = sodium_crypto_box_keypair();
@@ -741,10 +706,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_box_secretkey()
-     * @covers ParagonIE_Sodium_Compat::crypto_box_publickey()
-     */
     public function testCryptoBoxKeypairs(): void
     {
         $keypair = sodium_crypto_box_keypair();
@@ -761,9 +722,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_stream()
-     */
     public function testCryptoStream(): void
     {
         $key = str_repeat("\x80", 32);
@@ -786,9 +744,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_stream_xor()
-     */
     public function testCryptoStreamXor(): void
     {
         $key = str_repeat("\x80", 32);
@@ -815,9 +770,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_kx()
-     */
     public function testCryptoKx(): void
     {
         if (!is_callable('sodium_crypto_kx')) {
@@ -850,8 +802,6 @@ class PHP72Test extends TestCase
     }
 
     /**
-     * @covers ParagonIE_Sodium_Compat::crypto_pwhash()
-     *
      * @throws SodiumException
      * @throws TypeError
      */
@@ -889,9 +839,6 @@ class PHP72Test extends TestCase
         );
     }
 
-    /**
-     * @covers ParagonIE_Sodium_Compat::crypto_kdf_derive_from_key()
-     */
     public function testKdf(): void
     {
         $key = ParagonIE_Sodium_Compat::crypto_kdf_keygen();

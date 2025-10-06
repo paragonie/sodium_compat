@@ -132,4 +132,65 @@ class CoreEd25519Test extends TestCase
             $pk
         );
     }
+
+    public function testInvalidKeyLengths(): void
+    {
+        $pk = str_repeat('a', 32);
+        $sk = str_repeat('b', 64);
+        $sig = str_repeat('c', 64);
+        $seed = str_repeat('d', 32);
+        $msg = 'test';
+
+        try {
+            ParagonIE_Sodium_Core_Ed25519::pk_to_curve25519(substr($pk, 1));
+            $this->fail('Invalid public key length was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame(
+                'Argument 1 must be CRYPTO_SIGN_PUBLICKEYBYTES bytes',
+                $ex->getMessage()
+            );
+        }
+
+        try {
+            $pk_out = '';
+            $sk_out = '';
+            ParagonIE_Sodium_Core_Ed25519::seed_keypair($pk_out, $sk_out, substr($seed, 1));
+            $this->fail('Invalid seed length was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame(
+                'crypto_sign keypair seed must be CRYPTO_SIGN_SEEDBYTES bytes long',
+                $ex->getMessage()
+            );
+        }
+
+        try {
+            ParagonIE_Sodium_Core_Ed25519::sign_detached($msg, substr($sk, 1));
+            $this->fail('Invalid secret key length was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame(
+                'Argument 2 must be CRYPTO_SIGN_SECRETKEYBYTES long.',
+                $ex->getMessage()
+            );
+        }
+
+        try {
+            ParagonIE_Sodium_Core_Ed25519::verify_detached(substr($sig, 1), $msg, $pk);
+            $this->fail('Invalid signature length was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame(
+                'Argument 1 must be CRYPTO_SIGN_BYTES long',
+                $ex->getMessage()
+            );
+        }
+
+        try {
+            ParagonIE_Sodium_Core_Ed25519::verify_detached($sig, $msg, substr($pk, 1));
+            $this->fail('Invalid public key length was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame(
+                'Argument 3 must be CRYPTO_SIGN_PUBLICKEYBYTES long',
+                $ex->getMessage()
+            );
+        }
+    }
 }

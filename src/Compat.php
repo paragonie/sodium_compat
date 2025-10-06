@@ -3070,6 +3070,9 @@ class ParagonIE_Sodium_Compat
         }
 
         $len = ParagonIE_Sodium_Core_Util::strlen($var);
+        if ($len < 1) {
+            throw new SodiumException('Argument 1 cannot be empty');
+        }
         $c = 1;
         $copy = '';
         for ($i = 0; $i < $len; ++$i) {

@@ -1,4 +1,7 @@
 <?php
+
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -9,6 +12,7 @@ class Ristretto255CompatTest extends TestCase
     /**
      * @before
      */
+    #[Before]
     public function before(): void
     {
         if (!extension_loaded('sodium') && !defined('SODIUM_COMPAT_POLYFILLED_RISTRETTO255')) {
@@ -144,7 +148,7 @@ class Ristretto255CompatTest extends TestCase
      *
      * @return string[][]
      */
-    public static function brokenPHP81TestProvider()
+    public static function brokenPHP81TestProvider(): array
     {
         return array(
             array(
@@ -161,10 +165,10 @@ class Ristretto255CompatTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider brokenPHP81TestProvider
      * @throws SodiumException
      */
+    #[DataProvider("brokenPHP81TestProvider")]
     public function testBrokenPHP81($k_hex, $a_hex, $expect): void
     {
         $k = sodium_hex2bin($k_hex);
