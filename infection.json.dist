@@ -133,6 +133,13 @@
                 "ParagonIE_Sodium_Core_Curve25519_Fe::offsetGet"
             ]
         },
+        "MethodCallRemoval": {
+        	"ignore": [
+        		"ParagonIE_Sodium_Core_AEGIS128L::decrypt",
+        		"ParagonIE_Sodium_Core_AEGIS256::decrypt",
+        		"ParagonIE_Sodium_Core_Crypto::secretbox_open"
+        	]
+        }
         "PublicVisibility": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
