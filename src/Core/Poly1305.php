@@ -55,7 +55,7 @@ abstract class ParagonIE_Sodium_Core_Poly1305 extends ParagonIE_Sodium_Core_Util
         #[SensitiveParameter]
         string $key
     ): bool {
-        if (self::strlen($key) < 32) {
+        if (self::strlen($key) !== 32) {
             throw new InvalidArgumentException(
                 'Key must be 32 bytes long.'
             );
