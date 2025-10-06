@@ -2,7 +2,7 @@
 
 class HexTest extends PHPUnit_Framework_TestCase
 {
-    public function hexProvider()
+    public static function hexProvider()
     {
         return array(
             array('DEADBEEF', '', "\xde\xad\xbe\xef", false),

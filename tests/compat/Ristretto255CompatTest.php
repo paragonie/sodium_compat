@@ -144,7 +144,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
      *
      * @return string[][]
      */
-    public function brokenPHP81TestProvider()
+    public static function brokenPHP81TestProvider()
     {
         return array(
             array(
@@ -165,6 +165,7 @@ class Ristretto255CompatTest extends PHPUnit_Framework_TestCase
      * @dataProvider brokenPHP81TestProvider
      * @throws SodiumException
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider("brokenPHP81TestProvider")]
     public function testBrokenPHP81($k_hex, $a_hex, $expect)
     {
         $k = sodium_hex2bin($k_hex);
