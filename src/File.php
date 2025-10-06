@@ -423,10 +423,10 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
     ): bool {
         /* Input validation: */
         if (self::strlen($nonce) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_NONCEBYTES) {
-            throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_NONCEBYTES bytes');
+            throw new TypeError('Argument 3 must be CRYPTO_SECRETBOX_NONCEBYTES bytes');
         }
         if (self::strlen($key) !== ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES) {
-            throw new TypeError('Argument 4 must be CRYPTO_SECRETBOXBOX_KEYBYTES bytes');
+            throw new TypeError('Argument 4 must be CRYPTO_SECRETBOX_KEYBYTES bytes');
         }
 
         $size = filesize($inputFile);
