@@ -506,11 +506,14 @@ class ParagonIE_Sodium_Compat
         if (self::use_fallback('crypto_aead_aes256gcm_is_available')) {
             return call_user_func('\\Sodium\\crypto_aead_aes256gcm_is_available');
         }
+        if (!extension_loaded('openssl')) {
+            return false;
+        }
         if (!is_callable('openssl_encrypt') || !is_callable('openssl_decrypt')) {
             // OpenSSL isn't installed
             return false;
         }
-        return in_array('aes-256-gcm', openssl_get_cipher_methods());
+        return in_array('aes-256-gcm', openssl_get_cipher_methods(), true);
     }
 
     /**
