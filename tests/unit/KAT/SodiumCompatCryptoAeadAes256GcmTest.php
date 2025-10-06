@@ -121,12 +121,21 @@ class SodiumCompatCryptoAeadAes256GcmTest extends KnownAnswerTestCase
         );
     }
 
-    public function testEmptyInputs(): void
+    public function testEmptyInputsEncrypt(): void
     {
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('AES-256-GCM not available');
         }
         $this->expectException(SodiumException::class);
         ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt('', '', '', '');
+    }
+
+    public function testEmptyInputsDecrypt(): void
+    {
+        if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
+            $this->markTestSkipped('AES-256-GCM not available');
+        }
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_decrypt('', '', '', '');
     }
 }

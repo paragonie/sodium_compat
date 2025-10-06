@@ -524,6 +524,16 @@ class AEGISTest extends TestCase
         $ciphertext = str_repeat("\0", 32);
         ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt($ciphertext, '', $nonce, $key);
     }
+    public function testAegis128LDecryptSuperfluousNonce(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Nonce must be CRYPTO_AEAD_AEGIS128L_NPUBBYTES long');
+
+        $key = str_repeat("\0", 16);
+        $nonce = str_repeat("\0", 64);
+        $ciphertext = str_repeat("\0", 32);
+        ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt($ciphertext, '', $nonce, $key);
+    }
 
     public function testAegis128LDecryptBadKey(): void
     {
@@ -543,6 +553,17 @@ class AEGISTest extends TestCase
 
         $key = str_repeat("\0", 32);
         $nonce = str_repeat("\0", 31);
+        $ciphertext = str_repeat("\0", 32);
+        ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($ciphertext, '', $nonce, $key);
+    }
+
+    public function testAegis256DecryptSuperfluousNonce(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Nonce must be CRYPTO_AEAD_AEGIS256_NPUBBYTES long');
+
+        $key = str_repeat("\0", 32);
+        $nonce = str_repeat("\0", 64);
         $ciphertext = str_repeat("\0", 32);
         ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($ciphertext, '', $nonce, $key);
     }

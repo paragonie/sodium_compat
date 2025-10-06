@@ -145,9 +145,15 @@ class SodiumCompatCryptoAeadChacha20Poly1305Test extends KnownAnswerTestCase
         );
     }
 
-    public function testEmptyInputs(): void
+    public function testEmptyInputsEncrypt(): void
     {
         $this->expectException(SodiumException::class);
         ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_encrypt('', '', '', '');
+    }
+
+    public function testEmptyInputsDecrypt(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_ietf_decrypt('', '', '', '');
     }
 }
