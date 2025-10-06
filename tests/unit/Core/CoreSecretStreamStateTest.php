@@ -75,6 +75,9 @@ class CoreSecretStreamStateTest extends TestCase
      */
     public function testNeedsRekey(): void
     {
+        if (PHP_VERSION_ID >= 80500) {
+            $this->markTestSkipped('This test uses reflection which does not work on PHP 8.5');
+        }
         // Set counter to a value just before rekey is needed
         $state = new ParagonIE_Sodium_Core_SecretStream_State($this->key, $this->nonce);
         $reflection = new ReflectionClass($state);
