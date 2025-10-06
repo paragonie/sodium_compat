@@ -578,4 +578,22 @@ class AEGISTest extends TestCase
         $ciphertext = str_repeat("\0", 32);
         ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt($ciphertext, '', $nonce, $key);
     }
+
+    public function testAegis128LDecryptShortCiphertext(): void
+    {
+        $this->expectException(SodiumException::class);
+
+        $key = str_repeat("\0", 33);
+        $nonce = str_repeat("\0", 32);
+        ParagonIE_Sodium_Compat::crypto_aead_aegis128l_decrypt('', '', $nonce, $key);
+    }
+
+    public function testAegis256DecryptShortCiphertext(): void
+    {
+        $this->expectException(SodiumException::class);
+
+        $key = str_repeat("\0", 33);
+        $nonce = str_repeat("\0", 32);
+        ParagonIE_Sodium_Compat::crypto_aead_aegis256_decrypt('', '', $nonce, $key);
+    }
 }

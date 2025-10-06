@@ -432,6 +432,17 @@ class UtilTest extends TestCase
     /**
      * @throws SodiumException
      */
+    public function testAddBadLength(): void
+    {
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('values must have the same length');
+        $str = '';
+        ParagonIE_Sodium_Compat::add($str, 'ffff');
+    }
+
+    /**
+     * @throws SodiumException
+     */
     public function testSub(): void
     {
         $a = "\x02\x00\x00\x00";

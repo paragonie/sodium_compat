@@ -205,10 +205,6 @@ class ParagonIE_Sodium_Compat
         int $variant,
         string $ignore = ''
     ): string {
-        if (ParagonIE_Sodium_Core_Util::strlen($encoded) === 0) {
-            return '';
-        }
-
         // Just strip before decoding
         if (!empty($ignore)) {
             $encoded = str_replace($ignore, '', $encoded);
@@ -216,17 +212,22 @@ class ParagonIE_Sodium_Compat
 
         try {
             return match ($variant) {
-                self::BASE64_VARIANT_ORIGINAL => ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true),
-                self::BASE64_VARIANT_ORIGINAL_NO_PADDING => ParagonIE_Sodium_Core_Base64_Original::decodeNoPadding($encoded),
-                self::BASE64_VARIANT_URLSAFE => ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true),
-                self::BASE64_VARIANT_URLSAFE_NO_PADDING => ParagonIE_Sodium_Core_Base64_UrlSafe::decodeNoPadding($encoded),
-                default => throw new SodiumException('invalid base64 variant identifier'),
+                self::BASE64_VARIANT_ORIGINAL =>
+                    ParagonIE_Sodium_Core_Base64_Original::decode($encoded, true),
+                self::BASE64_VARIANT_ORIGINAL_NO_PADDING =>
+                    ParagonIE_Sodium_Core_Base64_Original::decodeNoPadding($encoded),
+                self::BASE64_VARIANT_URLSAFE =>
+                    ParagonIE_Sodium_Core_Base64_UrlSafe::decode($encoded, true),
+                self::BASE64_VARIANT_URLSAFE_NO_PADDING =>
+                    ParagonIE_Sodium_Core_Base64_UrlSafe::decodeNoPadding($encoded),
+                default =>
+                    throw new SodiumException('invalid base64 variant identifier'),
             };
         } catch (Exception $ex) {
             if ($ex instanceof SodiumException) {
                 throw $ex;
             }
-            throw new SodiumException('invalid base64 string');
+            throw new SodiumException('invalid base64 string', 0, $ex);
         }
     }
 
@@ -241,15 +242,15 @@ class ParagonIE_Sodium_Compat
         string $decoded,
         int $variant
     ): string {
-        if (ParagonIE_Sodium_Core_Util::strlen($decoded) === 0) {
-            return '';
-        }
-
         return match ($variant) {
-            self::BASE64_VARIANT_ORIGINAL => ParagonIE_Sodium_Core_Base64_Original::encode($decoded),
-            self::BASE64_VARIANT_ORIGINAL_NO_PADDING => ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded),
-            self::BASE64_VARIANT_URLSAFE => ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded),
-            self::BASE64_VARIANT_URLSAFE_NO_PADDING => ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded),
+            self::BASE64_VARIANT_ORIGINAL =>
+                ParagonIE_Sodium_Core_Base64_Original::encode($decoded),
+            self::BASE64_VARIANT_ORIGINAL_NO_PADDING =>
+                ParagonIE_Sodium_Core_Base64_Original::encodeUnpadded($decoded),
+            self::BASE64_VARIANT_URLSAFE =>
+                ParagonIE_Sodium_Core_Base64_UrlSafe::encode($decoded),
+            self::BASE64_VARIANT_URLSAFE_NO_PADDING =>
+                ParagonIE_Sodium_Core_Base64_UrlSafe::encodeUnpadded($decoded),
             default => throw new SodiumException('invalid base64 variant identifier'),
         };
     }
