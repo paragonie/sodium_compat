@@ -36,6 +36,7 @@
                 "ParagonIE_Sodium_Core_ChaCha20::ietfStream",
                 "ParagonIE_Sodium_Core_ChaCha20::stream",
                 "ParagonIE_Sodium_Core_ChaCha20::stream_xor_ic",
+				"ParagonIE_Sodium_Core_Curve25519::ge_mul_l",
                 "ParagonIE_Sodium_Core_Ed25519::sign_detached",
                 "ParagonIE_Sodium_Core_Ed25519::verify_detached",
                 "ParagonIE_Sodium_Core_Salsa20::salsa20_xor",
@@ -72,6 +73,11 @@
                 "ParagonIE_Sodium_Compat::bin2base64",
                 "ParagonIE_Sodium_Compat::base64_encode"
             ]
+        },
+        "IncrementInteger": {
+			"ignore": [
+				"ParagonIE_Sodium_Core_Curve25519::ge_mul_l"
+			]
         },
         "InstanceOf_": {
             "ignore": [
@@ -139,7 +145,7 @@
         		"ParagonIE_Sodium_Core_AEGIS256::decrypt",
         		"ParagonIE_Sodium_Core_Crypto::secretbox_open"
         	]
-        }
+        },
         "PublicVisibility": {
             "ignore": [
                 "ParagonIE_Sodium_Compat::base642bin",
