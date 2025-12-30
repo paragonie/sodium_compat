@@ -630,6 +630,12 @@ class ParagonIE_Sodium_File extends ParagonIE_Sodium_Core_Util
         ParagonIE_Sodium_Compat::$fastMult = true;
 
         $A = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($publicKey);
+        if (ParagonIE_Sodium_Core_Ed25519::small_order($publicKey)) {
+            throw new SodiumException('Public key has small order');
+        }
+        if (!ParagonIE_Sodium_Core_Ed25519::is_on_main_subgroup($A)) {
+            throw new SodiumException('Public key is not on main subgroup');
+        }
 
         $hs = hash_init('sha512');
         hash_update($hs, self::substr($sig, 0, 32));
