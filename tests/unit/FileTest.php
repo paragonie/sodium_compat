@@ -195,6 +195,25 @@ class FileTest extends TestCase
     }
 
     /**
+     * Regression test for the file-verification subgroup gate.
+     */
+    public function testVerifyRejectsMixedOrderPublicKey(): void
+    {
+        $file = $this->createTempFile('mixed-order public key regression test');
+        $signature = ParagonIE_Sodium_Core_Util::hex2bin(
+            '6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac' .
+            '18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a'
+        );
+        $mixedOrderPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
+        );
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Public key is not on main subgroup');
+        ParagonIE_Sodium_File::verify($signature, $file, $mixedOrderPublicKey);
+    }
+
+    /**
      * @return void
      * @throws SodiumException
      */
