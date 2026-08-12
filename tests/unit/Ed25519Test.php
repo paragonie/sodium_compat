@@ -218,6 +218,70 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Regression test for mixed-order public key validation.
+     *
+     * The subgroup check must reject a curve point with a torsion component,
+     * even though it is not itself a small-order point.
+     */
+    public function testRejectsMixedOrderPublicKey()
+    {
+        $validPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025'
+        );
+        $mixedOrderPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
+        );
+        $message = ParagonIE_Sodium_Core_Util::hex2bin('af82');
+        $signature = ParagonIE_Sodium_Core_Util::hex2bin(
+            '6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac' .
+            '18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a'
+        );
+        $orig = ParagonIE_Sodium_Compat::$fastMult;
+
+        if (PHP_INT_SIZE === 4) {
+            $validPoint = ParagonIE_Sodium_Core32_Ed25519::ge_frombytes_negate_vartime($validPublicKey);
+            $mixedOrderPoint = ParagonIE_Sodium_Core32_Ed25519::ge_frombytes_negate_vartime($mixedOrderPublicKey);
+            $this->assertTrue(ParagonIE_Sodium_Core32_Ed25519::is_on_main_subgroup($validPoint));
+            $this->assertFalse(ParagonIE_Sodium_Core32_Ed25519::small_order($mixedOrderPublicKey));
+            $this->assertFalse(ParagonIE_Sodium_Core32_Ed25519::is_on_main_subgroup($mixedOrderPoint));
+
+            try {
+                ParagonIE_Sodium_Core32_Ed25519::pk_to_curve25519($mixedOrderPublicKey);
+                $this->fail('Mixed-order public key was converted');
+            } catch (SodiumException $ex) {
+                $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
+            }
+            try {
+                ParagonIE_Sodium_Core32_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
+                $this->fail('Mixed-order public key reached signature verification');
+            } catch (SodiumException $ex) {
+                ParagonIE_Sodium_Compat::$fastMult = $orig;
+                $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
+            }
+        } else {
+            $validPoint = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($validPublicKey);
+            $mixedOrderPoint = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($mixedOrderPublicKey);
+            $this->assertTrue(ParagonIE_Sodium_Core_Ed25519::is_on_main_subgroup($validPoint));
+            $this->assertFalse(ParagonIE_Sodium_Core_Ed25519::small_order($mixedOrderPublicKey));
+            $this->assertFalse(ParagonIE_Sodium_Core_Ed25519::is_on_main_subgroup($mixedOrderPoint));
+
+            try {
+                ParagonIE_Sodium_Core_Ed25519::pk_to_curve25519($mixedOrderPublicKey);
+                $this->fail('Mixed-order public key was converted');
+            } catch (SodiumException $ex) {
+                $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
+            }
+            try {
+                ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
+                $this->fail('Mixed-order public key reached signature verification');
+            } catch (SodiumException $ex) {
+                ParagonIE_Sodium_Compat::$fastMult = $orig;
+                $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
+            }
+        }
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Ed25519::publickey_from_secretkey()
      * @covers ParagonIE_Sodium_Core_Ed25519::sign_detached()
      * @covers ParagonIE_Sodium_Core_Ed25519::verify_detached()
