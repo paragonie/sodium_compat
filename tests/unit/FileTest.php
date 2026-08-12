@@ -222,6 +222,17 @@ class FileTest extends PHPUnit_Framework_TestCase
         ParagonIE_Sodium_Compat::$fastMult = $orig;
 
         $this->assertTrue(ParagonIE_Sodium_File::verify($signed, 'random.data', $sign_pk));
+
+        $mixedOrderPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
+        );
+        try {
+            ParagonIE_Sodium_File::verify($signed, 'random.data', $mixedOrderPublicKey);
+            $this->fail('Mixed-order public key reached file signature verification');
+        } catch (SodiumException $ex) {
+            ParagonIE_Sodium_Compat::$fastMult = $orig;
+            $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
+        }
         unlink('random.data');
     }
 }
