@@ -15,7 +15,7 @@ class SodiumCompatCryptoSignTest extends KnownAnswerTestCase
             [
                 'This is a test message.', // message
                 '4299d32d4825a2399587a80800a74790a2a8965f57f6f73379b3614838f50000', // sk_seed
-                '3046067b579e1875418b329a285d24c9448981456314343d81b8e1585521405f', // pk
+                'a16c8a6a8ec39b611d4b56d962d649e3ea8cb05b7c86842db4572e252dc62938', // pk
                 '2745344399451998599485949812479124981248912489124891248912489124', // signature (placeholder)
             ],
         ];

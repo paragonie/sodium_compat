@@ -112,6 +112,52 @@ class CoreEd25519Test extends TestCase
     }
 
     /**
+     * Regression test for mixed-order public key validation.
+     *
+     * The subgroup check must reject a curve point with a torsion component,
+     * even though it is not itself a small-order point.
+     */
+    public function testRejectsMixedOrderPublicKey(): void
+    {
+        $validPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025'
+        );
+        $mixedOrderPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
+        );
+
+        $validPoint = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($validPublicKey);
+        $mixedOrderPoint = ParagonIE_Sodium_Core_Ed25519::ge_frombytes_negate_vartime($mixedOrderPublicKey);
+
+        $this->assertTrue(ParagonIE_Sodium_Core_Ed25519::is_on_main_subgroup($validPoint));
+        $this->assertFalse(ParagonIE_Sodium_Core_Ed25519::small_order($mixedOrderPublicKey));
+        $this->assertFalse(ParagonIE_Sodium_Core_Ed25519::is_on_main_subgroup($mixedOrderPoint));
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Public key is not on a member of the main subgroup');
+        ParagonIE_Sodium_Core_Ed25519::pk_to_curve25519($mixedOrderPublicKey);
+    }
+
+    /**
+     * Regression test for the detached-signature subgroup gate.
+     */
+    public function testVerifyDetachedRejectsMixedOrderPublicKey(): void
+    {
+        $message = ParagonIE_Sodium_Core_Util::hex2bin('af82');
+        $signature = ParagonIE_Sodium_Core_Util::hex2bin(
+            '6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac' .
+            '18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a'
+        );
+        $mixedOrderPublicKey = ParagonIE_Sodium_Core_Util::hex2bin(
+            'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
+        );
+
+        $this->expectException(SodiumException::class);
+        $this->expectExceptionMessage('Public key is not on main subgroup');
+        ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
+    }
+
+    /**
      * @throws Exception
      * @throws SodiumException
      */
