@@ -248,4 +248,15 @@ class Ristretto255Test extends PHPUnit_Framework_TestCase
             sodium_bin2hex($r2)
         );
     }
+
+    public function testScalarInvertRejectsZero()
+    {
+        $thrown = false;
+        try {
+            ParagonIE_Sodium_Compat::ristretto255_scalar_invert(str_repeat("\0", 32));
+        } catch (SodiumException $ex) {
+            $thrown = true;
+        }
+        $this->assertTrue($thrown, 'Scalar inversion of zero must be rejected');
+    }
 }
