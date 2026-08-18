@@ -610,6 +610,9 @@ class ParagonIE_Sodium_Core_Ristretto255 extends ParagonIE_Sodium_Core_Ed25519
         #[SensitiveParameter]
         string $s
     ): string {
+        if (ParagonIE_Sodium_Compat::is_zero($s)) {
+            throw new SodiumException('Cannot invert a zero scalar');
+        }
         return self::sc25519_invert($s);
     }
 

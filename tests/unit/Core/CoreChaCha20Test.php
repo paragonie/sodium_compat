@@ -88,13 +88,12 @@ class CoreChaCha20Test extends TestCase
 
         $key = str_repeat("\0", 32);
         $nonce = str_repeat("\0", 12);
-        // Set counter to the value just before the overflow check triggers
-        $counter = ParagonIE_Sodium_Core_Util::store32_le(0xf0000000 - 1);
+        // Set the IETF counter to the final valid block value.
+        $counter = ParagonIE_Sodium_Core_Util::store32_le(0xffffffff);
         $ctx = new ParagonIE_Sodium_Core_ChaCha20_IetfCtx($key, $nonce, $counter);
 
-        // Encrypting 64 bytes will succeed
+        // The final block succeeds; attempting to wrap the counter does not.
         ParagonIE_Sodium_Core_ChaCha20::encryptBytes($ctx, str_repeat("\0", 64));
-        // The next call will increment the counter and trigger the exception
         ParagonIE_Sodium_Core_ChaCha20::encryptBytes($ctx, str_repeat("\0", 64));
     }
 }

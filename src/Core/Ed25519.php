@@ -312,37 +312,40 @@ abstract class ParagonIE_Sodium_Core_Ed25519 extends ParagonIE_Sodium_Core_Curve
         if ($d === 0) {
             throw new SodiumException('All zero public key');
         }
+        if (self::small_order($pk)) {
+            throw new SodiumException('Public key has small order');
+        }
 
         /* The original value of ParagonIE_Sodium_Compat::$fastMult */
         $orig = ParagonIE_Sodium_Compat::$fastMult;
 
         // Set ParagonIE_Sodium_Compat::$fastMult to true to speed up verification.
         ParagonIE_Sodium_Compat::$fastMult = true;
+        try {
+            $A = self::ge_frombytes_negate_vartime($pk);
+            if (!self::is_on_main_subgroup($A)) {
+                throw new SodiumException('Public key is not on main subgroup');
+            }
 
-        $A = self::ge_frombytes_negate_vartime($pk);
-        if (!self::is_on_main_subgroup($A)) {
-            throw new SodiumException('Public key is not on main subgroup');
+            $hDigest = hash(
+                'sha512',
+                self::substr($sig, 0, 32) .
+                    self::substr($pk, 0, 32) .
+                    $message,
+                true
+            );
+            $h = self::sc_reduce($hDigest) . self::substr($hDigest, 32);
+            $R = self::ge_double_scalarmult_vartime(
+                $h,
+                $A,
+                self::substr($sig, 32)
+            );
+            $rcheck = self::ge_tobytes($R);
+
+            return self::verify_32($rcheck, self::substr($sig, 0, 32));
+        } finally {
+            ParagonIE_Sodium_Compat::$fastMult = $orig;
         }
-
-        $hDigest = hash(
-            'sha512',
-            self::substr($sig, 0, 32) .
-                self::substr($pk, 0, 32) .
-                $message,
-            true
-        );
-        $h = self::sc_reduce($hDigest) . self::substr($hDigest, 32);
-        $R = self::ge_double_scalarmult_vartime(
-            $h,
-            $A,
-            self::substr($sig, 32)
-        );
-        $rcheck = self::ge_tobytes($R);
-
-        // Reset ParagonIE_Sodium_Compat::$fastMult to what it was before.
-        ParagonIE_Sodium_Compat::$fastMult = $orig;
-
-        return self::verify_32($rcheck, self::substr($sig, 0, 32));
     }
 
     /**

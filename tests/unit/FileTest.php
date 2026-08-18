@@ -373,7 +373,7 @@ class FileTest extends TestCase
         $content = 'test content for secretbox';
         $inputFile = $this->createTempFile($content);
         $outputFile = $this->createTempFile();
-        $decryptedFile = $this->createTempFile();
+        $decryptedFile = $this->createTempFile('preserve');
 
         $key = ParagonIE_Sodium_Compat::crypto_secretbox_keygen();
         $invalidKey = random_bytes(ParagonIE_Sodium_Compat::CRYPTO_SECRETBOX_KEYBYTES);
@@ -381,9 +381,13 @@ class FileTest extends TestCase
 
         ParagonIE_Sodium_File::secretbox($inputFile, $outputFile, $nonce, $key);
 
-        $this->expectException(SodiumException::class);
-        $this->expectExceptionMessage('Invalid MAC');
-        ParagonIE_Sodium_File::secretbox_open($outputFile, $decryptedFile, $nonce, $invalidKey);
+        try {
+            ParagonIE_Sodium_File::secretbox_open($outputFile, $decryptedFile, $nonce, $invalidKey);
+            $this->fail('Invalid key was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
+        $this->assertSame('preserve', file_get_contents($decryptedFile));
     }
 
     /**

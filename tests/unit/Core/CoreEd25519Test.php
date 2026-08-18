@@ -152,9 +152,24 @@ class CoreEd25519Test extends TestCase
             'd1e06adf4e05e248e1e52beca14b6be4da0af01b41645d2849b407ec22f41d47'
         );
 
+        ParagonIE_Sodium_Compat::$fastMult = false;
+        try {
+            ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
+            $this->fail('Mixed-order public key was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Public key is not on main subgroup', $ex->getMessage());
+        }
+        $this->assertFalse(ParagonIE_Sodium_Compat::$fastMult);
+    }
+
+    public function testVerifyDetachedRejectsIdentityPublicKey(): void
+    {
+        $publicKey = "\x01" . str_repeat("\0", 31);
+        $signature = "\x58" . str_repeat("\x66", 31) . "\x01" . str_repeat("\0", 31);
+
         $this->expectException(SodiumException::class);
-        $this->expectExceptionMessage('Public key is not on main subgroup');
-        ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
+        $this->expectExceptionMessage('Public key has small order');
+        ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, 'message', $publicKey);
     }
 
     /**

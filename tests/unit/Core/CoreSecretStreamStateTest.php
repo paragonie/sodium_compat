@@ -75,13 +75,13 @@ class CoreSecretStreamStateTest extends TestCase
      */
     public function testNeedsRekey(): void
     {
-        // Set counter to a value just before rekey is needed
+        // Set counter to a value just before the 32-bit counter wraps.
         $state = new ParagonIE_Sodium_Core_SecretStream_State($this->key, $this->nonce);
         $reflection = new ReflectionClass($state);
         $counterProp = $reflection->getProperty('counter');
 
         // 1 left
-        $counterProp->setValue($state, 0xffff - 1);
+        $counterProp->setValue($state, 0xffffffff - 1);
         $this->assertFalse($state->needsRekey());
 
         // 0 left
