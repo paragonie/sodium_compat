@@ -255,7 +255,6 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
                 ParagonIE_Sodium_Core32_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
                 $this->fail('Mixed-order public key reached signature verification');
             } catch (SodiumException $ex) {
-                ParagonIE_Sodium_Compat::$fastMult = $orig;
                 $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
             }
         } else {
@@ -275,9 +274,21 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
                 ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, $message, $mixedOrderPublicKey);
                 $this->fail('Mixed-order public key reached signature verification');
             } catch (SodiumException $ex) {
-                ParagonIE_Sodium_Compat::$fastMult = $orig;
                 $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
             }
+        }
+        $this->assertSame($orig, ParagonIE_Sodium_Compat::$fastMult);
+    }
+
+    public function testRejectsIdentityPublicKey()
+    {
+        $publicKey = "\x01" . str_repeat("\0", 31);
+        $signature = "\x58" . str_repeat("\x66", 31) . "\x01" . str_repeat("\0", 31);
+        try {
+            ParagonIE_Sodium_Core_Ed25519::verify_detached($signature, 'message', $publicKey);
+            $this->fail('Accepted an identity public key');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Public key has small order', $ex->getMessage());
         }
     }
 

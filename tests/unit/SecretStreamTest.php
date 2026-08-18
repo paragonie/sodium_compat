@@ -30,6 +30,27 @@ class SecretStreamTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRekeyUsesFullCounterWidth()
+    {
+        $classes = array(
+            'ParagonIE_Sodium_Core_SecretStream_State',
+            'ParagonIE_Sodium_Core32_SecretStream_State'
+        );
+        foreach ($classes as $class) {
+            $state = new $class(str_repeat("\0", 32));
+            $counter = new ReflectionProperty($class, 'counter');
+            if (PHP_VERSION_ID < 80500) {
+                $counter->setAccessible(true);
+            }
+            $counter->setValue($state, 0xffffffff - 1);
+            $this->assertFalse($state->needsRekey());
+            $state->incrementCounter();
+            $this->assertFalse($state->needsRekey());
+            $state->incrementCounter();
+            $this->assertTrue($state->needsRekey());
+        }
+    }
+
     /**
      * @throws Exception
      */

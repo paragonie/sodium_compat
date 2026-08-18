@@ -230,9 +230,33 @@ class FileTest extends PHPUnit_Framework_TestCase
             ParagonIE_Sodium_File::verify($signed, 'random.data', $mixedOrderPublicKey);
             $this->fail('Mixed-order public key reached file signature verification');
         } catch (SodiumException $ex) {
-            ParagonIE_Sodium_Compat::$fastMult = $orig;
             $this->assertSame('Public key is not on a member of the main subgroup', $ex->getMessage());
         }
+        $this->assertSame($orig, ParagonIE_Sodium_Compat::$fastMult);
         unlink('random.data');
+    }
+
+    public function testInvalidCiphertextPreservesDestination()
+    {
+        $input = tempnam(sys_get_temp_dir(), 'sc-in-');
+        $output = tempnam(sys_get_temp_dir(), 'sc-out-');
+        file_put_contents($input, random_bytes(32));
+        file_put_contents($output, 'preserve');
+
+        try {
+            ParagonIE_Sodium_File::secretbox_open(
+                $input,
+                $output,
+                str_repeat("\0", 24),
+                str_repeat("\0", 32)
+            );
+            $this->fail('Invalid ciphertext was accepted');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Invalid MAC', $ex->getMessage());
+        }
+        $contents = file_get_contents($output);
+        unlink($input);
+        unlink($output);
+        $this->assertSame('preserve', $contents);
     }
 }

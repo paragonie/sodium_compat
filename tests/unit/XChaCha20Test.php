@@ -165,4 +165,40 @@ class XChaCha20Test extends PHPUnit_Framework_TestCase
             "XChaCha20 initial counter failed"
         );
     }
+
+    public function testCounterCarryMatchesLibsodium()
+    {
+        $key = str_repeat("\0", 32);
+        $nonce = str_repeat("\0", 24);
+        $message = str_repeat("\0", 128);
+        $counter = pack('V2', 0xffffffff, 0);
+        $expected = sodium_crypto_stream_xchacha20_xor_ic($message, $nonce, 0xffffffff, $key);
+
+        $implementation = PHP_INT_SIZE === 4
+            ? 'ParagonIE_Sodium_Core32_XChaCha20'
+            : 'ParagonIE_Sodium_Core_XChaCha20';
+        $this->assertSame(
+            $expected,
+            call_user_func(array($implementation, 'streamXorIc'), $message, $nonce, $key, $counter)
+        );
+    }
+
+    public function testIetfCounterWrapIsRejected()
+    {
+        $implementation = PHP_INT_SIZE === 4
+            ? 'ParagonIE_Sodium_Core32_XChaCha20'
+            : 'ParagonIE_Sodium_Core_XChaCha20';
+        try {
+            call_user_func(
+                array($implementation, 'ietfStreamXorIc'),
+                str_repeat("\0", 128),
+                str_repeat("\0", 24),
+                str_repeat("\0", 32),
+                str_repeat("\xff", 8)
+            );
+            $this->fail($implementation . ' allowed its IETF counter to wrap');
+        } catch (SodiumException $ex) {
+            $this->assertSame('Overflow', $ex->getMessage());
+        }
+    }
 }
