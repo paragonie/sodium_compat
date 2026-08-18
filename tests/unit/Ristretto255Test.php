@@ -252,4 +252,10 @@ class Ristretto255Test extends TestCase
         $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_complement($s));
         $this->assertIsString(ParagonIE_Sodium_Compat::ristretto255_scalar_invert($s));
     }
+
+    public function testScalarInvertRejectsZero(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::ristretto255_scalar_invert(str_repeat("\0", 32));
+    }
 }

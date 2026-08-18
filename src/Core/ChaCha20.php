@@ -103,6 +103,9 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
 
         $c = '';
         for (;;) {
+            if ($j12 > 0xffffffff || $j13 > 0xffffffff) {
+                throw new SodiumException('Overflow');
+            }
             if ($bytes < 64) {
                 $message .= str_repeat("\x00", 64 - $bytes);
             }
@@ -170,9 +173,12 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
             $x14 ^= self::load_4(self::substr($message, 56, 4));
             $x15 ^= self::load_4(self::substr($message, 60, 4));
 
-            ++$j12;
-            if ($j12 & 0xf0000000) {
-                throw new SodiumException('Overflow');
+            if (
+                ++$j12 > 0xffffffff &&
+                !($ctx instanceof ParagonIE_Sodium_Core_ChaCha20_IetfCtx)
+            ) {
+                $j12 = 0;
+                ++$j13;
             }
 
             $block = self::store32_le(($x0  & 0xffffffff)) .

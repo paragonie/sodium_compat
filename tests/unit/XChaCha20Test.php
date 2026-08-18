@@ -189,11 +189,11 @@ class XChaCha20Test extends TestCase
         $decrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($encrypted, $nonce, $key, str_repeat("\0", 8));
         $this->assertSame($message, $decrypted);
 
-        $encrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($message, $nonce, $key, str_repeat("\xff", 8));
-        $this->assertNotSame($message, $encrypted);
-
-        $decrypted = ParagonIE_Sodium_Core_XChaCha20::streamXorIc($encrypted, $nonce, $key, str_repeat("\xff", 8));
-        $this->assertSame($message, $decrypted);
+        $counter = pack('V2', 0xffffffff, 0);
+        $this->assertSame(
+            sodium_crypto_stream_xchacha20_xor_ic($message, $nonce, 0xffffffff, $key),
+            ParagonIE_Sodium_Core_XChaCha20::streamXorIc($message, $nonce, $key, $counter)
+        );
     }
 
     /**
@@ -210,12 +210,28 @@ class XChaCha20Test extends TestCase
 
         $decrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($encrypted, $nonce, $key, str_repeat("\0", 8));
         $this->assertSame($message, $decrypted);
+    }
 
-        $encrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($message, $nonce, $key, str_repeat("\xff", 8));
-        $this->assertNotSame($message, $encrypted);
+    public function testStreamXorIcRejectsCounterWrap(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_XChaCha20::streamXorIc(
+            random_bytes(128),
+            random_bytes(24),
+            random_bytes(32),
+            str_repeat("\xff", 8)
+        );
+    }
 
-        $decrypted = ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc($encrypted, $nonce, $key, str_repeat("\xff", 8));
-        $this->assertSame($message, $decrypted);
+    public function testIetfStreamXorIcRejectsCounterWrap(): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Core_XChaCha20::ietfStreamXorIc(
+            random_bytes(128),
+            random_bytes(24),
+            random_bytes(32),
+            str_repeat("\xff", 8)
+        );
     }
 
     public function testEmpty(): void
