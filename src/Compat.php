@@ -157,6 +157,32 @@ class ParagonIE_Sodium_Compat
     const CRYPTO_STREAM_NONCEBYTES = 24;
     const CRYPTO_STREAM_XCHACHA20_KEYBYTES = 32;
     const CRYPTO_STREAM_XCHACHA20_NONCEBYTES = 24;
+    const CRYPTO_KEM_MLKEM768_PUBLICKEYBYTES = 1184;
+    const CRYPTO_KEM_MLKEM768_SECRETKEYBYTES = 2400;
+    const CRYPTO_KEM_MLKEM768_SEEDBYTES = 64;
+    const CRYPTO_KEM_MLKEM768_CIPHERTEXTBYTES = 1088;
+    const CRYPTO_KEM_MLKEM768_SHAREDSECRETBYTES = 32;
+    const CRYPTO_KEM_MLKEM768_KEYPAIRBYTES = 3584;
+    const CRYPTO_KEM_XWING_PUBLICKEYBYTES = 1216;
+    const CRYPTO_KEM_XWING_SECRETKEYBYTES = 32;
+    const CRYPTO_KEM_XWING_SEEDBYTES = 32;
+    const CRYPTO_KEM_XWING_CIPHERTEXTBYTES = 1120;
+    const CRYPTO_KEM_XWING_SHAREDSECRETBYTES = 32;
+    const CRYPTO_KEM_XWING_KEYPAIRBYTES = 1248;
+    const CRYPTO_KEM_PUBLICKEYBYTES = 1216;
+    const CRYPTO_KEM_SECRETKEYBYTES = 32;
+    const CRYPTO_KEM_SEEDBYTES = 32;
+    const CRYPTO_KEM_CIPHERTEXTBYTES = 1120;
+    const CRYPTO_KEM_SHAREDSECRETBYTES = 32;
+    const CRYPTO_KEM_KEYPAIRBYTES = 1248;
+    const CRYPTO_KEM_PRIMITIVE = 'xwing';
+    const CRYPTO_SIGN_MLDSA44_PUBLICKEYBYTES = 1312;
+    const CRYPTO_SIGN_MLDSA44_SECRETKEYBYTES = 2560;
+    const CRYPTO_SIGN_MLDSA44_SEEDBYTES = 32;
+    const CRYPTO_SIGN_MLDSA44_BYTES = 2420;
+    const CRYPTO_SIGN_MLDSA44_KEYPAIRBYTES = 3872;
+    const CRYPTO_SIGN_MLDSA44_CONTEXTBYTES_MAX = 255;
+    const CRYPTO_SIGN_MLDSA44_MESSAGEBYTES_MAX = PHP_INT_MAX - 2420;
 
     /**
      * Add two numbers (little-endian unsigned), storing the value in the first
@@ -1595,6 +1621,264 @@ class ParagonIE_Sodium_Compat
         return random_bytes(self::CRYPTO_GENERICHASH_KEYBYTES);
     }
 
+    public static function crypto_kem_mlkem768_keypair(bool $dontFallback = false): string
+    {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_keypair')) {
+            return sodium_crypto_kem_mlkem768_keypair();
+        }
+        return ParagonIE_Sodium_Core_MLKEM768::seedKeypair(random_bytes(64));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_mlkem768_seed_keypair(
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_seed_keypair')) {
+            return sodium_crypto_kem_mlkem768_seed_keypair($seed);
+        }
+        return ParagonIE_Sodium_Core_MLKEM768::seedKeypair($seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_mlkem768_secretkey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_secretkey')) {
+            return sodium_crypto_kem_mlkem768_secretkey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 3584);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 0, 2400);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_mlkem768_publickey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_publickey')) {
+            return sodium_crypto_kem_mlkem768_publickey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 3584);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 2400, 1184);
+    }
+
+    public static function crypto_kem_mlkem768_enc(
+        string $publicKey,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_enc')) {
+            return sodium_crypto_kem_mlkem768_enc($publicKey);
+        }
+        return ParagonIE_Sodium_Core_MLKEM768::enc($publicKey, random_bytes(32));
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_mlkem768_enc_deterministic(
+        string $publicKey,
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_enc_deterministic')) {
+            return sodium_crypto_kem_mlkem768_enc_deterministic($publicKey, $seed);
+        }
+        return ParagonIE_Sodium_Core_MLKEM768::enc($publicKey, $seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_mlkem768_dec(
+        string $ciphertext,
+        #[SensitiveParameter] string $secretKey,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_mlkem768_dec')) {
+            ParagonIE_Sodium_Core_MLKEM768::validateSecretKey($secretKey);
+            return sodium_crypto_kem_mlkem768_dec($ciphertext, $secretKey);
+        }
+        return ParagonIE_Sodium_Core_MLKEM768::dec($ciphertext, $secretKey);
+    }
+
+    public static function crypto_kem_xwing_keypair(bool $dontFallback = false): string
+    {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_keypair')) {
+            return sodium_crypto_kem_xwing_keypair();
+        }
+        return ParagonIE_Sodium_Core_XWing::seedKeypair(random_bytes(32));
+    }
+
+    public static function crypto_kem_xwing_seed_keypair(
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_seed_keypair')) {
+            return sodium_crypto_kem_xwing_seed_keypair($seed);
+        }
+        return ParagonIE_Sodium_Core_XWing::seedKeypair($seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_xwing_secretkey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_secretkey')) {
+            return sodium_crypto_kem_xwing_secretkey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 1248);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 0, 32);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_xwing_publickey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_publickey')) {
+            return sodium_crypto_kem_xwing_publickey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 1248);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 32, 1216);
+    }
+
+    public static function crypto_kem_xwing_enc(
+        string $publicKey,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_enc')) {
+            return sodium_crypto_kem_xwing_enc($publicKey);
+        }
+        return ParagonIE_Sodium_Core_XWing::enc($publicKey, random_bytes(64));
+    }
+
+    public static function crypto_kem_xwing_enc_deterministic(
+        string $publicKey,
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_enc_deterministic')) {
+            return sodium_crypto_kem_xwing_enc_deterministic($publicKey, $seed);
+        }
+        return ParagonIE_Sodium_Core_XWing::enc($publicKey, $seed);
+    }
+
+    public static function crypto_kem_xwing_dec(
+        string $ciphertext,
+        #[SensitiveParameter] string $secretKey,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_xwing_dec')) {
+            return sodium_crypto_kem_xwing_dec($ciphertext, $secretKey);
+        }
+        return ParagonIE_Sodium_Core_XWing::dec($ciphertext, $secretKey);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_keypair(bool $dontFallback = false): string
+    {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_keypair')) {
+            return sodium_crypto_kem_keypair();
+        }
+        return self::crypto_kem_xwing_keypair();
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_seed_keypair(
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_seed_keypair')) {
+            return sodium_crypto_kem_seed_keypair($seed);
+        }
+        return self::crypto_kem_xwing_seed_keypair($seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_secretkey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_secretkey')) {
+            return sodium_crypto_kem_secretkey($keypair);
+        }
+        return self::crypto_kem_xwing_secretkey($keypair);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_publickey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_publickey')) {
+            return sodium_crypto_kem_publickey($keypair);
+        }
+        return self::crypto_kem_xwing_publickey($keypair);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_enc(
+        string $publicKey,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_enc')) {
+            return sodium_crypto_kem_enc($publicKey);
+        }
+        return self::crypto_kem_xwing_enc($publicKey);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_enc_deterministic(
+        string $publicKey,
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): array {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_enc_deterministic')) {
+            return sodium_crypto_kem_enc_deterministic($publicKey, $seed);
+        }
+        return self::crypto_kem_xwing_enc_deterministic($publicKey, $seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_kem_dec(
+        string $ciphertext,
+        #[SensitiveParameter] string $secretKey,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_kem_dec')) {
+            return sodium_crypto_kem_dec($ciphertext, $secretKey);
+        }
+        return self::crypto_kem_xwing_dec($ciphertext, $secretKey);
+    }
+
+
     /**
      * @param int $subkey_len
      * @param int $subkey_id
@@ -1778,7 +2062,7 @@ class ParagonIE_Sodium_Compat
         self::crypto_generichash_update($h, $pk);
         self::crypto_generichash_update($h, $serverPublicKey);
         $sessionKeys = self::crypto_generichash_final($h, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
-        return array(
+        return [
             ParagonIE_Sodium_Core_Util::substr(
                 $sessionKeys,
                 0,
@@ -1789,7 +2073,7 @@ class ParagonIE_Sodium_Compat
                 self::CRYPTO_KX_SESSIONKEYBYTES,
                 self::CRYPTO_KX_SESSIONKEYBYTES
             )
-        );
+        ];
     }
 
     /**
@@ -1817,7 +2101,7 @@ class ParagonIE_Sodium_Compat
         self::crypto_generichash_update($h, $clientPublicKey);
         self::crypto_generichash_update($h, $pk);
         $sessionKeys = self::crypto_generichash_final($h, self::CRYPTO_KX_SESSIONKEYBYTES * 2);
-        return array(
+        return [
             ParagonIE_Sodium_Core_Util::substr(
                 $sessionKeys,
                 self::CRYPTO_KX_SESSIONKEYBYTES,
@@ -1828,7 +2112,7 @@ class ParagonIE_Sodium_Compat
                 0,
                 self::CRYPTO_KX_SESSIONKEYBYTES
             )
-        );
+        ];
     }
 
     /**
@@ -2841,6 +3125,106 @@ class ParagonIE_Sodium_Compat
         return ParagonIE_Sodium_Core_XSalsa20::xsalsa20($len, $nonce, $key);
     }
 
+    public static function crypto_sign_mldsa44_keypair(bool $dontFallback = false): string
+    {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_keypair')) {
+            return sodium_crypto_sign_mldsa44_keypair();
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::seedKeypair(random_bytes(32));
+    }
+
+    public static function crypto_sign_mldsa44_seed_keypair(
+        #[SensitiveParameter] string $seed,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_seed_keypair')) {
+            return sodium_crypto_sign_mldsa44_seed_keypair($seed);
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::seedKeypair($seed);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_sign_mldsa44_secretkey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_secretkey')) {
+            return sodium_crypto_sign_mldsa44_secretkey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 3872);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 0, 2560);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_sign_mldsa44_publickey(
+        #[SensitiveParameter] string $keypair,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_publickey')) {
+            return sodium_crypto_sign_mldsa44_publickey($keypair);
+        }
+        ParagonIE_Sodium_Core_PQUtil::assertLength($keypair, 3872);
+        return ParagonIE_Sodium_Core_Util::substr($keypair, 2560, 1312);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_sign_mldsa44_detached(
+        string $message,
+        #[SensitiveParameter] string $secretKey,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_detached')) {
+            return sodium_crypto_sign_mldsa44_detached($message, $secretKey);
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::sign($message, $secretKey);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public static function crypto_sign_mldsa44_detached_ctx(
+        string $message,
+        string $context,
+        #[SensitiveParameter] string $secretKey,
+        bool $dontFallback = false
+    ): string {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_detached_ctx')) {
+            return sodium_crypto_sign_mldsa44_detached_ctx($message, $context, $secretKey);
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::sign($message, $secretKey, $context);
+    }
+
+    public static function crypto_sign_mldsa44_verify_detached(
+        string $signature,
+        string $message,
+        string $publicKey,
+        bool $dontFallback = false
+    ): bool {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_verify_detached')) {
+            return sodium_crypto_sign_mldsa44_verify_detached($signature, $message, $publicKey);
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::verify($signature, $message, $publicKey);
+    }
+
+    public static function crypto_sign_mldsa44_verify_detached_ctx(
+        string $signature,
+        string $message,
+        string $context,
+        string $publicKey,
+        bool $dontFallback = false
+    ): bool {
+        if (!$dontFallback && self::usePQNative('sodium_crypto_sign_mldsa44_verify_detached_ctx')) {
+            return sodium_crypto_sign_mldsa44_verify_detached_ctx($signature, $message, $context, $publicKey);
+        }
+        return ParagonIE_Sodium_Core_MLDSA44::verify($signature, $message, $publicKey, $context);
+    }
+
     /**
      * DANGER! UNAUTHENTICATED ENCRYPTION!
      *
@@ -3798,5 +4182,17 @@ class ParagonIE_Sodium_Compat
             return false;
         }
         return (bool) $res;
+    }
+
+    /**
+     * Only native ext-sodium functions may bypass the PHP implementation.
+     */
+    protected static function usePQNative(string $function): bool
+    {
+        if (self::$disableFallbackForUnitTests || !extension_loaded('sodium') || !function_exists($function)) {
+            return false;
+        }
+        $reflection = new ReflectionFunction($function);
+        return $reflection->isInternal() && $reflection->getExtensionName() === 'sodium';
     }
 }

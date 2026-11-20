@@ -53,7 +53,7 @@ class PedanticTest extends TestCase
      */
     public function getInteresting32BitInts(): array
     {
-        return array(
+        return [
             0x00000000, 0x01234567,
             0x11111111, 0x12345678,
             0x22222222, 0x23456789,
@@ -71,7 +71,7 @@ class PedanticTest extends TestCase
             0xdddddddd, 0xdef01234,
             0xeeeeeeee, 0xef012345,
             0xffffffff, 0xf0123456
-        );
+        ];
     }
 
     /**
@@ -80,7 +80,7 @@ class PedanticTest extends TestCase
      */
     public function getInteresting16ByteStrings(): array
     {
-        $strings = array();
+        $strings = [];
         foreach ($this->getInteresting32BitInts() as $i => $int) {
             $tmp = ParagonIE_Sodium_Core_Util::store32_le($int);
             $strings[$i] = str_repeat($tmp, 4);
@@ -94,7 +94,7 @@ class PedanticTest extends TestCase
      */
     public function getInteresting32ByteStrings(): array
     {
-        $strings = array();
+        $strings = [];
         foreach ($this->getInteresting32BitInts() as $i => $int) {
             $tmp = ParagonIE_Sodium_Core_Util::store32_le($int);
             $strings[$i] = str_repeat($tmp, 8);
@@ -131,7 +131,7 @@ class PedanticTest extends TestCase
         if ($min < 1) {
             $min = 1;
         }
-        $strings = array();
+        $strings = [];
         $j = 0;
         for ($l = $min; $l <= $max; ++$l) {
             foreach ($this->getInteresting32BitInts() as $i => $int) {
@@ -219,7 +219,7 @@ class PedanticTest extends TestCase
     public function testCryptoBox(): void
     {
         $secretKeys = $this->getCryptoBoxKeys();
-        $publicKeys = array();
+        $publicKeys = [];
         $nonce = random_bytes(24);
         foreach ($secretKeys as $id => $secret) {
             try {
@@ -336,8 +336,8 @@ class PedanticTest extends TestCase
     public function testCryptoSign(): void
     {
         $seeds = $this->getCryptoBoxKeys();
-        $secretKeys = array();
-        $publicKeys = array();
+        $secretKeys = [];
+        $publicKeys = [];
         foreach ($seeds as $seed) {
             $keypair = ParagonIE_Sodium_Compat::crypto_sign_seed_keypair($seed);
             $secretKeys[] = ParagonIE_Sodium_Compat::crypto_sign_secretkey($keypair);

@@ -4,7 +4,7 @@ class SodiumCompatRistretto255Test extends KnownAnswerTestCase
 {
     public function setUp(): void
     {
-        if (!is_callable(array('ParagonIE_Sodium_Compat', 'ristretto255_random'))) {
+        if (!is_callable(['ParagonIE_Sodium_Compat', 'ristretto255_random'])) {
             $this->markTestSkipped('Ristretto255 not supported');
         }
     }

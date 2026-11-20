@@ -15,7 +15,7 @@ class CoreCurve25519FeTest extends TestCase
 
     public function testFromArray(): void
     {
-        $data = array(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+        $data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
         $fe = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($data);
         $this->assertInstanceOf(ParagonIE_Sodium_Core_Curve25519_Fe::class, $fe);
         $this->assertSame(10, $fe->e0);
@@ -25,7 +25,7 @@ class CoreCurve25519FeTest extends TestCase
     public function testFromArrayInvalid(): void
     {
         $this->expectException(SodiumException::class);
-        ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(1, 2, 3));
+        ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([1, 2, 3]);
     }
 
     public function testArrayAccessGet(): void

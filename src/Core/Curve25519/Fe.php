@@ -189,11 +189,11 @@ class ParagonIE_Sodium_Core_Curve25519_Fe implements ArrayAccess
      */
     public function __debugInfo()
     {
-        return array(
+        return [
             implode(', ', [
                 $this->e0, $this->e1, $this->e2, $this->e3, $this->e4,
                 $this->e5, $this->e6, $this->e7, $this->e8, $this->e9
             ])
-        );
+        ];
     }
 }

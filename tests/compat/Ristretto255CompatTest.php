@@ -150,18 +150,18 @@ class Ristretto255CompatTest extends TestCase
      */
     public static function brokenPHP81TestProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 '71a330faff41651c6dfa6e4548877d2dc2b0c26056c2e7e17bfb14cf94a4b47c',
                 '92d753c7b3fef8b8b553e672823db0a052d7598999a3baacd5909f0c0a6d491f',
                 '0c7507876a0215c3bf5407680a7c0bef7116c9bca25deca316322d1647dff75a'
-            ),
-            array(
+            ],
+            [
                 'a57445510d01b93e6ac9b4b0df02edf58dd577c527636a508ac52a015848051c',
                 '30417da32e12af747c79dd8dd239db80d6621da155abb9bcf270dfbf7f621d4f',
                 '06a686c7a7ec35374f37f8f537e7e099ce60aaca1c0c009085cc5a8f43850005'
-            )
-        );
+            ]
+        ];
     }
 
     /**

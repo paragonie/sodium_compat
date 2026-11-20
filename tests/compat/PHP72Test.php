@@ -357,14 +357,14 @@ class PHP72Test extends TestCase
             $decrypted_message
         );
 
-        $messages = array(
+        $messages = [
             'test',
             'slightly longer message',
             str_repeat('a', 29) . ' 32',
             str_repeat('a', 30) . ' 33',
             str_repeat('a', 31) . ' 34',
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        );
+        ];
         foreach ($messages as $message) {
             $sealed_to_alice1 = sodium_crypto_box_seal($message, $alice_box_publickey);
             $sealed_to_alice2 = ParagonIE_Sodium_Compat::crypto_box_seal(
@@ -960,12 +960,12 @@ class PHP72Test extends TestCase
             '050fbb107d2050e960ed6e9988d7b2bd280ade65e20103c2'
         );
         $state_copy = '' . $state;
-        $inputs = array(
+        $inputs = [
             "This is just a test message! :)",
             "Paragon Initiative Enterprises",
             "sodium_compat improves PHP code and makes PHP 7.2 migrations easy"
-        );
-        $outputs = array();
+        ];
+        $outputs = [];
         $copy2 = $state_copy;
         foreach ($inputs as $i => $input) {
             $outputs[$i] = ParagonIE_Sodium_Compat::crypto_secretstream_xchacha20poly1305_push($state, $input);

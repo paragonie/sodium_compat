@@ -231,7 +231,7 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
     public static function subWord(int $x): int
     {
         $q = ParagonIE_Sodium_Core_AES_Block::fromArray(
-            array($x, $x, $x, $x, $x, $x, $x, $x)
+            [$x, $x, $x, $x, $x, $x, $x, $x]
         );
         $q->orthogonalize();
         self::sbox($q);
@@ -257,8 +257,8 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
             32 => 14,
             default => throw new SodiumException('Invalid key length: ' . $key_len),
         };
-        $skey = array();
-        $comp_skey = array();
+        $skey = [];
+        $comp_skey = [];
         $nk = $key_len >> 2;
         $nkf = ($num_rounds + 1) << 2;
         $tmp = 0;
@@ -503,10 +503,10 @@ class ParagonIE_Sodium_Core_AES extends ParagonIE_Sodium_Core_Util
         for ($i = 0; $i < 8; ++$i) {
             $q[$i] ^= $rk[$i];
         }
-        return array(
+        return [
             self::store32_le($q[0]) . self::store32_le($q[2]) . self::store32_le($q[4]) . self::store32_le($q[6]),
             self::store32_le($q[1]) . self::store32_le($q[3]) . self::store32_le($q[5]) . self::store32_le($q[7]),
-        );
+        ];
     }
 
     /**

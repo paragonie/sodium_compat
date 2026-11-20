@@ -10,7 +10,7 @@ require_once dirname(dirname(__FILE__)) . '/autoload.php';
  * Thus, the functions or constants just proxy to the appropriate
  * ParagonIE_Sodium_Compat method or class constant, respectively.
  */
-foreach (array(
+foreach ([
     'CRYPTO_AEAD_AESGIS128L_KEYBYTES',
     'CRYPTO_AEAD_AESGIS128L_NSECBYTES',
     'CRYPTO_AEAD_AESGIS128L_NPUBBYTES',
@@ -19,7 +19,7 @@ foreach (array(
     'CRYPTO_AEAD_AESGIS256_NSECBYTES',
     'CRYPTO_AEAD_AESGIS256_NPUBBYTES',
     'CRYPTO_AEAD_AESGIS256_ABYTES',
-    ) as $constant
+    ] as $constant
 ) {
     if (!defined("SODIUM_$constant") && defined("ParagonIE_Sodium_Compat::$constant")) {
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));

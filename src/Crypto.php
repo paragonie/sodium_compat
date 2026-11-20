@@ -1313,10 +1313,10 @@ abstract class ParagonIE_Sodium_Crypto
         # memcpy(STATE_INONCE(state), out + crypto_core_hchacha20_INPUTBYTES,
         #        crypto_secretstream_xchacha20poly1305_INONCEBYTES);
         # memset(state->_pad, 0, sizeof state->_pad);
-        return array(
+        return [
             $state->toString(),
             $out
-        );
+        ];
     }
 
     /**
@@ -1609,7 +1609,7 @@ abstract class ParagonIE_Sodium_Crypto
             // DO REKEY
             self::secretstream_xchacha20poly1305_rekey($state);
         }
-        return array($out, $tag);
+        return [$out, $tag];
     }
 
     /**

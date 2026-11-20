@@ -287,27 +287,31 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
      */
     protected static function context(): SplFixedArray
     {
-        $ctx    = new SplFixedArray(6);
-        $ctx[0] = new SplFixedArray(8);   // h
-        $ctx[1] = new SplFixedArray(2);   // t
-        $ctx[2] = new SplFixedArray(2);   // f
-        $ctx[3] = new SplFixedArray(256); // buf
-        $ctx[4] = 0;                      // buflen
-        $ctx[5] = 0;                      // last_node (uint8_t)
+        $h = new SplFixedArray(8);
+        $t = new SplFixedArray(2);
+        $f = new SplFixedArray(2);
+        $buf = new SplFixedArray(256);
 
         for ($i = 8; $i--;) {
-            $ctx[0][$i] = self::$iv[$i];
+            $h[$i] = self::$iv[$i];
         }
         for ($i = 256; $i--;) {
-            $ctx[3][$i] = 0;
+            $buf[$i] = 0;
         }
 
         $zero = self::new64(0, 0);
-        $ctx[1][0] = $zero;
-        $ctx[1][1] = $zero;
-        $ctx[2][0] = $zero;
-        $ctx[2][1] = $zero;
+        $t[0] = $zero;
+        $t[1] = $zero;
+        $f[0] = $zero;
+        $f[1] = $zero;
 
+        $ctx    = new SplFixedArray(6);
+        $ctx[0] = $h;
+        $ctx[1] = $t;
+        $ctx[2] = $f;
+        $ctx[3] = $buf;
+        $ctx[4] = 0; // buflen
+        $ctx[5] = 0; // last_node (uint8_t)
         return $ctx;
     }
 
@@ -680,7 +684,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         $ctx4 = (int) $ctx[4];
 
         # size_t buflen;
-        $str .= implode('', array(
+        $str .= implode('', [
             self::intToChr($ctx4 & 0xff),
             self::intToChr(($ctx4 >> 8) & 0xff),
             self::intToChr(($ctx4 >> 16) & 0xff),
@@ -689,7 +693,7 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
             self::intToChr(($ctx4 >> 40) & 0xff),
             self::intToChr(($ctx4 >> 48) & 0xff),
             self::intToChr(($ctx4 >> 56) & 0xff)
-        ));
+        ]);
         # uint8_t last_node;
         return $str . self::intToChr($ctx[5]) . str_repeat("\x00", 23);
     }
@@ -712,14 +716,14 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         # uint64_t h[8];
         for ($i = 0; $i < 8; ++$i) {
             $ctx[0][$i] = SplFixedArray::fromArray(
-                array(
+                [
                     self::load_4(
                         self::substr($string, (($i << 3) + 4), 4)
                     ),
                     self::load_4(
                         self::substr($string, (($i << 3)), 4)
                     )
-                )
+                ]
             );
         }
 
@@ -727,16 +731,16 @@ abstract class ParagonIE_Sodium_Core_BLAKE2b extends ParagonIE_Sodium_Core_Util
         # uint64_t f[2];
         for ($i = 1; $i < 3; ++$i) {
             $ctx[$i][1] = SplFixedArray::fromArray(
-                array(
+                [
                     self::load_4(self::substr($string, 76 + (($i - 1) << 4), 4)),
                     self::load_4(self::substr($string, 72 + (($i - 1) << 4), 4))
-                )
+                ]
             );
             $ctx[$i][0] = SplFixedArray::fromArray(
-                array(
+                [
                     self::load_4(self::substr($string, 68 + (($i - 1) << 4), 4)),
                     self::load_4(self::substr($string, 64 + (($i - 1) << 4), 4))
-                )
+                ]
             );
         }
 

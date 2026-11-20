@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * For unit tests only!
+ */
+final class PQPolynomialReference
+{
+    public static function coefficients(int $q, string $pattern): array
+    {
+        $values = array_fill(0, 256, 0);
+        if ($pattern === 'one') {
+            $values[0] = 1;
+        } elseif ($pattern === 'wrap') {
+            $values[255] = $q - 1;
+        } elseif ($pattern !== 'zero') {
+            for ($i = 0; $i < 256; ++$i) {
+                $values[$i] = $pattern === 'ramp'
+                    ? ($i * 17 + 3) % $q
+                    : hexdec(
+                        substr(hash('sha256', 'polynomial coefficient ' . $i),
+                            0,
+                            6)
+                    ) % $q;
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * Schoolbook multiplication in Z_q[x]/(x^256 + 1)
+     */
+    public static function multiply(array $a, array $b, int $q): array
+    {
+        $out = array_fill(0, 256, 0);
+        for ($i = 0; $i < 256; ++$i) {
+            for ($j = 0; $j < 256; ++$j) {
+                $index = $i + $j;
+                $product = $a[$i] * $b[$j];
+                if ($index >= 256) {
+                    $index -= 256;
+                    $product = -$product;
+                }
+                $out[$index] = (($out[$index] + $product) % $q + $q) % $q;
+            }
+        }
+        return $out;
+    }
+
+    /** Little-endian bit stream, assembled a byte at a time. */
+    public static function pack(array $coefficients, int $width): string
+    {
+        $out = '';
+        $pending = 0;
+        $bits = 0;
+        foreach ($coefficients as $coefficient) {
+            $pending |= $coefficient << $bits;
+            $bits += $width;
+            while ($bits >= 8) {
+                $out .= chr($pending & 255);
+                $pending >>= 8;
+                $bits -= 8;
+            }
+        }
+        if ($bits !== 0) {
+            $out .= chr($pending & 255);
+        }
+        return $out;
+    }
+}

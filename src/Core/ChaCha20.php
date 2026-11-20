@@ -64,7 +64,7 @@ class ParagonIE_Sodium_Core_ChaCha20 extends ParagonIE_Sodium_Core_Util
         /** @var int $c */
         $c = ($c + $d) & 0xffffffff;
         $b = self::rotate($b ^ $c, 7);
-        return array($a, $b, $c, $d);
+        return [$a, $b, $c, $d];
     }
 
     /**

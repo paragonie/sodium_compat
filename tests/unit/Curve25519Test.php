@@ -25,7 +25,7 @@ class Curve25519Test extends TestCase
      */
     public function testFe0(): void
     {
-        $f = array(
+        $f = [
             0,
             0,
             0,
@@ -36,7 +36,7 @@ class Curve25519Test extends TestCase
             0,
             0,
             0
-        );
+        ];
         $fe_f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($f);
         $r = ParagonIE_Sodium_Core_Curve25519::fe_0();
         for ($i = 0; $i < 10; ++$i) {
@@ -50,7 +50,7 @@ class Curve25519Test extends TestCase
      */
     public function testFe1(): void
     {
-        $f = array(
+        $f = [
             1,
             0,
             0,
@@ -61,7 +61,7 @@ class Curve25519Test extends TestCase
             0,
             0,
             0
-        );
+        ];
         $fe_f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($f);
         $r = ParagonIE_Sodium_Core_Curve25519::fe_1();
         for ($i = 0; $i < 10; ++$i) {
@@ -75,7 +75,7 @@ class Curve25519Test extends TestCase
      */
     public function testFeAdd(): void
     {
-        $f = array(
+        $f = [
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535),
@@ -86,8 +86,8 @@ class Curve25519Test extends TestCase
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535)
-        );
-        $g = array(
+        ];
+        $g = [
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535),
@@ -98,8 +98,8 @@ class Curve25519Test extends TestCase
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535)
-        );
-        $h = array();
+        ];
+        $h = [];
         for ($i = 0; $i < 10; ++$i) {
             $h[$i] = $f[$i] + $g[$i];
         }
@@ -121,7 +121,7 @@ class Curve25519Test extends TestCase
     public function testFeSq(): void
     {
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 70051,
                 -1455864,
                 -220599,
@@ -132,11 +132,11 @@ class Curve25519Test extends TestCase
                 12781942,
                 1056405,
                 -13773822
-            )
+            ]
         );
 
         $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 -4080589,
                 -8170580,
                 19250910,
@@ -147,7 +147,7 @@ class Curve25519Test extends TestCase
                 6893025,
                 -30945925,
                 -5379679
-            )
+            ]
         );
 
         $h = ParagonIE_Sodium_Core_Curve25519::fe_sq($g);
@@ -164,7 +164,7 @@ class Curve25519Test extends TestCase
     public function testFeSqDouble(): void
     {
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 70051,
                 -1455864,
                 -220599,
@@ -175,11 +175,11 @@ class Curve25519Test extends TestCase
                 12781942,
                 1056405,
                 -13773822
-            )
+            ]
         );
 
         $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 -8161178,
                 -16341160,
                 -28607044,
@@ -190,7 +190,7 @@ class Curve25519Test extends TestCase
                 13786051,
                 5217014,
                 -10759359
-            )
+            ]
         );
 
         $h = ParagonIE_Sodium_Core_Curve25519::fe_sq2($g);
@@ -207,7 +207,7 @@ class Curve25519Test extends TestCase
      */
     public function testFeSub(): void
     {
-        $f = array(
+        $f = [
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535),
@@ -218,8 +218,8 @@ class Curve25519Test extends TestCase
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535)
-        );
-        $g = array(
+        ];
+        $g = [
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535),
@@ -230,8 +230,8 @@ class Curve25519Test extends TestCase
             random_int(0, 65535),
             random_int(0, 65535),
             random_int(0, 65535)
-        );
-        $h = array();
+        ];
+        $h = [];
         for ($i = 0; $i < 10; ++$i) {
             $h[$i] = $f[$i] - $g[$i];
         }
@@ -307,13 +307,13 @@ class Curve25519Test extends TestCase
             ParagonIE_Sodium_Core_Curve25519::ge_select(0, 6),
             new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(-15371964, -12862754, 32573250, 4720197, -26436522, 5875511, -19188627, -15224819, -9818940, -12085777)
+                    [-15371964, -12862754, 32573250, 4720197, -26436522, 5875511, -19188627, -15224819, -9818940, -12085777]
                 ),
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(-8549212, 109983, 15149363, 2178705, 22900618, 4543417, 3044240, -15689887, 1762328, 14866737)
+                    [-8549212, 109983, 15149363, 2178705, 22900618, 4543417, 3044240, -15689887, 1762328, 14866737]
                 ),
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(-18199695, -15951423, -10473290, 1707278, -17185920, 3916101, -28236412, 3959421, 27914454, 4383652)
+                    [-18199695, -15951423, -10473290, 1707278, -17185920, 3916101, -28236412, 3959421, 27914454, 4383652]
                 )
             ),
             'ge_select is not working.'
@@ -323,7 +323,7 @@ class Curve25519Test extends TestCase
     public function testFeMul(): void
     {
         $f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 26853523,
                 -15767542,
                 10850706,
@@ -334,11 +334,11 @@ class Curve25519Test extends TestCase
                 1643574,
                 11273642,
                 14083967
-            )
+            ]
         );
 
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 -10913610,
                 13857413,
                 -15372611,
@@ -349,11 +349,11 @@ class Curve25519Test extends TestCase
                 -3247719,
                 -18696448,
                 -12055116
-            )
+            ]
         );
 
         $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 -25012118,
                 15881590,
                 -29167576,
@@ -364,7 +364,7 @@ class Curve25519Test extends TestCase
                 -1425685,
                 -9694368,
                 -16104023
-            )
+            ]
         );
 
         $h = ParagonIE_Sodium_Core_Curve25519::fe_mul($f, $g);
@@ -386,7 +386,7 @@ class Curve25519Test extends TestCase
         );
 
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 70051,
                 -1455864,
                 -220599,
@@ -397,7 +397,7 @@ class Curve25519Test extends TestCase
                 12781942,
                 1056405,
                 -13773822
-            )
+            ]
         );
         $this->assertEquals(
             $g,
@@ -405,7 +405,7 @@ class Curve25519Test extends TestCase
         );
 
         $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 7544649,
                 10532726,
                 -19637653,
@@ -416,7 +416,7 @@ class Curve25519Test extends TestCase
                 -8668475,
                 -9608131,
                 -4851782
-            )
+            ]
         );
 
         $h = ParagonIE_Sodium_Core_Curve25519::fe_mul($f, $g);
@@ -424,7 +424,7 @@ class Curve25519Test extends TestCase
 
 
         $f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 0x3ffffff,
                 0x3ffffff,
                 0x3ffffff,
@@ -435,10 +435,10 @@ class Curve25519Test extends TestCase
                 0x3ffffff,
                 0x3ffffff,
                 0x3ffffff
-            )
+            ]
         );
         $g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 0x1ffffff,
                 0x0ffffff,
                 0x1ffffff,
@@ -449,7 +449,7 @@ class Curve25519Test extends TestCase
                 0x0ffffff,
                 0x1ffffff,
                 0x0ffffff
-            )
+            ]
         );
         $this->assertEquals(
             $g,
@@ -457,7 +457,7 @@ class Curve25519Test extends TestCase
         );
 
         $expected = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-            array(
+            [
                 -33554165,
                 16777160,
                 33554393,
@@ -468,7 +468,7 @@ class Curve25519Test extends TestCase
                 16777186,
                 33554420,
                 16777195
-            )
+            ]
         );
 
         $h = ParagonIE_Sodium_Core_Curve25519::fe_mul($f, $g);
@@ -479,43 +479,43 @@ class Curve25519Test extends TestCase
     {
         $p = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             )
         );
 
         $q = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-8549212, 109983, 15149363, 2178705, 22900618, 4543417, 3044240, -15689887, 1762328, 14866737)
+                [-8549212, 109983, 15149363, 2178705, 22900618, 4543417, 3044240, -15689887, 1762328, 14866737]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-15371964, -12862754, 32573250, 4720197, -26436522, 5875511, -19188627, -15224819, -9818940, -12085777)
+                [-15371964, -12862754, 32573250, 4720197, -26436522, 5875511, -19188627, -15224819, -9818940, -12085777]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(18199695, 15951423, 10473290, -1707278, 17185920, -3916101, 28236412, -3959421, -27914454, -4383652)
+                [18199695, 15951423, 10473290, -1707278, 17185920, -3916101, 28236412, -3959421, -27914454, -4383652]
             )
         );
 
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(6822752, 12972737, -17423887, -2541492, 49337140, -1332094, 22232867, -465068, 11581268, 26952514)
+                [6822752, 12972737, -17423887, -2541492, 49337140, -1332094, 22232867, -465068, 11581268, 26952514]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-23921176, -12752771, 47722613, 6898902, -3535904, 10418928, -16144387, -30914706, -8056612, 2780960)
+                [-23921176, -12752771, 47722613, 6898902, -3535904, 10418928, -16144387, -30914706, -8056612, 2780960]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             )
         );
 
@@ -529,43 +529,43 @@ class Curve25519Test extends TestCase
         // $this->assertSame(true, true); return;
         $h = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             )
         );
 
         $t = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(23599295, -8306047, -11193664, -7687416, 13236774, 10506355, 7464579, 9656445, 13059162, 103743971)
+                [23599295, -8306047, -11193664, -7687416, 13236774, 10506355, 7464579, 9656445, 13059162, 103743971]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-17036878, 13921892, 10945806, -6033431, 27105052, -16084379, -28926210, 15006023, 3284568, -6276540)
+                [-17036878, 13921892, 10945806, -6033431, 27105052, -16084379, -28926210, 15006023, 3284568, -6276540]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-7798556, -16710257, -3033922, -2874086, -28997861, -2835604, -32406664, 3839045, 641708, 101325)
+                [-7798556, -16710257, -3033922, -2874086, -28997861, -2835604, -32406664, 3839045, 641708, 101325]
             )
         );
 
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(40636230, -22227939, -22139470, -1653985, -13868278, 26590734, 36390789, -5349578, 9774594, 9357215)
+                [40636230, -22227939, -22139470, -1653985, -13868278, 26590734, 36390789, -5349578, 9774594, 9357215]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(6562474, 5615845, -247858, -13720847, 40341826, -5578024, -21461631, 24662468, 16343730, -3195865)
+                [6562474, 5615845, -247858, -13720847, 40341826, -5578024, -21461631, 24662468, 16343730, -3195865]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             )
         );
 
@@ -578,43 +578,43 @@ class Curve25519Test extends TestCase
 
         $h = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(1,0,0,0,0,0,0,0,0,0)
+                [1,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(0,0,0,0,0,0,0,0,0,0)
+                [0,0,0,0,0,0,0,0,0,0]
             )
         );
 
         $t = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-12815894, -12976347, -21581243, 11784320, -25355658, -2750717, -11717903, -3814571, -358445, -10211303)
+                [-12815894, -12976347, -21581243, 11784320, -25355658, -2750717, -11717903, -3814571, -358445, -10211303]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-21703237, 6903825, 27185491, 6451973, -29577724, -9554005, -15616551, 11189268, -26829678, -53190817)
+                [-21703237, 6903825, 27185491, 6451973, -29577724, -9554005, -15616551, 11189268, -26829678, -53190817]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(26966642, 11152617, 32442495, 15396054, 14353839, -12752335, -3128826, -9541118, -15472047, -4166697)
+                [26966642, 11152617, 32442495, 15396054, 14353839, -12752335, -3128826, -9541118, -15472047, -4166697]
             )
         );
 
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(8887381, -19880172, -48766734, 5332347, 4222066, 6803288, 3898648, -15003839, 26471233, -24129350)
+                [8887381, -19880172, -48766734, 5332347, 4222066, 6803288, 3898648, -15003839, 26471233, -24129350]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-34519169, -6072522, 5604248, 18236293, -54933382, -12304722, -27334454, 7374697, -27188123, 3706744)
+                [-34519169, -6072522, 5604248, 18236293, -54933382, -12304722, -27334454, 7374697, -27188123, 3706744]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(2,0,0,0,0,0,0,0,0,0)
+                [2,0,0,0,0,0,0,0,0,0]
             )
         );
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
@@ -633,7 +633,7 @@ class Curve25519Test extends TestCase
         );
         $R = ParagonIE_Sodium_Core_Curve25519::ge_scalarmult_base($nonce);
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -23932472,
                 11221871,
                 27518927,
@@ -644,8 +644,8 @@ class Curve25519Test extends TestCase
                 6713345,
                 -33117680,
                 -10663750
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 14689788,
                 -10448958,
                 -30321432,
@@ -656,8 +656,8 @@ class Curve25519Test extends TestCase
                 -13751241,
                 -1536736,
                 -13958946
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 19689758,
                 -6173146,
                 -15886452,
@@ -668,8 +668,8 @@ class Curve25519Test extends TestCase
                 16072970,
                 5918454,
                 14582476
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -9719484,
                 -15496290,
                 -31004425,
@@ -680,7 +680,7 @@ class Curve25519Test extends TestCase
                 -14149517,
                 27692259,
                 -14101917
-            ))
+            ])
         );
         $this->assertEquals(
             $expected,
@@ -707,7 +707,7 @@ class Curve25519Test extends TestCase
             'bd84d56b93d272eb01a2ffb5557bda3922360e402c29d05cda3f0debabaf5ce5'
         );
         $this->assertEquals(
-            array(
+            [
                 0, 0, -1, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, -1,
                 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -15, 0, 0,
                 0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, -7, 0, 0, 0, 0,
@@ -721,7 +721,7 @@ class Curve25519Test extends TestCase
                 0, 0, 0, -3, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
                 0, -9, 0, 0, 0, 0, 0, -7, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
                 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0
-            ),
+            ],
             ParagonIE_Sodium_Core_Curve25519::slide($a),
             'slide()'
         );
@@ -730,7 +730,7 @@ class Curve25519Test extends TestCase
             '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
         );
         $this->assertEquals(
-            array(
+            [
                 0, -5, 0, 0, 0, 0, -7, 0, 0, 0, 0, -11, 0, 0, 0, 0, -13, 0, 0,
                 0, 0, 7, 0, 0, 0, 0, -3, 0, 0, 0, 0, -1, 0, 0, 0, 0, 9, 0, 0,
                 0, 0, -11, 0, 0, 0, 0, 0, -15, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
@@ -744,7 +744,7 @@ class Curve25519Test extends TestCase
                 0, 0, 15, 0, 0, 0, 0, -15, 0, 0, 0, 0, -1, 0, 0, 0, 0, -3, 0,
                 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 11, 0, 0, 0, 0, 5, 0, 0, 0,
                 0, 13, 0, 0, 0, 0, -5, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 1, 0
-            ),
+            ],
             ParagonIE_Sodium_Core_Curve25519::slide($b),
             'slide()'
         );
@@ -761,7 +761,7 @@ class Curve25519Test extends TestCase
             'bd84d56b93d272eb01a2ffb5557bda3922360e402c29d05cda3f0debabaf5ce5'
         );
         $A = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 25569346,
                 24607350,
                 21422669,
@@ -772,21 +772,21 @@ class Curve25519Test extends TestCase
                 12129629,
                 33577468,
                 23235570
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 16253166, 2599808, 30616947, -12747262, 372730, 8894334, 9139202, -197177, -24298945, 15942855
-            )),
+            ]),
             ParagonIE_Sodium_Core_Curve25519::fe_1(),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -28155508, 13944970, 2511703, 16462880, 15250894, -7952383, -19629302, 16022930, 1783986, 16320964
-            ))
+            ])
         );
         $sig = ParagonIE_Sodium_Core_Util::hex2bin(
             '36a6d2748f6ab8f76c122a562d55343cb7c6f15c8a45bd55bd8b9e9fadd2363f' .
             '370cb78fba42c550d487b9bd7413312b6490c8b3ee2cea638997172a9c8c250f'
         );
         $expected = new ParagonIE_Sodium_Core_Curve25519_Ge_P2(
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -18667682,
                 9847093,
                 7256576,
@@ -797,8 +797,8 @@ class Curve25519Test extends TestCase
                 6989354,
                 -19138147,
                 -13642525
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 6317192,
                 4477233,
                 24373531,
@@ -809,8 +809,8 @@ class Curve25519Test extends TestCase
                 8319048,
                 13730645,
                 -7760907
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 32680048,
                 -15342934,
                 3837898,
@@ -821,7 +821,7 @@ class Curve25519Test extends TestCase
                 -627297,
                 24243949,
                 12818173
-            ))
+            ])
         );
 
         $this->assertEquals(
@@ -838,16 +838,16 @@ class Curve25519Test extends TestCase
     {
         $h = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-1594322, -5977244, 5464532, 10581198, -25979371, 12080549, -33350018, 1574611, 19995101, 13564973)
+                [-1594322, -5977244, 5464532, 10581198, -25979371, 12080549, -33350018, 1574611, 19995101, 13564973]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-18723709, -973029, -25256245, 15814990, -1761947, -13933478, 4253868, 13520360, -19620859, 9124635)
+                [-18723709, -973029, -25256245, 15814990, -1761947, -13933478, 4253868, 13520360, -19620859, 9124635]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(13325287, -281729, -20379096, -7440165, 33350335, -2779381, 3728108, -4645219, 8597785, 10781386)
+                [13325287, -281729, -20379096, -7440165, 33350335, -2779381, 3728108, -4645219, 8597785, 10781386]
             ),
             ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                array(-2132132, -9321290, -6314567, -5742359, 26868584, 6121874, -12905835, -8351796, -6684490, 2810736)
+                [-2132132, -9321290, -6314567, -5742359, 26868584, 6121874, -12905835, -8351796, -6684490, 2810736]
             )
         );
         $r = ParagonIE_Sodium_Core_Curve25519::ge_p3_dbl($h);
@@ -855,16 +855,16 @@ class Curve25519Test extends TestCase
             $r,
             new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1(
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(-35283196, -12206287, -25587079, -781847, -12122107, -28300439, 17653143, -6739204, 53430184, -2709074)
+                    [-35283196, -12206287, -25587079, -781847, -12122107, -28300439, 17653143, -6739204, 53430184, -2709074]
                 ),
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(41346847, -651104, 44099729, -11567738, 24203910, 15902281, -7669229, -5701807, -36827255, -8892117)
+                    [41346847, -651104, 44099729, -11567738, 24203910, 15902281, -7669229, -5701807, -36827255, -8892117]
                 ),
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(-8486765, -30734394, -22721233, -6397156, 15030434, -12155039, 45632571, 6384575, -16815183, 4041753)
+                    [-8486765, -30734394, -22721233, -6397156, 15030434, -12155039, 45632571, 6384575, -16815183, 4041753]
                 ),
                 ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(
-                    array(20359676, 27238564, 53876343, -3630392, 747030, 27670722, -30548977, -5701679, 9121398, -14580561)
+                    [20359676, 27238564, 53876343, -3630392, 747030, 27670722, -30548977, -5701679, 9121398, -14580561]
                 )
             )
         );
@@ -877,7 +877,7 @@ class Curve25519Test extends TestCase
     public function testGeP3ToBytes32(): void
     {
         $R = new ParagonIE_Sodium_Core_Curve25519_Ge_P3(
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -23932472,
                 11221871,
                 27518927,
@@ -888,8 +888,8 @@ class Curve25519Test extends TestCase
                 6713345,
                 -33117680,
                 -10663750
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 14689788,
                 -10448958,
                 -30321432,
@@ -900,8 +900,8 @@ class Curve25519Test extends TestCase
                 -13751241,
                 -1536736,
                 -13958946
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 19689758,
                 -6173146,
                 -15886452,
@@ -912,8 +912,8 @@ class Curve25519Test extends TestCase
                 16072970,
                 5918454,
                 14582476
-            )),
-            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray(array(
+            ]),
+            ParagonIE_Sodium_Core_Curve25519_Fe::fromArray([
                 -9719484,
                 -15496290,
                 -31004425,
@@ -924,7 +924,7 @@ class Curve25519Test extends TestCase
                 -14149517,
                 27692259,
                 -14101917
-            ))
+            ])
         );
         $bytes = ParagonIE_Sodium_Core_Curve25519::ge_p3_tobytes($R);
         $this->assertSame(
@@ -956,12 +956,12 @@ class Curve25519Test extends TestCase
 
     public function test121666Mul(): void
     {
-        $f = array(
+        $f = [
             6334098, -296341, -25402037, 14130508, 28301433, 10881396, -32579582, 21932206, 23531802, -8703561
-        );
-        $g = array(
+        ];
+        $g = [
             32682354, 16401777, 279075, 7462323, 33495638, 5862485, 24776867, -12488670, 21945689, -16644908
-        );
+        ];
         $fe_f = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($f);
         $fe_g = ParagonIE_Sodium_Core_Curve25519_Fe::fromArray($g);
         $mult = ParagonIE_Sodium_Core_X25519::fe_mul121666($fe_f);

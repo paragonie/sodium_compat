@@ -25,22 +25,22 @@ class AESTest extends TestCase
     public static function aes128ecbProvider(): array
     {
         // key, plaintext, ciphertext
-        return array(
-            array(
+        return [
+            [
                 "2B7E151628AED2A6ABF7158809CF4F3C",
                 "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710",
                 "3AD77BB40D7A3660A89ECAF32466EF97F5D3D58503B9699DE785895A96FDBAAF43B1CD7F598ECE23881B00E3ED0306887B0C785E27E8AD3F8223207104725DD4"
-            ),
-            array("000102030405060708090a0b0c0d0e0f", "00112233445566778899aabbccddeeff", "69c4e0d86a7b0430d8cdb78070b4c55a"),
-            array('30313233343536373839616263646566', '59454c4c4f57205355424d4152494e45', '1438c8f442ce85508d6b1f6826988551'),
-            array('00000000000000000000000000000000', 'f34481ec3cc627bacd5dc3fb08f273e6', '0336763e966d92595a567cc9ce537f5e'),
-            array('00000000000000000000000000000000', '9798c4640bad75c7c3227db910174e72', 'a9a1631bf4996954ebc093957b234589'),
-            array('00000000000000000000000000000000', '96ab5c2ff612d9dfaae8c31f30c42168', 'ff4f8391a6a40ca5b25d23bedd44a597'),
-            array('00000000000000000000000000000000', '6a118a874519e64e9963798a503f1d35', 'dc43be40be0e53712f7e2bf5ca707209'),
-            array('00000000000000000000000000000000', 'cb9fceec81286ca3e989bd979b0cb284', '92beedab1895a94faa69b632e5cc47ce'),
-            array('00000000000000000000000000000000', 'b26aeb1874e47ca8358ff22378f09144', '459264f4798f6a78bacb89c15ed3d601'),
-            array('00000000000000000000000000000000', '58c8e00b2631686d54eab84b91f0aca1', '08a4e2efec8a8e3312ca7460b9040bbf')
-        );
+            ],
+            ["000102030405060708090a0b0c0d0e0f", "00112233445566778899aabbccddeeff", "69c4e0d86a7b0430d8cdb78070b4c55a"],
+            ['30313233343536373839616263646566', '59454c4c4f57205355424d4152494e45', '1438c8f442ce85508d6b1f6826988551'],
+            ['00000000000000000000000000000000', 'f34481ec3cc627bacd5dc3fb08f273e6', '0336763e966d92595a567cc9ce537f5e'],
+            ['00000000000000000000000000000000', '9798c4640bad75c7c3227db910174e72', 'a9a1631bf4996954ebc093957b234589'],
+            ['00000000000000000000000000000000', '96ab5c2ff612d9dfaae8c31f30c42168', 'ff4f8391a6a40ca5b25d23bedd44a597'],
+            ['00000000000000000000000000000000', '6a118a874519e64e9963798a503f1d35', 'dc43be40be0e53712f7e2bf5ca707209'],
+            ['00000000000000000000000000000000', 'cb9fceec81286ca3e989bd979b0cb284', '92beedab1895a94faa69b632e5cc47ce'],
+            ['00000000000000000000000000000000', 'b26aeb1874e47ca8358ff22378f09144', '459264f4798f6a78bacb89c15ed3d601'],
+            ['00000000000000000000000000000000', '58c8e00b2631686d54eab84b91f0aca1', '08a4e2efec8a8e3312ca7460b9040bbf']
+        ];
     }
 
     /**
@@ -49,13 +49,13 @@ class AESTest extends TestCase
     public static function aes192ecbProvider(): array
     {
         // key, plaintext, ciphertext
-        return array(
-            array(
+        return [
+            [
                 "8E73B0F7DA0E6452C810F32B809079E562F8EAD2522C6B7B",
                 "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710",
                 "BD334F1D6E45F25FF712A214571FA5CC974104846D0AD3AD7734ECB3ECEE4EEFEF7AFD2270E2E60ADCE0BA2FACE6444E9A4B41BA738D6C72FB16691603C18E0E"
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -64,18 +64,18 @@ class AESTest extends TestCase
     public static function aes256ecbProvider(): array
     {
         // key, plaintext, ciphertext
-        return array(
-            array(
+        return [
+            [
                 "603DEB1015CA71BE2B73AEF0857D77811F352C073B6108D72D9810A30914DFF4",
                 "6BC1BEE22E409F96E93D7E117393172AAE2D8A571E03AC9C9EB76FAC45AF8E5130C81C46A35CE411E5FBC1191A0A52EFF69F2445DF4F9B17AD2B417BE66C3710",
                 "F3EED1BDB5D2A03C064B5A7E3DB181F8591CCB10D410ED26DC5BA74A31362870B6ED21B99CA6F4F9F153E7B1BEAFED1D23304B7A39F9F3FF067D8D8F9E24ECC7"
-            ),
-        );
+            ],
+        ];
     }
 
     public static function sboxProvider(): array
     {
-        $lut = array(
+        $lut = [
             0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B,
             0xFE, 0xD7, 0xAB, 0x76, 0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0,
             0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0, 0xB7, 0xFD, 0x93, 0x26,
@@ -98,17 +98,17 @@ class AESTest extends TestCase
             0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
             0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F,
             0xB0, 0x54, 0xBB, 0x16
-        );
-        $return = array();
+        ];
+        $return = [];
         foreach ($lut as $i => $v) {
-            $return []= array($i, $v);
+            $return []= [$i, $v];
         }
         return $return;
     }
 
     public function testSboxKnownGood(): void
     {
-        $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
+        $q = ParagonIE_Sodium_Core_AES_Block::fromArray([
             0x00010203,
             0x04050607,
             0x08090a0b,
@@ -117,7 +117,7 @@ class AESTest extends TestCase
             0x79872083, // OW S
             0x85667765, // UBMA
             0x82737869, // RINE
-        ));
+        ]);
         $q->orthogonalize();
         ParagonIE_Sodium_Core_AES::sbox($q);
         $q->orthogonalize();
@@ -154,16 +154,16 @@ class AESTest extends TestCase
 
     public static function orthoProvider(): array
     {
-        return array(
-            array(
-                array(0x03020100, 0x03020100, 0x07060504, 0x07060504, 0x0b0a0908, 0x0b0a0908, 0x0f0e0d0c, 0x0f0e0d0c),
-                array(0xff00ff00, 0xffff0000, 0xcccccccc, 0xf0f0f0f0, 0x00000000, 0x00000000, 0x00000000, 0x00000000)
-            ),
-            array(
-                array(0xfd74aad6, 0xfd74aad6, 0xfa72afd2, 0xfa72afd2, 0xf178a6da, 0xf178a6da, 0xfe76abd6, 0xfe76abd6),
-                array(0x3300cc00, 0xccccffff, 0xc3c33cc3, 0xcf30cf30, 0xffff00ff, 0xffffff00, 0xffff00ff, 0xff00ffff)
-            )
-        );
+        return [
+            [
+                [0x03020100, 0x03020100, 0x07060504, 0x07060504, 0x0b0a0908, 0x0b0a0908, 0x0f0e0d0c, 0x0f0e0d0c],
+                [0xff00ff00, 0xffff0000, 0xcccccccc, 0xf0f0f0f0, 0x00000000, 0x00000000, 0x00000000, 0x00000000]
+            ],
+            [
+                [0xfd74aad6, 0xfd74aad6, 0xfa72afd2, 0xfa72afd2, 0xf178a6da, 0xf178a6da, 0xfe76abd6, 0xfe76abd6],
+                [0x3300cc00, 0xccccffff, 0xc3c33cc3, 0xcf30cf30, 0xffff00ff, 0xffffff00, 0xffff00ff, 0xff00ffff]
+            ]
+        ];
     }
 
     /**
@@ -181,7 +181,7 @@ class AESTest extends TestCase
 
     public function testAddRoundKey(): void
     {
-        $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(1, 2, 3, 4, 5, 6, 7, 8));
+        $q = ParagonIE_Sodium_Core_AES_Block::fromArray([1, 2, 3, 4, 5, 6, 7, 8]);
         $schedule = ParagonIE_Sodium_Core_AES::keySchedule('sodiumcompat1.21');
         ParagonIE_Sodium_Core_AES::addRoundKey($q, $schedule);
         $rk = $schedule->getRoundKey(0);
@@ -192,10 +192,10 @@ class AESTest extends TestCase
 
     public function testShiftRows(): void
     {
-        $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
+        $q = ParagonIE_Sodium_Core_AES_Block::fromArray([
             0x11111111, 0x22222222, 0x33333333, 0x44444444,
             0x01234567, 0xfedcba98, 0x00010203, 0xfffefdfc,
-        ));
+        ]);
         $_q = clone $q;
         $q->orthogonalize()->shiftRows()->orthogonalize();
         $this->assertSame(0x00233311, $q[0]);
@@ -214,9 +214,9 @@ class AESTest extends TestCase
 
     public function testMixColumns(): void
     {
-        $q = ParagonIE_Sodium_Core_AES_Block::fromArray(array(
+        $q = ParagonIE_Sodium_Core_AES_Block::fromArray([
             0xf8be2b17, 0xcaba63cb, 0x67b2a090, 0x8988c2d4, 0x1a70b1e8, 0xcabf96eb, 0x7ae7f79b, 0x615d60d8
-        ));
+        ]);
         $q->mixColumns();
 
         $this->assertSame(0x3bf86cd5, $q[0]);
@@ -243,7 +243,7 @@ class AESTest extends TestCase
     public function testKeySchedule(): void
     {
         $ks = ParagonIE_Sodium_Core_AES::keySchedule(sodium_hex2bin("000102030405060708090a0b0c0d0e0f"));
-        $expect = array(
+        $expect = [
             0xffaa5500, 0xe4e4e4e4, 0x00000000, 0x00000000, 0x9988eeaa, 0xcb619e61, 0xffffaa55, 0xff55aaff,
             0x87d73622, 0xc21f2cb5, 0xccccddbb, 0xccbb2266, 0x7ec45b0a, 0x3ff9a371, 0x3cc39327, 0x698d5f1e,
             0x4c6b4757, 0xf3cd75e5, 0xf33f2ff4, 0xe28313f9, 0xbcb7be44, 0x9a3c4ecb, 0x9aa6f69b, 0x9f2afa98,
@@ -252,7 +252,7 @@ class AESTest extends TestCase
             0x7f39f17f, 0x671b94c0, 0x07e18539, 0xe124087c, 0xae3e1b15, 0x258d57b9, 0xfdc705c5, 0xf8ed6a99,
             0x4cf0d767, 0xed0ccc30, 0xf42551fb, 0xa7ed7a77, 0xf26bc1e0, 0xd7e69659, 0x2a21939c, 0xd2ccf905,
             0x4769bcd2, 0xaa6570e2, 0x5e402119, 0xf9ad5b6e
-        );
+        ];
         for ($i = 0; $i < 44; ++$i) {
             $this->assertSame(
                 sprintf('0x%08x', $expect[$i]),
@@ -261,7 +261,7 @@ class AESTest extends TestCase
             );
             $this->assertSame($expect[$i], $ks->get($i), 'key schedule u = ' . $i);
         }
-        $sk_expect = array(
+        $sk_expect = [
             0xff00ff00, 0xffff0000, 0xcccccccc, 0xf0f0f0f0, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
             0x3300cc00, 0xccccffff, 0xc3c33cc3, 0xcf30cf30, 0xffff00ff, 0xffffff00, 0xffff00ff, 0xff00ffff,
             0x0fff3c00, 0xc3c33333, 0xc03f0c3f, 0xc30f3cf0, 0xccccff33, 0xccccccff, 0xcc3300cc, 0xccff3333,
@@ -277,7 +277,7 @@ class AESTest extends TestCase
             0x0f6832a0, 0x0000558a, 0x00000d68, 0x00000000, 0xb828c9e1, 0x00007f2b, 0xb841b780, 0x00007f2b,
             0xb841b780, 0x00007f2b, 0xb8417600, 0x00007f2b, 0x03c1dbd8, 0x00007ffd, 0x0e840083, 0x0000558a,
             0x0e87b7d8, 0x0000558a, 0xb858e040, 0x00007f2b, 0x77160b00, 0x852ca90b, 0x0e83a0e7, 0x0000558a
-        );
+        ];
         $expanded = $ks->expand();
         for ($i = 0; $i < 44; ++$i) {
             $this->assertSame(
@@ -292,16 +292,16 @@ class AESTest extends TestCase
     public function testSkeyExpand(): void
     {
         // "000102030405060708090a0b0c0d0e0f"
-        $ks = new ParagonIE_Sodium_Core_AES_KeySchedule(array(
+        $ks = new ParagonIE_Sodium_Core_AES_KeySchedule([
             0xffaa5500, 0xe4e4e4e4, 0x00000000, 0x00000000, 0x9988eeaa, 0xcb619e61, 0xffffaa55, 0xff55aaff,
             0x87d73622, 0xc21f2cb5, 0xccccddbb, 0xccbb2266, 0x7ec45b0a, 0x3ff9a371, 0x3cc39327, 0x698d5f1e,
             0x4c6b4757, 0xf3cd75e5, 0xf33f2ff4, 0xe28313f9, 0xbcb7be44, 0x9a3c4ecb, 0x9aa6f69b, 0x9f2afa98,
             0xd9dbd9be, 0x87f31697, 0x87749b2d, 0x7908982d, 0x92386d8c, 0x7e30aed1, 0x811b8709, 0x18fd875c,
             0x85a7e383, 0x19a5dcc5, 0x7ff8d4a8, 0xf86681b9, 0x81de3580, 0xf874c6c1, 0x196791dd, 0x67b42a8d,
             0x7f39f17f, 0x671b94c0, 0x07e18539, 0xe124087c
-        ), 10);
+        ], 10);
         $exp = $ks->expand();
-        $values = array(
+        $values = [
             0xff00ff00, 0xffff0000, 0xcccccccc, 0xf0f0f0f0, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
             0x3300cc00, 0xccccffff, 0xc3c33cc3, 0xcf30cf30, 0xffff00ff, 0xffffff00, 0xffff00ff, 0xff00ffff,
             0x0fff3c00, 0xc3c33333, 0xc03f0c3f, 0xc30f3cf0, 0xccccff33, 0xccccccff, 0xcc3300cc, 0xccff3333,
@@ -313,7 +313,7 @@ class AESTest extends TestCase
             0x0f0fc303, 0xc0f3f3c3, 0x330ffccf, 0x0cf0ccc0, 0xfff0fc00, 0x3ffcc0fc, 0xf0cc0333, 0xfc33c0fc,
             0x03fc3f00, 0xc0cf30c0, 0xf0fcccc3, 0xfc30c3c0, 0x33cf33ff, 0x0c33c0cc, 0xcf3c000f, 0x33f03fcc,
             0xff33f3ff, 0x3f3cf03f, 0xcf333cc0, 0x330fc0c0, 0x0fc30f33, 0x03f0c03c, 0xc30c00fc, 0xf0300c3c
-        );
+        ];
         for ($i = 0; $i < 88; ++$i) {
             $this->assertSame($values[$i], $exp->get($i), 'skey - index ' . $i);
         }

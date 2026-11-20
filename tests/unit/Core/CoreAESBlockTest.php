@@ -12,12 +12,12 @@ class CoreAESBlockTest extends TestCase
     {
         // Use a non-zero, non-repeating pattern for testing
         $this->block = ParagonIE_Sodium_Core_AES_Block::fromArray(
-            array(
+            [
                 0x01234567, 0x89abcdef,
                 0xfedcba98, 0x76543210,
                 0xdeadbeef, 0xcafebabe,
                 0xfaceb00c, 0x1337c0de
-            )
+            ]
         );
     }
 
