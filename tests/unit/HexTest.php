@@ -9,14 +9,14 @@ class HexTest extends TestCase
 {
     public static function hexProvider(): array
     {
-        return array(
-            array('DEADBEEF', '', "\xde\xad\xbe\xef", false),
-            array('DeAdBeeF', '', "\xde\xad\xbe\xef", false),
-            array("De\nAdBe\neF", "\n", "\xde\xad\xbe\xef", false),
-            array("De\nAdBe eF", "\n", "\xde\xad\xbe\xef", true),
-            array("De\nAdBe eF", "\n ", "\xde\xad\xbe\xef", false),
-            array("De AdBe eF", " ", "\xde\xad\xbe\xef", false),
-        );
+        return [
+            ['DEADBEEF', '', "\xde\xad\xbe\xef", false],
+            ['DeAdBeeF', '', "\xde\xad\xbe\xef", false],
+            ["De\nAdBe\neF", "\n", "\xde\xad\xbe\xef", false],
+            ["De\nAdBe eF", "\n", "\xde\xad\xbe\xef", true],
+            ["De\nAdBe eF", "\n ", "\xde\xad\xbe\xef", false],
+            ["De AdBe eF", " ", "\xde\xad\xbe\xef", false],
+        ];
     }
 
     /**

@@ -112,10 +112,10 @@ class WycheproofTest extends TestCase
                 $message = "{$document['algorithm']} :: #{$test['tcId']} - {$test['comment']}";
                 $test = $test + $extra;
                 try {
-                    $result = call_user_func_array(array($this, $method), array($test));
+                    $result = call_user_func_array([$this, $method], [$test]);
                     $expected = ($test['result'] === 'valid');
                     if ($result !== $expected) {
-                        call_user_func_array(array($this, $method), array($test, true));
+                        call_user_func_array([$this, $method], [$test, true]);
                     }
                     $this->assertSame($result, $expected, $message);
                 } catch (Exception $ex) {

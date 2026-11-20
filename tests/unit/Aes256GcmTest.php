@@ -40,8 +40,8 @@ class Aes256GcmTest extends TestCase
         if (!ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_is_available()) {
             $this->markTestSkipped('Cannot test AES-256-GCM; it is not available.');
         }
-        $testCases = array(
-            array(
+        $testCases = [
+            [
                 'key' =>
                     ParagonIE_Sodium_Core_Util::hex2bin(
                         'efb9de8bf561f4f7684b28b7ba5e7604948d3f25c44fc454f2ccfbcc975a542e'
@@ -64,8 +64,8 @@ class Aes256GcmTest extends TestCase
                         'b6f5cca4aca4663ed79d24ab6253fb68e11228952d065e49406301cb2efffb25fca808fd069d9e3e' .
                         '7cf9bf8f208b4a4c3fd3eead5462bca0cae0'
                     )
-            ),
-            array(
+            ],
+            [
                 'key' =>
                     ParagonIE_Sodium_Core_Util::hex2bin(
                         'ce700f44c94e9e6be34c5a6dbdcc2ef38b079c732a391b2964d9da77a33d3be4'
@@ -128,8 +128,8 @@ class Aes256GcmTest extends TestCase
                         '1f3fd2b2443e20e42bd4684f6e0da4917153ded48f99f4615a502cd160599cb9173afa5280a60d62' .
                         'fd7131bf667c8c8d9e631de8d29b98ce6b1ea24ff5098597dea729b05ac18f74e2ec34'
                     )
-            )
-        );
+            ]
+        ];
         foreach ($testCases as $case) {
             $encrypted = ParagonIE_Sodium_Compat::crypto_aead_aes256gcm_encrypt(
                 $case['msg'],

@@ -30,7 +30,7 @@ class ParagonIE_Sodium_Core_HChaCha20 extends ParagonIE_Sodium_Core_ChaCha20
         if (self::strlen($key) !== 32) {
             throw new SodiumException('Argument 2 must be 32 bytes');
         }
-        $ctx = array();
+        $ctx = [];
 
         if ($c === null) {
             $ctx[0] = 0x61707865;

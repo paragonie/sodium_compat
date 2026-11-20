@@ -23,8 +23,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
     {
         # v0 += v1;
         list($v[0], $v[1]) = self::add(
-            array($v[0], $v[1]),
-            array($v[2], $v[3])
+            [$v[0], $v[1]],
+            [$v[2], $v[3]]
         );
 
         #  v1=ROTL(v1,13);
@@ -39,8 +39,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v2 += v3;
         list($v[4], $v[5]) = self::add(
-            array($v[4], $v[5]),
-            array($v[6], $v[7])
+            [$v[4], $v[5]],
+            [$v[6], $v[7]]
         );
 
         # v3=ROTL(v3,16);
@@ -52,8 +52,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v0 += v3;
         list($v[0], $v[1]) = self::add(
-            array($v[0], $v[1]),
-            array($v[6], $v[7])
+            [$v[0], $v[1]],
+            [$v[6], $v[7]]
         );
 
         # v3=ROTL(v3,21);
@@ -65,8 +65,8 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # v2 += v1;
         list($v[4], $v[5]) = self::add(
-            array($v[4], $v[5]),
-            array($v[2], $v[3])
+            [$v[4], $v[5]],
+            [$v[2], $v[3]]
         );
 
         # v1=ROTL(v1,17);
@@ -99,10 +99,10 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         $c = $x1 >> 32; // Carry if ($a + $b) > 0xffffffff
         /** @var int $x0 */
         $x0 = $a[0] + $b[0] + $c;
-        return array(
+        return [
             $x0 & 0xffffffff,
             $x1 & 0xffffffff
-        );
+        ];
     }
 
     /**
@@ -119,7 +119,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         $int1 &= 0xffffffff;
         $c &= 63;
         if ($c === 32) {
-            return array($int1, $int0);
+            return [$int1, $int0];
         }
         if ($c > 31) {
             $tmp = $int1;
@@ -128,9 +128,9 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             $c &= 31;
         }
         if ($c === 0) {
-            return array($int0, $int1);
+            return [$int0, $int1];
         }
-        return array(
+        return [
             0xffffffff & (
                 ($int0 << $c)
                     |
@@ -141,7 +141,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
                     |
                 ($int0 >> (32 - $c))
             ),
-        );
+        ];
     }
 
     /**
@@ -176,7 +176,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         # u64 v1 = 0x646f72616e646f6dULL;
         # u64 v2 = 0x6c7967656e657261ULL;
         # u64 v3 = 0x7465646279746573ULL;
-        $v = array(
+        $v = [
             0x736f6d65, // 0
             0x70736575, // 1
             0x646f7261, // 2
@@ -185,7 +185,7 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
             0x6e657261, // 5
             0x74656462, // 6
             0x79746573  // 7
-        );
+        ];
         // v0 => $v[0], $v[1]
         // v1 => $v[2], $v[3]
         // v2 => $v[4], $v[5]
@@ -193,20 +193,20 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
 
         # u64 k0 = LOAD64_LE( k );
         # u64 k1 = LOAD64_LE( k + 8 );
-        $k = array(
+        $k = [
             self::load_4(self::substr($key, 4, 4)),
             self::load_4(self::substr($key, 0, 4)),
             self::load_4(self::substr($key, 12, 4)),
             self::load_4(self::substr($key, 8, 4))
-        );
+        ];
         // k0 => $k[0], $k[1]
         // k1 => $k[2], $k[3]
 
         # b = ( ( u64 )inlen ) << 56;
-        $b = array(
+        $b = [
             $inlen << 24,
             0
-        );
+        ];
         // See docblock for why the 0th index gets the higher bits.
 
         # v3 ^= k1;
@@ -226,10 +226,10 @@ class ParagonIE_Sodium_Core_SipHash extends ParagonIE_Sodium_Core_Util
         # for ( ; in != end; in += 8 )
         while ($left >= 8) {
             # m = LOAD64_LE( in );
-            $m = array(
+            $m = [
                 self::load_4(self::substr($in, 4, 4)),
                 self::load_4(self::substr($in, 0, 4))
-            );
+            ];
 
             # v3 ^= m;
             $v[6] ^= $m[0];

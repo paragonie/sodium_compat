@@ -10,7 +10,7 @@ require_once dirname(__DIR__) . '/autoload.php';
  * Thus, the functions or constants just proxy to the appropriate
  * ParagonIE_Sodium_Compat method or class constant, respectively.
  */
-foreach (array(
+foreach ([
     'BASE64_VARIANT_ORIGINAL',
     'BASE64_VARIANT_ORIGINAL_NO_PADDING',
     'BASE64_VARIANT_URLSAFE',
@@ -102,7 +102,7 @@ foreach (array(
     'LIBRARY_VERSION_MAJOR',
     'LIBRARY_VERSION_MINOR',
     'VERSION_STRING'
-    ) as $constant
+    ] as $constant
 ) {
     if (!defined("SODIUM_$constant") && defined("ParagonIE_Sodium_Compat::$constant")) {
         define("SODIUM_$constant", constant("ParagonIE_Sodium_Compat::$constant"));

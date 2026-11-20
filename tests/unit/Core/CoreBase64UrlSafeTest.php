@@ -47,16 +47,16 @@ class CoreBase64UrlSafeTest extends TestCase
 
     public static function provideTestStrings(): array
     {
-        return array(
-            array(''),
-            array('f'),
-            array('fo'),
-            array('foo'),
-            array('foob'),
-            array('fooba'),
-            array('foobar'),
-            array(random_bytes(33)),
-            array(random_bytes(128))
-        );
+        return [
+            [''],
+            ['f'],
+            ['fo'],
+            ['foo'],
+            ['foob'],
+            ['fooba'],
+            ['foobar'],
+            [random_bytes(33)],
+            [random_bytes(128)]
+        ];
     }
 }

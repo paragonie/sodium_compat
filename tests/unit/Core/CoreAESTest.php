@@ -25,11 +25,11 @@ class CoreAESTest extends TestCase
      */
     public static function provideKeyAndMessage(): array
     {
-        return array(
-            array(random_bytes(16), random_bytes(16)),
-            array(random_bytes(24), random_bytes(16)),
-            array(random_bytes(32), random_bytes(16)),
-        );
+        return [
+            [random_bytes(16), random_bytes(16)],
+            [random_bytes(24), random_bytes(16)],
+            [random_bytes(32), random_bytes(16)],
+        ];
     }
 
     /**

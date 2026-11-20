@@ -33,8 +33,8 @@ class NamespacedTest extends TestCase
             ParagonIE_Sodium_Core_Util::substr(
                 bin2hex(
                     call_user_func_array(
-                        array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                        array($message, $nonce, $key)
+                        ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                        [$message, $nonce, $key]
                     )
                 ),
                 0, 32
@@ -49,8 +49,8 @@ class NamespacedTest extends TestCase
             $message,
             ParagonIE_Sodium_Compat::crypto_secretbox_open(
                 call_user_func_array(
-                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                    array($message, $nonce, $key)
+                    ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                    [$message, $nonce, $key]
                 ),
                 $nonce,
                 $key
@@ -59,20 +59,20 @@ class NamespacedTest extends TestCase
         $this->assertSame(
             $message,
             call_user_func_array(
-                array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox_open'),
-                array(
+                ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox_open'],
+                [
                     ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key),
                     $nonce,
                     $key
-                )
+                ]
             )
         );
         $message = str_repeat('a', 97);
         $this->assertSame(
             bin2hex(
                 call_user_func_array(
-                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                    array($message, $nonce, $key)
+                    ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                    [$message, $nonce, $key]
                 )
             ),
             bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
@@ -86,8 +86,8 @@ class NamespacedTest extends TestCase
         $this->assertSame(
             bin2hex(
                 call_user_func_array(
-                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                    array($message, $nonce, $key)
+                    ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                    [$message, $nonce, $key]
                 )
             ),
             bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
@@ -99,8 +99,8 @@ class NamespacedTest extends TestCase
         $this->assertSame(
             bin2hex(
                 call_user_func_array(
-                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                    array($message, $nonce, $key)
+                    ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                    [$message, $nonce, $key]
                 )
             ),
             bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),
@@ -112,8 +112,8 @@ class NamespacedTest extends TestCase
         $this->assertSame(
             bin2hex(
                 call_user_func_array(
-                    array('\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'),
-                    array($message, $nonce, $key)
+                    ['\\ParagonIE\\Sodium\\Compat', 'crypto_secretbox'],
+                    [$message, $nonce, $key]
                 )
             ),
             bin2hex(ParagonIE_Sodium_Compat::crypto_secretbox($message, $nonce, $key)),

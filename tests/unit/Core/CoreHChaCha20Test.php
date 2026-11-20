@@ -26,18 +26,18 @@ class CoreHChaCha20Test extends TestCase
 
     public static function provideLibsodiumTestVectors(): array
     {
-        return array(
-            array(
+        return [
+            [
                 '51e3ff45a895675c4b33b46c64f4a9ace110d34df6a2ceab486372bacbd3eff6',
                 '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
                 '000102030405060708090a0b0c0d0e0f'
-            ),
-            array(
+            ],
+            [
                 '1140704c328d1d5d0e30086cdf209dbd6a43b8f41518a11cc387b669b2ee6586',
                 '0000000000000000000000000000000000000000000000000000000000000000',
                 '00000000000000000000000000000000'
-            )
-        );
+            ]
+        ];
     }
 
     public function testInvalidKeyLength(): void

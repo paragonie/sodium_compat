@@ -15,7 +15,7 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
     /**
      * @var array<int, int>
      */
-    protected array $values = array();
+    protected array $values = [];
 
     /**
      * @var int
@@ -150,11 +150,11 @@ class ParagonIE_Sodium_Core_AES_Block extends SplFixedArray
      */
     public function __debugInfo()
     {
-        $out = array();
+        $out = [];
         foreach ($this->values as $v) {
             $out[] = str_pad(dechex($v), 8, '0', STR_PAD_LEFT);
         }
-        return array(implode(', ', $out));
+        return [implode(', ', $out)];
         /*
          return array(implode(', ', $this->values));
          */

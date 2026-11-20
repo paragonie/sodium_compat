@@ -157,12 +157,12 @@ class SodiumCompatMiscTest extends KnownAnswerTestCase
         $this->assertSame('', ParagonIE_Sodium_Compat::bin2base64('', 1));
         $this->assertSame('', ParagonIE_Sodium_Compat::base642bin('', 1));
 
-        $variants = array(
+        $variants = [
             ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL,
             ParagonIE_Sodium_Compat::BASE64_VARIANT_ORIGINAL_NO_PADDING,
             ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE,
             ParagonIE_Sodium_Compat::BASE64_VARIANT_URLSAFE_NO_PADDING
-        );
+        ];
         $str = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
         foreach ($variants as $v) {

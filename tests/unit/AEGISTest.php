@@ -22,7 +22,7 @@ class AEGISTest extends TestCase
 
     public function testAegis128lUpdate(): void
     {
-        $state = ParagonIE_Sodium_Core_AEGIS_State128L::initForUnitTests(array(
+        $state = ParagonIE_Sodium_Core_AEGIS_State128L::initForUnitTests([
             ParagonIE_Sodium_Core_Util::hex2bin('9b7e60b24cc873ea894ecc07911049a3'),
             ParagonIE_Sodium_Core_Util::hex2bin('330be08f35300faa2ebf9a7b0d274658'),
             ParagonIE_Sodium_Core_Util::hex2bin('7bbd5bd2b049f7b9b515cf26fbe7756c'),
@@ -31,12 +31,12 @@ class AEGISTest extends TestCase
             ParagonIE_Sodium_Core_Util::hex2bin('58d83e31f256371e60fc6bb257114601'),
             ParagonIE_Sodium_Core_Util::hex2bin('1639b56ea322c88568a176585bc915de'),
             ParagonIE_Sodium_Core_Util::hex2bin('640818ffb57dc0fbc2e72ae93457e39a')
-        ));
+        ]);
         $m0 = ParagonIE_Sodium_Core_Util::hex2bin('033e6975b94816879e42917650955aa0');
         $m1 = ParagonIE_Sodium_Core_Util::hex2bin('033e6975b94816879e42917650955aa0');
         $state->update($m0, $m1);
         $s = $state->getState();
-        $expected = array(
+        $expected = [
             ParagonIE_Sodium_Core_Util::hex2bin('596ab773e4433ca0127c73f60536769d'),
             ParagonIE_Sodium_Core_Util::hex2bin('790394041a3d26ab697bde865014652d'),
             ParagonIE_Sodium_Core_Util::hex2bin('38cf49e4b65248acd533041b64dd0611'),
@@ -45,31 +45,31 @@ class AEGISTest extends TestCase
             ParagonIE_Sodium_Core_Util::hex2bin('a21746bb193a569e331e1aa985d0d729'),
             ParagonIE_Sodium_Core_Util::hex2bin('09d714e6fcf9177a8ed1cde7e3d259a6'),
             ParagonIE_Sodium_Core_Util::hex2bin('61279ba73167f0ab76f0a11bf203bdff')
-        );
+        ];
         $this->assertSame($s, $expected);
     }
 
     public function testAegis256lUpdate(): void
     {
-        $state = ParagonIE_Sodium_Core_AEGIS_State256::initForUnitTests(array(
+        $state = ParagonIE_Sodium_Core_AEGIS_State256::initForUnitTests([
             ParagonIE_Sodium_Core_Util::hex2bin('1fa1207ed76c86f2c4bb40e8b395b43e'),
             ParagonIE_Sodium_Core_Util::hex2bin('b44c375e6c1e1978db64bcd12e9e332f'),
             ParagonIE_Sodium_Core_Util::hex2bin('0dab84bfa9f0226432ff630f233d4e5b'),
             ParagonIE_Sodium_Core_Util::hex2bin('d7ef65c9b93e8ee60c75161407b066e7'),
             ParagonIE_Sodium_Core_Util::hex2bin('a760bb3da073fbd92bdc24734b1f56fb'),
             ParagonIE_Sodium_Core_Util::hex2bin('a828a18d6a964497ac6e7e53c5f55c73')
-        ));
+        ]);
         $m = ParagonIE_Sodium_Core_Util::hex2bin('b165617ed04ab738afb2612c6d18a1ec');
         $state->update($m);
         $s = $state->getState();
-        $expected = array(
+        $expected = [
             ParagonIE_Sodium_Core_Util::hex2bin('e6bc643bae82dfa3d991b1b323839dcd'),
             ParagonIE_Sodium_Core_Util::hex2bin('648578232ba0f2f0a3677f617dc052c3'),
             ParagonIE_Sodium_Core_Util::hex2bin('ea788e0e572044a46059212dd007a789'),
             ParagonIE_Sodium_Core_Util::hex2bin('2f1498ae19b80da13fba698f088a8590'),
             ParagonIE_Sodium_Core_Util::hex2bin('a54c2ee95e8c2a2c3dae2ec743ae6b86'),
             ParagonIE_Sodium_Core_Util::hex2bin('a3240fceb68e32d5d114df1b5363ab67')
-        );
+        ];
         $this->assertSame($s, $expected);
     }
 
@@ -80,8 +80,8 @@ class AEGISTest extends TestCase
      */
     public static function aegis128lVectors(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'AEGIS-128L test vector 1',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -90,8 +90,8 @@ class AEGISTest extends TestCase
                 '00000000000000000000000000000000',
                 '',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 2',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -100,8 +100,8 @@ class AEGISTest extends TestCase
                 '',
                 '',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 3',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -110,8 +110,8 @@ class AEGISTest extends TestCase
                 '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
                 '0001020304050607',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 4',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -120,8 +120,8 @@ class AEGISTest extends TestCase
                 '000102030405060708090a0b0c0d',
                 '0001020304050607',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 5',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -130,8 +130,8 @@ class AEGISTest extends TestCase
                 '101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f3031323334353637',
                 '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20212223242526272829',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 6',
                 '10000200000000000000000000000000',
                 '10010000000000000000000000000000',
@@ -140,8 +140,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 7',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -150,8 +150,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 8',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -160,8 +160,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050608',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-128L test vector 9',
                 '10010000000000000000000000000000',
                 '10000200000000000000000000000000',
@@ -170,8 +170,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -181,8 +181,8 @@ class AEGISTest extends TestCase
      */
     public static function aegis256Vectors(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'AEGIS-256 test vector 1',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -191,8 +191,8 @@ class AEGISTest extends TestCase
                 '00000000000000000000000000000000',
                 '',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 2',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -201,8 +201,8 @@ class AEGISTest extends TestCase
                 '',
                 '',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 3',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -211,8 +211,8 @@ class AEGISTest extends TestCase
                 '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
                 '0001020304050607',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 4',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -221,8 +221,8 @@ class AEGISTest extends TestCase
                 '000102030405060708090a0b0c0d',
                 '0001020304050607',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 5',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -231,8 +231,8 @@ class AEGISTest extends TestCase
                 '101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f3031323334353637',
                 '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20212223242526272829',
                 false
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 6',
                 '1000020000000000000000000000000000000000000000000000000000000000',
                 '1001000000000000000000000000000000000000000000000000000000000000',
@@ -241,8 +241,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 7',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -251,8 +251,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 8',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -261,8 +261,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050608',
                 true
-            ),
-            array(
+            ],
+            [
                 'AEGIS-256 test vector 9',
                 '1001000000000000000000000000000000000000000000000000000000000000',
                 '1000020000000000000000000000000000000000000000000000000000000000',
@@ -271,8 +271,8 @@ class AEGISTest extends TestCase
                 '',
                 '0001020304050607',
                 true
-            )
-        );
+            ]
+        ];
     }
 
     /**

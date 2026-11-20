@@ -1018,7 +1018,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             }
         }
         /** @var array<int, int> $r */
-        $r = array();
+        $r = [];
 
         for ($i = 0; $i < 256; ++$i) {
             $r[$i] = (
@@ -1463,7 +1463,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     {
         static $base = null;
         if ($base === null) {
-            $base = array();
+            $base = [];
             /** @var int $i */
             foreach (self::BASE as $i => $bas) {
                 for ($j = 0; $j < 8; ++$j) {
@@ -1567,10 +1567,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         string $b
     ): ParagonIE_Sodium_Core_Curve25519_Ge_P2 {
         /** @var array<int, ParagonIE_Sodium_Core_Curve25519_Ge_Cached> $Ai */
-        $Ai = array();
+        $Ai = [];
 
         /** @var array<int, ParagonIE_Sodium_Core_Curve25519_Ge_Precomp> $Bi */
-        static $Bi = array();
+        static $Bi = [];
         if (!$Bi) {
             for ($i = 0; $i < 8; ++$i) {
                 $Bi[$i] = new ParagonIE_Sodium_Core_Curve25519_Ge_Precomp(
@@ -1660,7 +1660,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         $e = array_fill(0, 64, 0);
 
         /** @var ParagonIE_Sodium_Core_Curve25519_Ge_Cached[] $pi */
-        $pi = array();
+        $pi = [];
 
         $pi[0] = self::ge_p3_to_cached($p);
 
@@ -1743,7 +1743,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
         string $a
     ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
         /** @var array<int, int> $e */
-        $e = array();
+        $e = [];
         $r = new ParagonIE_Sodium_Core_Curve25519_Ge_P1p1();
 
         for ($i = 0; $i < 32; ++$i) {
@@ -2571,7 +2571,7 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
     public static function ge_mul_l(
         ParagonIE_Sodium_Core_Curve25519_Ge_P3 $A
     ): ParagonIE_Sodium_Core_Curve25519_Ge_P3 {
-        $aslide = array(
+        $aslide = [
             13, 0, 0, 0, 0, -1, 0, 0, 0, 0, -11, 0, 0, 0, 0, 0, 0, -5, 0, 0, 0,
             0, 0, 0, -3, 0, 0, 0, 0, -13, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 3, 0,
             0, 0, 0, -13, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0,
@@ -2584,10 +2584,10 @@ abstract class ParagonIE_Sodium_Core_Curve25519 extends ParagonIE_Sodium_Core_Cu
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1
-        );
+        ];
 
         /** @var array<int, ParagonIE_Sodium_Core_Curve25519_Ge_Cached> $Ai size 8 */
-        $Ai = array();
+        $Ai = [];
 
         $Ai[0] = self::ge_p3_to_cached($A);
         $t = self::ge_p3_dbl($A);

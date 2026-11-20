@@ -61,12 +61,12 @@ class StreamTest extends TestCase
     {
         $func_pieces= explode('::', $func);
         $func_xor_pieces= explode('::', $func . '_xor');
-        $stream = call_user_func_array($func_pieces, array($len, $nonce, $key));
+        $stream = call_user_func_array($func_pieces, [$len, $nonce, $key]);
         $this->assertSame($len, ParagonIE_Sodium_Core_Util::strlen($stream));
         // Pseudorandom (but deterministic) nonce:
         $n2 = ParagonIE_Sodium_Core_Util::substr(hash('sha224', $stream, true), 0, 24);
-        $encrypted = call_user_func_array($func_xor_pieces, array($stream, $n2, $key));
-        $decrypted = call_user_func_array($func_xor_pieces, array($encrypted, $n2, $key));
+        $encrypted = call_user_func_array($func_xor_pieces, [$stream, $n2, $key]);
+        $decrypted = call_user_func_array($func_xor_pieces, [$encrypted, $n2, $key]);
         $this->assertSame(sodium_bin2hex($stream), sodium_bin2hex($decrypted), 'Decryption unsuccessful');
         $this->assertNotSame(sodium_bin2hex($stream), sodium_bin2hex($encrypted), 'Encryption is a NOP');
     }

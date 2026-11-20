@@ -114,10 +114,10 @@ class ParagonIE_Sodium_Core_AEGIS128L extends ParagonIE_Sodium_Core_AES
             $msg_len << 3
         );
         // return ct and tag
-        return array(
+        return [
             self::substr($ct, 0, $msg_len),
             $tag
-        );
+        ];
     }
 
     /**

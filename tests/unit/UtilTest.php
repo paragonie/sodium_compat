@@ -125,7 +125,7 @@ class UtilTest extends TestCase
      */
     public function testConversion(): void
     {
-        $sample = array(80, 97, 114, 97, 103, 111, 110);
+        $sample = [80, 97, 114, 97, 103, 111, 110];
 
         $this->assertSame(
             'Paragon',
@@ -257,44 +257,44 @@ class UtilTest extends TestCase
      */
     public function testMul(): void
     {
-        $arguments = array(
-            array(1, 1),
-            array(65534, 65534),
-            array(65535, 65534),
-            array(-65535, 65534),
-            array(19, -13120145),
-            array(0x7ffffffe, 1),
-            array(0x1fffffff, 0x1fffffff),
-            array(0x01, 0x7fffffff),
-            array(0x7fffffff, 0x01),
-            array(0x80808080, 0x01),
-            array(0xffffffff, 0x01),
-            array(0xffffffff, 0x02),
-            array(0xffffffff, 0xffffffff)
-        );
+        $arguments = [
+            [1, 1],
+            [65534, 65534],
+            [65535, 65534],
+            [-65535, 65534],
+            [19, -13120145],
+            [0x7ffffffe, 1],
+            [0x1fffffff, 0x1fffffff],
+            [0x01, 0x7fffffff],
+            [0x7fffffff, 0x01],
+            [0x80808080, 0x01],
+            [0xffffffff, 0x01],
+            [0xffffffff, 0x02],
+            [0xffffffff, 0xffffffff]
+        ];
         for ($i = 0; $i < 100; ++$i) {
-            $arguments[] = array(
+            $arguments[] = [
                 random_int(0, 0x7fffffff),
                 random_int(0, 0x7fffffff)
-            );
+            ];
         }
         for ($i = 0; $i < 100; ++$i) {
-            $arguments[] = array(
+            $arguments[] = [
                 -random_int(0, 0x7fffffff),
                 -random_int(0, 0x7fffffff)
-            );
+            ];
         }
         for ($i = 0; $i < 100; ++$i) {
-            $arguments[] = array(
+            $arguments[] = [
                 -random_int(0, 0x7fffffff),
                 random_int(0, 0x7fffffff)
-            );
+            ];
         }
         for ($i = 0; $i < 100; ++$i) {
-            $arguments[] = array(
+            $arguments[] = [
                 random_int(0, 0x7fffffff),
                 -random_int(0, 0x7fffffff)
-            );
+            ];
         }
 
         foreach ($arguments as $arg) {

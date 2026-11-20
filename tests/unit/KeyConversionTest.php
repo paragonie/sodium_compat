@@ -37,11 +37,11 @@ class KeyConversionTest extends TestCase
             ParagonIE_Sodium_Core_Util::bin2hex($pk_convert),
             'Different strings from different approaches of converting Ed25519 -> X25519'
         );
-        $messages = array(
+        $messages = [
             'test',
             str_repeat('A', 100),
             random_bytes(100)
-        );
+        ];
 
         foreach($messages as $message) {
             $sealed = ParagonIE_Sodium_Compat::crypto_box_seal($message, $pk_convert);

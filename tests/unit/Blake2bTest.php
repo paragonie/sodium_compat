@@ -100,7 +100,7 @@ class Blake2bTest extends TestCase
      */
     public function testGenericHashSaltPersonal(): void
     {
-        $outputs = array(
+        $outputs = [
             'ba',
             '6139',
             '3a1666',
@@ -196,7 +196,7 @@ class Blake2bTest extends TestCase
                 '25852ff1f566b0c8c37157b25fb9f947a2e70b40577a17860a0732c170ac',
             '5fcdcc02be7714a0dbc77df498bf999ea9225d564adca1c121c9af03af92cac817' .
                 '7b9b4a86bcc47c79aa32aac58a3fef967b2132e9352d4613fe890beed2571b'
-        );
+        ];
         $salt = '5b6b41ed9b343fe0';
         $personal = '5126fb2a37400d2a';
 
@@ -309,7 +309,7 @@ class Blake2bTest extends TestCase
 
         $ctxB = ParagonIE_Sodium_Core_BLAKE2b::init(null, 32);
 
-        $chunks = array(
+        $chunks = [
             'Paragon Initiative ',
             'Enterprises, LLC',
             str_repeat("\x7e", 128),
@@ -320,7 +320,7 @@ class Blake2bTest extends TestCase
             str_repeat("\x4e", 64),
             str_repeat("\x4f", 257),
             str_repeat("\x0a", 511)
-        );
+        ];
         foreach ($chunks as $i => $chk) {
             ParagonIE_Sodium_Compat::crypto_generichash_update($ctxA, $chk);
             $chunk = ParagonIE_Sodium_Core_BLAKE2b::stringToSplFixedArray($chk);

@@ -48,7 +48,7 @@ class ExceptionTest extends TestCase
 
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt(
-                array(),
+                [],
                 $aad,
                 $nonce,
                 $key
@@ -61,7 +61,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt(
                 $message,
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -74,7 +74,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_encrypt(
                 $message,
                 $aad,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -87,7 +87,7 @@ class ExceptionTest extends TestCase
                 $message,
                 $aad,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -120,7 +120,7 @@ class ExceptionTest extends TestCase
 
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt(
-                array(),
+                [],
                 $aad,
                 $nonce,
                 $key
@@ -133,7 +133,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt(
                 $cipher1,
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -146,7 +146,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_aead_chacha20poly1305_decrypt(
                 $cipher1,
                 $aad,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -159,7 +159,7 @@ class ExceptionTest extends TestCase
                 $cipher1,
                 $aad,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -233,7 +233,7 @@ class ExceptionTest extends TestCase
 
         try {
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt(
-                array(),
+                [],
                 $aad,
                 $nonce,
                 $key
@@ -246,7 +246,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt(
                 $message,
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -259,7 +259,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_encrypt(
                 $message,
                 $aad,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -272,7 +272,7 @@ class ExceptionTest extends TestCase
                 $message,
                 $aad,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -283,7 +283,7 @@ class ExceptionTest extends TestCase
 
         try {
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt(
-                array(),
+                [],
                 $aad,
                 $nonce,
                 $key
@@ -296,7 +296,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt(
                 $cipher1,
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -309,7 +309,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_aead_xchacha20poly1305_ietf_decrypt(
                 $cipher1,
                 $aad,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -322,7 +322,7 @@ class ExceptionTest extends TestCase
                 $cipher1,
                 $aad,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -350,14 +350,14 @@ class ExceptionTest extends TestCase
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         $message .= random_bytes(64);
         try {
-            ParagonIE_Sodium_Compat::crypto_auth(array(), $key);
+            ParagonIE_Sodium_Compat::crypto_auth([], $key);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
         }
 
         try {
-            ParagonIE_Sodium_Compat::crypto_auth($message, array());
+            ParagonIE_Sodium_Compat::crypto_auth($message, []);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
@@ -380,19 +380,19 @@ class ExceptionTest extends TestCase
         $message .= random_bytes(64);
         $mac = ParagonIE_Sodium_Compat::crypto_auth($message, $key);
         try {
-            ParagonIE_Sodium_Compat::crypto_auth_verify(array(), $message, $key);
+            ParagonIE_Sodium_Compat::crypto_auth_verify([], $message, $key);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
         }
         try {
-            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, array(), $key);
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, [], $key);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
         }
         try {
-            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, array());
+            ParagonIE_Sodium_Compat::crypto_auth_verify($mac, $message, []);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
@@ -458,21 +458,21 @@ class ExceptionTest extends TestCase
         $ciphertext = ParagonIE_Sodium_Compat::crypto_box($message, $nonce, $alice_to_bob);
 
         try {
-            ParagonIE_Sodium_Compat::crypto_box_open(array(), $nonce, $alice_to_bob);
+            ParagonIE_Sodium_Compat::crypto_box_open([], $nonce, $alice_to_bob);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
         }
 
         try {
-            ParagonIE_Sodium_Compat::crypto_box_open($ciphertext, array(), $alice_to_bob);
+            ParagonIE_Sodium_Compat::crypto_box_open($ciphertext, [], $alice_to_bob);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
         }
 
         try {
-            ParagonIE_Sodium_Compat::crypto_box_open($ciphertext, $nonce, array());
+            ParagonIE_Sodium_Compat::crypto_box_open($ciphertext, $nonce, []);
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
             $this->assertTrue($ex instanceof TypeError);
@@ -491,7 +491,7 @@ class ExceptionTest extends TestCase
 
         try {
             ParagonIE_Sodium_Compat::crypto_secretbox(
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -503,7 +503,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_secretbox(
                 $message,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -514,7 +514,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_secretbox(
                 $message,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -539,7 +539,7 @@ class ExceptionTest extends TestCase
         }
         try {
             ParagonIE_Sodium_Compat::crypto_secretbox_open(
-                array(),
+                [],
                 $nonce,
                 $key
             );
@@ -550,7 +550,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_secretbox_open(
                 $ciphertext,
-                array(),
+                [],
                 $key
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -561,7 +561,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_secretbox_open(
                 $ciphertext,
                 $nonce,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {
@@ -591,7 +591,7 @@ class ExceptionTest extends TestCase
         $signature = ParagonIE_Sodium_Compat::crypto_sign_detached($message, $secretKey);
         try {
             ParagonIE_Sodium_Compat::crypto_sign_verify_detached(
-                array(),
+                [],
                 $message,
                 $publicKey
             );
@@ -604,7 +604,7 @@ class ExceptionTest extends TestCase
         try {
             ParagonIE_Sodium_Compat::crypto_sign_verify_detached(
                 $signature,
-                array(),
+                [],
                 $publicKey
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
@@ -617,7 +617,7 @@ class ExceptionTest extends TestCase
             ParagonIE_Sodium_Compat::crypto_sign_verify_detached(
                 $signature,
                 $message,
-                array()
+                []
             );
             $this->fail('Silent failure occurred instead of exception being thrown');
         } catch (Throwable $ex) {

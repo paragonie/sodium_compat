@@ -465,7 +465,7 @@ abstract class ParagonIE_Sodium_Core_Util
          * @var int $high
          * @var int $low
          */
-        return array((int) $high, (int) $low);
+        return [(int) $high, (int) $low];
     }
 
     /**
