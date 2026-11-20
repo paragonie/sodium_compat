@@ -68,7 +68,7 @@ class AEGISTest extends PHPUnit_Framework_TestCase
      *
      * name, key, nonce, tag, ciphertext, plaintext, aad, expect_fail?
      */
-    public function aegis128lVectors()
+    public static function aegis128lVectors()
     {
         return array(
             array(
@@ -169,7 +169,7 @@ class AEGISTest extends PHPUnit_Framework_TestCase
      *
      * name, key, nonce, tag, ciphertext, plaintext, aad, expect_fail?
      */
-    public function aegis256Vectors()
+    public static function aegis256Vectors()
     {
         return array(
             array(

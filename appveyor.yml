@@ -7,22 +7,33 @@ clone_folder: C:\projects\sodium_compat
 image: Visual Studio 2017
 
 install:
-  - cinst -y OpenSSL.Light
-  - SET PATH=C:\Program Files\OpenSSL;%PATH%
-  - sc config wuauserv start= auto
-  - net start wuauserv
-  - cinst -y php --version 5.6.30
-  - cd c:\tools\php56
-  - copy php.ini-production php.ini
-  - echo date.timezone="UTC" >> php.ini
-  - echo extension_dir=ext >> php.ini
-  - echo extension=php_openssl.dll >> php.ini
-  - echo extension=php_curl.dll >> php.ini
-  - cd C:\projects\sodium_compat
-  - SET PATH=C:\tools\php56;%PATH%
-  - php.exe -r "readfile('https://getcomposer.org/installer');" | php.exe
-  - php.exe composer.phar install --prefer-source --no-interaction
+  - cinst -y vcredist2012
+  - ps: |
+      $ErrorActionPreference = 'Stop'
+      $ProgressPreference = 'SilentlyContinue'
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+      if ($env:PLATFORM -notin @('x86', 'x64')) {
+          throw "Unsupported PHP platform: $env:PLATFORM"
+      }
+      $phpDirectory = Join-Path $env:APPVEYOR_BUILD_FOLDER '.appveyor-php'
+      $phpArchive = Join-Path $env:TEMP "php-5.6.40-$env:PLATFORM.zip"
+      $phpUrl = "https://downloads.php.net/~windows/releases/archives/php-5.6.40-nts-Win32-VC11-$env:PLATFORM.zip"
+      Invoke-WebRequest -UseBasicParsing -Uri $phpUrl -OutFile $phpArchive
+      Expand-Archive -LiteralPath $phpArchive -DestinationPath $phpDirectory -Force
+      $phpIni = Join-Path $phpDirectory 'php.ini'
+      Copy-Item -LiteralPath (Join-Path $phpDirectory 'php.ini-production') -Destination $phpIni
+      @(
+          'date.timezone="UTC"'
+          ('extension_dir="' + (Join-Path $phpDirectory 'ext') + '"')
+          'extension=php_openssl.dll'
+          'extension=php_curl.dll'
+          'extension=php_mbstring.dll'
+      ) | Add-Content -LiteralPath $phpIni
+      $composer = Join-Path $env:APPVEYOR_BUILD_FOLDER 'composer.phar'
+      Invoke-WebRequest -UseBasicParsing -Uri 'https://getcomposer.org/download/latest-2.2.x/composer.phar' -OutFile $composer
+  - .appveyor-php\php.exe -v
+  - .appveyor-php\php.exe -r "echo 'Integer size = ', PHP_INT_SIZE, ' bytes', PHP_EOL;"
+  - .appveyor-php\php.exe composer.phar install --prefer-dist --no-interaction --no-progress
 
 test_script:
-  - cd C:\projects\sodium_compat
-  - vendor\bin\phpunit.bat tests/Windows32Test.php
+  - .appveyor-php\php.exe vendor\phpunit\phpunit\phpunit tests/Windows32Test.php
