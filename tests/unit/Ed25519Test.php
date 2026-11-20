@@ -356,8 +356,8 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
 
     public function testMalformedIdentityKeyIsRejected()
     {
-        $sig = hex2bin('58666666666666666666666666666666666666666666666666666666666666660100000000000000000000000000000000000000000000000000000000000000');
-        $pk = hex2bin('0100000000000000000000000000000000000000000000000000000000000080');
+        $sig = ParagonIE_Sodium_Core_Util::hex2bin('58666666666666666666666666666666666666666666666666666666666666660100000000000000000000000000000000000000000000000000000000000000');
+        $pk = ParagonIE_Sodium_Core_Util::hex2bin('0100000000000000000000000000000000000000000000000000000000000080');
         $old = ParagonIE_Sodium_Compat::$disableFallbackForUnitTests;
         ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = true;
         $accepted = false;
@@ -365,9 +365,8 @@ class Ed25519Test extends PHPUnit_Framework_TestCase
             $accepted = ParagonIE_Sodium_Compat::crypto_sign_verify_detached($sig, 'any message', $pk);
         } catch (SodiumException $e) {
             // Throwing on an invalid public key also rejects the forgery.
-        } finally {
-            ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = $old;
         }
+        ParagonIE_Sodium_Compat::$disableFallbackForUnitTests = $old;
         $this->assertFalse($accepted);
     }
 }
