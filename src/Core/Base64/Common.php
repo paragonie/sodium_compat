@@ -105,12 +105,13 @@ abstract class ParagonIE_Sodium_Core_Base64_Common
         }
 
         if ($strictPadding) {
-            if (($srcLen & 3) === 0) {
+            if (($srcLen & 3) !== 0) {
+                throw new RangeException('Incorrect padding');
+            }
+            if ($src[$srcLen - 1] === '=') {
+                $srcLen--;
                 if ($src[$srcLen - 1] === '=') {
                     $srcLen--;
-                    if ($src[$srcLen - 1] === '=') {
-                        $srcLen--;
-                    }
                 }
             }
             if (($srcLen & 3) === 1) {
@@ -162,6 +163,7 @@ abstract class ParagonIE_Sodium_Core_Base64_Common
                     ((($c1 << 4) | ($c2 >> 2)) & 0xff)
                 );
                 $err |= ($c0 | $c1 | $c2) >> 8;
+                $err |= ($c2 & 0x03);
             } elseif ($i + 1 < $srcLen) {
                 $c1 = static::decode6Bits($chunk[2]);
                 $dest .= pack(
@@ -169,6 +171,7 @@ abstract class ParagonIE_Sodium_Core_Base64_Common
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
+                $err |= ($c1 & 0x0f);
             }
         }
         $check = ($err === 0);
@@ -188,18 +191,15 @@ abstract class ParagonIE_Sodium_Core_Base64_Common
         if ($srcLen === 0) {
             return '';
         }
-        if (($srcLen & 3) === 0) {
-            // If $strLen is not zero, and it is divisible by 4, then it's at least 4.
-            if ($encodedString[$srcLen - 1] === '=' || $encodedString[$srcLen - 2] === '=') {
-                throw new InvalidArgumentException(
-                    "decodeNoPadding() doesn't tolerate padding"
-                );
-            }
+        if (($srcLen & 3) === 1) {
+            throw new RangeException('Incorrect padding');
         }
-        return static::decode(
-            $encodedString,
-            true
-        );
+        if (str_contains($encodedString, '=')) {
+            throw new InvalidArgumentException(
+                "decodeNoPadding() doesn't tolerate padding"
+            );
+        }
+        return static::decode($encodedString);
     }
 
     abstract protected static function decode6Bits(

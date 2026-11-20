@@ -63,8 +63,8 @@ class Base64Test extends TestCase
     #[DataProvider("variants")]
     public function testReversible(int $variant): void
     {
-        for ($len = 0; $len < 8; ++$len) {
-            $random = random_bytes(8);
+        for ($len = 1; $len <= 8; ++$len) {
+            $random = random_bytes($len);
             $encoded = ParagonIE_Sodium_Compat::bin2base64($random, $variant);
             $decoded = ParagonIE_Sodium_Compat::base642bin($encoded, $variant);
             $this->assertSame($random, $decoded);
@@ -142,7 +142,7 @@ class Base64Test extends TestCase
         );
         $this->assertSame(
             'foob',
-            ParagonIE_Sodium_Compat::base642bin('Zm9?vYg', SODIUM_BASE64_VARIANT_ORIGINAL, '?')
+            ParagonIE_Sodium_Compat::base642bin('Zm9?vYg', SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING, '?')
         );
     }
 
@@ -170,5 +170,86 @@ class Base64Test extends TestCase
         $this->expectException(SodiumException::class);
         $this->expectExceptionMessage('invalid base64 variant identifier');
         ParagonIE_Sodium_Compat::bin2base64('foob', 9999);
+    }
+
+    public static function trailingBitVectors(): array
+    {
+        $cases = [];
+        foreach (self::variants() as [$variant]) {
+            $urlSafe = in_array(
+                $variant,
+                [SODIUM_BASE64_VARIANT_URLSAFE, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING],
+                true
+            );
+            $noPadding = in_array(
+                $variant,
+                [SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING],
+                true
+            );
+            $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' . ($urlSafe ? '-_' : '+/');
+            foreach (["\xff", "\xff\xff", str_repeat("\xa5", 32)] as $binary) {
+                $encoded = base64_encode($binary);
+                if ($urlSafe) {
+                    $encoded = strtr($encoded, '+/', '-_');
+                }
+                if ($noPadding) {
+                    $encoded = rtrim($encoded, '=');
+                }
+                $label = 'variant ' . $variant . ', ' . strlen($binary) . ' byte(s)';
+                $cases[$label . ', canonical'] = [$encoded, $variant, $binary];
+                $last = strlen(rtrim($encoded, '=')) - 1;
+                $lastValue = strpos($alphabet, $encoded[$last]);
+                $mask = strlen($binary) === 1 ? 15 : 3;
+                for ($bits = 1; $bits <= $mask; ++$bits) {
+                    $noncanonical = $encoded;
+                    $noncanonical[$last] = $alphabet[$lastValue | $bits];
+                    $cases[$label . ', unused bits ' . $bits] = [$noncanonical, $variant, null];
+                }
+            }
+        }
+        return $cases;
+    }
+
+    /**
+     * @dataProvider trailingBitVectors
+     * @throws SodiumException
+     */
+    #[DataProvider('trailingBitVectors')]
+    public function testCanonicalTrailingBits(string $encoded, int $variant, ?string $expected): void
+    {
+        if ($expected === null) {
+            $this->expectException(SodiumException::class);
+            ParagonIE_Sodium_Compat::base642bin($encoded, $variant);
+            return;
+        }
+        $this->assertSame($expected, ParagonIE_Sodium_Compat::base642bin($encoded, $variant));
+    }
+
+    /**
+     * @dataProvider variants
+     */
+    #[DataProvider('variants')]
+    public function testPaddingPolicy(int $variant): void
+    {
+        $noPadding = in_array(
+            $variant,
+            [SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING],
+            true
+        );
+        $valid = $noPadding ? 'AA' : 'AA==';
+        $invalid = $noPadding ? 'AA==' : 'AA';
+        $this->assertSame("\x00", ParagonIE_Sodium_Compat::base642bin($valid, $variant));
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::base642bin($invalid, $variant);
+    }
+
+    /**
+     * @dataProvider variants
+     */
+    #[DataProvider('variants')]
+    public function testRejectsIncompleteQuartet(int $variant): void
+    {
+        $this->expectException(SodiumException::class);
+        ParagonIE_Sodium_Compat::base642bin('A', $variant);
     }
 }
