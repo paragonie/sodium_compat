@@ -111,15 +111,25 @@ final class ParagonIE_Sodium_Core_Keccak extends ParagonIE_Sodium_Core_PQUtil
         if ($this->squeezing) {
             throw new SodiumException("Cannot absorb after squeezing");
         }
-        $this->buffer .= $data;
-        while (strlen($this->buffer) >= $this->rate) {
-            $this->absorbBlock(
-                substr($this->buffer, 0, $this->rate)
-            );
-            $this->buffer = substr(
-                $this->buffer, $this->rate
-            );
+        $length = strlen($data);
+        $offset = 0;
+        if ($this->buffer !== '') {
+            $take = min($this->rate - strlen($this->buffer), $length);
+            $this->buffer .= substr($data, 0, $take);
+            if (strlen($this->buffer) < $this->rate) {
+                return $this;
+            }
+            $this->absorbBlock($this->buffer);
+            $this->buffer = '';
+            $offset = $take;
         }
+
+        // Copy each rate block once, rather than the entire remaining input
+        while ($length - $offset >= $this->rate) {
+            $this->absorbBlock(substr($data, $offset, $this->rate));
+            $offset += $this->rate;
+        }
+        $this->buffer = substr($data, $offset);
         return $this;
     }
 
