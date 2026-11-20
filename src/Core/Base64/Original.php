@@ -165,6 +165,8 @@ class ParagonIE_Sodium_Core_Base64_Original
                     ((($c1 << 4) | ($c2 >> 2)) & 0xff)
                 );
                 $err |= ($c0 | $c1 | $c2) >> 8;
+                $err |= ($c2 & 0x03);
+                $err |= ($c1 & 0x0f);
             } elseif ($i + 1 < $srcLen) {
                 $c1 = self::decode6Bits($chunk[2]);
                 $dest .= pack(
@@ -172,6 +174,7 @@ class ParagonIE_Sodium_Core_Base64_Original
                     ((($c0 << 2) | ($c1 >> 4)) & 0xff)
                 );
                 $err |= ($c0 | $c1) >> 8;
+                $err |= ($c1 & 0x0f);
             } elseif ($i < $srcLen && $strictPadding) {
                 $err |= 1;
             }
