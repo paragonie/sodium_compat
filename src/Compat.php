@@ -260,6 +260,9 @@ class ParagonIE_Sodium_Compat
             if ($ex instanceof SodiumException) {
                 throw $ex;
             }
+            if (PHP_VERSION_ID < 50300) {
+                throw new SodiumException('invalid base64 string');
+            }
             throw new SodiumException('invalid base64 string', 0, $ex);
         }
     }
