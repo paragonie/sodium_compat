@@ -115,11 +115,24 @@ class ParagonIE_Sodium_Core_Keccak64 extends ParagonIE_Sodium_Core_Util
         if ($this->squeezing) {
             throw new SodiumException("Cannot absorb after squeezing");
         }
-        $this->buffer .= $data;
-        while (ParagonIE_Sodium_Core_Util::strlen($this->buffer) >= $this->rate) {
-            $this->absorbBlock(ParagonIE_Sodium_Core_Util::substr($this->buffer, 0, $this->rate));
-            $this->buffer = ParagonIE_Sodium_Core_Util::substr($this->buffer, $this->rate);
+        $length = ParagonIE_Sodium_Core_Util::strlen($data);
+        $offset = 0;
+        if ($this->buffer !== '') {
+            $take = min($this->rate - ParagonIE_Sodium_Core_Util::strlen($this->buffer), $length);
+            $this->buffer .= ParagonIE_Sodium_Core_Util::substr($data, 0, $take);
+            if (ParagonIE_Sodium_Core_Util::strlen($this->buffer) < $this->rate) {
+                return $this;
+            }
+            $this->absorbBlock($this->buffer);
+            $this->buffer = '';
+            $offset = $take;
         }
+        // Copy each rate block once, rather than the entire remaining input.
+        while ($length - $offset >= $this->rate) {
+            $this->absorbBlock(ParagonIE_Sodium_Core_Util::substr($data, $offset, $this->rate));
+            $offset += $this->rate;
+        }
+        $this->buffer = ParagonIE_Sodium_Core_Util::substr($data, $offset);
         return $this;
     }
 
